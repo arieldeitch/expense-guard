@@ -34,6 +34,7 @@ import {
 import { MuscleMap } from "@/components/exercises/MuscleMap";
 import { AlternativesList } from "@/components/exercises/AlternativesList";
 import { MediaGallery } from "@/components/exercises/MediaGallery";
+import { ExerciseHistoryPanel } from "@/components/analytics/ExerciseHistoryPanel";
 import { ExerciseForm } from "@/components/exercises/ExerciseForm";
 import {
   EQUIPMENT_TYPE_LABEL,
