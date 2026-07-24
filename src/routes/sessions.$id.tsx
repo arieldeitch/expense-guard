@@ -103,7 +103,7 @@ function SessionPage() {
   function handleFinish() {
     const incomplete = exercises.some((e) => !e.completed);
     if (incomplete && !confirm("יש תרגילים לא מסומנים כהושלמו. לסיים בכל זאת?")) return;
-    finishSession(id, { markAllRemainingComplete: false });
+    finishSession(id);
     navigate({ to: "/sessions/$id/summary", params: { id } });
   }
 
@@ -246,7 +246,7 @@ function SessionPage() {
       </div>
 
       <PageHeader
-        eyebrow={session.template_name ? `מבוסס תבנית · ${session.template_name}` : "אימון חופשי"}
+        eyebrow={session.template_id ? `מבוסס תבנית · v${session.template_version ?? "?"}` : "אימון חופשי"}
         title="תרגילים"
       />
 
@@ -269,7 +269,7 @@ function SessionPage() {
           blocks.map((block) => {
             const blockExercises = byBlock.get(block.id) ?? [];
             const isSuper = block.block_type === "superset" || block.block_type === "circuit";
-            const letter = String.fromCharCode(65 + block.order_index);
+            const letter = String.fromCharCode(65 + block.sequence);
             return (
               <section key={block.id} className="flex flex-col gap-2">
                 {isSuper && blockExercises.length > 1 ? (
@@ -343,14 +343,23 @@ function SessionPage() {
         onSelect={(ids, asSuperset) => {
           if (ids.length === 0) return;
           if (asSuperset && ids.length > 1) {
-            addExerciseToSession(id, { exerciseIds: ids, asSuperset: true });
+            let blockId: string | undefined;
+            for (const exId of ids) {
+              const added = addExerciseToSession(id, exId, {
+                asNewBlock: !blockId,
+                targetBlockId: blockId,
+                asSuperset: true,
+              });
+              if (added && !blockId) blockId = added.block_id;
+            }
           } else {
             for (const exId of ids) {
-              addExerciseToSession(id, { exerciseIds: [exId], asSuperset: false });
+              addExerciseToSession(id, exId, { asNewBlock: true });
             }
           }
           setPickerOpen(false);
         }}
+
       />
 
       {/* Substitute picker — single choice */}
