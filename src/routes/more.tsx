@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Settings2,
   MapPin,
@@ -11,15 +11,17 @@ import {
   HeartPulse,
   Check,
   Database,
+  ChevronLeft,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
-import type { ReactNode } from "react";
 import { usePreferences } from "@/lib/hooks/use-preferences";
 import type { LandingModule } from "@/lib/preferences";
 import { LANDING_MODULE_LABELS } from "@/lib/preferences";
 import { activeRepoKind } from "@/lib/repo";
+import { useTrashItems } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/more")({
@@ -43,6 +45,17 @@ function MorePage() {
       <div className="grid grid-cols-1 gap-3 px-4 sm:px-6">
         <DefaultModuleSetting />
         <DataSourceTile />
+      </div>
+
+      <SectionHeader title="קטלוג" />
+      <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 sm:px-6">
+        <CatalogLinkTile
+          to="/locations"
+          title="מקומות וציוד"
+          hint="חדרי כושר, מסלולי ריצה, הליכונים, ציוד ביתי"
+          icon={<MapPin aria-hidden />}
+        />
+        <TrashLinkTile />
       </div>
 
       <SectionHeader title="ניהול המוצר" />
@@ -132,8 +145,6 @@ function DataSourceTile() {
 
 const futureItems: { title: string; hint: string; icon: ReactNode }[] = [
   { title: "הגדרות פרופיל", hint: "פרופיל, יחידות, שפה", icon: <Settings2 aria-hidden /> },
-  { title: "מקומות וציוד", hint: "חדר כושר, מסילות, ציוד ביתי", icon: <MapPin aria-hidden /> },
-  { title: "סל מחזור", hint: "פריטים שנמחקו — ניתן לשחזר", icon: <Trash2 aria-hidden /> },
   { title: "ייצוא נתונים", hint: "כל מה שהזנת — CSV / JSON", icon: <Download aria-hidden /> },
   { title: "הגדרות AI", hint: "רק כשיופעל. תמיד עם אישור.", icon: <Cpu aria-hidden /> },
 ];
@@ -154,5 +165,63 @@ function DisabledItemTile({ title, hint, icon }: { title: string; hint: string; 
         </span>
       </div>
     </Tile>
+  );
+}
+
+function CatalogLinkTile({
+  to,
+  title,
+  hint,
+  icon,
+  badge,
+}: {
+  to: "/locations" | "/trash";
+  title: string;
+  hint: string;
+  icon: ReactNode;
+  badge?: ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className="tile-interactive group block rounded-2xl border border-border-strong bg-surface p-4 shadow-[var(--shadow-tile)]"
+    >
+      <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
+        <span className="inline-flex size-10 items-center justify-center rounded-xl bg-tint text-foreground [&_svg]:size-5">
+          {icon}
+        </span>
+        <div className="min-w-0">
+          <div className="truncate text-sm font-bold">{title}</div>
+          <div className="truncate text-xs text-muted-foreground">{hint}</div>
+        </div>
+        <div className="inline-flex items-center gap-2">
+          {badge}
+          <ChevronLeft
+            aria-hidden
+            className="size-4 text-muted-foreground rtl:rotate-180"
+          />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function TrashLinkTile() {
+  const { locations, treadmills, equipment } = useTrashItems();
+  const total = locations.length + treadmills.length + equipment.length;
+  return (
+    <CatalogLinkTile
+      to="/trash"
+      title="סל מחזור"
+      hint="פריטים שנמחקו — ניתן לשחזר"
+      icon={<Trash2 aria-hidden />}
+      badge={
+        total > 0 ? (
+          <span className="rounded-md border border-border-strong bg-tint px-2 py-0.5 text-[10px] font-bold text-foreground">
+            {total}
+          </span>
+        ) : null
+      }
+    />
   );
 }
