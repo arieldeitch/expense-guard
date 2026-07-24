@@ -65,3 +65,35 @@ bun run build        # וידוא build עובר
 - ✅ typecheck — נקי.
 - ✅ lint — נקי (או מותאם לתבנית).
 - ❌ בדיקות פונקציונליות — אין. אין קוד לבדוק.
+
+---
+
+## עדכון 2026-07-25 — QA ידני שהורץ
+
+### Visual QA (Playwright, headless)
+- ✅ `/`, `/running`, `/gym`, `/home`, `/more` — mobile 390×844.
+- ✅ `/` — desktop 1280×900 (SideNav מופיע, BottomNav מוסתר).
+- ✅ אין horizontal overflow באף מסך.
+- ✅ RTL: nav צד ב־end (ימין), chevron של back מסתובב אוטומטית (`rtl:rotate-180`).
+- ✅ Domain tiles: run coral, gym cyan, home green, goal violet — כולם מלווים ב־icon+label.
+- ✅ Bottom nav: 5 פריטים, safe-bottom padding, active state צבוע לפי דומיין.
+- ✅ Empty states: קומפקטיים, ללא illustration גדול.
+- ✅ אין רקע לבן דומיננטי — background dark-tinted עם gradient עדין.
+
+### QA שעדיין חסר (כשיהיה קוד לוגי)
+- keyboard nav מלא, screen reader labels, touch target measurement, dialogs/drawers, reduced motion בפועל.
+
+### QA טכני
+- ✅ `bunx tsgo --noEmit` — נקי.
+- ✅ `bun run lint` — 0 errors, 6 warnings (shadcn `only-export-components` — לא נדרש לתקן).
+- ✅ Prettier — כולם מפורמטים.
+
+## Screens בכיסוי QA
+
+| Route | Mobile | Desktop |
+|---|---|---|
+| `/` | ✅ | ✅ |
+| `/running` | ✅ | — |
+| `/gym` | ✅ | — |
+| `/home` | ✅ | — |
+| `/more` | ✅ | — |

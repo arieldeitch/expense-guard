@@ -72,3 +72,33 @@
 ## ADR-0013 · 2026-07-24 · תיעוד `docs/ai/` הוא מקור האמת
 
 **החלטה:** כל AI/agent עתידי חייב לקרוא את `docs/ai/*` לפני עריכה. שינוי דרישה מהותית — קודם עדכון `product-requirements.md`, אחר כך קוד.
+
+## ADR-0014 · 2026-07-25 · Dark-tinted background, אין `.dark` class
+
+**החלטה:** האפליקציה dark-first. `:root` מגדיר עולם dark-tinted יחיד, ללא toggle. אין `.dark { ... }` block.
+**נימוק:** המוצר single-user, אין דרישה לתאורה משתנה, פשטות tokens, ומצווה "אין רקע לבן דומיננטי" מתקיימת by construction. Toggle יתווסף רק בבקשה מפורשת.
+
+## ADR-0015 · 2026-07-25 · Heebo כפונט יחיד (עברית + לטינית)
+
+**החלטה:** `Heebo` (Google Fonts) לכל הממשק — sans + display. Weights 400-900. נטען דרך `<link>` ב־`__root.tsx`.
+**נימוק:** תמיכה עברית מצוינת, קריא במובייל, weights רבים (מאפשר heirarchy דרך משקל), חינמי ובטוח. Fallback ל־ui-sans-serif.
+
+## ADR-0016 · 2026-07-25 · Tile כדפוס בסיס מוצרי
+
+**החלטה:** `<Tile>` הוא הרכיב היחיד להצגת "פריט" ברשימה, במטריצה, במסך. variants=domain, tones=(outline|soft|solid), sizes=(sm|md|lg). רשימות טקסט ארוכות אסורות כברירת מחדל.
+**נימוק:** דורש `product-requirements.md` §3 ("אריחים לפני רשימות"). מרכזי המימוש → קל להחליף עיצוב בעתיד בקובץ אחד.
+
+## ADR-0017 · 2026-07-25 · צבע דומיין = זהות ויזואלית מובחנת
+
+**החלטה:** לכל דומיין צבע יחודי + soft variant + foreground:
+- Running → coral/amber (`--run`)
+- Gym → cyan/teal (`--gym`)
+- Home → fresh green (`--home`)
+- Goals → violet (`--goal`)
+
+**נימוק:** מבחין תחומים ב־glance מבלי לקרוא טקסט. אך **אף פעם לא לבד** — תמיד בליווי icon+label (ראה `risks.md` §צבע כמידע יחיד).
+
+## ADR-0018 · 2026-07-25 · AppShell כמעטפת יחידה — לא layout פר-עמוד
+
+**החלטה:** כל route מייבא `<AppShell>` ומוסר לו `topBar` אם צריך. אין `<html>` / `<body>` / navigation ידניים בעמודים.
+**נימוק:** מונע דריפט בין עמודים; שינוי חוצה-מסך נעשה בקובץ אחד; RTL/safe-area מטופלים במרכז.

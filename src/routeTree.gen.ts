@@ -9,8 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RunningRouteImport } from './routes/running'
+import { Route as MoreRouteImport } from './routes/more'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as GymRouteImport } from './routes/gym'
 import { Route as IndexRouteImport } from './routes/index'
 
+const RunningRoute = RunningRouteImport.update({
+  id: '/running',
+  path: '/running',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreRoute = MoreRouteImport.update({
+  id: '/more',
+  path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymRoute = GymRouteImport.update({
+  id: '/gym',
+  path: '/gym',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +43,72 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/gym': typeof GymRoute
+  '/home': typeof HomeRoute
+  '/more': typeof MoreRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gym': typeof GymRoute
+  '/home': typeof HomeRoute
+  '/more': typeof MoreRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/gym': typeof GymRoute
+  '/home': typeof HomeRoute
+  '/more': typeof MoreRoute
+  '/running': typeof RunningRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/gym' | '/home' | '/more' | '/running'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/gym' | '/home' | '/more' | '/running'
+  id: '__root__' | '/' | '/gym' | '/home' | '/more' | '/running'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GymRoute: typeof GymRoute
+  HomeRoute: typeof HomeRoute
+  MoreRoute: typeof MoreRoute
+  RunningRoute: typeof RunningRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/running': {
+      id: '/running'
+      path: '/running'
+      fullPath: '/running'
+      preLoaderRoute: typeof RunningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more': {
+      id: '/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym': {
+      id: '/gym'
+      path: '/gym'
+      fullPath: '/gym'
+      preLoaderRoute: typeof GymRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +121,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GymRoute: GymRoute,
+  HomeRoute: HomeRoute,
+  MoreRoute: MoreRoute,
+  RunningRoute: RunningRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

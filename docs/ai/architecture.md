@@ -15,32 +15,34 @@
 ```
 src/
   routes/                 file-based routing (TanStack)
-    __root.tsx            shell + providers + head defaults
-    index.tsx             landing / entry
-    _authenticated/       gated subtree (integration-managed)
-      route.tsx           ssr:false gate → /auth
-      dashboard.tsx       ...
-    api/public/*          server routes (webhooks בלבד, אם נדרש)
+    __root.tsx            <html lang="he" dir="rtl">, HeadContent, providers
+    index.tsx             / — Home dashboard
+    running.tsx           /running
+    gym.tsx               /gym
+    home.tsx              /home (בית + משקל גוף)
+    more.tsx              /more
+    _authenticated/       (עתידי) gated subtree — integration-managed
+    api/public/*          (עתידי) server routes (webhooks בלבד)
   components/
-    ui/                   shadcn primitives (קיים)
-    domain/               רכיבים לתחום מסוים (ריצה/כוח/בית)
-    shared/               רכיבים חוצי־תחום
-  features/               לוגיקה לפי feature (עתידי, אם יגדל)
+    ui/                   shadcn primitives
+    shell/                AppShell, Nav (Bottom+Side), PageHeader, EmptyState
+    tile/                 Tile + variants (המחצית המרכזית של השפה החזותית)
+    domain/               (עתידי) run/gym/home-specific composites
+  features/               (עתידי) לוגיקה לפי feature
   hooks/                  hooks כלליים
   lib/
     utils.ts              cn()
-    query-options/        queryOptions מרוכזים לפי entity
-    validators/           zod schemas משותפים
+    query-options/        (עתידי) queryOptions מרוכזים
+    validators/           (עתידי) zod schemas
   integrations/
-    supabase/             client, client.server, types (נוצר עם Lovable Cloud)
-  styles.css              tokens + tailwind base
+    supabase/             (עתידי) client, client.server, types
+  styles.css              tokens + tailwind base + utilities
   server.ts / start.ts    TanStack Start entry
-supabase/
-  migrations/             SQL migrations (Lovable Cloud managed)
-docs/
-  ai/                     מקור אמת + זיכרון סוכן
+supabase/                 (עתידי) migrations
+docs/ai/                  מקור אמת + זיכרון סוכן
 public/                   נכסים סטטיים
 ```
+
 
 ## שכבות
 
