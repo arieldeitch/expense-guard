@@ -184,7 +184,7 @@ function CatalogLinkTile({
   icon,
   badge,
 }: {
-  to: "/locations" | "/trash";
+  to: "/locations" | "/trash" | "/exercises";
   title: string;
   hint: string;
   icon: ReactNode;
@@ -215,7 +215,9 @@ function CatalogLinkTile({
 function TrashLinkTile() {
   const { locations, treadmills, equipment } = useTrashItems();
   const runs = useTrashedRuns();
-  const total = locations.length + treadmills.length + equipment.length + runs.length;
+  const exercises = useTrashedExercises();
+  const total =
+    locations.length + treadmills.length + equipment.length + runs.length + exercises.length;
   return (
     <CatalogLinkTile
       to="/trash"
