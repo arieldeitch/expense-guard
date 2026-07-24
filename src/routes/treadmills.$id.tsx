@@ -49,7 +49,7 @@ function TreadmillCalibrationPage() {
   const history = useCalibrationsForTreadmill(id);
   const exclusions = useExclusions(id);
 
-  const inputs = useMemo(() => buildCalibrationInputs(id, runs), [id, runs, exclusions.length]);
+  const inputs = useMemo(() => buildCalibrationInputs(id, runs), [id, runs, exclusions]);
   const proposal = useMemo(() => proposeCalibration(id, inputs), [id, inputs]);
   const [confirming, setConfirming] = useState(false);
 
