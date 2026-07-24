@@ -222,7 +222,7 @@ function completeAllSets(exId: string, weights: number[], reps: number) {
 
 describe("session records — baseline vs PRs", () => {
   it("first session with an exercise emits baseline, not a PR", () => {
-    const ex = makeExercise();
+    const ex = seededWeightRepsExercise();
     const session = startEmptySession("אימון א׳");
     const se = addExerciseToSession(session.id, ex.id);
     expect(se).not.toBeNull();
@@ -237,7 +237,7 @@ describe("session records — baseline vs PRs", () => {
   });
 
   it("second session with higher weight generates real PRs", () => {
-    const ex = makeExercise();
+    const ex = seededWeightRepsExercise();
     const s1 = startEmptySession("א");
     const se1 = addExerciseToSession(s1.id, ex.id)!;
     const set1 = addSet(se1.id, false)!;
@@ -259,7 +259,7 @@ describe("session records — baseline vs PRs", () => {
 
 describe("Workout Quality Score", () => {
   it("normalizes weights when RPE/rest absent (no penalty for missing optionals)", () => {
-    const ex = makeExercise();
+    const ex = seededWeightRepsExercise();
     const s = startEmptySession("א");
     const se = addExerciseToSession(s.id, ex.id)!;
     const set = addSet(se.id, false)!;
@@ -277,7 +277,7 @@ describe("Workout Quality Score", () => {
 
 describe("session history + comparison", () => {
   it("lists completed session in history and can compare two", () => {
-    const ex = makeExercise();
+    const ex = seededWeightRepsExercise();
     const s1 = startEmptySession("א");
     const se1 = addExerciseToSession(s1.id, ex.id)!;
     const set1 = addSet(se1.id, false)!;
@@ -301,7 +301,7 @@ describe("session history + comparison", () => {
 
 describe("getExerciseHistorySummary", () => {
   it("aggregates last/top values after a session", () => {
-    const ex = makeExercise();
+    const ex = seededWeightRepsExercise();
     const s = startEmptySession("א");
     const se = addExerciseToSession(s.id, ex.id)!;
     const set = addSet(se.id, false)!;
