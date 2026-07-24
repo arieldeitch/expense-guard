@@ -104,9 +104,7 @@ function SessionSummary() {
                   className="flex items-center justify-between gap-2 border-b border-border-strong/40 py-1 last:border-b-0"
                 >
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-bold">
-                      {ex.snapshot.exercise_name}
-                    </div>
+                    <div className="truncate text-sm font-bold">{ex.snapshot.exercise_name}</div>
                   </div>
                   <div className="ltr-nums text-xs text-muted-foreground">
                     {ex.completed ? "הושלם" : "לא הושלם"}

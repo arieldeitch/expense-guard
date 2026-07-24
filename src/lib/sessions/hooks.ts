@@ -121,7 +121,10 @@ export function stopRestTimer() {
   emitRest();
 }
 export function adjustRestTimer(deltaSeconds: number) {
-  restState = { ...restState, plannedSeconds: Math.max(0, restState.plannedSeconds + deltaSeconds) };
+  restState = {
+    ...restState,
+    plannedSeconds: Math.max(0, restState.plannedSeconds + deltaSeconds),
+  };
   emitRest();
 }
 

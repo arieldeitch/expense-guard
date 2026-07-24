@@ -17,7 +17,6 @@ import {
   useAllSessions,
 } from "@/lib/sessions";
 
-
 export const Route = createFileRoute("/gym/new")({
   head: () => ({
     meta: [
@@ -38,7 +37,9 @@ function NewGymPage() {
   const recent = sessions
     .filter((s) => s.status === "completed")
     .sort(
-      (a, b) => new Date(b.ended_at ?? b.started_at).getTime() - new Date(a.ended_at ?? a.started_at).getTime(),
+      (a, b) =>
+        new Date(b.ended_at ?? b.started_at).getTime() -
+        new Date(a.ended_at ?? a.started_at).getTime(),
     )
     .slice(0, 5);
 
@@ -48,7 +49,11 @@ function NewGymPage() {
 
   return (
     <AppShell topBar={{ title: "אימון חדש", back: { to: "/gym" } }}>
-      <PageHeader eyebrow="חדר כושר" title="התחלת אימון" description="בחר מקור להתחלה. אפשר לערוך הכל אחר כך." />
+      <PageHeader
+        eyebrow="חדר כושר"
+        title="התחלת אימון"
+        description="בחר מקור להתחלה. אפשר לערוך הכל אחר כך."
+      />
 
       <SectionHeader title="התחלה מהירה" />
       <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 sm:px-6">
@@ -91,10 +96,11 @@ function NewGymPage() {
         {templates.length === 0 ? (
           <EmptyState title="אין תבניות" description="נהל תבניות במסך התבניות." />
         ) : (
-          templates.slice(0, 6).map((t) => <TemplateStartTile key={t.id} template={t} onStart={go} />)
+          templates
+            .slice(0, 6)
+            .map((t) => <TemplateStartTile key={t.id} template={t} onStart={go} />)
         )}
       </div>
-
 
       {recent.length > 0 ? (
         <>
@@ -168,4 +174,3 @@ function TemplateStartTile({
     </button>
   );
 }
-

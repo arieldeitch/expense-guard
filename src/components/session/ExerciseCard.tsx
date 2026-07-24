@@ -13,11 +13,7 @@ import {
   Repeat,
   Trash2,
 } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Chip } from "@/components/catalog/shared";
 import { useExercise, useMuscleGroups } from "@/lib/exercises";
 import {
@@ -83,9 +79,7 @@ export function ExerciseCard({
             <h3 className="text-base font-black leading-tight">
               {exercise.snapshot.exercise_name}
             </h3>
-            {exercise.substituted_from_exercise_id ? (
-              <Chip tone="warning">הוחלף</Chip>
-            ) : null}
+            {exercise.substituted_from_exercise_id ? <Chip tone="warning">הוחלף</Chip> : null}
             {exercise.completed ? <Chip tone="success">הושלם</Chip> : null}
           </div>
           <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
@@ -144,9 +138,7 @@ export function ExerciseCard({
               הוסף סט
             </ItemBtn>
             <ItemBtn
-              onClick={() =>
-                updateSessionExercise(exercise.id, { completed: !exercise.completed })
-              }
+              onClick={() => updateSessionExercise(exercise.id, { completed: !exercise.completed })}
             >
               {exercise.completed ? "בטל השלמה" : "סמן כהושלם"}
             </ItemBtn>

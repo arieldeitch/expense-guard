@@ -4,33 +4,15 @@
  * ה־session נשמר autosave לכל שינוי דרך storage. snapshot של התבנית קפוא.
  */
 import { useMemo, useState } from "react";
-import {
-  createFileRoute,
-  Link,
-  notFound,
-  useNavigate,
-} from "@tanstack/react-router";
-import {
-  CheckCircle2,
-  MapPin,
-  Pause,
-  Play,
-  Plus,
-  Save,
-  StopCircle,
-  Trash2,
-} from "lucide-react";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { CheckCircle2, MapPin, Pause, Play, Plus, Save, StopCircle, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import { Chip } from "@/components/catalog/shared";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ExerciseCard } from "@/components/session/ExerciseCard";
 import { RestTimer } from "@/components/session/RestTimer";
 import { ExercisePickerSheet } from "@/components/templates/ExercisePickerSheet";
@@ -158,9 +140,7 @@ function SessionPage() {
               </div>
             </div>
             <div className="text-end">
-              <div className="ltr-nums text-2xl font-black tabular-nums">
-                {formatHMS(duration)}
-              </div>
+              <div className="ltr-nums text-2xl font-black tabular-nums">{formatHMS(duration)}</div>
               <div className="text-[10px] uppercase text-muted-foreground">משך אימון</div>
             </div>
           </div>
@@ -246,7 +226,9 @@ function SessionPage() {
       </div>
 
       <PageHeader
-        eyebrow={session.template_id ? `מבוסס תבנית · v${session.template_version ?? "?"}` : "אימון חופשי"}
+        eyebrow={
+          session.template_id ? `מבוסס תבנית · v${session.template_version ?? "?"}` : "אימון חופשי"
+        }
         title="תרגילים"
       />
 
@@ -359,7 +341,6 @@ function SessionPage() {
           }
           setPickerOpen(false);
         }}
-
       />
 
       {/* Substitute picker — single choice */}

@@ -207,7 +207,11 @@ export function detectPersonalRecords(
         vol += toKg(st.actual_weight, st.weight_unit) * st.actual_reps;
     }
     if (maxWeight > 0 && curMaxWeight > maxWeight)
-      flags.push({ kind: "top_weight", value: Math.round(curMaxWeight * 10) / 10, label: "משקל שיא" });
+      flags.push({
+        kind: "top_weight",
+        value: Math.round(curMaxWeight * 10) / 10,
+        label: "משקל שיא",
+      });
     if (maxReps > 0 && curMaxReps > maxReps)
       flags.push({ kind: "top_reps", value: curMaxReps, label: "מספר חזרות שיא" });
     if (maxVolume > 0 && vol > maxVolume)

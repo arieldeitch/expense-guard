@@ -15,11 +15,7 @@ import {
   undoCompleteSet,
   updateSet,
 } from "@/lib/sessions";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { NumberField } from "./NumberField";
 
@@ -164,7 +160,11 @@ export function SetRow({ set, trackingType, weightIncrement = 2.5, onComplete }:
               : "border-border-strong bg-tint text-foreground active:bg-primary/20",
           )}
         >
-          {done ? <Undo2 className="size-5" aria-hidden /> : <Check className="size-5" aria-hidden />}
+          {done ? (
+            <Undo2 className="size-5" aria-hidden />
+          ) : (
+            <Check className="size-5" aria-hidden />
+          )}
         </button>
       </div>
     </div>

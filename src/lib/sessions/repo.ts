@@ -214,7 +214,8 @@ export function startSessionFromTemplate(templateId: string): StrengthSession | 
       id: blockId,
       session_id: session.id,
       sequence: bi,
-      block_type: b.block_type === "superset" || b.block_type === "circuit" ? b.block_type : "single",
+      block_type:
+        b.block_type === "superset" || b.block_type === "circuit" ? b.block_type : "single",
       display_label: b.display_label,
       rounds: b.rounds,
       rest_between_exercises_seconds: b.rest_between_exercises_seconds,
@@ -447,8 +448,7 @@ export function finishSession(
     timers: s.timers.map((t) => {
       if (t.session_id !== id) return t;
       if (t.paused_at) {
-        const pausedFor =
-          (new Date(now).getTime() - new Date(t.paused_at).getTime()) / 1000;
+        const pausedFor = (new Date(now).getTime() - new Date(t.paused_at).getTime()) / 1000;
         return { ...t, paused_at: null, paused_seconds: t.paused_seconds + pausedFor };
       }
       return t;
@@ -619,9 +619,7 @@ export function restoreExerciseInSession(id: string): void {
     exercises: s.exercises.map((x) =>
       x.id === id ? { ...x, deleted_at: null, updated_at: nowIso() } : x,
     ),
-    sets: s.sets.map((st) =>
-      st.session_exercise_id === id ? { ...st, deleted_at: null } : st,
-    ),
+    sets: s.sets.map((st) => (st.session_exercise_id === id ? { ...st, deleted_at: null } : st)),
   }));
 }
 
@@ -679,7 +677,11 @@ export function updateSet(id: string, patch: Partial<StrengthSet>): void {
 
 export function completeSet(
   id: string,
-  values?: { actual_reps?: number | null; actual_weight?: number | null; duration_seconds?: number | null },
+  values?: {
+    actual_reps?: number | null;
+    actual_weight?: number | null;
+    duration_seconds?: number | null;
+  },
 ): void {
   const set = getSet(id);
   if (!set) return;

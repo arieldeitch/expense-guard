@@ -53,7 +53,11 @@ export function RestTimer({ sessionId }: Props) {
           <RestBtn onClick={() => adjustRestTimer(15)} icon={<Plus className="size-3.5" />}>
             15 ש׳
           </RestBtn>
-          <RestBtn onClick={() => adjustRestTimer(-15)} icon={<Pause className="size-3.5" />} hidden />
+          <RestBtn
+            onClick={() => adjustRestTimer(-15)}
+            icon={<Pause className="size-3.5" />}
+            hidden
+          />
           <div className="ms-auto flex gap-2">
             <Button
               type="button"
