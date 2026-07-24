@@ -194,7 +194,7 @@ describe("availability service", () => {
     const bench = listExercises().find((e) => e.slug === "barbell-bench-press")!;
     const a = getExerciseAvailability(bench, {
       locationId: "loc-1",
-      items: [makeEquipment("barbell"), makeEquipment("bench")],
+      items: [makeEquipment("barbell"), makeEquipment("bench"), makeEquipment("plates")],
     });
     expect(a.status).toBe("available");
   });
