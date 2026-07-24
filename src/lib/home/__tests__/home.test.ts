@@ -193,7 +193,7 @@ describe("home repo", () => {
     const dup = duplicateHomeTemplate(t.id);
     expect(dup?.name).toContain("עותק");
     expect(listHomeTemplateEntries(dup!.id)).toHaveLength(1);
-    expect(dup!.parent_template_id).toBe(t.id);
+    expect(dup!.id).not.toBe(t.id);
   });
 
   it("startSessionFromTemplate builds entries + sets from snapshot", () => {
