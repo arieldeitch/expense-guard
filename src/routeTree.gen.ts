@@ -26,6 +26,7 @@ import { Route as RunningNewRouteImport } from './routes/running.new'
 import { Route as RunningHistoryRouteImport } from './routes/running.history'
 import { Route as RunningIdRouteImport } from './routes/running.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
+import { Route as HomeQuickRouteImport } from './routes/home.quick'
 import { Route as HomeNewRouteImport } from './routes/home.new'
 import { Route as GymNewRouteImport } from './routes/gym.new'
 import { Route as GymHistoryRouteImport } from './routes/gym.history'
@@ -36,6 +37,7 @@ import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit
 import { Route as SessionsIdSummaryRouteImport } from './routes/sessions.$id.summary'
 import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
+import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$exerciseId'
 import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
 import { Route as ExercisesIdHistoryRouteImport } from './routes/exercises.$id.history'
 
@@ -124,6 +126,11 @@ const LocationsIdRoute = LocationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => LocationsRoute,
 } as any)
+const HomeQuickRoute = HomeQuickRouteImport.update({
+  id: '/quick',
+  path: '/quick',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeNewRoute = HomeNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -174,6 +181,11 @@ const RunningIdEditRoute = RunningIdEditRouteImport.update({
   path: '/edit',
   getParentRoute: () => RunningIdRoute,
 } as any)
+const HomeQuickExerciseIdRoute = HomeQuickExerciseIdRouteImport.update({
+  id: '/$exerciseId',
+  path: '/$exerciseId',
+  getParentRoute: () => HomeQuickRoute,
+} as any)
 const GymHistoryIdRoute = GymHistoryIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -200,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
+  '/home/quick': typeof HomeQuickRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -210,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/exercises/$id/history': typeof ExercisesIdHistoryRoute
   '/gym/history/$id': typeof GymHistoryIdRoute
+  '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -231,6 +245,7 @@ export interface FileRoutesByTo {
   '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
+  '/home/quick': typeof HomeQuickRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -241,6 +256,7 @@ export interface FileRoutesByTo {
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/exercises/$id/history': typeof ExercisesIdHistoryRoute
   '/gym/history/$id': typeof GymHistoryIdRoute
+  '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -263,6 +279,7 @@ export interface FileRoutesById {
   '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
+  '/home/quick': typeof HomeQuickRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -273,6 +290,7 @@ export interface FileRoutesById {
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/exercises/$id/history': typeof ExercisesIdHistoryRoute
   '/gym/history/$id': typeof GymHistoryIdRoute
+  '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -296,6 +314,7 @@ export interface FileRouteTypes {
     | '/gym/history'
     | '/gym/new'
     | '/home/new'
+    | '/home/quick'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -306,6 +325,7 @@ export interface FileRouteTypes {
     | '/treadmills/$id'
     | '/exercises/$id/history'
     | '/gym/history/$id'
+    | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -327,6 +347,7 @@ export interface FileRouteTypes {
     | '/gym/history'
     | '/gym/new'
     | '/home/new'
+    | '/home/quick'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -337,6 +358,7 @@ export interface FileRouteTypes {
     | '/treadmills/$id'
     | '/exercises/$id/history'
     | '/gym/history/$id'
+    | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -358,6 +380,7 @@ export interface FileRouteTypes {
     | '/gym/history'
     | '/gym/new'
     | '/home/new'
+    | '/home/quick'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -368,6 +391,7 @@ export interface FileRouteTypes {
     | '/treadmills/$id'
     | '/exercises/$id/history'
     | '/gym/history/$id'
+    | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -510,6 +534,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsIdRouteImport
       parentRoute: typeof LocationsRoute
     }
+    '/home/quick': {
+      id: '/home/quick'
+      path: '/quick'
+      fullPath: '/home/quick'
+      preLoaderRoute: typeof HomeQuickRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/new': {
       id: '/home/new'
       path: '/new'
@@ -580,6 +611,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RunningIdEditRouteImport
       parentRoute: typeof RunningIdRoute
     }
+    '/home/quick/$exerciseId': {
+      id: '/home/quick/$exerciseId'
+      path: '/$exerciseId'
+      fullPath: '/home/quick/$exerciseId'
+      preLoaderRoute: typeof HomeQuickExerciseIdRouteImport
+      parentRoute: typeof HomeQuickRoute
+    }
     '/gym/history/$id': {
       id: '/gym/history/$id'
       path: '/$id'
@@ -647,12 +685,26 @@ const GymRouteChildren: GymRouteChildren = {
 
 const GymRouteWithChildren = GymRoute._addFileChildren(GymRouteChildren)
 
+interface HomeQuickRouteChildren {
+  HomeQuickExerciseIdRoute: typeof HomeQuickExerciseIdRoute
+}
+
+const HomeQuickRouteChildren: HomeQuickRouteChildren = {
+  HomeQuickExerciseIdRoute: HomeQuickExerciseIdRoute,
+}
+
+const HomeQuickRouteWithChildren = HomeQuickRoute._addFileChildren(
+  HomeQuickRouteChildren,
+)
+
 interface HomeRouteChildren {
   HomeNewRoute: typeof HomeNewRoute
+  HomeQuickRoute: typeof HomeQuickRouteWithChildren
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
   HomeNewRoute: HomeNewRoute,
+  HomeQuickRoute: HomeQuickRouteWithChildren,
 }
 
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
