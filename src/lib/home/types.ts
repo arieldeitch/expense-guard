@@ -10,7 +10,8 @@
  *  - product-requirements.md §2 (תחומי אימון), §3 (UX), §4 (דאטה).
  *  - metrics-home.md — נוסחאות ומדדים.
  */
-import type { TrackingType, WeightUnit } from "@/lib/exercises";
+import type { TrackingType } from "@/lib/exercises";
+import type { WeightUnit } from "@/lib/templates";
 // אין תלות ישירה ב־Gym; מיוצר type עצמאי לצורך snapshot מתבנית.
 
 /** סטטוסים ל־HomeSession — חופפים ל־PR "מודל אימון ביתי". */
