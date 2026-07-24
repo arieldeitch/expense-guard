@@ -66,9 +66,7 @@ export function TemplateExerciseRow({
           {label}
         </span>
         <div className="min-w-0">
-          <div className="truncate text-sm font-black">
-            {catalog?.name_he ?? "תרגיל לא נמצא"}
-          </div>
+          <div className="truncate text-sm font-black">{catalog?.name_he ?? "תרגיל לא נמצא"}</div>
           <div className="mt-0.5 truncate text-[11px] uppercase tracking-wider text-muted-foreground">
             {primary?.name_he ?? "—"} · {catalog?.tracking_type ?? "—"}
           </div>
@@ -220,7 +218,9 @@ function ExerciseEditor({ exercise }: { exercise: WorkoutTemplateExercise }) {
       <Field label="יחידה">
         <Select
           value={exercise.weight_unit}
-          onValueChange={(v) => updateTemplateExercise(exercise.id, { weight_unit: v as "kg" | "lb" })}
+          onValueChange={(v) =>
+            updateTemplateExercise(exercise.id, { weight_unit: v as "kg" | "lb" })
+          }
         >
           <SelectTrigger className="min-h-11 rounded-xl border-border-strong">
             <SelectValue />

@@ -9,14 +9,7 @@ import type { TemplateMuscleLoadSummary } from "./types";
 // heuristic: קטגוריית ה־muscle group משפיעה על push/pull/upper/lower/core.
 const PUSH_CODES = new Set(["chest", "shoulders", "triceps", "quads"]);
 const PULL_CODES = new Set(["back", "biceps", "hamstrings", "forearms"]);
-const UPPER_CODES = new Set([
-  "chest",
-  "back",
-  "shoulders",
-  "biceps",
-  "triceps",
-  "forearms",
-]);
+const UPPER_CODES = new Set(["chest", "back", "shoulders", "biceps", "triceps", "forearms"]);
 const LOWER_CODES = new Set(["quads", "hamstrings", "glutes", "calves", "hip_flexors"]);
 const CORE_CODES = new Set(["core", "obliques", "lower_back"]);
 

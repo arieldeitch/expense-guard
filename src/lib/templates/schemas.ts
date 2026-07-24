@@ -25,23 +25,13 @@ export const templateExerciseFormSchema = z
     rest_seconds: z.number().int().min(0).max(3600).nullable(),
     default_rpe: z.number().min(1).max(10).nullable(),
     default_rir: z.number().int().min(0).max(10).nullable(),
-    set_type: z.enum([
-      "regular",
-      "warmup",
-      "drop_set",
-      "failure",
-      "amrap",
-      "timed",
-      "custom",
-    ]),
+    set_type: z.enum(["regular", "warmup", "drop_set", "failure", "amrap", "timed", "custom"]),
     tempo: z.string().max(20).nullable().optional(),
     notes: z.string().max(2000).nullable().optional(),
   })
   .refine(
     (v) =>
-      v.rep_range_min === null ||
-      v.rep_range_max === null ||
-      v.rep_range_min <= v.rep_range_max,
+      v.rep_range_min === null || v.rep_range_max === null || v.rep_range_min <= v.rep_range_max,
     { message: "מינימום גדול מהמקסימום", path: ["rep_range_min"] },
   );
 

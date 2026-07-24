@@ -5,7 +5,16 @@
  */
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { RotateCcw, Trash2, MapPin, Gauge, Dumbbell, Footprints, BookOpen, Layers } from "lucide-react";
+import {
+  RotateCcw,
+  Trash2,
+  MapPin,
+  Gauge,
+  Dumbbell,
+  Footprints,
+  BookOpen,
+  Layers,
+} from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";

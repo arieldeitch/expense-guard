@@ -74,9 +74,7 @@ function EditTemplatePage() {
     if (!template) return;
     // Add to existing block
     if (pickerTargetBlockId) {
-      exerciseIds.forEach((exId) =>
-        addExerciseToBlock(pickerTargetBlockId, { exercise_id: exId }),
-      );
+      exerciseIds.forEach((exId) => addExerciseToBlock(pickerTargetBlockId, { exercise_id: exId }));
       return;
     }
     // No target block — create block(s)
@@ -178,9 +176,7 @@ function EditTemplatePage() {
             תיאור (רשות)
             <Input
               value={template.description ?? ""}
-              onChange={(e) =>
-                updateTemplate(template.id, { description: e.target.value || null })
-              }
+              onChange={(e) => updateTemplate(template.id, { description: e.target.value || null })}
               className="min-h-11 rounded-xl border-border-strong"
               placeholder="למשל: יום כוח עליון עם דגש על חזה"
             />
@@ -271,9 +267,7 @@ function EditTemplatePage() {
           <Button
             type="button"
             variant="ghost"
-            onClick={() =>
-              navigate({ to: "/templates/$id/history", params: { id: template.id } })
-            }
+            onClick={() => navigate({ to: "/templates/$id/history", params: { id: template.id } })}
             className="min-h-11 rounded-xl border border-border-strong"
           >
             <History aria-hidden className="me-1 size-4" />

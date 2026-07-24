@@ -71,7 +71,12 @@ function GymPage() {
           to="/templates"
           className="tile-interactive block rounded-2xl border border-border-strong bg-surface p-3 text-start"
         >
-          <Tile variant="gym" tone="soft" size="sm" className="border-0 bg-transparent p-0 shadow-none">
+          <Tile
+            variant="gym"
+            tone="soft"
+            size="sm"
+            className="border-0 bg-transparent p-0 shadow-none"
+          >
             <TileLabel>תבניות</TileLabel>
             <TileMetric value={String(templates.length)} />
             <TileFootnote>לפתיחה ← ניהול תבניות</TileFootnote>

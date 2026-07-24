@@ -31,9 +31,7 @@ function TemplateHistoryPage() {
   if (!template) throw notFound();
 
   return (
-    <AppShell
-      topBar={{ title: "גרסאות", back: { to: `/templates/${template.id}` } }}
-    >
+    <AppShell topBar={{ title: "גרסאות", back: { to: `/templates/${template.id}` } }}>
       <PageHeader
         eyebrow={template.name}
         title="היסטוריית גרסאות"

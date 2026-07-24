@@ -91,7 +91,15 @@ function TemplatesPage() {
         {list.length === 0 ? (
           <div className="sm:col-span-2">
             <EmptyState
-              icon={tab === "trashed" ? <Trash2 aria-hidden /> : tab === "archived" ? <Archive aria-hidden /> : <Layers aria-hidden />}
+              icon={
+                tab === "trashed" ? (
+                  <Trash2 aria-hidden />
+                ) : tab === "archived" ? (
+                  <Archive aria-hidden />
+                ) : (
+                  <Layers aria-hidden />
+                )
+              }
               title={
                 tab === "trashed"
                   ? "סל התבניות ריק"
@@ -148,7 +156,9 @@ function TabButton({
       aria-pressed={active}
       className={cn(
         "min-h-10 rounded-lg px-3 text-xs font-bold",
-        active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+        active
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:text-foreground",
       )}
     >
       {children}

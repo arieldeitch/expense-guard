@@ -31,8 +31,7 @@ function SessionPage() {
   if (!session) throw notFound();
 
   const snapshot = session.snapshot;
-  const totalExercises =
-    snapshot?.blocks.reduce((n, b) => n + b.exercises.length, 0) ?? 0;
+  const totalExercises = snapshot?.blocks.reduce((n, b) => n + b.exercises.length, 0) ?? 0;
 
   return (
     <AppShell topBar={{ title: "אימון פעיל", back: { to: "/templates" } }}>
@@ -54,18 +53,14 @@ function SessionPage() {
                   ? "בוטל"
                   : "מושהה"}
           </Chip>
-          <TileFootnote>
-            נפתח: {new Date(session.started_at).toLocaleString("he-IL")}
-          </TileFootnote>
+          <TileFootnote>נפתח: {new Date(session.started_at).toLocaleString("he-IL")}</TileFootnote>
         </Tile>
         <Tile size="sm">
           <TileLabel>מבנה ה־snapshot</TileLabel>
           <div className="text-base font-bold">
             {snapshot?.blocks.length ?? 0} בלוקים · {totalExercises} תרגילים
           </div>
-          <TileFootnote>
-            נשמר immutable — עריכה של התבנית לא תשפיע על אימון זה.
-          </TileFootnote>
+          <TileFootnote>נשמר immutable — עריכה של התבנית לא תשפיע על אימון זה.</TileFootnote>
         </Tile>
         <Tile size="sm">
           <TileLabel>גרסת התבנית</TileLabel>
@@ -89,10 +84,7 @@ function SessionPage() {
       {snapshot ? (
         <section className="mt-4 flex flex-col gap-2 px-4 sm:px-6">
           {snapshot.blocks.map((b, i) => (
-            <div
-              key={b.id}
-              className="rounded-xl border border-border-strong bg-surface p-3"
-            >
+            <div key={b.id} className="rounded-xl border border-border-strong bg-surface p-3">
               <div className="flex items-center gap-2">
                 <span className="grid size-8 place-items-center rounded-lg bg-tint text-xs font-black">
                   {String.fromCharCode(65 + i)}

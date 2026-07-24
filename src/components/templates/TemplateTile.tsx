@@ -97,7 +97,11 @@ export function TemplateTile({ template }: Props) {
                 {template.name}
               </Link>
               {template.is_favorite ? (
-                <Star aria-label="מועדפת" className="size-4 shrink-0 text-warning" fill="currentColor" />
+                <Star
+                  aria-label="מועדפת"
+                  className="size-4 shrink-0 text-warning"
+                  fill="currentColor"
+                />
               ) : null}
             </div>
             <div className="mt-0.5 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -114,14 +118,14 @@ export function TemplateTile({ template }: Props) {
 
         <div className="grid grid-cols-3 gap-2">
           <MiniStat label="תרגילים" value={String(exercises.length)} />
-          <MiniStat label="סופרסטים" value={String(supersetCount)} icon={<Layers className="size-3.5" />} />
+          <MiniStat
+            label="סופרסטים"
+            value={String(supersetCount)}
+            icon={<Layers className="size-3.5" />}
+          />
           <MiniStat
             label="משך משוער"
-            value={
-              duration.seconds > 0
-                ? `${duration.minMinutes}–${duration.maxMinutes} ד׳`
-                : "–"
-            }
+            value={duration.seconds > 0 ? `${duration.minMinutes}–${duration.maxMinutes} ד׳` : "–"}
           />
         </div>
 
@@ -178,7 +182,15 @@ export function TemplateTile({ template }: Props) {
   );
 }
 
-function MiniStat({ label, value, icon }: { label: string; value: string; icon?: React.ReactNode }) {
+function MiniStat({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <div className="rounded-xl border border-border-strong bg-tint/40 px-2 py-1.5 text-center">
       <div className="flex items-center justify-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">

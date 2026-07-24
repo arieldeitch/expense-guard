@@ -34,9 +34,7 @@ export function TemplateSummary({ templateId }: Props) {
           משך משוער
         </TileLabel>
         <div className="ltr-nums text-lg font-black">
-          {duration.seconds > 0
-            ? `${duration.minMinutes}–${duration.maxMinutes} דקות`
-            : "—"}
+          {duration.seconds > 0 ? `${duration.minMinutes}–${duration.maxMinutes} דקות` : "—"}
         </div>
         <TileFootnote>הערכה מבוססת סטים, סבבים ומנוחות. יכולה להשתנות בפועל.</TileFootnote>
       </Tile>
@@ -52,12 +50,11 @@ export function TemplateSummary({ templateId }: Props) {
               {mgById.get(p.muscle_group_id)?.name_he ?? "—"} · {p.sets}
             </Chip>
           ))}
-          {load.primary.length === 0 ? (
-            <TileFootnote>אין תרגילים לחישוב</TileFootnote>
-          ) : null}
+          {load.primary.length === 0 ? <TileFootnote>אין תרגילים לחישוב</TileFootnote> : null}
         </div>
         <TileFootnote>
-          עליון: {load.upperCount} · תחתון: {load.lowerCount} · דחיפה: {load.pushCount} · משיכה: {load.pullCount}
+          עליון: {load.upperCount} · תחתון: {load.lowerCount} · דחיפה: {load.pushCount} · משיכה:{" "}
+          {load.pullCount}
         </TileFootnote>
       </Tile>
 
@@ -82,9 +79,7 @@ export function TemplateSummary({ templateId }: Props) {
                 <Chip tone="destructive">חסרים {equipment.unavailableExercises}</Chip>
               ) : null}
             </div>
-            <TileFootnote>
-              סה"כ {equipment.totalExercises} תרגילים במיקום שנבחר
-            </TileFootnote>
+            <TileFootnote>סה"כ {equipment.totalExercises} תרגילים במיקום שנבחר</TileFootnote>
           </>
         )}
       </Tile>

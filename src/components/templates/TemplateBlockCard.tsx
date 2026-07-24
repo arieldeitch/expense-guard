@@ -3,15 +3,7 @@
  * מציג את התרגילים שבתוכו, פעולות (הזזה/מחיקה/הוספה), הגדרות בלוק (מנוחה, סבבים).
  */
 import { useState } from "react";
-import {
-  ChevronDown,
-  ChevronUp,
-  Layers,
-  Plus,
-  Settings2,
-  Trash2,
-  X as XIcon,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Layers, Plus, Settings2, Trash2, X as XIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/catalog/shared";
@@ -103,7 +95,11 @@ export function TemplateBlockCard({ block, positionIndex, siblingsCount, onAddEx
             <IconButton label="הגדרות בלוק" onClick={() => setSettingsOpen((v) => !v)}>
               <Settings2 aria-hidden className="size-4" />
             </IconButton>
-            <IconButton label="מחיקת בלוק" onClick={() => setConfirmDelete(true)} tone="destructive">
+            <IconButton
+              label="מחיקת בלוק"
+              onClick={() => setConfirmDelete(true)}
+              tone="destructive"
+            >
               <XIcon aria-hidden className="size-4" />
             </IconButton>
           </div>
@@ -114,9 +110,7 @@ export function TemplateBlockCard({ block, positionIndex, siblingsCount, onAddEx
             <Field label="שם מוצג">
               <Input
                 value={block.display_label ?? ""}
-                onChange={(e) =>
-                  updateBlock(block.id, { display_label: e.target.value || null })
-                }
+                onChange={(e) => updateBlock(block.id, { display_label: e.target.value || null })}
                 placeholder={BLOCK_TYPE_LABELS[block.block_type]}
                 className="min-h-11 rounded-xl border-border-strong"
               />

@@ -31,14 +31,7 @@ export type BlockType =
   | "cooldown" // סיום
   | "custom"; // מותאם אישית
 
-export type SetType =
-  | "regular"
-  | "warmup"
-  | "drop_set"
-  | "failure"
-  | "amrap"
-  | "timed"
-  | "custom";
+export type SetType = "regular" | "warmup" | "drop_set" | "failure" | "amrap" | "timed" | "custom";
 
 /** מזהי צבע סמנטיים לבלוקים בסופרסט. עוקבים אחרי טוקנים ב־styles.css. */
 export type BlockColorToken =
@@ -153,9 +146,7 @@ export interface WorkoutTemplateSnapshot {
   template: Omit<WorkoutTemplate, "created_at" | "updated_at" | "deleted_at">;
   blocks: Array<
     Omit<WorkoutTemplateBlock, "created_at" | "updated_at" | "deleted_at"> & {
-      exercises: Array<
-        Omit<WorkoutTemplateExercise, "created_at" | "updated_at" | "deleted_at">
-      >;
+      exercises: Array<Omit<WorkoutTemplateExercise, "created_at" | "updated_at" | "deleted_at">>;
     }
   >;
 }
@@ -163,15 +154,17 @@ export interface WorkoutTemplateSnapshot {
 // ---------- DTOs ----------
 
 export type NewTemplate = Partial<
-  Omit<WorkoutTemplate, keyof WorkoutTemplateRecordBase | "version" | "usage_count" | "last_used_at">
+  Omit<
+    WorkoutTemplate,
+    keyof WorkoutTemplateRecordBase | "version" | "usage_count" | "last_used_at"
+  >
 > & {
   name: string;
 };
 
-export type NewBlock = Omit<
-  WorkoutTemplateBlock,
-  keyof WorkoutTemplateRecordBase | "sequence"
-> & { sequence?: number };
+export type NewBlock = Omit<WorkoutTemplateBlock, keyof WorkoutTemplateRecordBase | "sequence"> & {
+  sequence?: number;
+};
 
 export type NewTemplateExercise = Omit<
   WorkoutTemplateExercise,

@@ -202,7 +202,9 @@ export function getBlock(id: string): WorkoutTemplateBlock | null {
   return readTemplatesState().blocks.find((b) => b.id === id) ?? null;
 }
 
-function defaultsForBlockType(type: BlockType): Pick<
+function defaultsForBlockType(
+  type: BlockType,
+): Pick<
   WorkoutTemplateBlock,
   "rounds" | "rest_between_exercises_seconds" | "rest_between_rounds_seconds" | "color_token"
 > {
@@ -252,7 +254,10 @@ function defaultsForBlockType(type: BlockType): Pick<
   }
 }
 
-export function createBlock(templateId: string, input: Partial<NewBlock> = {}): WorkoutTemplateBlock {
+export function createBlock(
+  templateId: string,
+  input: Partial<NewBlock> = {},
+): WorkoutTemplateBlock {
   const existing = listBlocks(templateId);
   const sequence = input.sequence ?? existing.length;
   const type: BlockType = input.block_type ?? "single";
@@ -383,10 +388,7 @@ export function addExerciseToBlock(
   return record;
 }
 
-export function updateTemplateExercise(
-  id: string,
-  patch: Partial<WorkoutTemplateExercise>,
-): void {
+export function updateTemplateExercise(id: string, patch: Partial<WorkoutTemplateExercise>): void {
   const affectedBlocks = new Set<string>();
   commit((s) => ({
     ...s,
@@ -524,9 +526,7 @@ export function saveVersion(templateId: string, reason?: string): WorkoutTemplat
 function touchTemplate(templateId: string): void {
   commit((s) => ({
     ...s,
-    templates: s.templates.map((t) =>
-      t.id === templateId ? { ...t, updated_at: nowIso() } : t,
-    ),
+    templates: s.templates.map((t) => (t.id === templateId ? { ...t, updated_at: nowIso() } : t)),
   }));
 }
 

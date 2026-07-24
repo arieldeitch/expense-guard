@@ -146,9 +146,7 @@ function BlockReadonly({ blockId, index }: { blockId: string; index: number }) {
         <span className="grid size-9 place-items-center rounded-lg bg-tint text-sm font-black">
           {letter}
         </span>
-        <div className="min-w-0 truncate text-sm font-bold">
-          {exs.length} תרגילים
-        </div>
+        <div className="min-w-0 truncate text-sm font-bold">{exs.length} תרגילים</div>
         <Chip>
           <Layers aria-hidden className="me-0.5 size-3" />
           בלוק
@@ -156,7 +154,13 @@ function BlockReadonly({ blockId, index }: { blockId: string; index: number }) {
       </div>
       <ul className="ms-11 mt-2 space-y-1 text-sm">
         {exs.map((te, i) => (
-          <ReadonlyExerciseLine key={te.id} exerciseId={te.exercise_id} sublabel={`${letter}${i + 1}`} sets={te.planned_sets} reps={te.planned_reps} />
+          <ReadonlyExerciseLine
+            key={te.id}
+            exerciseId={te.exercise_id}
+            sublabel={`${letter}${i + 1}`}
+            sets={te.planned_sets}
+            reps={te.planned_reps}
+          />
         ))}
       </ul>
     </Tile>

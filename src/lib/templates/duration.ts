@@ -14,7 +14,11 @@ import {
   DEFAULT_SUPERSET_ROUND_REST_SECONDS,
 } from "./defaults";
 import { listBlocks, listBlockExercises, getTemplate } from "./repo";
-import type { TemplateDurationEstimate, WorkoutTemplateBlock, WorkoutTemplateExercise } from "./types";
+import type {
+  TemplateDurationEstimate,
+  WorkoutTemplateBlock,
+  WorkoutTemplateExercise,
+} from "./types";
 
 export function estimateTemplateDuration(templateId: string): TemplateDurationEstimate {
   const template = getTemplate(templateId);
@@ -53,7 +57,9 @@ export function estimateTemplateDuration(templateId: string): TemplateDurationEs
     total += AVERAGE_TRANSITION_BETWEEN_EXERCISES_SECONDS;
   }
 
-  details.push(`חושב לפי ${blocks.length} בלוקים ו־${blocks.reduce((n, b) => n + Math.max(1, b.rounds), 0)} סבבים סה"כ`);
+  details.push(
+    `חושב לפי ${blocks.length} בלוקים ו־${blocks.reduce((n, b) => n + Math.max(1, b.rounds), 0)} סבבים סה"כ`,
+  );
   details.push("הערכה — יכולה להשתנות בפועל לפי קצב המנוחה");
 
   const seconds = Math.round(total);

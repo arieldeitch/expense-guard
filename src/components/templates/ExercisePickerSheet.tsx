@@ -36,13 +36,7 @@ interface Props {
   title?: string;
 }
 
-export function ExercisePickerSheet({
-  open,
-  onOpenChange,
-  locationId,
-  onSelect,
-  title,
-}: Props) {
+export function ExercisePickerSheet({ open, onOpenChange, locationId, onSelect, title }: Props) {
   const all = useAllExercises();
   const muscleGroups = useMuscleGroups();
   const locationEquipment = useEquipmentInLocation(locationId ?? "");
@@ -167,7 +161,10 @@ export function ExercisePickerSheet({
                   muscleName={mgById.get(ex.primary_muscle_group_id)?.name_he ?? "—"}
                   availabilityBadge={
                     onlyAvailable || locationId
-                      ? availabilityLabel(ex, locationId ? { locationId, items: locationEquipment } : null)
+                      ? availabilityLabel(
+                          ex,
+                          locationId ? { locationId, items: locationEquipment } : null,
+                        )
                       : null
                   }
                   onToggle={() => toggle(ex.id)}
@@ -291,7 +288,9 @@ function PickerRow({
           {muscleName}
         </span>
       </span>
-      {availabilityBadge ? <Chip tone={availabilityBadge.tone}>{availabilityBadge.label}</Chip> : null}
+      {availabilityBadge ? (
+        <Chip tone={availabilityBadge.tone}>{availabilityBadge.label}</Chip>
+      ) : null}
     </button>
   );
 }
