@@ -1,6 +1,25 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: 2026-07-30 (שלב היסטוריה + אנליטיקה לכוח)
+תאריך עדכון: 2026-08-XX (שלב מודול כוח בבית)
+
+## עדכון אחרון — Home Strength Module
+
+- `src/lib/home/` — data layer מלא: `types.ts`, `storage.ts`, `repo.ts`, `metrics.ts`, `records.ts`, `hooks.ts`, `seed.ts`, `index.ts`.
+- מודלים: `HomeSession`, `HomeExerciseEntry` (+ `snapshot` להיסטוריית substitution), `HomeExerciseSet` (reps/time/tempo/side/added_weight/assistance/round), `HomeTemplate` + entries + versions. Soft-delete בכל הישויות.
+- Repo תומך: quick entry (תרגיל יחיד), אימון מלא, autosave, החלפת תרגיל, שכפול/מחיקת סט, ארכוב/שחזור, סבבים (rounds), תבניות ביתיות + גרסאות + הפעלה מתבנית.
+- Metrics: `stabilityFromReps` (CV-based), `homeQualityScore` (Completion 0.5 + Stability 0.3 + Data completeness 0.2), `summarizeSets` (avg/median/max/last-to-first ratio). ראה `docs/ai/metrics-home.md`.
+- Records: baseline-aware (session ראשון = baseline, לא שיא): `top_reps_in_set`, `total_reps_in_session`, `longest_hold`, `top_reps_with_added_weight`.
+- UI: `src/components/home/` — `RepStepper` (−1/+1/+5), `HoldTimer` (timestamp), `HomeSetRow`, `HomeSessionTile[Wrapper]`, `HomeTemplateTile`.
+- Routes: `/home` (launchpad עם recent + templates + quick actions), `/home/quick`, `/home/quick/$exerciseId`, `/home/sessions/$id` (ביצוע), `/home/sessions/$id/summary` (עובדתי + PRs + Quality), `/home/history`, `/home/history/$id`, `/home/templates`, `/home/templates/$id`, `/home/templates/$id/edit` (עורך מלא).
+- Behavior: Autosave על כל mutation; דיווח עצמאי לכל סט (חזרות שונות); substitution שומר snapshot; skipped סט לא נספר; שפה עובדתית.
+- Tests: `src/lib/home/__tests__/home.test.ts` — 20 בדיקות. סה"כ **139/139** עוברות (9 קבצים).
+- Typecheck נקי.
+
+---
+
+## סיכום קודם
+
+
 
 ## סיכום מנהלים
 
