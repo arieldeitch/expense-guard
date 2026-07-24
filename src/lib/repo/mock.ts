@@ -94,10 +94,7 @@ export const mockRepository: Repository = {
 };
 
 /** Testing helper — repo פונקציונלי עם נתונים מוזרקים. */
-export function createInMemoryRepo(seed: {
-  activities?: Activity[];
-  goals?: Goal[];
-}): Repository {
+export function createInMemoryRepo(seed: { activities?: Activity[]; goals?: Goal[] }): Repository {
   const activities = seed.activities ?? [];
   const goals = seed.goals ?? [];
   return {

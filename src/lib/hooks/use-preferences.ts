@@ -13,11 +13,7 @@ export function usePreferences(): {
   preferences: Preferences;
   setPreferences: (patch: Partial<Preferences>) => void;
 } {
-  const preferences = useSyncExternalStore(
-    subscribePreferences,
-    readPreferences,
-    readPreferences,
-  );
+  const preferences = useSyncExternalStore(subscribePreferences, readPreferences, readPreferences);
   const setPreferences = useCallback((patch: Partial<Preferences>) => {
     writePreferences(patch);
   }, []);

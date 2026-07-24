@@ -53,7 +53,9 @@ function GymPage() {
         </Tile>
         <Tile variant="gym" tone="soft" size="sm">
           <TileLabel>פעילות אחרונה</TileLabel>
-          <TileMetric value={hasActivity ? (formatDaysSince(summary!.daysSinceLast) ?? "–") : "–"} />
+          <TileMetric
+            value={hasActivity ? (formatDaysSince(summary!.daysSinceLast) ?? "–") : "–"}
+          />
           <TileFootnote>{hasActivity ? "" : "טרם דווח"}</TileFootnote>
         </Tile>
         <Tile variant="gym" tone="soft" size="sm">

@@ -46,10 +46,7 @@ describe("preferences", () => {
   });
 
   it("ערך לא חוקי נופל לברירת מחדל", () => {
-    localStorage.setItem(
-      "fitlog:preferences:v1",
-      JSON.stringify({ landingModule: "not-a-thing" }),
-    );
+    localStorage.setItem("fitlog:preferences:v1", JSON.stringify({ landingModule: "not-a-thing" }));
     expect(readPreferences().landingModule).toBe("home");
   });
 

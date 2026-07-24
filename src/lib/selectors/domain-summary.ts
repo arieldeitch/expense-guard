@@ -86,9 +86,7 @@ export function computeDomainSummary(
   }
 
   // last activity + days since
-  const sorted = [...domainActivities].sort((a, b) =>
-    a.occurredAt < b.occurredAt ? 1 : -1,
-  );
+  const sorted = [...domainActivities].sort((a, b) => (a.occurredAt < b.occurredAt ? 1 : -1));
   const lastActivityAt = sorted[0]?.occurredAt ?? null;
   const daysSinceLast =
     lastActivityAt !== null

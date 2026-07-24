@@ -52,9 +52,7 @@ function RunningPage() {
             value={isPending ? "–" : (summary?.primary.value ?? "–")}
             unit={summary?.primary.unit}
           />
-          <TileFootnote>
-            {hasActivity ? "החודש הנוכחי" : "ללא נתונים"}
-          </TileFootnote>
+          <TileFootnote>{hasActivity ? "החודש הנוכחי" : "ללא נתונים"}</TileFootnote>
         </Tile>
         <Tile variant="run" tone="soft" size="sm">
           <TileLabel>ריצות החודש</TileLabel>
@@ -63,7 +61,9 @@ function RunningPage() {
         </Tile>
         <Tile variant="run" tone="soft" size="sm">
           <TileLabel>פעילות אחרונה</TileLabel>
-          <TileMetric value={hasActivity ? (formatDaysSince(summary!.daysSinceLast) ?? "–") : "–"} />
+          <TileMetric
+            value={hasActivity ? (formatDaysSince(summary!.daysSinceLast) ?? "–") : "–"}
+          />
           <TileFootnote>{hasActivity ? "" : "טרם דווח"}</TileFootnote>
         </Tile>
         <Tile variant="run" tone="soft" size="sm">

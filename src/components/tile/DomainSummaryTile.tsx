@@ -148,13 +148,7 @@ function MetricRow({
   );
 }
 
-function LastRow({
-  summary,
-  loading,
-}: {
-  summary: DomainSummary | undefined;
-  loading?: boolean;
-}) {
+function LastRow({ summary, loading }: { summary: DomainSummary | undefined; loading?: boolean }) {
   if (loading || !summary) return null;
   if (!summary.hasAnyActivity) return null;
   const label = formatDaysSince(summary.daysSinceLast);

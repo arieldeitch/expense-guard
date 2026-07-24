@@ -32,10 +32,14 @@ function NewRunPage() {
             </div>
             <div className="min-w-0">
               <div className="text-lg font-black">ריצת חוץ</div>
-              <div className="text-sm text-muted-foreground">מסלול פתוח, GPS ידני או Suunto import.</div>
+              <div className="text-sm text-muted-foreground">
+                מסלול פתוח, GPS ידני או Suunto import.
+              </div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
         <Tile variant="run" tone="soft" size="lg">
           <div className="flex items-start gap-3">
@@ -47,7 +51,9 @@ function NewRunPage() {
               <div className="text-sm text-muted-foreground">כיול מהיר לפי מסילה שמורה.</div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
       </div>
       <div className="mt-6 px-4 sm:px-6">
@@ -55,7 +61,13 @@ function NewRunPage() {
           <div className="flex items-center gap-3">
             <Footprints aria-hidden className="size-5 text-muted-foreground" />
             <TileFootnote>
-              רוצה לחזור? <Link to="/running" className="font-bold text-foreground underline-offset-2 hover:underline">חזרה לתחום ריצה</Link>
+              רוצה לחזור?{" "}
+              <Link
+                to="/running"
+                className="font-bold text-foreground underline-offset-2 hover:underline"
+              >
+                חזרה לתחום ריצה
+              </Link>
             </TileFootnote>
           </div>
         </Tile>

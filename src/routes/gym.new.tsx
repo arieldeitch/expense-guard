@@ -32,10 +32,14 @@ function NewGymPage() {
             </div>
             <div className="min-w-0">
               <div className="text-lg font-black">התחלה מתבנית</div>
-              <div className="text-sm text-muted-foreground">Push / Pull / רגליים / מותאם אישית.</div>
+              <div className="text-sm text-muted-foreground">
+                Push / Pull / רגליים / מותאם אישית.
+              </div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול התבניות ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול התבניות ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
         <Tile variant="gym" tone="soft" size="lg">
           <div className="flex items-start gap-3">
@@ -47,7 +51,9 @@ function NewGymPage() {
               <div className="text-sm text-muted-foreground">הוספת תרגילים תוך כדי.</div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
       </div>
       <div className="mt-6 px-4 sm:px-6">
@@ -55,7 +61,12 @@ function NewGymPage() {
           <div className="flex items-center gap-3">
             <Dumbbell aria-hidden className="size-5 text-muted-foreground" />
             <TileFootnote>
-              <Link to="/gym" className="font-bold text-foreground underline-offset-2 hover:underline">חזרה לתחום חדר כושר</Link>
+              <Link
+                to="/gym"
+                className="font-bold text-foreground underline-offset-2 hover:underline"
+              >
+                חזרה לתחום חדר כושר
+              </Link>
             </TileFootnote>
           </div>
         </Tile>

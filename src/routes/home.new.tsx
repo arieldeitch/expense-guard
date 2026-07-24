@@ -35,7 +35,9 @@ function NewHomeWorkoutPage() {
               <div className="text-sm text-muted-foreground">שכיבות סמיכה, מתח, סקוואטים.</div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול הדיווח ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
         <Tile variant="home" tone="soft" size="lg">
           <div className="flex items-start gap-3">
@@ -47,7 +49,9 @@ function NewHomeWorkoutPage() {
               <div className="text-sm text-muted-foreground">אימון full-body / ליבה / משיכה.</div>
             </div>
           </div>
-          <TileFootnote className="mt-2">מודול התבניות ייבנה בשלב הבא. לא נשמר מידע כאן.</TileFootnote>
+          <TileFootnote className="mt-2">
+            מודול התבניות ייבנה בשלב הבא. לא נשמר מידע כאן.
+          </TileFootnote>
         </Tile>
       </div>
       <div className="mt-6 px-4 sm:px-6">
@@ -55,7 +59,12 @@ function NewHomeWorkoutPage() {
           <div className="flex items-center gap-3">
             <HeartPulse aria-hidden className="size-5 text-muted-foreground" />
             <TileFootnote>
-              <Link to="/home" className="font-bold text-foreground underline-offset-2 hover:underline">חזרה לתחום בית</Link>
+              <Link
+                to="/home"
+                className="font-bold text-foreground underline-offset-2 hover:underline"
+              >
+                חזרה לתחום בית
+              </Link>
             </TileFootnote>
           </div>
         </Tile>

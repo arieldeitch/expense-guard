@@ -1,5 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Settings2, MapPin, Trash2, Download, Cpu, Home, Footprints, Dumbbell, HeartPulse, Check, Database } from "lucide-react";
+import {
+  Settings2,
+  MapPin,
+  Trash2,
+  Download,
+  Cpu,
+  Home,
+  Footprints,
+  Dumbbell,
+  HeartPulse,
+  Check,
+  Database,
+} from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
@@ -96,8 +108,7 @@ function DefaultModuleSetting() {
 }
 
 function DataSourceTile() {
-  const label =
-    activeRepoKind === "mock" ? "נתוני mock מקומיים" : "מחובר ל־Lovable Cloud";
+  const label = activeRepoKind === "mock" ? "נתוני mock מקומיים" : "מחובר ל־Lovable Cloud";
   return (
     <Tile>
       <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
@@ -127,15 +138,7 @@ const futureItems: { title: string; hint: string; icon: ReactNode }[] = [
   { title: "הגדרות AI", hint: "רק כשיופעל. תמיד עם אישור.", icon: <Cpu aria-hidden /> },
 ];
 
-function DisabledItemTile({
-  title,
-  hint,
-  icon,
-}: {
-  title: string;
-  hint: string;
-  icon: ReactNode;
-}) {
+function DisabledItemTile({ title, hint, icon }: { title: string; hint: string; icon: ReactNode }) {
   return (
     <Tile disabled className="opacity-70">
       <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
