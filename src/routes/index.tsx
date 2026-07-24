@@ -103,9 +103,7 @@ function HomePage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="truncate text-base font-bold">תובנות</div>
-              <div className="truncate text-sm text-muted-foreground">
-                מוצגות אחרי איסוף נתונים
-              </div>
+              <div className="truncate text-sm text-muted-foreground">מוצגות אחרי איסוף נתונים</div>
             </div>
           </div>
         </Tile>
@@ -137,11 +135,7 @@ function DomainTile({
   hint: string;
 }) {
   return (
-    <Link
-      to={to}
-      className="focus-visible:outline-none"
-      aria-label={`${title} — ${hint}`}
-    >
+    <Link to={to} className="focus-visible:outline-none" aria-label={`${title} — ${hint}`}>
       <Tile variant={variant} tone="soft" interactive size="lg" className="h-full">
         <div className="flex items-start justify-between">
           <div

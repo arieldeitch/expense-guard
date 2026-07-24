@@ -84,8 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Fit Log · אימונים אישיים" },
       {
         name: "description",
-        content:
-          "אפליקציית אימונים אישית: ריצה, חדר כושר וכוח בבית. מבוססת נתונים ולא עידוד ריק.",
+        content: "אפליקציית אימונים אישית: ריצה, חדר כושר וכוח בבית. מבוססת נתונים ולא עידוד ריק.",
       },
       { property: "og:title", content: "Fit Log · אימונים אישיים" },
       {
