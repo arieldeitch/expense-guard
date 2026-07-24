@@ -244,8 +244,3 @@ function HomePage() {
   );
 }
 
-function MiniHistoryTile({ sessionId }: { sessionId: string }) {
-  // Wrap HomeSessionTile lazily to keep computation local.
-  const HomeMini = require("@/components/home/HomeSessionTileWrapper").default;
-  return <HomeMini sessionId={sessionId} />;
-}
