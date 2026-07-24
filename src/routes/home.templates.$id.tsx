@@ -64,7 +64,16 @@ function TemplateDetailPage() {
       />
       <div className="space-y-2 px-4 sm:px-6">
         {entries.length ? (
-          entries.map((e) => <EntryTile key={e.id} entryId={e.id} />)
+          entries.map((e) => (
+            <EntryTile
+              key={e.id}
+              exerciseId={e.exercise_id}
+              plannedSets={e.planned_sets}
+              plannedReps={e.planned_reps}
+              plannedDuration={e.planned_duration_seconds}
+              restSeconds={e.rest_seconds}
+            />
+          ))
         ) : (
           <EmptyState
             title="אין תרגילים בתבנית"
@@ -101,11 +110,20 @@ function TemplateDetailPage() {
   );
 }
 
-function EntryTile({ entryId }: { entryId: string }) {
-  const entries = useHomeTemplateEntries(useEntryTemplateId(entryId));
-  const entry = entries.find((e) => e.id === entryId);
-  const exercise = useExercise(entry?.exercise_id);
-  if (!entry) return null;
+function EntryTile({
+  exerciseId,
+  plannedSets,
+  plannedReps,
+  plannedDuration,
+  restSeconds,
+}: {
+  exerciseId: string;
+  plannedSets: number;
+  plannedReps: number | null;
+  plannedDuration: number | null;
+  restSeconds: number | null;
+}) {
+  const exercise = useExercise(exerciseId);
   return (
     <Tile variant="home" tone="soft">
       <div className="flex items-start justify-between gap-2">
@@ -115,24 +133,14 @@ function EntryTile({ entryId }: { entryId: string }) {
         </div>
         <div className="text-end">
           <TileLabel>סטים</TileLabel>
-          <div className="ltr-nums text-lg font-black">{entry.planned_sets}</div>
+          <div className="ltr-nums text-lg font-black">{plannedSets}</div>
         </div>
       </div>
       <TileFootnote>
-        {entry.planned_reps ? `${entry.planned_reps} חז׳` : ""}
-        {entry.planned_duration_seconds ? ` · ${entry.planned_duration_seconds}שנ׳` : ""}
-        {entry.rest_seconds ? ` · מנוחה ${entry.rest_seconds}שנ׳` : ""}
+        {plannedReps ? `${plannedReps} חז׳` : ""}
+        {plannedDuration ? ` · ${plannedDuration}שנ׳` : ""}
+        {restSeconds ? ` · מנוחה ${restSeconds}שנ׳` : ""}
       </TileFootnote>
     </Tile>
   );
-}
-
-// לוקח את template_id מרשומת ה־entry (דרך storage) לצורך רה־טריגר.
-function useEntryTemplateId(entryId: string): string {
-  // ה־hook רק צריך מזהה יציב; יביא אותו מ־storage ישירות בזמן ריצה.
-  const readHomeState = require("@/lib/home").readHomeState as () => {
-    templateEntries: Array<{ id: string; template_id: string }>;
-  };
-  const s = readHomeState();
-  return s.templateEntries.find((e) => e.id === entryId)?.template_id ?? "";
 }

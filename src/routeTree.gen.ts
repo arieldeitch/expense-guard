@@ -26,6 +26,7 @@ import { Route as RunningNewRouteImport } from './routes/running.new'
 import { Route as RunningHistoryRouteImport } from './routes/running.history'
 import { Route as RunningIdRouteImport } from './routes/running.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
+import { Route as HomeTemplatesRouteImport } from './routes/home.templates'
 import { Route as HomeQuickRouteImport } from './routes/home.quick'
 import { Route as HomeNewRouteImport } from './routes/home.new'
 import { Route as HomeHistoryRouteImport } from './routes/home.history'
@@ -38,6 +39,7 @@ import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit
 import { Route as SessionsIdSummaryRouteImport } from './routes/sessions.$id.summary'
 import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
+import { Route as HomeTemplatesIdRouteImport } from './routes/home.templates.$id'
 import { Route as HomeSessionsIdRouteImport } from './routes/home.sessions.$id'
 import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$exerciseId'
 import { Route as HomeHistoryIdRouteImport } from './routes/home.history.$id'
@@ -130,6 +132,11 @@ const LocationsIdRoute = LocationsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => LocationsRoute,
 } as any)
+const HomeTemplatesRoute = HomeTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeQuickRoute = HomeQuickRouteImport.update({
   id: '/quick',
   path: '/quick',
@@ -190,6 +197,11 @@ const RunningIdEditRoute = RunningIdEditRouteImport.update({
   path: '/edit',
   getParentRoute: () => RunningIdRoute,
 } as any)
+const HomeTemplatesIdRoute = HomeTemplatesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HomeTemplatesRoute,
+} as any)
 const HomeSessionsIdRoute = HomeSessionsIdRouteImport.update({
   id: '/sessions/$id',
   path: '/sessions/$id',
@@ -238,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/home/history': typeof HomeHistoryRouteWithChildren
   '/home/new': typeof HomeNewRoute
   '/home/quick': typeof HomeQuickRouteWithChildren
+  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -251,6 +264,7 @@ export interface FileRoutesByFullPath {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
+  '/home/templates/$id': typeof HomeTemplatesIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -275,6 +289,7 @@ export interface FileRoutesByTo {
   '/home/history': typeof HomeHistoryRouteWithChildren
   '/home/new': typeof HomeNewRoute
   '/home/quick': typeof HomeQuickRouteWithChildren
+  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -288,6 +303,7 @@ export interface FileRoutesByTo {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
+  '/home/templates/$id': typeof HomeTemplatesIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -313,6 +329,7 @@ export interface FileRoutesById {
   '/home/history': typeof HomeHistoryRouteWithChildren
   '/home/new': typeof HomeNewRoute
   '/home/quick': typeof HomeQuickRouteWithChildren
+  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/locations/$id': typeof LocationsIdRoute
   '/running/$id': typeof RunningIdRouteWithChildren
   '/running/history': typeof RunningHistoryRoute
@@ -326,6 +343,7 @@ export interface FileRoutesById {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
+  '/home/templates/$id': typeof HomeTemplatesIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -352,6 +370,7 @@ export interface FileRouteTypes {
     | '/home/history'
     | '/home/new'
     | '/home/quick'
+    | '/home/templates'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -365,6 +384,7 @@ export interface FileRouteTypes {
     | '/home/history/$id'
     | '/home/quick/$exerciseId'
     | '/home/sessions/$id'
+    | '/home/templates/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -389,6 +409,7 @@ export interface FileRouteTypes {
     | '/home/history'
     | '/home/new'
     | '/home/quick'
+    | '/home/templates'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -402,6 +423,7 @@ export interface FileRouteTypes {
     | '/home/history/$id'
     | '/home/quick/$exerciseId'
     | '/home/sessions/$id'
+    | '/home/templates/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -426,6 +448,7 @@ export interface FileRouteTypes {
     | '/home/history'
     | '/home/new'
     | '/home/quick'
+    | '/home/templates'
     | '/locations/$id'
     | '/running/$id'
     | '/running/history'
@@ -439,6 +462,7 @@ export interface FileRouteTypes {
     | '/home/history/$id'
     | '/home/quick/$exerciseId'
     | '/home/sessions/$id'
+    | '/home/templates/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -582,6 +606,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsIdRouteImport
       parentRoute: typeof LocationsRoute
     }
+    '/home/templates': {
+      id: '/home/templates'
+      path: '/templates'
+      fullPath: '/home/templates'
+      preLoaderRoute: typeof HomeTemplatesRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/quick': {
       id: '/home/quick'
       path: '/quick'
@@ -665,6 +696,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/running/$id/edit'
       preLoaderRoute: typeof RunningIdEditRouteImport
       parentRoute: typeof RunningIdRoute
+    }
+    '/home/templates/$id': {
+      id: '/home/templates/$id'
+      path: '/$id'
+      fullPath: '/home/templates/$id'
+      preLoaderRoute: typeof HomeTemplatesIdRouteImport
+      parentRoute: typeof HomeTemplatesRoute
     }
     '/home/sessions/$id': {
       id: '/home/sessions/$id'
@@ -785,6 +823,18 @@ const HomeQuickRouteWithChildren = HomeQuickRoute._addFileChildren(
   HomeQuickRouteChildren,
 )
 
+interface HomeTemplatesRouteChildren {
+  HomeTemplatesIdRoute: typeof HomeTemplatesIdRoute
+}
+
+const HomeTemplatesRouteChildren: HomeTemplatesRouteChildren = {
+  HomeTemplatesIdRoute: HomeTemplatesIdRoute,
+}
+
+const HomeTemplatesRouteWithChildren = HomeTemplatesRoute._addFileChildren(
+  HomeTemplatesRouteChildren,
+)
+
 interface HomeSessionsIdRouteChildren {
   HomeSessionsIdSummaryRoute: typeof HomeSessionsIdSummaryRoute
 }
@@ -801,6 +851,7 @@ interface HomeRouteChildren {
   HomeHistoryRoute: typeof HomeHistoryRouteWithChildren
   HomeNewRoute: typeof HomeNewRoute
   HomeQuickRoute: typeof HomeQuickRouteWithChildren
+  HomeTemplatesRoute: typeof HomeTemplatesRouteWithChildren
   HomeSessionsIdRoute: typeof HomeSessionsIdRouteWithChildren
 }
 
@@ -808,6 +859,7 @@ const HomeRouteChildren: HomeRouteChildren = {
   HomeHistoryRoute: HomeHistoryRouteWithChildren,
   HomeNewRoute: HomeNewRoute,
   HomeQuickRoute: HomeQuickRouteWithChildren,
+  HomeTemplatesRoute: HomeTemplatesRouteWithChildren,
   HomeSessionsIdRoute: HomeSessionsIdRouteWithChildren,
 }
 
