@@ -135,7 +135,16 @@ function RunDetail() {
 
       {treadmill ? (
         <>
-          <SectionHeader title="הליכון" />
+          <SectionHeader
+            title="הליכון"
+            action={
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/treadmills/$id" params={{ id: treadmill.id }}>
+                  היסטוריית כיול
+                </Link>
+              </Button>
+            }
+          />
           <div className="px-4 sm:px-6">
             <Tile>
               <div className="font-bold">{treadmill.display_name}</div>
@@ -146,6 +155,79 @@ function RunDetail() {
           </div>
         </>
       ) : null}
+
+      <SectionHeader
+        title="נתוני Suunto"
+        action={
+          <div className="flex gap-1">
+            {suunto ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  if (!window.confirm("להסיר את נתוני Suunto? ניתן לשחזר מסל המחזור."))
+                    return;
+                  suuntoRepo.softDeleteSuuntoForRun(id, "suunto");
+                  toast.info("נתוני Suunto הוסרו");
+                }}
+                aria-label="הסרת Suunto"
+              >
+                <X className="size-4" />
+              </Button>
+            ) : hasTrashedSuunto ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  const n = suuntoRepo.restoreSuuntoForRun(id, "suunto");
+                  if (n > 0) toast.success("נתוני Suunto שוחזרו");
+                }}
+              >
+                <Undo2 className="me-1 size-4" />
+                שחזור
+              </Button>
+            ) : null}
+            <Button size="sm" onClick={() => setSuuntoOpen(true)}>
+              <Watch className="me-1 size-4" />
+              {suunto ? "עריכה" : "הוספה"}
+            </Button>
+          </div>
+        }
+      />
+      <div className="px-4 sm:px-6">
+        {suunto ? (
+          <ComparisonTiles
+            result={compareSnapshots(
+              treadmillSnapshotFromRun({
+                distance_meters: run.distance_meters,
+                duration_seconds: run.duration_seconds,
+                average_pace_s_per_km: run.average_pace_s_per_km,
+                average_speed_kmh: run.average_speed_kmh,
+                max_speed_kmh: run.max_speed_kmh,
+                average_heart_rate: run.average_heart_rate,
+                max_heart_rate: run.max_heart_rate,
+                average_cadence_spm: run.average_cadence_spm,
+                calories: run.calories,
+              }),
+              suunto,
+              {
+                firstLabel: run.run_type === "treadmill" ? "הליכון" : "ריצה",
+                secondLabel: suunto.device_name ?? "Suunto",
+              },
+            )}
+          />
+        ) : (
+          <Tile tone="soft" size="sm">
+            <TileLabel>אין נתוני Suunto לריצה זו</TileLabel>
+            <TileFootnote>
+              ניתן להוסיף מדדים מהשעון כדי להשוות מול נתוני{" "}
+              {run.run_type === "treadmill" ? "ההליכון" : "המקור"} ולזהות פערים.
+            </TileFootnote>
+          </Tile>
+        )}
+      </div>
+
+      <SuuntoForm runId={id} open={suuntoOpen} onOpenChange={setSuuntoOpen} existing={suunto} />
 
       {run.segments.length > 0 ? (
         <>
