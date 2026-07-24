@@ -9,13 +9,14 @@ import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Chip } from "@/components/catalog/shared";
-import { useAllTemplates } from "@/lib/templates";
+import { useAllTemplates, useTemplateExercises } from "@/lib/templates";
 import {
   duplicateSessionAsNew,
   startEmptySession,
   startSessionFromTemplate,
   useAllSessions,
 } from "@/lib/sessions";
+
 
 export const Route = createFileRoute("/gym/new")({
   head: () => ({
