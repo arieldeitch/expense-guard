@@ -91,29 +91,10 @@ function NewGymPage() {
         {templates.length === 0 ? (
           <EmptyState title="אין תבניות" description="נהל תבניות במסך התבניות." />
         ) : (
-          templates.slice(0, 6).map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => {
-                const s = startSessionFromTemplate(t.id);
-                if (s) go(s.id);
-              }}
-              className="tile-interactive rounded-xl border border-border-strong bg-surface p-3 text-start"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-black">{t.name}</div>
-                  <div className="mt-0.5 text-xs text-muted-foreground">
-                    {t.blocks.reduce((n, b) => n + b.exercises.length, 0)} תרגילים · v{t.version}
-                  </div>
-                </div>
-                <Chip>התחל</Chip>
-              </div>
-            </button>
-          ))
+          templates.slice(0, 6).map((t) => <TemplateStartTile key={t.id} template={t} onStart={go} />)
         )}
       </div>
+
 
       {recent.length > 0 ? (
         <>
