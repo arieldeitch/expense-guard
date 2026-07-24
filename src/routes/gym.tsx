@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
 import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
 import { formatDaysSince } from "@/lib/selectors/domain-summary";
+import { useAllTemplates } from "@/lib/templates";
 
 export const Route = createFileRoute("/gym")({
   head: () => ({
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/gym")({
 
 function GymPage() {
   const { data: summary, isPending } = useDomainSummary("gym");
+  const templates = useAllTemplates();
   const hasActivity = summary?.hasAnyActivity ?? false;
 
   return (
@@ -65,11 +67,16 @@ function GymPage() {
             {summary?.activeGoal ? summary.activeGoal.title : "אין יעד פעיל"}
           </TileFootnote>
         </Tile>
-        <Tile variant="gym" tone="soft" size="sm">
-          <TileLabel>תבניות</TileLabel>
-          <TileMetric value="–" />
-          <TileFootnote>מודול בקרוב</TileFootnote>
-        </Tile>
+        <Link
+          to="/templates"
+          className="tile-interactive block rounded-2xl border border-border-strong bg-surface p-3 text-start"
+        >
+          <Tile variant="gym" tone="soft" size="sm" className="border-0 bg-transparent p-0 shadow-none">
+            <TileLabel>תבניות</TileLabel>
+            <TileMetric value={String(templates.length)} />
+            <TileFootnote>לפתיחה ← ניהול תבניות</TileFootnote>
+          </Tile>
+        </Link>
       </div>
 
       <SectionHeader title="אימונים אחרונים" />
