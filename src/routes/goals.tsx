@@ -66,7 +66,7 @@ function GoalsPage() {
         <GoalCreateForm defaultDomain={domain ?? "running"} />
       </div>
 
-      <SectionHeader title={`יעדים${domain ? ` — ${DOMAIN_LABEL[domain]}` : ""}`} />
+      <SectionHeader title={`יעדים${domain ? ` — ${DOMAIN_LABEL[domain as GoalDomain]}` : ""}`} />
       <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-2 sm:px-6">
         {goals.length === 0 ? (
           <EmptyState
