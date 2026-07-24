@@ -34,6 +34,7 @@ import {
 import { MuscleMap } from "@/components/exercises/MuscleMap";
 import { AlternativesList } from "@/components/exercises/AlternativesList";
 import { MediaGallery } from "@/components/exercises/MediaGallery";
+import { ExerciseHistoryPanel } from "@/components/analytics/ExerciseHistoryPanel";
 import { ExerciseForm } from "@/components/exercises/ExerciseForm";
 import {
   EQUIPMENT_TYPE_LABEL,
@@ -376,11 +377,7 @@ function ExerciseDetailPage() {
 
       <SectionHeader title="היסטוריה" />
       <div className="px-4 sm:px-6">
-        <EmptyState
-          icon={<History aria-hidden />}
-          title="אין עדיין נתוני ביצוע"
-          description="כאשר יופעל מסך אימון, ייאספו כאן נפח, שיאים ותאריך שימוש אחרון."
-        />
+        <ExerciseHistoryPanel exerciseId={exercise.id} />
       </div>
 
       {!exercise.is_system ? (
