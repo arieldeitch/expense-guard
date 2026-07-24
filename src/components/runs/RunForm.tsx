@@ -222,7 +222,6 @@ export function RunForm({ runType, existing, initial }: Props) {
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   const setField = useCallback(
