@@ -103,6 +103,25 @@ function ExerciseDetailPage() {
 
   const mgById = useMemo(() => new Map(muscleGroups.map((m) => [m.id, m])), [muscleGroups]);
 
+  const snapshot = locationId ? { locationId, items: equipment } : null;
+  const favoriteIds = useMemo(
+    () => allExercises.filter((e) => e.is_favorite).map((e) => e.id),
+    [allExercises],
+  );
+  const alternatives = useMemo(
+    () =>
+      exercise
+        ? findAlternatives(exercise, {
+            candidatePool: allExercises,
+            snapshot,
+            favoriteIds,
+            limit: 6,
+          })
+        : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [exercise?.id, allExercises, snapshot?.locationId, equipment.length, favoriteIds],
+  );
+
   if (!exercise) return <MissingExercise />;
 
   const primaryMuscle = mgById.get(exercise.primary_muscle_group_id);
@@ -110,22 +129,8 @@ function ExerciseDetailPage() {
     .map((id) => mgById.get(id))
     .filter((m): m is NonNullable<typeof m> => Boolean(m));
 
-  const snapshot = locationId ? { locationId, items: equipment } : null;
   const availability = getExerciseAvailability(exercise, snapshot);
   const availabilityTone = AVAILABILITY_STATUS_TONE[availability.status];
-
-  const favoriteIds = allExercises.filter((e) => e.is_favorite).map((e) => e.id);
-  const alternatives = useMemo(
-    () =>
-      findAlternatives(exercise, {
-        candidatePool: allExercises,
-        snapshot,
-        favoriteIds,
-        limit: 6,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [exercise.id, allExercises, snapshot?.locationId, equipment.length],
-  );
 
   const parent = exercise.parent_exercise_id
     ? allExercises.find((e) => e.id === exercise.parent_exercise_id) ?? null
