@@ -21,8 +21,12 @@ import type {
 } from "./types";
 import { getGoalTypeSpec } from "./catalog";
 import type { RunSession } from "@/lib/runs/types";
-import type { StrengthSession, StrengthSet } from "@/lib/sessions/types";
-import type { HomeSession } from "@/lib/home/types";
+import type {
+  StrengthSession,
+  StrengthSessionExercise,
+  StrengthSet,
+} from "@/lib/sessions/types";
+import type { HomeSession, HomeExerciseEntry, HomeExerciseSet } from "@/lib/home/types";
 
 export const FORMULA_VERSION = "v1";
 
@@ -31,8 +35,11 @@ const MS_DAY = 86_400_000;
 export interface CalcContext {
   runs?: RunSession[];
   strengthSessions?: StrengthSession[];
+  strengthSessionExercises?: StrengthSessionExercise[];
   strengthSets?: StrengthSet[];
   homeSessions?: HomeSession[];
+  homeEntries?: HomeExerciseEntry[];
+  homeSets?: HomeExerciseSet[];
   /** current שהוזן ידנית ע"י המשתמש — משמש ב־custom_manual. */
   manualCurrent?: number | null;
   now?: Date;
