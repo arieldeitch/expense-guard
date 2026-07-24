@@ -12,7 +12,7 @@ import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import { Button } from "@/components/ui/button";
 import { DiffChart, type DiffPoint } from "@/components/suunto/DiffChart";
-import { catalogRepo, useTreadmill } from "@/lib/catalog";
+import { getTreadmill, useTreadmill } from "@/lib/catalog";
 import { useAllRuns } from "@/lib/runs";
 import {
   buildCalibrationInputs,
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/treadmills/$id")({
     ],
   }),
   loader: ({ params }) => {
-    const t = catalogRepo.getTreadmill(params.id);
+    const t = getTreadmill(params.id);
     if (!t) throw notFound();
     return { id: params.id };
   },
