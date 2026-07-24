@@ -387,17 +387,19 @@ export function updateTemplateExercise(
   id: string,
   patch: Partial<WorkoutTemplateExercise>,
 ): void {
-  let blockId: string | null = null;
+  const affectedBlocks = new Set<string>();
   commit((s) => ({
     ...s,
     exercises: s.exercises.map((e) => {
       if (e.id !== id) return e;
-      blockId = e.block_id;
-      return { ...e, ...patch, id: e.id, block_id: e.block_id, updated_at: nowIso() };
+      affectedBlocks.add(e.block_id);
+      const next = { ...e, ...patch, id: e.id, updated_at: nowIso() };
+      affectedBlocks.add(next.block_id);
+      return next;
     }),
   }));
-  if (blockId) {
-    const b = getBlock(blockId);
+  for (const bId of affectedBlocks) {
+    const b = getBlock(bId);
     if (b) touchTemplate(b.template_id);
   }
 }
