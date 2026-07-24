@@ -53,7 +53,7 @@ export function ImagePicker({
       <div className="flex items-center gap-3">
         <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-border-strong bg-tint text-muted-foreground">
           {value ? (
-            // eslint-disable-next-line @next/next/no-img-element
+            
             <img src={value} alt={label} className="h-full w-full object-cover" loading="lazy" />
           ) : (
             <ImagePlus aria-hidden className="size-6" />

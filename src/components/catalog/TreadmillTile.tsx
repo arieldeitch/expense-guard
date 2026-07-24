@@ -45,7 +45,7 @@ export function TreadmillTile({
         <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
           <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border-strong bg-tint text-muted-foreground">
             {treadmill.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
+              
               <img
                 src={treadmill.image_url}
                 alt={treadmill.display_name}

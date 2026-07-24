@@ -79,7 +79,7 @@ export function EquipmentTile({
         <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3">
           <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-border-strong bg-tint text-foreground">
             {equipment.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
+              
               <img
                 src={equipment.image_url}
                 alt={equipment.name}
