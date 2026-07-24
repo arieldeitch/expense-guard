@@ -28,7 +28,7 @@ export function TopBar({
     >
       <div className="mx-auto grid h-14 max-w-3xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-4">
         <div className="min-w-9">
-          {back && back !== false ? (
+          {back ? (
             <Link
               to={typeof back === "object" ? back.to : "/"}
               aria-label={typeof back === "object" ? back.label ?? "חזרה" : "חזרה"}
