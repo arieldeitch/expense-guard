@@ -5,7 +5,7 @@
  */
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { RotateCcw, Trash2, MapPin, Gauge, Dumbbell, Footprints } from "lucide-react";
+import { RotateCcw, Trash2, MapPin, Gauge, Dumbbell, Footprints, BookOpen } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
@@ -15,6 +15,7 @@ import { ConfirmDialog } from "@/components/catalog/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { restoreEquipment, restoreLocation, restoreTreadmill, useTrashItems } from "@/lib/catalog";
 import { runsRepo, useTrashedRuns, RUN_TYPE_LABELS } from "@/lib/runs";
+import { restoreExercise, useTrashedExercises } from "@/lib/exercises";
 
 export const Route = createFileRoute("/trash")({
   head: () => ({
@@ -31,8 +32,13 @@ export const Route = createFileRoute("/trash")({
 function TrashPage() {
   const trash = useTrashItems();
   const trashedRuns = useTrashedRuns();
+  const trashedExercises = useTrashedExercises();
   const total =
-    trash.locations.length + trash.treadmills.length + trash.equipment.length + trashedRuns.length;
+    trash.locations.length +
+    trash.treadmills.length +
+    trash.equipment.length +
+    trashedRuns.length +
+    trashedExercises.length;
 
   return (
     <AppShell topBar={{ title: "סל מחזור", back: { to: "/more" } }}>
@@ -111,6 +117,19 @@ function TrashPage() {
                   : undefined,
               }))}
               onRestore={runsRepo.restoreRun}
+            />
+          ) : null}
+
+          {trashedExercises.length > 0 ? (
+            <TrashSection
+              title="תרגילים"
+              icon={<BookOpen aria-hidden />}
+              items={trashedExercises.map((e) => ({
+                id: e.id,
+                primary: e.name_he,
+                secondary: e.name_en ?? undefined,
+              }))}
+              onRestore={restoreExercise}
             />
           ) : null}
         </div>
