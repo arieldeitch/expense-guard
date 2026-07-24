@@ -16,6 +16,7 @@ import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as GymRouteImport } from './routes/gym'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TreadmillsIdRouteImport } from './routes/treadmills.$id'
 import { Route as RunningRoutesRouteImport } from './routes/running.routes'
 import { Route as RunningNewRouteImport } from './routes/running.new'
 import { Route as RunningHistoryRouteImport } from './routes/running.history'
@@ -59,6 +60,11 @@ const GymRoute = GymRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreadmillsIdRoute = TreadmillsIdRouteImport.update({
+  id: '/treadmills/$id',
+  path: '/treadmills/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunningRoutesRoute = RunningRoutesRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
 }
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
 }
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
 }
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
   fileRoutesByTo: FileRoutesByTo
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
   id:
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
   fileRoutesById: FileRoutesById
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   MoreRoute: typeof MoreRoute
   RunningRoute: typeof RunningRouteWithChildren
   TrashRoute: typeof TrashRoute
+  TreadmillsIdRoute: typeof TreadmillsIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/treadmills/$id': {
+      id: '/treadmills/$id'
+      path: '/treadmills/$id'
+      fullPath: '/treadmills/$id'
+      preLoaderRoute: typeof TreadmillsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/running/routes': {
@@ -427,6 +447,7 @@ const rootRouteChildren: RootRouteChildren = {
   MoreRoute: MoreRoute,
   RunningRoute: RunningRouteWithChildren,
   TrashRoute: TrashRoute,
+  TreadmillsIdRoute: TreadmillsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
