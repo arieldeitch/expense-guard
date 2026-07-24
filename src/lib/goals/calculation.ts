@@ -350,6 +350,20 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
 function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
   const now = ctx.now ?? new Date();
   const sessions = activeHome(ctx.homeSessions);
+  const entries = (ctx.homeEntries ?? []).filter((e) => e.deleted_at == null);
+  const setsAll = (ctx.homeSets ?? []).filter((s) => s.deleted_at == null);
+  const sessionOfEntry = new Map<string, string>();
+  const exerciseOfEntry = new Map<string, string>();
+  for (const e of entries) {
+    sessionOfEntry.set(e.id, e.home_session_id);
+    exerciseOfEntry.set(e.id, e.exercise_id);
+  }
+  const sessionIds = new Set(sessions.map((s) => s.id));
+  const setsInScope = setsAll.filter((s) => {
+    const sid = sessionOfEntry.get(s.entry_id);
+    return sid ? sessionIds.has(sid) : false;
+  });
+
   switch (goal.goal_type) {
     case "home_consecutive_reps": {
       const exId = goal.linked_exercise_id;
@@ -357,16 +371,12 @@ function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
         return { current_value: null, source_activity_ids: [], details: "לא נבחר תרגיל", data_available: false };
       let best = 0;
       let bestSid = "";
-      for (const s of sessions) {
-        for (const ex of s.exercises ?? []) {
-          if (ex.exercise_id !== exId) continue;
-          for (const set of ex.sets ?? []) {
-            const reps = set.reps ?? 0;
-            if (reps > best) {
-              best = reps;
-              bestSid = s.id;
-            }
-          }
+      for (const set of setsInScope) {
+        if (exerciseOfEntry.get(set.entry_id) !== exId) continue;
+        const reps = set.reps ?? 0;
+        if (reps > best) {
+          best = reps;
+          bestSid = sessionOfEntry.get(set.entry_id) ?? "";
         }
       }
       return {
@@ -382,16 +392,12 @@ function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
         return { current_value: null, source_activity_ids: [], details: "לא נבחר תרגיל", data_available: false };
       let best = 0;
       let bestSid = "";
-      for (const s of sessions) {
-        for (const ex of s.exercises ?? []) {
-          if (ex.exercise_id !== exId) continue;
-          for (const set of ex.sets ?? []) {
-            const dur = set.duration_seconds ?? 0;
-            if (dur > best) {
-              best = dur;
-              bestSid = s.id;
-            }
-          }
+      for (const set of setsInScope) {
+        if (exerciseOfEntry.get(set.entry_id) !== exId) continue;
+        const dur = set.duration_seconds ?? 0;
+        if (dur > best) {
+          best = dur;
+          bestSid = sessionOfEntry.get(set.entry_id) ?? "";
         }
       }
       return {
@@ -405,17 +411,18 @@ function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
       const exId = goal.linked_exercise_id;
       if (!exId)
         return { current_value: null, source_activity_ids: [], details: "לא נבחר תרגיל", data_available: false };
+      const perSession = new Map<string, number>();
+      for (const set of setsInScope) {
+        if (exerciseOfEntry.get(set.entry_id) !== exId) continue;
+        const sid = sessionOfEntry.get(set.entry_id) ?? "";
+        perSession.set(sid, (perSession.get(sid) ?? 0) + (set.reps ?? 0));
+      }
       let best = 0;
       let bestSid = "";
-      for (const s of sessions) {
-        let sessionReps = 0;
-        for (const ex of s.exercises ?? []) {
-          if (ex.exercise_id !== exId) continue;
-          for (const set of ex.sets ?? []) sessionReps += set.reps ?? 0;
-        }
-        if (sessionReps > best) {
-          best = sessionReps;
-          bestSid = s.id;
+      for (const [sid, total] of perSession) {
+        if (total > best) {
+          best = total;
+          bestSid = sid;
         }
       }
       return {
@@ -438,9 +445,11 @@ function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
     case "home_sets_in_period": {
       const start = periodStart(goal.linked_period ?? "month", now, goal.start_date);
       const scope = start ? sessions.filter((s) => new Date(s.started_at) >= start) : sessions;
+      const scopeIds = new Set(scope.map((s) => s.id));
       let total = 0;
-      for (const s of scope) {
-        for (const ex of s.exercises ?? []) total += (ex.sets ?? []).length;
+      for (const set of setsAll) {
+        const sid = sessionOfEntry.get(set.entry_id);
+        if (sid && scopeIds.has(sid)) total++;
       }
       return {
         current_value: total,
@@ -449,6 +458,7 @@ function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
         data_available: true,
       };
     }
+
     case "home_reps_per_minute":
     case "home_custom":
       return {
