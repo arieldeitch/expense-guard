@@ -8,7 +8,6 @@ import {
   _resetPreferencesCache,
 } from "../index";
 
-
 // Minimal in-memory storage polyfill (vitest node env has no Web Storage).
 class MemStorage {
   private map = new Map<string, string>();
