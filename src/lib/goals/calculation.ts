@@ -333,7 +333,10 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
         data_available: planned > 0,
       };
     }
-
+    case "gym_custom_metric":
+    case "gym_custom":
+      return {
+        current_value: ctx.manualCurrent ?? goal.current_value,
         source_activity_ids: [],
         details: "יעד מותאם — ערך מוזן ידנית",
         data_available: (ctx.manualCurrent ?? goal.current_value) != null,
@@ -342,6 +345,7 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
       return { current_value: null, source_activity_ids: [], details: "", data_available: false };
   }
 }
+
 
 function calcHomeCurrent(goal: Goal, ctx: CalcContext): Calc {
   const now = ctx.now ?? new Date();
