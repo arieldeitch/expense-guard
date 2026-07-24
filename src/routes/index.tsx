@@ -8,9 +8,9 @@ import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
 import {
   hasLandedThisSession,
   markLandedThisSession,
+  readPreferences,
   LANDING_MODULE_ROUTES,
 } from "@/lib/preferences";
-import { usePreferences } from "@/lib/hooks/use-preferences";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,18 +35,21 @@ function LaunchpadPage() {
   const gym = useDomainSummary("gym");
   const home = useDomainSummary("home");
   const navigate = useNavigate();
-  const { preferences } = usePreferences();
 
-  // Default module redirect — פעם אחת לסשן.
+  // One-shot redirect לפי landing preference (פעם בסשן, לא reactive לשינויים).
   useEffect(() => {
     if (hasLandedThisSession()) return;
     markLandedThisSession();
-    if (preferences.landingModule === "home") return;
-    const target = LANDING_MODULE_ROUTES[preferences.landingModule];
+    const module = readPreferences().landingModule;
+    if (module === "home") return;
+    const target = LANDING_MODULE_ROUTES[module];
     if (target && target !== "/") {
       navigate({ to: target, replace: true });
     }
-  }, [navigate, preferences.landingModule]);
+    // Intentionally no deps — one shot per mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <AppShell>
