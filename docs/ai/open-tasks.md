@@ -4,10 +4,10 @@
 
 ## 🔴 Critical (חוסם התקדמות)
 
-- [ ] **החלטה מוצרית: מאיזה תחום להתחיל?** ריצה / חדר כושר / בית. משפיע על מיגרציה ראשונה, מסך ראשון, ו־MVP.
-- [ ] **RTL + i18n bootstrap** — `<html lang="he" dir="rtl">`, החלטה על ספריית i18n (או no-lib כי single-user).
-- [ ] **מטא־דאטה של `__root.tsx`** — להחליף "Lovable App" בשם המוצר האמיתי כשייקבע.
-- [ ] **החלפת placeholder ב־`/`** — לבנות landing/entry אמיתי.
+- [ ] **Workout Execution screen** — מסך ביצוע האימון שקורא מ־`sessions.$id`: סטים בפועל, RPE/RIR, מנוחה, סימון סופרסט. Data contract כבר קיים (`WorkoutSessionSnapshot`).
+- [ ] הפעלת **Lovable Cloud** + מיגרציות (עדיין ב־localStorage בלבד).
+- [ ] Auth flow (email+password, `_authenticated/route.tsx`).
+
 
 ## 🟠 High
 
