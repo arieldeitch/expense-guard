@@ -69,3 +69,10 @@
 - **behavior** · Autosave on every mutation; per-set independent reporting (no forced identical reps); exercise substitution snapshot; skipped-set exclusion from totals; factual language (no cheerleading).
 - **tests** · `src/lib/home/__tests__/home.test.ts` — 20 tests (metrics, repo lifecycle, quick entry, substitution, templates, PR baseline behavior, quality score).
 - **checks** · `bunx tsgo` נקי; `vitest` 139/139 עוברות (9 test files).
+
+## Goals module — 2026-07-24
+- `src/lib/goals/`: types, catalog (26 goal types × 3 domains), calculation (deterministic, formula v1), repo (CRUD + status transitions + versions + snapshots + activity links), hooks (useGoalProgress computes from live runs/sessions/home data), storage (localStorage + subscribers).
+- `src/components/goals/DomainPrimaryGoalTile.tsx`: reusable tile with progress bar + primary goal selection.
+- `src/routes/goals.tsx`, `goals.$id.tsx`, `goals.new.tsx`: list + filter + create form + detail (progress, projection, manual current, snapshots, versions, lifecycle actions).
+- Tests: 11 new (150 total passing). Typecheck + build clean.
+- Notes: is_primary is single-per-domain; material field changes bump version + write GoalVersion; snapshots append-only; event goals show days-remaining only (no % progress).
