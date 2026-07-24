@@ -376,11 +376,7 @@ function ExerciseDetailPage() {
 
       <SectionHeader title="היסטוריה" />
       <div className="px-4 sm:px-6">
-        <EmptyState
-          icon={<History aria-hidden />}
-          title="אין עדיין נתוני ביצוע"
-          description="כאשר יופעל מסך אימון, ייאספו כאן נפח, שיאים ותאריך שימוש אחרון."
-        />
+        <ExerciseHistoryPanel exerciseId={exercise.id} />
       </div>
 
       {!exercise.is_system ? (
