@@ -28,12 +28,16 @@ import { Route as RunningIdRouteImport } from './routes/running.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 import { Route as HomeNewRouteImport } from './routes/home.new'
 import { Route as GymNewRouteImport } from './routes/gym.new'
+import { Route as GymHistoryRouteImport } from './routes/gym.history'
+import { Route as GymCompareRouteImport } from './routes/gym.compare'
 import { Route as ExercisesIdRouteImport } from './routes/exercises.$id'
 import { Route as TemplatesIdHistoryRouteImport } from './routes/templates.$id.history'
 import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit'
 import { Route as SessionsIdSummaryRouteImport } from './routes/sessions.$id.summary'
 import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
+import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
+import { Route as ExercisesIdHistoryRouteImport } from './routes/exercises.$id.history'
 
 const TrashRoute = TrashRouteImport.update({
   id: '/trash',
@@ -130,6 +134,16 @@ const GymNewRoute = GymNewRouteImport.update({
   path: '/new',
   getParentRoute: () => GymRoute,
 } as any)
+const GymHistoryRoute = GymHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => GymRoute,
+} as any)
+const GymCompareRoute = GymCompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => GymRoute,
+} as any)
 const ExercisesIdRoute = ExercisesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -160,6 +174,16 @@ const RunningIdEditRoute = RunningIdEditRouteImport.update({
   path: '/edit',
   getParentRoute: () => RunningIdRoute,
 } as any)
+const GymHistoryIdRoute = GymHistoryIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => GymHistoryRoute,
+} as any)
+const ExercisesIdHistoryRoute = ExercisesIdHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => ExercisesIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -171,7 +195,9 @@ export interface FileRoutesByFullPath {
   '/running': typeof RunningRouteWithChildren
   '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
-  '/exercises/$id': typeof ExercisesIdRoute
+  '/exercises/$id': typeof ExercisesIdRouteWithChildren
+  '/gym/compare': typeof GymCompareRoute
+  '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -182,6 +208,8 @@ export interface FileRoutesByFullPath {
   '/sessions/$id': typeof SessionsIdRouteWithChildren
   '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
+  '/exercises/$id/history': typeof ExercisesIdHistoryRoute
+  '/gym/history/$id': typeof GymHistoryIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -198,7 +226,9 @@ export interface FileRoutesByTo {
   '/running': typeof RunningRouteWithChildren
   '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
-  '/exercises/$id': typeof ExercisesIdRoute
+  '/exercises/$id': typeof ExercisesIdRouteWithChildren
+  '/gym/compare': typeof GymCompareRoute
+  '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -209,6 +239,8 @@ export interface FileRoutesByTo {
   '/sessions/$id': typeof SessionsIdRouteWithChildren
   '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
+  '/exercises/$id/history': typeof ExercisesIdHistoryRoute
+  '/gym/history/$id': typeof GymHistoryIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -226,7 +258,9 @@ export interface FileRoutesById {
   '/running': typeof RunningRouteWithChildren
   '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
-  '/exercises/$id': typeof ExercisesIdRoute
+  '/exercises/$id': typeof ExercisesIdRouteWithChildren
+  '/gym/compare': typeof GymCompareRoute
+  '/gym/history': typeof GymHistoryRouteWithChildren
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -237,6 +271,8 @@ export interface FileRoutesById {
   '/sessions/$id': typeof SessionsIdRouteWithChildren
   '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
+  '/exercises/$id/history': typeof ExercisesIdHistoryRoute
+  '/gym/history/$id': typeof GymHistoryIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
@@ -256,6 +292,8 @@ export interface FileRouteTypes {
     | '/templates'
     | '/trash'
     | '/exercises/$id'
+    | '/gym/compare'
+    | '/gym/history'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -266,6 +304,8 @@ export interface FileRouteTypes {
     | '/sessions/$id'
     | '/templates/$id'
     | '/treadmills/$id'
+    | '/exercises/$id/history'
+    | '/gym/history/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -283,6 +323,8 @@ export interface FileRouteTypes {
     | '/templates'
     | '/trash'
     | '/exercises/$id'
+    | '/gym/compare'
+    | '/gym/history'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -293,6 +335,8 @@ export interface FileRouteTypes {
     | '/sessions/$id'
     | '/templates/$id'
     | '/treadmills/$id'
+    | '/exercises/$id/history'
+    | '/gym/history/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -310,6 +354,8 @@ export interface FileRouteTypes {
     | '/templates'
     | '/trash'
     | '/exercises/$id'
+    | '/gym/compare'
+    | '/gym/history'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -320,6 +366,8 @@ export interface FileRouteTypes {
     | '/sessions/$id'
     | '/templates/$id'
     | '/treadmills/$id'
+    | '/exercises/$id/history'
+    | '/gym/history/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
     | '/sessions/$id/summary'
@@ -476,6 +524,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GymNewRouteImport
       parentRoute: typeof GymRoute
     }
+    '/gym/history': {
+      id: '/gym/history'
+      path: '/history'
+      fullPath: '/gym/history'
+      preLoaderRoute: typeof GymHistoryRouteImport
+      parentRoute: typeof GymRoute
+    }
+    '/gym/compare': {
+      id: '/gym/compare'
+      path: '/compare'
+      fullPath: '/gym/compare'
+      preLoaderRoute: typeof GymCompareRouteImport
+      parentRoute: typeof GymRoute
+    }
     '/exercises/$id': {
       id: '/exercises/$id'
       path: '/$id'
@@ -518,26 +580,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RunningIdEditRouteImport
       parentRoute: typeof RunningIdRoute
     }
+    '/gym/history/$id': {
+      id: '/gym/history/$id'
+      path: '/$id'
+      fullPath: '/gym/history/$id'
+      preLoaderRoute: typeof GymHistoryIdRouteImport
+      parentRoute: typeof GymHistoryRoute
+    }
+    '/exercises/$id/history': {
+      id: '/exercises/$id/history'
+      path: '/history'
+      fullPath: '/exercises/$id/history'
+      preLoaderRoute: typeof ExercisesIdHistoryRouteImport
+      parentRoute: typeof ExercisesIdRoute
+    }
   }
 }
 
+interface ExercisesIdRouteChildren {
+  ExercisesIdHistoryRoute: typeof ExercisesIdHistoryRoute
+}
+
+const ExercisesIdRouteChildren: ExercisesIdRouteChildren = {
+  ExercisesIdHistoryRoute: ExercisesIdHistoryRoute,
+}
+
+const ExercisesIdRouteWithChildren = ExercisesIdRoute._addFileChildren(
+  ExercisesIdRouteChildren,
+)
+
 interface ExercisesRouteChildren {
-  ExercisesIdRoute: typeof ExercisesIdRoute
+  ExercisesIdRoute: typeof ExercisesIdRouteWithChildren
 }
 
 const ExercisesRouteChildren: ExercisesRouteChildren = {
-  ExercisesIdRoute: ExercisesIdRoute,
+  ExercisesIdRoute: ExercisesIdRouteWithChildren,
 }
 
 const ExercisesRouteWithChildren = ExercisesRoute._addFileChildren(
   ExercisesRouteChildren,
 )
 
+interface GymHistoryRouteChildren {
+  GymHistoryIdRoute: typeof GymHistoryIdRoute
+}
+
+const GymHistoryRouteChildren: GymHistoryRouteChildren = {
+  GymHistoryIdRoute: GymHistoryIdRoute,
+}
+
+const GymHistoryRouteWithChildren = GymHistoryRoute._addFileChildren(
+  GymHistoryRouteChildren,
+)
+
 interface GymRouteChildren {
+  GymCompareRoute: typeof GymCompareRoute
+  GymHistoryRoute: typeof GymHistoryRouteWithChildren
   GymNewRoute: typeof GymNewRoute
 }
 
 const GymRouteChildren: GymRouteChildren = {
+  GymCompareRoute: GymCompareRoute,
+  GymHistoryRoute: GymHistoryRouteWithChildren,
   GymNewRoute: GymNewRoute,
 }
 

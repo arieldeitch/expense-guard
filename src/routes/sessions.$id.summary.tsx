@@ -3,20 +3,21 @@
  * ללא צ׳ירלידינג, ללא קונפטי. מספרים, שיאים, וקישורים לפעולה הבאה.
  */
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, Repeat2 } from "lucide-react";
+import { ArrowRight, Repeat2, History, GitCompare } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import { Chip } from "@/components/catalog/shared";
 import { useLocation } from "@/lib/catalog";
 import {
-  detectPersonalRecords,
   duplicateSessionAsNew,
   useSession,
   useSessionBlocks,
   useSessionExercises,
   useSessionVolume,
 } from "@/lib/sessions";
+import { computeWorkoutQuality, detectSessionRecords, labelForRecord } from "@/lib/analytics";
+import { QualityBreakdown } from "@/components/analytics/QualityBreakdown";
 
 export const Route = createFileRoute("/sessions/$id/summary")({
   head: () => ({
@@ -39,9 +40,9 @@ function SessionSummary() {
   const location = useLocation(session?.location_id ?? undefined);
   if (!session) throw notFound();
 
-  const allPRs = exercises
-    .map((ex) => ({ ex, prs: detectPersonalRecords(id, ex.exercise_id) }))
-    .filter((x) => x.prs.length > 0);
+  const records = detectSessionRecords(id);
+  const realPRs = records.filter((r) => !r.isBaseline);
+  const quality = session.status === "completed" ? computeWorkoutQuality(id) : null;
 
   return (
     <AppShell topBar={{ title: "סיכום אימון", back: { to: "/gym" } }}>
@@ -70,27 +71,44 @@ function SessionSummary() {
         </Tile>
       </div>
 
-      {allPRs.length > 0 ? (
+      {realPRs.length > 0 ? (
         <section className="mt-4 px-4 sm:px-6">
           <div className="rounded-2xl border border-success/40 bg-success-soft/25 p-3">
-            <div className="mb-2 text-sm font-black text-success">שיאים חדשים</div>
+            <div className="mb-2 text-sm font-black text-success">שיאים</div>
             <ul className="flex flex-col gap-1">
-              {allPRs.map(({ ex, prs }) => (
-                <li key={ex.id} className="flex items-start justify-between gap-2 text-sm">
-                  <span className="font-bold">{ex.snapshot.exercise_name}</span>
-                  <span className="flex flex-wrap gap-1">
-                    {prs.map((p) => (
-                      <Chip key={p.kind} tone="success">
-                        {p.label}: {p.value}
-                      </Chip>
-                    ))}
-                  </span>
+              {realPRs.map((r, i) => (
+                <li key={i} className="flex items-start justify-between gap-2 text-sm">
+                  <span className="font-bold">{labelForRecord(r)}</span>
+                  <Chip tone="success">{r.value}</Chip>
                 </li>
               ))}
             </ul>
           </div>
         </section>
       ) : null}
+
+      {quality ? (
+        <section className="mt-4 px-4 sm:px-6">
+          <QualityBreakdown quality={quality} />
+        </section>
+      ) : null}
+
+      <div className="mt-4 flex flex-wrap gap-2 px-4 sm:px-6">
+        <Link
+          to="/gym/history"
+          className="inline-flex items-center gap-1 rounded-xl border border-border-strong bg-surface px-3 py-2 text-sm font-bold"
+        >
+          <History className="size-4" aria-hidden /> היסטוריית אימונים
+        </Link>
+        <Link
+          to="/gym/compare"
+          search={{ a: id } as never}
+          className="inline-flex items-center gap-1 rounded-xl border border-border-strong bg-surface px-3 py-2 text-sm font-bold"
+        >
+          <GitCompare className="size-4" aria-hidden /> השווה לאימון קודם
+        </Link>
+      </div>
+
 
       <section className="mt-4 flex flex-col gap-2 px-4 pb-24 sm:px-6">
         {blocks.map((b) => {
