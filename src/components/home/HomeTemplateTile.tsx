@@ -51,31 +51,39 @@ export function HomeTemplateTile({ template, entriesCount, onStart }: Props) {
           <PopoverContent align="end" className="w-56 p-1">
             <ActionRow
               icon={<Star aria-hidden />}
-              label={template.is_favorite ? "בטל מועדף" : "סמן כמועדף"}
-              onSelect={() => toggleFavoriteTemplate(template.id)}
-            />
+              onClick={() => toggleFavoriteTemplate(template.id)}
+            >
+              {template.is_favorite ? "בטל מועדף" : "סמן כמועדף"}
+            </ActionRow>
             <ActionRow
               icon={<Edit2 aria-hidden />}
-              label="עריכה"
-              to="/home/templates/$id/edit"
-              params={{ id: template.id }}
-            />
+              onClick={() => {
+                window.location.href = `/home/templates/${template.id}/edit`;
+              }}
+            >
+              עריכה
+            </ActionRow>
             <ActionRow
               icon={<Copy aria-hidden />}
-              label="שכפול"
-              onSelect={() => duplicateHomeTemplate(template.id)}
-            />
+              onClick={() => {
+                duplicateHomeTemplate(template.id);
+              }}
+            >
+              שכפול
+            </ActionRow>
             <ActionRow
               icon={<Archive aria-hidden />}
-              label="ארכיון"
-              onSelect={() => archiveHomeTemplate(template.id)}
-            />
+              onClick={() => archiveHomeTemplate(template.id)}
+            >
+              ארכיון
+            </ActionRow>
             <ActionRow
               icon={<Trash2 aria-hidden />}
-              label="לסל מחזור"
-              onSelect={() => trashHomeTemplate(template.id)}
+              onClick={() => trashHomeTemplate(template.id)}
               tone="destructive"
-            />
+            >
+              לסל מחזור
+            </ActionRow>
           </PopoverContent>
         </Popover>
       </div>

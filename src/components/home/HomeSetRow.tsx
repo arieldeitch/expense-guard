@@ -87,18 +87,15 @@ export function HomeSetRow({
               </button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-56 p-1">
-              <ActionRow icon={<Copy aria-hidden />} label="שכפול" onSelect={onDuplicate} />
-              <ActionRow
-                icon={<ArrowLeftRight aria-hidden />}
-                label={set.skipped ? "בטל דילוג" : "דלג"}
-                onSelect={onSkip}
-              />
-              <ActionRow
-                icon={<Trash2 aria-hidden />}
-                label="מחק"
-                onSelect={onDelete}
-                tone="destructive"
-              />
+              <ActionRow icon={<Copy aria-hidden />} onClick={onDuplicate}>
+                שכפול
+              </ActionRow>
+              <ActionRow icon={<ArrowLeftRight aria-hidden />} onClick={onSkip}>
+                {set.skipped ? "בטל דילוג" : "דלג"}
+              </ActionRow>
+              <ActionRow icon={<Trash2 aria-hidden />} onClick={onDelete} tone="destructive">
+                מחק
+              </ActionRow>
             </PopoverContent>
           </Popover>
         </div>
