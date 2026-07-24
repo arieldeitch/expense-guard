@@ -14,6 +14,9 @@ import { Route as MoreRouteImport } from './routes/more'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as GymRouteImport } from './routes/gym'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RunningNewRouteImport } from './routes/running.new'
+import { Route as HomeNewRouteImport } from './routes/home.new'
+import { Route as GymNewRouteImport } from './routes/gym.new'
 
 const RunningRoute = RunningRouteImport.update({
   id: '/running',
@@ -40,43 +43,92 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RunningNewRoute = RunningNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => RunningRoute,
+} as any)
+const HomeNewRoute = HomeNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => HomeRoute,
+} as any)
+const GymNewRoute = GymNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => GymRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/gym': typeof GymRoute
-  '/home': typeof HomeRoute
+  '/gym': typeof GymRouteWithChildren
+  '/home': typeof HomeRouteWithChildren
   '/more': typeof MoreRoute
-  '/running': typeof RunningRoute
+  '/running': typeof RunningRouteWithChildren
+  '/gym/new': typeof GymNewRoute
+  '/home/new': typeof HomeNewRoute
+  '/running/new': typeof RunningNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/gym': typeof GymRoute
-  '/home': typeof HomeRoute
+  '/gym': typeof GymRouteWithChildren
+  '/home': typeof HomeRouteWithChildren
   '/more': typeof MoreRoute
-  '/running': typeof RunningRoute
+  '/running': typeof RunningRouteWithChildren
+  '/gym/new': typeof GymNewRoute
+  '/home/new': typeof HomeNewRoute
+  '/running/new': typeof RunningNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/gym': typeof GymRoute
-  '/home': typeof HomeRoute
+  '/gym': typeof GymRouteWithChildren
+  '/home': typeof HomeRouteWithChildren
   '/more': typeof MoreRoute
-  '/running': typeof RunningRoute
+  '/running': typeof RunningRouteWithChildren
+  '/gym/new': typeof GymNewRoute
+  '/home/new': typeof HomeNewRoute
+  '/running/new': typeof RunningNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/gym' | '/home' | '/more' | '/running'
+  fullPaths:
+    | '/'
+    | '/gym'
+    | '/home'
+    | '/more'
+    | '/running'
+    | '/gym/new'
+    | '/home/new'
+    | '/running/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/gym' | '/home' | '/more' | '/running'
-  id: '__root__' | '/' | '/gym' | '/home' | '/more' | '/running'
+  to:
+    | '/'
+    | '/gym'
+    | '/home'
+    | '/more'
+    | '/running'
+    | '/gym/new'
+    | '/home/new'
+    | '/running/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/gym'
+    | '/home'
+    | '/more'
+    | '/running'
+    | '/gym/new'
+    | '/home/new'
+    | '/running/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  GymRoute: typeof GymRoute
-  HomeRoute: typeof HomeRoute
+  GymRoute: typeof GymRouteWithChildren
+  HomeRoute: typeof HomeRouteWithChildren
   MoreRoute: typeof MoreRoute
-  RunningRoute: typeof RunningRoute
+  RunningRoute: typeof RunningRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -116,15 +168,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/running/new': {
+      id: '/running/new'
+      path: '/new'
+      fullPath: '/running/new'
+      preLoaderRoute: typeof RunningNewRouteImport
+      parentRoute: typeof RunningRoute
+    }
+    '/home/new': {
+      id: '/home/new'
+      path: '/new'
+      fullPath: '/home/new'
+      preLoaderRoute: typeof HomeNewRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/gym/new': {
+      id: '/gym/new'
+      path: '/new'
+      fullPath: '/gym/new'
+      preLoaderRoute: typeof GymNewRouteImport
+      parentRoute: typeof GymRoute
+    }
   }
 }
 
+interface GymRouteChildren {
+  GymNewRoute: typeof GymNewRoute
+}
+
+const GymRouteChildren: GymRouteChildren = {
+  GymNewRoute: GymNewRoute,
+}
+
+const GymRouteWithChildren = GymRoute._addFileChildren(GymRouteChildren)
+
+interface HomeRouteChildren {
+  HomeNewRoute: typeof HomeNewRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  HomeNewRoute: HomeNewRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
+interface RunningRouteChildren {
+  RunningNewRoute: typeof RunningNewRoute
+}
+
+const RunningRouteChildren: RunningRouteChildren = {
+  RunningNewRoute: RunningNewRoute,
+}
+
+const RunningRouteWithChildren =
+  RunningRoute._addFileChildren(RunningRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  GymRoute: GymRoute,
-  HomeRoute: HomeRoute,
+  GymRoute: GymRouteWithChildren,
+  HomeRoute: HomeRouteWithChildren,
   MoreRoute: MoreRoute,
-  RunningRoute: RunningRoute,
+  RunningRoute: RunningRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
