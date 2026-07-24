@@ -45,6 +45,7 @@ import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$ex
 import { Route as HomeHistoryIdRouteImport } from './routes/home.history.$id'
 import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
 import { Route as ExercisesIdHistoryRouteImport } from './routes/exercises.$id.history'
+import { Route as HomeTemplatesIdEditRouteImport } from './routes/home.templates.$id.edit'
 import { Route as HomeSessionsIdSummaryRouteImport } from './routes/home.sessions.$id.summary'
 
 const TrashRoute = TrashRouteImport.update({
@@ -227,6 +228,11 @@ const ExercisesIdHistoryRoute = ExercisesIdHistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => ExercisesIdRoute,
 } as any)
+const HomeTemplatesIdEditRoute = HomeTemplatesIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => HomeTemplatesIdRoute,
+} as any)
 const HomeSessionsIdSummaryRoute = HomeSessionsIdSummaryRouteImport.update({
   id: '/summary',
   path: '/summary',
@@ -264,13 +270,14 @@ export interface FileRoutesByFullPath {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
-  '/home/templates/$id': typeof HomeTemplatesIdRoute
+  '/home/templates/$id': typeof HomeTemplatesIdRouteWithChildren
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
   '/templates/$id/edit': typeof TemplatesIdEditRoute
   '/templates/$id/history': typeof TemplatesIdHistoryRoute
   '/home/sessions/$id/summary': typeof HomeSessionsIdSummaryRoute
+  '/home/templates/$id/edit': typeof HomeTemplatesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -303,13 +310,14 @@ export interface FileRoutesByTo {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
-  '/home/templates/$id': typeof HomeTemplatesIdRoute
+  '/home/templates/$id': typeof HomeTemplatesIdRouteWithChildren
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
   '/templates/$id/edit': typeof TemplatesIdEditRoute
   '/templates/$id/history': typeof TemplatesIdHistoryRoute
   '/home/sessions/$id/summary': typeof HomeSessionsIdSummaryRoute
+  '/home/templates/$id/edit': typeof HomeTemplatesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -343,13 +351,14 @@ export interface FileRoutesById {
   '/home/history/$id': typeof HomeHistoryIdRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/home/sessions/$id': typeof HomeSessionsIdRouteWithChildren
-  '/home/templates/$id': typeof HomeTemplatesIdRoute
+  '/home/templates/$id': typeof HomeTemplatesIdRouteWithChildren
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
   '/sessions/$id/summary': typeof SessionsIdSummaryRoute
   '/templates/$id/edit': typeof TemplatesIdEditRoute
   '/templates/$id/history': typeof TemplatesIdHistoryRoute
   '/home/sessions/$id/summary': typeof HomeSessionsIdSummaryRoute
+  '/home/templates/$id/edit': typeof HomeTemplatesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -391,6 +400,7 @@ export interface FileRouteTypes {
     | '/templates/$id/edit'
     | '/templates/$id/history'
     | '/home/sessions/$id/summary'
+    | '/home/templates/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -430,6 +440,7 @@ export interface FileRouteTypes {
     | '/templates/$id/edit'
     | '/templates/$id/history'
     | '/home/sessions/$id/summary'
+    | '/home/templates/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -469,6 +480,7 @@ export interface FileRouteTypes {
     | '/templates/$id/edit'
     | '/templates/$id/history'
     | '/home/sessions/$id/summary'
+    | '/home/templates/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -739,6 +751,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExercisesIdHistoryRouteImport
       parentRoute: typeof ExercisesIdRoute
     }
+    '/home/templates/$id/edit': {
+      id: '/home/templates/$id/edit'
+      path: '/edit'
+      fullPath: '/home/templates/$id/edit'
+      preLoaderRoute: typeof HomeTemplatesIdEditRouteImport
+      parentRoute: typeof HomeTemplatesIdRoute
+    }
     '/home/sessions/$id/summary': {
       id: '/home/sessions/$id/summary'
       path: '/summary'
@@ -823,12 +842,24 @@ const HomeQuickRouteWithChildren = HomeQuickRoute._addFileChildren(
   HomeQuickRouteChildren,
 )
 
+interface HomeTemplatesIdRouteChildren {
+  HomeTemplatesIdEditRoute: typeof HomeTemplatesIdEditRoute
+}
+
+const HomeTemplatesIdRouteChildren: HomeTemplatesIdRouteChildren = {
+  HomeTemplatesIdEditRoute: HomeTemplatesIdEditRoute,
+}
+
+const HomeTemplatesIdRouteWithChildren = HomeTemplatesIdRoute._addFileChildren(
+  HomeTemplatesIdRouteChildren,
+)
+
 interface HomeTemplatesRouteChildren {
-  HomeTemplatesIdRoute: typeof HomeTemplatesIdRoute
+  HomeTemplatesIdRoute: typeof HomeTemplatesIdRouteWithChildren
 }
 
 const HomeTemplatesRouteChildren: HomeTemplatesRouteChildren = {
-  HomeTemplatesIdRoute: HomeTemplatesIdRoute,
+  HomeTemplatesIdRoute: HomeTemplatesIdRouteWithChildren,
 }
 
 const HomeTemplatesRouteWithChildren = HomeTemplatesRoute._addFileChildren(
