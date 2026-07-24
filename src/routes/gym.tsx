@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Dumbbell, Plus, Target } from "lucide-react";
+import { Dumbbell, Play, Plus, Target } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
+import { Chip } from "@/components/catalog/shared";
 import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
 import { formatDaysSince } from "@/lib/selectors/domain-summary";
 import { useAllTemplates } from "@/lib/templates";
+import { useActiveSession } from "@/lib/sessions";
+
 
 export const Route = createFileRoute("/gym")({
   head: () => ({
@@ -23,7 +26,9 @@ export const Route = createFileRoute("/gym")({
 function GymPage() {
   const { data: summary, isPending } = useDomainSummary("gym");
   const templates = useAllTemplates();
+  const activeSession = useActiveSession();
   const hasActivity = summary?.hasAnyActivity ?? false;
+
 
   return (
     <AppShell
