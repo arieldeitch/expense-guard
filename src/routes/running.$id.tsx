@@ -53,6 +53,9 @@ function RunDetail() {
   const locations = useAllLocations();
   const routes = useActiveRoutes();
   const treadmill = useTreadmill(run?.treadmill_id ?? undefined);
+  const suunto = useSuuntoSnapshot(id);
+  const hasTrashedSuunto = useHasTrashedSource(id, "suunto");
+  const [suuntoOpen, setSuuntoOpen] = useState(false);
 
   if (!run) return null;
   const locationName = run.location_id
