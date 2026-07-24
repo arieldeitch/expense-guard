@@ -2,11 +2,7 @@
  * Suunto storage — persistent state ב-localStorage תחת `fitlog:suunto:v1`.
  * חוזה זהה למה שיהיה ב-Supabase (rows + calibrations + exclusions).
  */
-import type {
-  RunDeviceReading,
-  TreadmillCalibrationProfile,
-  CalibrationExclusion,
-} from "./types";
+import type { RunDeviceReading, TreadmillCalibrationProfile, CalibrationExclusion } from "./types";
 
 const STORAGE_KEY = "fitlog:suunto:v1";
 export const CURRENT_OWNER_ID = "single-user";

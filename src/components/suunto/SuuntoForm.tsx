@@ -21,11 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import {
   formatDurationHMS,
@@ -139,7 +135,12 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
     const pace = form.average_pace_s_per_km ?? (d && t ? t / (d / 1000) : null);
     const speed = form.average_speed_kmh ?? (d && t ? d / 1000 / (t / 3600) : null);
     return { pace, speed };
-  }, [form.distance_meters, form.duration_seconds, form.average_pace_s_per_km, form.average_speed_kmh]);
+  }, [
+    form.distance_meters,
+    form.duration_seconds,
+    form.average_pace_s_per_km,
+    form.average_speed_kmh,
+  ]);
 
   function handleSave() {
     const parsed = suuntoSnapshotSchema.safeParse(form);
@@ -264,7 +265,11 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
           <Row2>
             <Field
               label="קצב ממוצע"
-              hint={derived.pace && !form.average_pace_s_per_km ? `יחושב: ${formatPace(derived.pace)}` : "m:ss"}
+              hint={
+                derived.pace && !form.average_pace_s_per_km
+                  ? `יחושב: ${formatPace(derived.pace)}`
+                  : "m:ss"
+              }
               error={errors.average_pace_s_per_km}
               outlier={isOutOfRange("average_pace_s_per_km", form.average_pace_s_per_km)}
             >
@@ -333,7 +338,9 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
                 className="w-full justify-between rounded-xl border border-border-strong bg-tint px-3 min-h-11 font-bold"
               >
                 מדדי עומס ואימון
-                <span className="text-xs text-muted-foreground">{advancedOpen ? "סגור" : "הרחב"}</span>
+                <span className="text-xs text-muted-foreground">
+                  {advancedOpen ? "סגור" : "הרחב"}
+                </span>
               </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-3 space-y-3">
@@ -396,7 +403,9 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
                 className="w-full justify-between rounded-xl border border-border-strong bg-tint px-3 min-h-11 font-bold"
               >
                 שטח ורום
-                <span className="text-xs text-muted-foreground">{terrainOpen ? "סגור" : "הרחב"}</span>
+                <span className="text-xs text-muted-foreground">
+                  {terrainOpen ? "סגור" : "הרחב"}
+                </span>
               </Button>
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-3 space-y-3">
@@ -443,7 +452,8 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
                     onChange={(e) => {
                       const asNum = Number(e.target.value.replace(",", "."));
                       updateCustom(i, {
-                        value: Number.isFinite(asNum) && e.target.value !== "" ? asNum : e.target.value,
+                        value:
+                          Number.isFinite(asNum) && e.target.value !== "" ? asNum : e.target.value,
                       });
                     }}
                     placeholder="ערך"
@@ -531,7 +541,11 @@ function Row3({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-3 gap-3">{children}</div>;
 }
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <div className="mt-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">{children}</div>;
+  return (
+    <div className="mt-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+      {children}
+    </div>
+  );
 }
 function Field({
   label,

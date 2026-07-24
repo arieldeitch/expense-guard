@@ -120,7 +120,15 @@ function snapshotToRows(
     metadata: Record<string, unknown> = {},
   ) => {
     if (normalized == null && raw == null) return;
-    rows.push({ ...base, metric_key: key, raw_value: raw, normalized_value: normalized, unit, raw_unit: rawUnit, metadata });
+    rows.push({
+      ...base,
+      metric_key: key,
+      raw_value: raw,
+      normalized_value: normalized,
+      unit,
+      raw_unit: rawUnit,
+      metadata,
+    });
   };
 
   // core
@@ -256,14 +264,10 @@ export function restoreSuuntoForRun(runId: string, source: DeviceSourceType): nu
 }
 
 /** בונה snapshot מ-rows. rows של notes ו-custom נטמעים ב-snapshot. */
-export function buildSnapshot(
-  runId: string,
-  source: DeviceSourceType,
-): DeviceRunSnapshot | null {
+export function buildSnapshot(runId: string, source: DeviceSourceType): DeviceRunSnapshot | null {
   const rows = listActiveReadings(runId, source);
   if (rows.length === 0) return null;
-  const num = (key: string) =>
-    rows.find((r) => r.metric_key === key)?.normalized_value ?? null;
+  const num = (key: string) => rows.find((r) => r.metric_key === key)?.normalized_value ?? null;
   const notesRow = rows.find((r) => r.metric_key === "notes");
   const custom = rows
     .filter((r) => isCustomKey(r.metric_key))
@@ -333,7 +337,10 @@ export function getActiveCalibration(treadmillId: string): TreadmillCalibrationP
   );
 }
 export function createCalibration(
-  input: Omit<TreadmillCalibrationProfile, "id" | "owner_id" | "created_at" | "updated_at" | "deleted_at">,
+  input: Omit<
+    TreadmillCalibrationProfile,
+    "id" | "owner_id" | "created_at" | "updated_at" | "deleted_at"
+  >,
 ): TreadmillCalibrationProfile {
   const state = readSuuntoState();
   const now = nowIso();
@@ -371,12 +378,9 @@ export function approveCalibration(id: string): TreadmillCalibrationProfile | nu
   const state = readSuuntoState();
   const now = nowIso();
   const next = state.calibrations.map((c) => {
-    if (c.id === id) return { ...c, status: "approved" as const, approved_at: now, updated_at: now };
-    if (
-      c.treadmill_id === target.treadmill_id &&
-      c.status === "approved" &&
-      c.id !== id
-    ) {
+    if (c.id === id)
+      return { ...c, status: "approved" as const, approved_at: now, updated_at: now };
+    if (c.treadmill_id === target.treadmill_id && c.status === "approved" && c.id !== id) {
       return { ...c, status: "superseded" as const, updated_at: now };
     }
     return c;

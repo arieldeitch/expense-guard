@@ -156,10 +156,7 @@ export type CalibrationStatus =
   | "superseded"
   | "archived";
 
-export type CalibrationMethod =
-  | "median_ratio_distance"
-  | "mean_ratio_distance"
-  | "manual";
+export type CalibrationMethod = "median_ratio_distance" | "mean_ratio_distance" | "manual";
 
 export type ConfidenceLabel =
   | "insufficient" // <3 מדגמים

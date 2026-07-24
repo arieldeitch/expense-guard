@@ -2,17 +2,9 @@
  * Reactive hooks ל-Suunto state דרך useSyncExternalStore.
  */
 import { useSyncExternalStore } from "react";
-import {
-  readSuuntoServerSnapshot,
-  readSuuntoState,
-  subscribeSuunto,
-} from "./storage";
+import { readSuuntoServerSnapshot, readSuuntoState, subscribeSuunto } from "./storage";
 import * as repo from "./repo";
-import type {
-  DeviceRunSnapshot,
-  DeviceSourceType,
-  TreadmillCalibrationProfile,
-} from "./types";
+import type { DeviceRunSnapshot, DeviceSourceType, TreadmillCalibrationProfile } from "./types";
 
 function useState_() {
   return useSyncExternalStore(subscribeSuunto, readSuuntoState, readSuuntoServerSnapshot);
@@ -29,10 +21,7 @@ export function useHasSource(runId: string | undefined, source: DeviceSourceType
   if (!runId) return false;
   return repo.hasSource(runId, source);
 }
-export function useHasTrashedSource(
-  runId: string | undefined,
-  source: DeviceSourceType,
-): boolean {
+export function useHasTrashedSource(runId: string | undefined, source: DeviceSourceType): boolean {
   useState_();
   if (!runId) return false;
   return repo.hasTrashedSource(runId, source);

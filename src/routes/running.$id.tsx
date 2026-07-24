@@ -165,8 +165,7 @@ function RunDetail() {
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  if (!window.confirm("להסיר את נתוני Suunto? ניתן לשחזר מסל המחזור."))
-                    return;
+                  if (!window.confirm("להסיר את נתוני Suunto? ניתן לשחזר מסל המחזור.")) return;
                   suuntoRepo.softDeleteSuuntoForRun(id, "suunto");
                   toast.info("נתוני Suunto הוסרו");
                 }}

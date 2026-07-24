@@ -153,8 +153,8 @@ function TreadmillCalibrationPage() {
               {confirming ? (
                 <div className="mt-3 flex flex-col gap-2">
                   <div className="rounded-lg border border-warning/40 bg-warning/10 p-2 text-xs">
-                    האישור משפיע רק על תצוגות "מרחק מוצע" — לא משנה נתוני מקור. הפרופיל הפעיל
-                    הקודם יעבור ל-superseded אך יישמר בהיסטוריה.
+                    האישור משפיע רק על תצוגות "מרחק מוצע" — לא משנה נתוני מקור. הפרופיל הפעיל הקודם
+                    יעבור ל-superseded אך יישמר בהיסטוריה.
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" onClick={handleApprove}>
@@ -191,9 +191,7 @@ function TreadmillCalibrationPage() {
         {inputs.length === 0 ? (
           <Tile size="sm">
             <TileLabel>אין ריצות עם נתוני Suunto להליכון זה</TileLabel>
-            <TileFootnote>
-              הוסף נתוני Suunto לריצות הליכון קיימות כדי לחשב מקדם כיול.
-            </TileFootnote>
+            <TileFootnote>הוסף נתוני Suunto לריצות הליכון קיימות כדי לחשב מקדם כיול.</TileFootnote>
           </Tile>
         ) : null}
         {inputs
@@ -245,8 +243,7 @@ function TreadmillCalibrationPage() {
                   <div className="text-muted-foreground">פער</div>
                   <div className="ltr-nums font-bold">
                     {(
-                      ((r.suunto_distance_m! - r.treadmill_distance_m!) /
-                        r.treadmill_distance_m!) *
+                      ((r.suunto_distance_m! - r.treadmill_distance_m!) / r.treadmill_distance_m!) *
                       100
                     ).toFixed(1)}
                     %

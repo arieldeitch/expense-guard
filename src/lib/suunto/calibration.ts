@@ -19,11 +19,7 @@
  */
 
 import { median, mean, stddev } from "./compare";
-import type {
-  CalibrationMethod,
-  ConfidenceLabel,
-  TreadmillCalibrationProfile,
-} from "./types";
+import type { CalibrationMethod, ConfidenceLabel, TreadmillCalibrationProfile } from "./types";
 
 export interface CalibrationInputRun {
   run_id: string;
@@ -133,7 +129,8 @@ export function proposeCalibration(
 
   const n = included.length;
   const label = labelFromSample(n);
-  const factor = label === "insufficient" ? null : method === "mean_ratio_distance" ? meanRatio : medianRatio;
+  const factor =
+    label === "insufficient" ? null : method === "mean_ratio_distance" ? meanRatio : medianRatio;
 
   const dates = included.map((r) => r.started_at).sort();
   const periodStart = dates[0] ?? null;

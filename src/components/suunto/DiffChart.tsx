@@ -11,13 +11,7 @@ export interface DiffPoint {
   is_outlier: boolean;
 }
 
-export function DiffChart({
-  points,
-  height = 160,
-}: {
-  points: DiffPoint[];
-  height?: number;
-}) {
+export function DiffChart({ points, height = 160 }: { points: DiffPoint[]; height?: number }) {
   const sorted = useMemo(
     () => points.slice().sort((a, b) => a.date.localeCompare(b.date)),
     [points],
@@ -124,7 +118,10 @@ export function DiffChart({
               fill="currentColor"
               opacity={0.6}
             >
-              {new Date(sorted[i].date).toLocaleDateString("he-IL", { day: "2-digit", month: "2-digit" })}
+              {new Date(sorted[i].date).toLocaleDateString("he-IL", {
+                day: "2-digit",
+                month: "2-digit",
+              })}
             </text>
           ))}
         </g>

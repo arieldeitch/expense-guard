@@ -52,7 +52,12 @@ function DiffArrow({ dir }: { dir: MetricComparison["direction"] }) {
 }
 
 export function ComparisonTiles({ result }: { result: ComparisonResult }) {
-  const primary = ["distance_meters", "duration_seconds", "average_pace_s_per_km", "average_speed_kmh"];
+  const primary = [
+    "distance_meters",
+    "duration_seconds",
+    "average_pace_s_per_km",
+    "average_speed_kmh",
+  ];
   const primaryMetrics = result.metrics.filter((m) => primary.includes(m.metric));
   const secondary = result.metrics.filter(
     (m) => !primary.includes(m.metric) && (m.first_value != null || m.second_value != null),
@@ -70,7 +75,12 @@ export function ComparisonTiles({ result }: { result: ComparisonResult }) {
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {primaryMetrics.map((m) => (
-          <MetricCard key={m.metric} m={m} first={result.first_label} second={result.second_label} />
+          <MetricCard
+            key={m.metric}
+            m={m}
+            first={result.first_label}
+            second={result.second_label}
+          />
         ))}
       </div>
 

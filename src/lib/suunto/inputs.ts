@@ -27,16 +27,15 @@ export function buildCalibrationInputs(
 ): CalibrationInputRun[] {
   const eligible = (runs as RunLike[])
     .filter(
-      (r) =>
-        r.deleted_at == null &&
-        r.treadmill_id === treadmillId &&
-        r.run_type === "treadmill",
+      (r) => r.deleted_at == null && r.treadmill_id === treadmillId && r.run_type === "treadmill",
     )
     .map((r) => {
       const snap = buildSnapshot(r.id, "suunto");
       return { run: r, snap };
     })
-    .filter((x): x is { run: RunLike; snap: NonNullable<ReturnType<typeof buildSnapshot>> } => !!x.snap);
+    .filter(
+      (x): x is { run: RunLike; snap: NonNullable<ReturnType<typeof buildSnapshot>> } => !!x.snap,
+    );
 
   const points: RunComparisonPoint[] = eligible.map(({ run, snap }) => ({
     run_id: run.id,

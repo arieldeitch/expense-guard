@@ -155,7 +155,7 @@ export function compareSnapshots(
     compareMetric(
       "average_speed_kmh",
       "מהירות ממוצעת",
-      "קמ\"ש",
+      'קמ"ש',
       first.average_speed_kmh,
       second.average_speed_kmh,
       firstLabel,
@@ -270,7 +270,10 @@ export function treadmillSnapshotFromRun(run: {
 // ---------- Statistics ----------
 
 export function median(values: number[]): number | null {
-  const arr = values.filter((v) => isFinite(v)).slice().sort((a, b) => a - b);
+  const arr = values
+    .filter((v) => isFinite(v))
+    .slice()
+    .sort((a, b) => a - b);
   if (arr.length === 0) return null;
   const mid = Math.floor(arr.length / 2);
   return arr.length % 2 === 0 ? (arr[mid - 1] + arr[mid]) / 2 : arr[mid];

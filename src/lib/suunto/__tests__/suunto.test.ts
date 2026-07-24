@@ -109,10 +109,46 @@ describe("proposeCalibration", () => {
 
   it("uses median ratio and excludes outliers from calc but records them", () => {
     const p = proposeCalibration("t1", [
-      { run_id: "a", started_at: "2025-01-01", treadmill_distance_m: 5000, suunto_distance_m: 5100, treadmill_duration_s: 1500, suunto_duration_s: 1500, excluded: false, is_outlier: false },
-      { run_id: "b", started_at: "2025-01-02", treadmill_distance_m: 5000, suunto_distance_m: 5150, treadmill_duration_s: 1500, suunto_duration_s: 1500, excluded: false, is_outlier: false },
-      { run_id: "c", started_at: "2025-01-03", treadmill_distance_m: 5000, suunto_distance_m: 5120, treadmill_duration_s: 1500, suunto_duration_s: 1500, excluded: false, is_outlier: false },
-      { run_id: "d", started_at: "2025-01-04", treadmill_distance_m: 5000, suunto_distance_m: 9000, treadmill_duration_s: 1500, suunto_duration_s: 1500, excluded: false, is_outlier: true },
+      {
+        run_id: "a",
+        started_at: "2025-01-01",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5100,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+        excluded: false,
+        is_outlier: false,
+      },
+      {
+        run_id: "b",
+        started_at: "2025-01-02",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5150,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+        excluded: false,
+        is_outlier: false,
+      },
+      {
+        run_id: "c",
+        started_at: "2025-01-03",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5120,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+        excluded: false,
+        is_outlier: false,
+      },
+      {
+        run_id: "d",
+        started_at: "2025-01-04",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 9000,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+        excluded: false,
+        is_outlier: true,
+      },
     ]);
     expect(p.sample_size).toBe(3);
     expect(p.factor).toBeCloseTo(1.024, 3);
@@ -141,10 +177,34 @@ describe("labelFromSample", () => {
 describe("assessOutliers", () => {
   it("flags large distance deviation", () => {
     const res = assessOutliers([
-      { run_id: "a", treadmill_distance_m: 5000, suunto_distance_m: 5050, treadmill_duration_s: 1500, suunto_duration_s: 1500 },
-      { run_id: "b", treadmill_distance_m: 5000, suunto_distance_m: 5100, treadmill_duration_s: 1500, suunto_duration_s: 1500 },
-      { run_id: "c", treadmill_distance_m: 5000, suunto_distance_m: 5080, treadmill_duration_s: 1500, suunto_duration_s: 1500 },
-      { run_id: "d", treadmill_distance_m: 5000, suunto_distance_m: 8000, treadmill_duration_s: 1500, suunto_duration_s: 1500 },
+      {
+        run_id: "a",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5050,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+      },
+      {
+        run_id: "b",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5100,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+      },
+      {
+        run_id: "c",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 5080,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+      },
+      {
+        run_id: "d",
+        treadmill_distance_m: 5000,
+        suunto_distance_m: 8000,
+        treadmill_duration_s: 1500,
+        suunto_duration_s: 1500,
+      },
     ]);
     const d = res.find((x) => x.run_id === "d")!;
     expect(d.is_outlier).toBe(true);

@@ -6,15 +6,9 @@ import { z } from "zod";
 import { METRIC_DEFS, metricDef } from "./metrics";
 
 export const customMetricSchema = z.object({
-  label: z
-    .string()
-    .trim()
-    .min(1, "תווית נדרשת")
-    .max(40, "תווית ארוכה מדי"),
+  label: z.string().trim().min(1, "תווית נדרשת").max(40, "תווית ארוכה מדי"),
   value: z.union([
-    z
-      .number()
-      .refine((n) => Number.isFinite(n), { message: "ערך לא תקין" }),
+    z.number().refine((n) => Number.isFinite(n), { message: "ערך לא תקין" }),
     z.string().trim().min(1, "ערך נדרש").max(80),
   ]),
   unit: z.string().trim().max(20).nullable(),
