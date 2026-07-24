@@ -27,27 +27,14 @@ import {
   addExerciseToSession,
   updateSet,
 } from "@/lib/sessions";
-import { _resetExercisesStateForTests, createExercise, createMuscleGroup } from "@/lib/exercises";
+import { _resetExercisesStateForTests, listExercises } from "@/lib/exercises";
 import { _resetCatalogStateForTests } from "@/lib/catalog";
 import { _resetTemplatesStateForTests } from "@/lib/templates";
 
-function makeExercise(overrides: Partial<Parameters<typeof createExercise>[0]> = {}) {
-  const mg = createMuscleGroup({ name_he: "חזה", body_region: "chest", is_primary: true });
-  return createExercise({
-    name_he: "לחיצת חזה",
-    name_en: "Bench Press",
-    domain: "gym",
-    category: "compound",
-    movement_pattern: "push_horizontal",
-    tracking_type: "weight_reps",
-    difficulty: "intermediate",
-    primary_muscle_group_id: mg.id,
-    secondary_muscle_group_ids: [],
-    tags: [],
-    equipment_ids: [],
-    is_system: false,
-    ...overrides,
-  });
+function seededWeightRepsExercise() {
+  const ex = listExercises().find((e) => e.tracking_type === "weight_reps");
+  if (!ex) throw new Error("expected seeded weight_reps exercise");
+  return ex;
 }
 
 beforeEach(() => {
