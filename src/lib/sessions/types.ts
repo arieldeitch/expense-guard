@@ -66,7 +66,7 @@ export interface StrengthSessionExerciseSnapshot {
   exercise_id: string;
   exercise_name: string;
   tracking_type: TrackingType | null;
-  is_unilateral: boolean;
+  unilateral: boolean;
   primary_muscle_group_id: string | null;
   planned_sets: number;
   planned_reps: number | null;

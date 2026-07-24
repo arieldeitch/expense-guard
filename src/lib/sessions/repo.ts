@@ -51,7 +51,7 @@ function makeSnapshotFromExercise(exerciseId: string): StrengthSessionExerciseSn
     exercise_id: exerciseId,
     exercise_name: ex?.name_he ?? "תרגיל",
     tracking_type: ex?.tracking_type ?? "weight_reps",
-    is_unilateral: ex?.is_unilateral ?? false,
+    unilateral: ex?.unilateral ?? false,
     primary_muscle_group_id: ex?.primary_muscle_group_id ?? null,
     planned_sets: ex?.default_sets ?? 3,
     planned_reps: ex?.default_reps ?? 12,
@@ -230,7 +230,7 @@ export function startSessionFromTemplate(templateId: string): StrengthSession | 
         exercise_id: te.exercise_id,
         exercise_name: ex?.name_he ?? "תרגיל",
         tracking_type: ex?.tracking_type ?? "weight_reps",
-        is_unilateral: ex?.is_unilateral ?? false,
+        unilateral: ex?.unilateral ?? false,
         primary_muscle_group_id: ex?.primary_muscle_group_id ?? null,
         planned_sets: te.planned_sets,
         planned_reps: te.planned_reps,
@@ -569,7 +569,7 @@ export function substituteExercise(
     exercise_id: newExerciseId,
     exercise_name: ex?.name_he ?? se.snapshot.exercise_name,
     tracking_type: ex?.tracking_type ?? se.snapshot.tracking_type,
-    is_unilateral: ex?.is_unilateral ?? se.snapshot.is_unilateral,
+    unilateral: ex?.unilateral ?? se.snapshot.unilateral,
     primary_muscle_group_id: ex?.primary_muscle_group_id ?? se.snapshot.primary_muscle_group_id,
   };
   commit((s) => ({
