@@ -4,7 +4,7 @@
  * Sections נפתחים כדי לא להציף.
  */
 import { useMemo, useState } from "react";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   BookOpen,
   Copy,
@@ -103,7 +103,7 @@ function ExerciseDetailPage() {
 
   const mgById = useMemo(() => new Map(muscleGroups.map((m) => [m.id, m])), [muscleGroups]);
 
-  if (!exercise) throw notFound();
+  if (!exercise) return <MissingExercise />;
 
   const primaryMuscle = mgById.get(exercise.primary_muscle_group_id);
   const secondaryMuscles = exercise.secondary_muscle_group_ids
