@@ -196,10 +196,7 @@ function CatalogLinkTile({
         </div>
         <div className="inline-flex items-center gap-2">
           {badge}
-          <ChevronLeft
-            aria-hidden
-            className="size-4 text-muted-foreground rtl:rotate-180"
-          />
+          <ChevronLeft aria-hidden className="size-4 text-muted-foreground rtl:rotate-180" />
         </div>
       </div>
     </Link>

@@ -43,7 +43,9 @@ function loadFromStorage(): Preferences {
     if (!parsed || typeof parsed !== "object") return { ...DEFAULTS };
     const obj = parsed as Record<string, unknown>;
     return {
-      landingModule: isLandingModule(obj.landingModule) ? obj.landingModule : DEFAULTS.landingModule,
+      landingModule: isLandingModule(obj.landingModule)
+        ? obj.landingModule
+        : DEFAULTS.landingModule,
     };
   } catch {
     return { ...DEFAULTS };

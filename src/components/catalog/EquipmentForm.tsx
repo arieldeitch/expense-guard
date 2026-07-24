@@ -208,9 +208,7 @@ export function EquipmentForm({
         >
           <SheetHeader className="text-start">
             <SheetTitle>{equipment ? "עריכת ציוד" : "ציוד חדש"}</SheetTitle>
-            <SheetDescription>
-              שם, סוג וזמינות נדרשים. פרטים מתקדמים אופציונליים.
-            </SheetDescription>
+            <SheetDescription>שם, סוג וזמינות נדרשים. פרטים מתקדמים אופציונליים.</SheetDescription>
           </SheetHeader>
           <form className="mt-4 flex flex-col gap-4" onSubmit={(e) => handleSave(e, false)}>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -230,7 +228,9 @@ export function EquipmentForm({
                   className="min-h-11 rounded-xl"
                   placeholder='למשל: "משקולות יד 5-25 ק״ג"'
                 />
-                {errors.name ? <p className="mt-1 text-xs text-destructive">{errors.name}</p> : null}
+                {errors.name ? (
+                  <p className="mt-1 text-xs text-destructive">{errors.name}</p>
+                ) : null}
               </div>
               <div>
                 <Label htmlFor="eq-type" className="mb-1.5 block text-sm font-bold">
@@ -333,9 +333,7 @@ export function EquipmentForm({
                     <Input
                       id="eq-mfr"
                       value={state.manufacturer}
-                      onChange={(e) =>
-                        setState((s) => ({ ...s, manufacturer: e.target.value }))
-                      }
+                      onChange={(e) => setState((s) => ({ ...s, manufacturer: e.target.value }))}
                       maxLength={60}
                       className="min-h-11 rounded-xl"
                     />
@@ -405,7 +403,10 @@ export function EquipmentForm({
                     value={state.unit === "" ? "kg" : state.unit}
                     onValueChange={(v) => setState((s) => ({ ...s, unit: v as WeightUnit }))}
                   >
-                    <SelectTrigger id="eq-unit" className="min-h-11 rounded-xl border-border-strong">
+                    <SelectTrigger
+                      id="eq-unit"
+                      className="min-h-11 rounded-xl border-border-strong"
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent dir="rtl">

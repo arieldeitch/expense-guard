@@ -7,11 +7,7 @@
  *
  * זהו יישום mock; כשיחובר Supabase, יוחלף ב־repository שקורא ל־server functions.
  */
-import type {
-  EquipmentItem,
-  TrainingLocation,
-  TreadmillProfile,
-} from "./types";
+import type { EquipmentItem, TrainingLocation, TreadmillProfile } from "./types";
 
 const STORAGE_KEY = "fitlog:catalog:v1";
 export const CURRENT_OWNER_ID = "single-user";

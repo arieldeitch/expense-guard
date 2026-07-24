@@ -58,11 +58,13 @@ export function TreadmillTile({
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <div className="min-w-0 truncate text-base font-black">
-                {treadmill.display_name}
-              </div>
+              <div className="min-w-0 truncate text-base font-black">{treadmill.display_name}</div>
               {treadmill.is_favorite ? (
-                <Star aria-label="מועדף" className="size-3.5 shrink-0 text-warning" fill="currentColor" />
+                <Star
+                  aria-label="מועדף"
+                  className="size-3.5 shrink-0 text-warning"
+                  fill="currentColor"
+                />
               ) : null}
             </div>
             <div className="mt-0.5 truncate text-xs text-muted-foreground">
@@ -130,7 +132,10 @@ function MoreMenu({
       </PopoverTrigger>
       <PopoverContent align="end" side="bottom" dir="rtl" className="w-56 p-1">
         {isTrashed ? (
-          <ActionRow icon={<Undo2 aria-hidden />} onClick={() => run(() => restoreTreadmill(treadmill.id))}>
+          <ActionRow
+            icon={<Undo2 aria-hidden />}
+            onClick={() => run(() => restoreTreadmill(treadmill.id))}
+          >
             שחזור
           </ActionRow>
         ) : (
@@ -160,7 +165,11 @@ function MoreMenu({
                 ארכוב
               </ActionRow>
             )}
-            <ActionRow icon={<Trash2 aria-hidden />} tone="destructive" onClick={() => run(onTrash)}>
+            <ActionRow
+              icon={<Trash2 aria-hidden />}
+              tone="destructive"
+              onClick={() => run(onTrash)}
+            >
               העברה לסל מחזור
             </ActionRow>
           </>

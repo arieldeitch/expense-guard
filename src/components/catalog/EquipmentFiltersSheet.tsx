@@ -92,9 +92,7 @@ export function EquipmentFiltersSheet({
                       <Checkbox
                         checked={checked}
                         onCheckedChange={(c) => {
-                          const next = c
-                            ? [...value.types, t]
-                            : value.types.filter((x) => x !== t);
+                          const next = c ? [...value.types, t] : value.types.filter((x) => x !== t);
                           onChange({ ...value, types: next });
                         }}
                       />

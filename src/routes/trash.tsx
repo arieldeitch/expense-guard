@@ -13,12 +13,7 @@ import { Tile } from "@/components/tile/Tile";
 import { Chip } from "@/components/catalog/shared";
 import { ConfirmDialog } from "@/components/catalog/ConfirmDialog";
 import { Button } from "@/components/ui/button";
-import {
-  restoreEquipment,
-  restoreLocation,
-  restoreTreadmill,
-  useTrashItems,
-} from "@/lib/catalog";
+import { restoreEquipment, restoreLocation, restoreTreadmill, useTrashItems } from "@/lib/catalog";
 
 export const Route = createFileRoute("/trash")({
   head: () => ({

@@ -54,12 +54,7 @@ export function ImagePicker({
         <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-border-strong bg-tint text-muted-foreground">
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={value}
-              alt={label}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
+            <img src={value} alt={label} className="h-full w-full object-cover" loading="lazy" />
           ) : (
             <ImagePlus aria-hidden className="size-6" />
           )}
@@ -99,7 +94,10 @@ export function ImagePicker({
         </div>
       </div>
       {error ? (
-        <div className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive" role="alert">
+        <div
+          className="rounded-lg bg-destructive/10 px-3 py-2 text-xs text-destructive"
+          role="alert"
+        >
           {error}
         </div>
       ) : null}

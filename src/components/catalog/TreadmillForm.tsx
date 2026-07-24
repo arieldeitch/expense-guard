@@ -306,7 +306,10 @@ export function TreadmillForm({ open, onOpenChange, locationId, treadmill, onSav
               >
                 ביטול
               </Button>
-              <Button type="submit" className="min-h-11 rounded-xl bg-primary text-primary-foreground">
+              <Button
+                type="submit"
+                className="min-h-11 rounded-xl bg-primary text-primary-foreground"
+              >
                 {treadmill ? "שמירה" : "הוספת הליכון"}
               </Button>
             </SheetFooter>

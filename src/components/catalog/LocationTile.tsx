@@ -92,11 +92,13 @@ export function LocationTile({
               >
                 {location.name}
               </Link>
-              {location.is_default ? (
-                <Chip tone="info">ברירת מחדל</Chip>
-              ) : null}
+              {location.is_default ? <Chip tone="info">ברירת מחדל</Chip> : null}
               {location.is_favorite ? (
-                <Star aria-label="מועדף" className="size-3.5 shrink-0 text-warning" fill="currentColor" />
+                <Star
+                  aria-label="מועדף"
+                  className="size-3.5 shrink-0 text-warning"
+                  fill="currentColor"
+                />
               ) : null}
             </div>
             <div className="mt-0.5 truncate text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -189,7 +191,10 @@ function MoreMenu({
       </PopoverTrigger>
       <PopoverContent align="end" side="bottom" dir="rtl" className="w-56 p-1">
         {isTrashed ? (
-          <ActionRow icon={<Undo2 aria-hidden />} onClick={() => run(() => restoreLocation(location.id))}>
+          <ActionRow
+            icon={<Undo2 aria-hidden />}
+            onClick={() => run(() => restoreLocation(location.id))}
+          >
             שחזור מסל המחזור
           </ActionRow>
         ) : (
@@ -228,7 +233,11 @@ function MoreMenu({
                 ארכוב
               </ActionRow>
             )}
-            <ActionRow icon={<Trash2 aria-hidden />} onClick={() => run(onTrash)} tone="destructive">
+            <ActionRow
+              icon={<Trash2 aria-hidden />}
+              onClick={() => run(onTrash)}
+              tone="destructive"
+            >
               העברה לסל מחזור
             </ActionRow>
           </>

@@ -2,12 +2,7 @@
  * Human labels for enums — עברית, RTL.
  * מרוכזים בקובץ אחד כדי לאפשר החלפה עתידית ל־i18n מבלי לגעת ב־UI פרטני.
  */
-import type {
-  EquipmentAvailability,
-  EquipmentType,
-  LocationType,
-  WeightUnit,
-} from "./types";
+import type { EquipmentAvailability, EquipmentType, LocationType, WeightUnit } from "./types";
 
 export const LOCATION_TYPE_LABEL: Record<LocationType, string> = {
   gym_kibbutz: "חדר כושר בקיבוץ",

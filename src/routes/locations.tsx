@@ -49,18 +49,12 @@ function LocationsPage() {
     return all
       .filter((l) => l.deleted_at === null)
       .filter((l) =>
-        visibility === "archived"
-          ? !l.is_active
-          : visibility === "active"
-            ? l.is_active
-            : true,
+        visibility === "archived" ? !l.is_active : visibility === "active" ? l.is_active : true,
       )
       .filter((l) =>
         q === ""
           ? true
-          : [l.name, l.city, l.area, l.address].some(
-              (s) => s && s.toLowerCase().includes(q),
-            ),
+          : [l.name, l.city, l.area, l.address].some((s) => s && s.toLowerCase().includes(q)),
       );
   }, [all, query, visibility]);
 
@@ -154,11 +148,7 @@ function LocationsPage() {
         </div>
       ) : null}
 
-      <LocationForm
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        location={editing}
-      />
+      <LocationForm open={formOpen} onOpenChange={setFormOpen} location={editing} />
     </AppShell>
   );
 }

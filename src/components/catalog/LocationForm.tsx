@@ -180,9 +180,7 @@ export function LocationForm({ open, onOpenChange, location, onSaved }: Props) {
         >
           <SheetHeader className="text-start">
             <SheetTitle>{location ? "עריכת מקום" : "מקום חדש"}</SheetTitle>
-            <SheetDescription>
-              שם וסוג הם חובה. שאר הפרטים לא נחוצים לדיווח אימון.
-            </SheetDescription>
+            <SheetDescription>שם וסוג הם חובה. שאר הפרטים לא נחוצים לדיווח אימון.</SheetDescription>
           </SheetHeader>
           <form className="mt-4 flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
@@ -208,9 +206,7 @@ export function LocationForm({ open, onOpenChange, location, onSaved }: Props) {
               </Label>
               <Select
                 value={state.location_type}
-                onValueChange={(v) =>
-                  setState((s) => ({ ...s, location_type: v as LocationType }))
-                }
+                onValueChange={(v) => setState((s) => ({ ...s, location_type: v as LocationType }))}
               >
                 <SelectTrigger id="loc-type" className="min-h-11 rounded-xl border-border-strong">
                   <SelectValue />

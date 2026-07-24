@@ -3,11 +3,7 @@
  * שדות חובה: name/display_name + טיפוס. כל השאר optional.
  */
 import { z } from "zod";
-import {
-  AVAILABILITY_ORDERED,
-  EQUIPMENT_TYPES_ORDERED,
-  LOCATION_TYPES_ORDERED,
-} from "./labels";
+import { AVAILABILITY_ORDERED, EQUIPMENT_TYPES_ORDERED, LOCATION_TYPES_ORDERED } from "./labels";
 
 const COUNTRY_CODE = z
   .string()
@@ -25,32 +21,20 @@ const optionalNullableString = (max: number, message?: string) =>
     .nullable();
 
 const optionalPositiveNumber = () =>
-  z
-    .number()
-    .finite()
-    .nonnegative("הערך חייב להיות אפס או חיובי")
-    .optional()
-    .nullable();
+  z.number().finite().nonnegative("הערך חייב להיות אפס או חיובי").optional().nullable();
 
 export const locationFormSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "יש להזין שם למקום")
-    .max(80, "עד 80 תווים"),
+  name: z.string().trim().min(1, "יש להזין שם למקום").max(80, "עד 80 תווים"),
   location_type: z.enum(LOCATION_TYPES_ORDERED as [string, ...string[]]),
-  country_code: COUNTRY_CODE.optional().nullable().or(z.literal("").transform(() => null)),
+  country_code: COUNTRY_CODE.optional()
+    .nullable()
+    .or(z.literal("").transform(() => null)),
   city: optionalNullableString(80),
   area: optionalNullableString(80),
   address: optionalNullableString(200),
   description: optionalNullableString(500),
   notes: optionalNullableString(500),
-  latitude: z
-    .number()
-    .min(-90, "קו רוחב לא תקין")
-    .max(90, "קו רוחב לא תקין")
-    .optional()
-    .nullable(),
+  latitude: z.number().min(-90, "קו רוחב לא תקין").max(90, "קו רוחב לא תקין").optional().nullable(),
   longitude: z
     .number()
     .min(-180, "קו אורך לא תקין")
@@ -85,19 +69,10 @@ export const equipmentFormSchema = z
     equipment_type: z.enum(EQUIPMENT_TYPES_ORDERED as [string, ...string[]]),
     manufacturer: optionalNullableString(60),
     model: optionalNullableString(60),
-    quantity: z
-      .number()
-      .int("כמות שלמה בלבד")
-      .min(1, "כמות חייבת להיות לפחות 1")
-      .max(9999),
+    quantity: z.number().int("כמות שלמה בלבד").min(1, "כמות חייבת להיות לפחות 1").max(9999),
     min_weight: optionalPositiveNumber(),
     max_weight: optionalPositiveNumber(),
-    weight_increment: z
-      .number()
-      .finite()
-      .positive("צעד חייב להיות חיובי")
-      .optional()
-      .nullable(),
+    weight_increment: z.number().finite().positive("צעד חייב להיות חיובי").optional().nullable(),
     unit: z.enum(["kg", "lb"]).optional().nullable(),
     availability_status: z.enum(AVAILABILITY_ORDERED as [string, ...string[]]),
     image_url: optionalNullableString(2_000_000, "תמונה גדולה מדי"),

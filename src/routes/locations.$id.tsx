@@ -110,9 +110,7 @@ function LocationDetailPage() {
       .filter((e) =>
         q === ""
           ? true
-          : [e.name, e.manufacturer, e.model].some(
-              (s) => s && s.toLowerCase().includes(q),
-            ),
+          : [e.name, e.manufacturer, e.model].some((s) => s && s.toLowerCase().includes(q)),
       );
   }, [equipment, equipQuery, filters]);
 
@@ -125,8 +123,7 @@ function LocationDetailPage() {
         eyebrow={LOCATION_TYPE_LABEL[location.location_type as LocationType]}
         title={location.name}
         description={
-          [location.city, country?.he, location.address].filter(Boolean).join(" · ") ||
-          undefined
+          [location.city, country?.he, location.address].filter(Boolean).join(" · ") || undefined
         }
         action={
           <Button
@@ -196,11 +193,7 @@ function LocationDetailPage() {
                 <div className="sm:col-span-2">
                   <EmptyState
                     icon={<Dumbbell aria-hidden />}
-                    title={
-                      equipQuery || activeFilters
-                        ? "אין ציוד תואם"
-                        : "אין עדיין ציוד"
-                    }
+                    title={equipQuery || activeFilters ? "אין ציוד תואם" : "אין עדיין ציוד"}
                     description={
                       equipQuery || activeFilters
                         ? "נסה לנקות פילטרים או להסיר חיפוש."

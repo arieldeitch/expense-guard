@@ -204,9 +204,7 @@ export function listTreadmills(): TreadmillProfile[] {
 }
 
 export function listTreadmillsInLocation(locationId: string): TreadmillProfile[] {
-  return sortTreadmills(
-    readCatalogState().treadmills.filter((t) => t.location_id === locationId),
-  );
+  return sortTreadmills(readCatalogState().treadmills.filter((t) => t.location_id === locationId));
 }
 
 export function getTreadmill(id: string): TreadmillProfile | null {
@@ -309,9 +307,7 @@ export function listEquipment(): EquipmentItem[] {
 }
 
 export function listEquipmentInLocation(locationId: string): EquipmentItem[] {
-  return sortEquipment(
-    readCatalogState().equipment.filter((e) => e.location_id === locationId),
-  );
+  return sortEquipment(readCatalogState().equipment.filter((e) => e.location_id === locationId));
 }
 
 export function getEquipment(id: string): EquipmentItem | null {
@@ -412,7 +408,6 @@ function applyRecordChange<T extends CatalogRecordBase>(
   writeCatalogState({ ...state, [bucket]: next } as CatalogState);
 }
 
-
 // ---------- Cross-entity helpers ----------
 
 /** בודק אם פריט ציוד או הליכון בעל שם מנורמל דומה כבר קיים באותו מקום. */
@@ -423,14 +418,13 @@ export function findSimilarEquipmentInLocation(
 ): EquipmentItem[] {
   const target = normalizeName(name);
   if (!target) return [];
-  return readCatalogState()
-    .equipment.filter(
-      (e) =>
-        e.location_id === locationId &&
-        e.id !== excludeId &&
-        e.deleted_at === null &&
-        normalizeName(e.name) === target,
-    );
+  return readCatalogState().equipment.filter(
+    (e) =>
+      e.location_id === locationId &&
+      e.id !== excludeId &&
+      e.deleted_at === null &&
+      normalizeName(e.name) === target,
+  );
 }
 
 export function findSimilarTreadmillInLocation(
@@ -440,14 +434,13 @@ export function findSimilarTreadmillInLocation(
 ): TreadmillProfile[] {
   const target = normalizeName(displayName);
   if (!target) return [];
-  return readCatalogState()
-    .treadmills.filter(
-      (t) =>
-        t.location_id === locationId &&
-        t.id !== excludeId &&
-        t.deleted_at === null &&
-        normalizeName(t.display_name) === target,
-    );
+  return readCatalogState().treadmills.filter(
+    (t) =>
+      t.location_id === locationId &&
+      t.id !== excludeId &&
+      t.deleted_at === null &&
+      normalizeName(t.display_name) === target,
+  );
 }
 
 /** ספירה: כמה רשומות שאינן מחוקות משתמשות במקום. */
@@ -460,8 +453,7 @@ export function countLocationUsage(locationId: string): {
     treadmills: state.treadmills.filter(
       (t) => t.location_id === locationId && t.deleted_at === null,
     ).length,
-    equipment: state.equipment.filter(
-      (e) => e.location_id === locationId && e.deleted_at === null,
-    ).length,
+    equipment: state.equipment.filter((e) => e.location_id === locationId && e.deleted_at === null)
+      .length,
   };
 }

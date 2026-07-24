@@ -109,7 +109,14 @@ export interface EquipmentItem extends CatalogRecordBase {
 /** DTO ליצירה — ה־layer מייצר id/timestamps/owner. */
 export type NewLocation = Omit<
   TrainingLocation,
-  "id" | "owner_id" | "created_at" | "updated_at" | "deleted_at" | "is_active" | "is_favorite" | "is_default"
+  | "id"
+  | "owner_id"
+  | "created_at"
+  | "updated_at"
+  | "deleted_at"
+  | "is_active"
+  | "is_favorite"
+  | "is_default"
 > &
   Partial<Pick<TrainingLocation, "is_favorite" | "is_default">>;
 
