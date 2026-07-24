@@ -13,6 +13,7 @@ import {
   Database,
   ChevronLeft,
   BookOpen,
+  Layers,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { AppShell } from "@/components/shell/AppShell";
@@ -63,6 +64,12 @@ function MorePage() {
           title="ספריית תרגילים"
           hint="חדר כושר · בית · משקל גוף — עם חלופות וזמינות ציוד"
           icon={<BookOpen aria-hidden />}
+        />
+        <CatalogLinkTile
+          to="/templates"
+          title="תבניות אימון"
+          hint="תבניות כוח, סופרסטים, גרסאות ו־snapshots"
+          icon={<Layers aria-hidden />}
         />
         <TrashLinkTile />
       </div>
@@ -184,7 +191,7 @@ function CatalogLinkTile({
   icon,
   badge,
 }: {
-  to: "/locations" | "/trash" | "/exercises";
+  to: "/locations" | "/trash" | "/exercises" | "/templates";
   title: string;
   hint: string;
   icon: ReactNode;
