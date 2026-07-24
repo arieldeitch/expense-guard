@@ -26,6 +26,7 @@ import { activeRepoKind } from "@/lib/repo";
 import { useTrashItems } from "@/lib/catalog";
 import { useTrashedRuns } from "@/lib/runs";
 import { useTrashedExercises } from "@/lib/exercises";
+import { useTrashedTemplates } from "@/lib/templates";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/more")({
@@ -223,8 +224,14 @@ function TrashLinkTile() {
   const { locations, treadmills, equipment } = useTrashItems();
   const runs = useTrashedRuns();
   const exercises = useTrashedExercises();
+  const templates = useTrashedTemplates();
   const total =
-    locations.length + treadmills.length + equipment.length + runs.length + exercises.length;
+    locations.length +
+    treadmills.length +
+    equipment.length +
+    runs.length +
+    exercises.length +
+    templates.length;
   return (
     <CatalogLinkTile
       to="/trash"
