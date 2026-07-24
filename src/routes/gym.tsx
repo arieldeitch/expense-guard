@@ -10,7 +10,6 @@ import { formatDaysSince } from "@/lib/selectors/domain-summary";
 import { useAllTemplates } from "@/lib/templates";
 import { useActiveSession } from "@/lib/sessions";
 
-
 export const Route = createFileRoute("/gym")({
   head: () => ({
     meta: [
@@ -28,7 +27,6 @@ function GymPage() {
   const templates = useAllTemplates();
   const activeSession = useActiveSession();
   const hasActivity = summary?.hasAnyActivity ?? false;
-
 
   return (
     <AppShell
@@ -73,8 +71,6 @@ function GymPage() {
           </Link>
         </div>
       ) : null}
-
-
 
       <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-4 sm:px-6">
         <Tile variant="gym" tone="soft" size="sm">
