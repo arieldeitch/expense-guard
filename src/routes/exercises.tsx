@@ -120,9 +120,7 @@ function ExercisesPage() {
             <EmptyState
               icon={<Dumbbell aria-hidden />}
               title={
-                filters.query || activeCount > 0
-                  ? "לא נמצאו תרגילים תואמים"
-                  : "אין עדיין תרגילים"
+                filters.query || activeCount > 0 ? "לא נמצאו תרגילים תואמים" : "אין עדיין תרגילים"
               }
               description={
                 filters.query || activeCount > 0

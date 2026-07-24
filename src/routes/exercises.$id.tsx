@@ -35,7 +35,12 @@ import { MuscleMap } from "@/components/exercises/MuscleMap";
 import { AlternativesList } from "@/components/exercises/AlternativesList";
 import { MediaGallery } from "@/components/exercises/MediaGallery";
 import { ExerciseForm } from "@/components/exercises/ExerciseForm";
-import { EQUIPMENT_TYPE_LABEL, useAllLocations, useEquipmentInLocation, type EquipmentType } from "@/lib/catalog";
+import {
+  EQUIPMENT_TYPE_LABEL,
+  useAllLocations,
+  useEquipmentInLocation,
+  type EquipmentType,
+} from "@/lib/catalog";
 import {
   AVAILABILITY_STATUS_LABEL,
   AVAILABILITY_STATUS_TONE,
@@ -133,7 +138,7 @@ function ExerciseDetailPage() {
   const availabilityTone = AVAILABILITY_STATUS_TONE[availability.status];
 
   const parent = exercise.parent_exercise_id
-    ? allExercises.find((e) => e.id === exercise.parent_exercise_id) ?? null
+    ? (allExercises.find((e) => e.id === exercise.parent_exercise_id) ?? null)
     : null;
 
   return (
@@ -142,7 +147,9 @@ function ExerciseDetailPage() {
         eyebrow={exercise.is_system ? "תרגיל מערכת" : "תרגיל אישי"}
         title={exercise.name_he}
         description={
-          exercise.name_en ? `${exercise.name_en}${exercise.aliases.length > 0 ? " · " + exercise.aliases.join(", ") : ""}` : undefined
+          exercise.name_en
+            ? `${exercise.name_en}${exercise.aliases.length > 0 ? " · " + exercise.aliases.join(", ") : ""}`
+            : undefined
         }
         action={
           <div className="flex gap-2">
@@ -196,7 +203,9 @@ function ExerciseDetailPage() {
             />
             <MetricCell
               label="מנוחה"
-              value={exercise.default_rest_seconds != null ? `${exercise.default_rest_seconds} שנ'` : "—"}
+              value={
+                exercise.default_rest_seconds != null ? `${exercise.default_rest_seconds} שנ'` : "—"
+              }
             />
           </div>
         </Tile>
@@ -211,7 +220,10 @@ function ExerciseDetailPage() {
                 מקום אימון לבדיקת זמינות
               </div>
               <div className="mt-1.5">
-                <Select value={locationId || "none"} onValueChange={(v) => setLocationId(v === "none" ? "" : v)}>
+                <Select
+                  value={locationId || "none"}
+                  onValueChange={(v) => setLocationId(v === "none" ? "" : v)}
+                >
                   <SelectTrigger className="min-h-11 rounded-xl border-border-strong">
                     <SelectValue placeholder="בחר מקום" />
                   </SelectTrigger>
