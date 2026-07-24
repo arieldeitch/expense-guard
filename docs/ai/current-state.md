@@ -1,120 +1,88 @@
 # Current State — מצב הפרויקט
 
-תאריך סריקה: 2026-07-24
+תאריך עדכון: 2026-07-24 (שלב Design System + Shell)
 
 ## סיכום מנהלים
 
-הפרויקט נמצא כרגע במצב **תבנית ריקה של Lovable / TanStack Start**. אין קוד מוצר: אין מסכי אימון, אין מודל דאטה, אין Supabase, אין auth, אין תיעוד מוצרי קודם. הריפו מכיל את שלד ה־framework בלבד + ספריית shadcn UI מוכנה לשימוש.
-
-**משמעות:** אין מה "לתקן" או "לשכתב". השלב הבא הוא בנייה מאפס לפי הדרישות ב־`product-requirements.md`.
+הפרויקט עבר משלב **תבנית ריקה** לשלב **מערכת עיצוב + מעטפת אפליקציה עובדות**. קיימת שפה חזותית עקבית (dark-tinted, צבעי דומיין נפרדים, אריחים כדפוס בסיס), ניווט תחתון במובייל + Side nav בדסקטופ, ו־5 routes עובדים (`/`, `/running`, `/gym`, `/home`, `/more`). האפליקציה עדיין ללא backend, ללא auth, ללא דאטה. מוכנה לשלב בניית מסך הכניסה ומודולי הדומיין.
 
 ## מה קיים בפועל
 
-### Framework / Build
-- **TanStack Start v1** + Vite 7 + React 19.
-- **TypeScript** (`tsconfig.json` תקין, strict מופעל דרך `@tsconfig/*` — לבדוק בעת הצורך).
-- **Tailwind v4** דרך `src/styles.css` (native `@import "tailwindcss"`).
-- **Bun** כ־package manager (`bun.lock`, `bunfig.toml`).
-- ESLint + Prettier מוגדרים.
+### Design System (חדש)
+- **`src/styles.css`** — טוקנים מלאים ב־Tailwind v4 (`@theme inline`):
+  - Semantic: `background`, `foreground`, `surface`, `surface-elevated`, `tint`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`, `border`, `border-strong`, `input`, `ring`.
+  - Domain: `run`, `gym`, `home`, `goal` (כל אחד עם `-foreground` ו־`-soft`).
+  - Status: `success`, `warning`, `info` (כל אחד עם `-foreground` ו־`-soft`).
+  - Chart: `chart-1..5` ממופה לצבעי דומיין.
+  - Font: `Heebo` נטען דרך `<link>` ב־__root, `--font-sans` + `--font-display`.
+  - Shadows: `--shadow-tile`, `--shadow-elevated`, `--shadow-focus`.
+  - Utilities: `tile-base`, `tile-interactive`, `safe-top`, `safe-bottom`, `scroll-none`.
+- רקע: dark-tinted (`oklch(0.185 0.018 260)`) עם gradient עדין ברקע (primary + goal + run) — **אין רקע לבן דומיננטי**.
+- ללא `.dark` block — האפליקציה dark-first בכוונה.
+- Reduced motion: מכובד באופן גורף (`@media prefers-reduced-motion`).
+
+### Shell / Navigation (חדש)
+- `src/components/shell/AppShell.tsx` — מעטפת עם top bar אופציונלי, main container, bottom nav (mobile), side nav (desktop).
+- `src/components/shell/Nav.tsx` — `BottomNav` (5 פריטים) + `SideNav`.
+  - פריטים: ראשי · ריצה · חדר כושר · בית · עוד.
+  - צבע פעיל לפי דומיין.
+- `src/components/shell/PageHeader.tsx` — `PageHeader` + `SectionHeader` עם `grid-cols-[minmax(0,1fr)_auto]` (RTL-safe).
+- `src/components/shell/EmptyState.tsx` — קומפקטי, ללא illustration.
+
+### Tile primitives (חדש)
+- `src/components/tile/Tile.tsx` — `Tile` (cva variants: default/run/gym/home/goal/warning/success/info × outline/soft/solid × sm/md/lg), `TileLabel`, `TileMetric`, `TileFootnote`, `TileTrend`.
+- Selected state + disabled state + focus-visible מובנים.
 
 ### Routes
-- `src/routes/__root.tsx` — root layout עם QueryClientProvider, HeadContent, NotFound + Error boundaries. **מטא־דאטה עדיין ברירת מחדל של Lovable** ("Lovable App" / "Lovable Generated Project") — יש להחליף כשיוגדר שם המוצר.
-- `src/routes/index.tsx` — **placeholder ריק** (`data-lovable-blank-page-placeholder`). לא מוצר.
-- `src/routeTree.gen.ts` — נוצר אוטומטית.
+| Route | קובץ | סטטוס |
+|---|---|---|
+| `/` | `src/routes/index.tsx` | ✅ Home dashboard (3 domain tiles, weekly overview, quick actions, history empty state) |
+| `/running` | `src/routes/running.tsx` | ✅ מסך תחום עם 4 metric tiles + empty states |
+| `/gym` | `src/routes/gym.tsx` | ✅ מסך תחום עם 4 metric tiles + empty states |
+| `/home` | `src/routes/home.tsx` | ✅ מסך תחום (בית + משקל גוף) |
+| `/more` | `src/routes/more.tsx` | ✅ הגדרות, מקומות, סל מחזור, ייצוא, AI (כולם מסומנים "בקרוב") |
 
-### Components
-- `src/components/ui/` — **46 קבצי shadcn/ui** מוכנים (accordion, alert-dialog, button, dialog, form, input, select, sheet, tabs, toast, ועוד). זמינים לשימוש, אין מפגש עם דרישות המוצר עדיין.
-- **אין** רכיבי מוצר (`components/domain`, `components/features` וכו').
+### __root.tsx
+- `<html lang="he" dir="rtl">`.
+- Meta: title="Fit Log · אימונים אישיים", theme-color, viewport-fit=cover, og/twitter tags.
+- Heebo נטען מ־Google Fonts דרך `<link>` (לא `@import` ב־CSS).
 
-### Hooks / Lib
-- `src/hooks/use-mobile.tsx` — hook בסיסי.
-- `src/lib/utils.ts` — `cn()` (shadcn).
-- `src/lib/error-capture.ts`, `error-page.ts`, `lovable-error-reporting.ts` — תשתית שגיאות של Lovable.
+### Framework / Build (ללא שינוי)
+TanStack Start + Vite + React 19 + TS + Tailwind v4 + Bun. TanStack Query מותקן אבל טרם בשימוש בפועל.
 
-### Integrations / Backend
-- `src/integrations/` — **ריק** (התיקייה עצמה קיימת אך בלי קבצים).
-- `supabase/` — **לא קיימת**. אין client, אין migrations, אין types, אין edge functions.
-- אין `@supabase/supabase-js` ב־`package.json`.
-
-### Auth
-- **לא קיים**. אין login, אין guard, אין session state.
-
-### State Management
-- **TanStack Query** מותקן וקשור ב־root, אך אין queryOptions או queries בפועל.
-- **אין** Redux/Zustand/Jotai. אין צורך כרגע.
-
-### Testing
-- **אין קבצי בדיקות** בפרויקט. אין `vitest`/`playwright` config של המשתמש.
-- אין CI מוגדר בריפו (לא מצאתי `.github/workflows/`).
-
-### Assets / Media
-- `public/favicon.ico` בלבד.
-- אין `src/assets/`.
-
-### Env
-- **אין** `.env.example`, `.env`, או `.env.*.local`.
-- אין secrets מוגדרים דרך Lovable (יש לאמת ב־`fetch_secrets` כשיידרש).
-
-### Docs
-- `README.md` — תבנית Lovable ברירת מחדל.
-- `AGENTS.md` — הערת Lovable על git בלבד.
-- `src/routes/README.md` — הסבר routing של TanStack.
-- **אין** `docs/` — נוצר עכשיו במסגרת המשימה.
+### עדיין לא קיים
+Auth, Supabase, `src/integrations/supabase/*`, `supabase/migrations/`, tests, forms, real data queries.
 
 ## מצב לפי מודול
 
 | מודול | סטטוס | הערות |
 |---|---|---|
-| Routing | ✅ עובד | placeholder בלבד ב־`/` |
-| Root layout / providers | ✅ עובד | מטא־דאטה גנרית |
-| UI primitives | ✅ מוכן | shadcn מלא, טרם בשימוש מוצרי |
-| Auth | ❌ אין | לבנות (Lovable Cloud email+password) |
-| Backend / DB | ❌ אין | להפעיל Lovable Cloud כשמתחילים דאטה |
-| Data model | ❌ אין | ראה `data-model.md` |
-| Screens (אימון) | ❌ אין | אף מסך מוצרי לא קיים |
-| Forms / validation | ❌ אין | `zod` + `react-hook-form` מותקנים |
-| Media / receipts / assets | ❌ אין | |
-| Offline | ❌ אין | לא בהיקף מיידי |
-| Analytics | ❌ אין | לא בהיקף מיידי |
-| i18n / RTL | ⚠️ חסר | לא הוגדר `dir="rtl"` ולא i18n; נדרש בשלב עיצוב |
-| Error handling | ✅ בסיסי | boundaries קיימים ב־root |
-| Loading / empty states | ❌ אין | אין תוכן להציג עדיין |
-| Tests | ❌ אין | להוסיף כשיהיה קוד מוצרי |
-
-## חיבורים קיימים
-
-אין. אין קריאות רשת, אין Supabase, אין API חיצוני.
-
-## מסכים
-
-| מסך | קיים? | סטטוס |
-|---|---|---|
-| `/` | כן | placeholder של Lovable |
-| כל השאר | לא | — |
-
-**אין** מסכים לא בשימוש, אין nav routes שבורים, אין רכיבים כפולים — כי אין קוד מוצרי כלל.
+| Routing | ✅ | 5 routes, כל route עם `head()` ייחודי |
+| Root layout / providers | ✅ | RTL, Hebrew, dark-tinted, Heebo font |
+| Design tokens | ✅ | מרוכזים ב־`src/styles.css` |
+| Tile primitives | ✅ | variants + tones + sizes |
+| Shell (top+bottom+side) | ✅ | responsive, RTL, safe-area |
+| UI primitives (shadcn) | ✅ מוכן | 46 קבצים, נטמעים כשיידרשו |
+| Empty states | ✅ | קומפקטי, ללא illustration |
+| Auth | ❌ | טרם |
+| Backend / DB | ❌ | Lovable Cloud טרם הופעל (ADR-0012) |
+| Data model | ❌ | מתועד ב־`data-model.md`, לא ממומש |
+| Forms / validation | ❌ | `zod` + `react-hook-form` מותקנים |
+| i18n | 🟡 | עברית hard-coded בטקסטים (מקובל ל־single-user) |
+| Tests | ❌ | להוסיף כשיהיה קוד עם לוגיקה |
 
 ## חסמים אמיתיים
 
-1. **דרישות המוצר מונחות לפני קוד** — זו נקודת הזינוק. אין חסם טכני, יש חסם החלטה: מאיפה מתחילים (ריצה / חדר כושר / בית)?
-2. **Supabase לא מופעל** — יופעל דרך `supabase--enable` כשמתחילים לבנות דאטה. אין חשבון קיים לחבר.
-3. **RTL / i18n חסרים** — צריך להיקבע בתחילת שלב העיצוב.
-4. **מטא־דאטה גנרית** — יעודכן כשייקבע שם המוצר.
+1. **החלטה מוצרית פתוחה** — מאיזה תחום להתחיל את המימוש בפועל (ריצה / חדר כושר / בית).
+2. **Lovable Cloud טרם הופעל** — יופעל כשמתחילים לכתוב מיגרציה ראשונה.
 
-## רמת מוכנות לכל שלב
+## סטטוס בדיקות (2026-07-24)
 
-| שלב | מוכנות |
-|---|---|
-| תיעוד דרישות | ✅ 100% (מסמך זה + `product-requirements.md`) |
-| Design system | 🟡 בסיס shadcn — צריך התאמה RTL/עברית והחלטות ויזואליות |
-| Auth | 🔴 טרם התחיל |
-| Data layer (Supabase + schema) | 🔴 טרם התחיל |
-| מסכי ריצה | 🔴 טרם התחיל |
-| מסכי חדר כושר | 🔴 טרם התחיל |
-| מסכי בית | 🔴 טרם התחיל |
-| AI / הצעות | 🔴 טרם התחיל |
-| בדיקות | 🔴 טרם התחיל |
+- ✅ `bunx tsgo --noEmit` — נקי.
+- ✅ `bun run lint` — 0 errors (6 warnings בקבצי shadcn ui — לא משפיעים).
+- ✅ Prettier — כל הקבצים מפורמטים.
+- ✅ Visual QA (Playwright) — screenshots ב־390×844 (mobile), 1280×900 (desktop) לכל 5 המסכים. אין overflow אופקי. Bottom nav במקום, Side nav במקום ב־lg. פונטים נטענים, tiles בצבעי דומיין, gradient רקע עדין.
 
-## תיקונים שבוצעו בסריקה הזו
+## מוכנות לשלב מסך הכניסה
 
-אף אחד. לא נמצאו imports שבורים, routes שבורים, שגיאות TypeScript, typos שמונעים build, או references לקבצים חסרים. הבסיס נקי.
+✅ **מוכן.** יש מעטפת עקבית, טוקנים מרכזיים, ורכיבי בסיס. מסך `/auth` יבנה על AppShell (עם `topBar={{ back: false }}`) + `Tile` + input primitives של shadcn.

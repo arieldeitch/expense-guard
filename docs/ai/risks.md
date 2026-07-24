@@ -57,3 +57,11 @@
 ## R-14 · duplicate `/` route — 🟢 Low
 **תרחיש:** יצירת `_authenticated/index.tsx` בזמן ש־`index.tsx` קיים → build fail.
 **מיטיגציה:** בכל יצירת gate: home מוגן מקבל שם path (`/dashboard`), לא index.
+
+## R-15 · צבע דומיין כמידע יחיד — 🟡 Medium (הוסף 2026-07-25)
+**תרחיש:** משתמש עיוור צבעים לא מזהה אריח ריצה מ־gym כי הצבע לבד מוביל.
+**מיטיגציה:** מיושם כבר ב־Home + domain routes — כל אריח דומיין נושא **גם** icon (Footprints/Dumbbell/HeartPulse) **וגם** label ("תחום" eyebrow + שם). אין להוסיף אריח שמסתמך על צבע לבד.
+
+## R-16 · Bottom nav מפריע ל־sticky action buttons — 🟢 Low (הוסף 2026-07-25)
+**תרחיש:** בעמוד עם CTA sticky (למשל "סיים אימון") — יסתתר מאחורי BottomNav.
+**מיטיגציה:** `main` ב־`AppShell` מקבל `pb-28` (מקום ל־56px nav + safe-area + מרווח). Sticky CTA עתידי — מומלץ להשתמש ב־`bottom-[calc(theme(spacing.20)+env(safe-area-inset-bottom))]`.
