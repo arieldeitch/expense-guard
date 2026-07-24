@@ -60,8 +60,7 @@ const tileVariants = cva(
 );
 
 export interface TileProps
-  extends Omit<ButtonHTMLAttributes<HTMLDivElement>, "onClick">,
-    VariantProps<typeof tileVariants> {
+  extends Omit<ButtonHTMLAttributes<HTMLDivElement>, "onClick">, VariantProps<typeof tileVariants> {
   as?: "div" | "button" | "a";
   href?: string;
   onClick?: () => void;
@@ -142,21 +141,13 @@ export function TileMetric({
   return (
     <div className={cn("flex items-baseline gap-1.5", className)}>
       <span className="ltr-nums text-3xl font-black leading-none tracking-tight">{value}</span>
-      {unit ? (
-        <span className="text-sm font-medium text-muted-foreground">{unit}</span>
-      ) : null}
+      {unit ? <span className="text-sm font-medium text-muted-foreground">{unit}</span> : null}
     </div>
   );
 }
 
 /** מידע משני מוגבל בשורה */
-export function TileFootnote({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function TileFootnote({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={cn("text-sm text-muted-foreground", className)}>{children}</div>;
 }
 

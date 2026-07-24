@@ -88,9 +88,11 @@
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* shadows */
-  --shadow-tile: 0 1px 0 0 color-mix(in oklab, var(--border-strong) 40%, transparent),
+  --shadow-tile:
+    0 1px 0 0 color-mix(in oklab, var(--border-strong) 40%, transparent),
     0 10px 24px -14px oklch(0 0 0 / 0.55);
-  --shadow-elevated: 0 2px 0 0 color-mix(in oklab, var(--border-strong) 60%, transparent),
+  --shadow-elevated:
+    0 2px 0 0 color-mix(in oklab, var(--border-strong) 60%, transparent),
     0 20px 44px -18px oklch(0 0 0 / 0.7);
   --shadow-focus: 0 0 0 3px color-mix(in oklab, var(--ring) 55%, transparent);
 }
@@ -197,11 +199,26 @@
     pointer-events: none;
     z-index: -1;
     background:
-      radial-gradient(1200px 700px at 100% -10%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 60%),
-      radial-gradient(900px 600px at -20% 110%, color-mix(in oklab, var(--goal) 12%, transparent), transparent 55%),
-      radial-gradient(700px 500px at 50% 120%, color-mix(in oklab, var(--run) 6%, transparent), transparent 55%);
+      radial-gradient(
+        1200px 700px at 100% -10%,
+        color-mix(in oklab, var(--primary) 14%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 600px at -20% 110%,
+        color-mix(in oklab, var(--goal) 12%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        700px 500px at 50% 120%,
+        color-mix(in oklab, var(--run) 6%, transparent),
+        transparent 55%
+      );
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.015em;
     font-weight: 700;
@@ -216,7 +233,9 @@
     border-radius: var(--radius-md);
   }
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;

@@ -31,7 +31,7 @@ export function TopBar({
           {back ? (
             <Link
               to={typeof back === "object" ? back.to : "/"}
-              aria-label={typeof back === "object" ? back.label ?? "חזרה" : "חזרה"}
+              aria-label={typeof back === "object" ? (back.label ?? "חזרה") : "חזרה"}
               className="inline-flex size-11 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-tint hover:text-foreground"
             >
               {/* Chevron מתהפך אוטומטית ב־RTL דרך logical direction */}
@@ -40,9 +40,7 @@ export function TopBar({
           ) : null}
         </div>
         <div className="min-w-0 text-center">
-          {title ? (
-            <div className="truncate text-sm font-bold text-foreground">{title}</div>
-          ) : null}
+          {title ? <div className="truncate text-sm font-bold text-foreground">{title}</div> : null}
         </div>
         <div className="min-w-9 text-end">{action}</div>
       </div>
@@ -69,10 +67,7 @@ export function AppShell({
     <div className="min-h-dvh lg:pe-64">
       <SideNav />
       {topBar ? <TopBar {...topBar} /> : null}
-      <main
-        role="main"
-        className="mx-auto w-full max-w-3xl pb-28 pt-4 sm:pt-6 lg:pb-8"
-      >
+      <main role="main" className="mx-auto w-full max-w-3xl pb-28 pt-4 sm:pt-6 lg:pb-8">
         {children}
       </main>
       <BottomNav />

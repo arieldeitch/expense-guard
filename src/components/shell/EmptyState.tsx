@@ -20,10 +20,7 @@ export function EmptyState({
 }) {
   return (
     <div
-      className={cn(
-        "tile-base flex flex-col items-start gap-3 p-5 text-start",
-        className,
-      )}
+      className={cn("tile-base flex flex-col items-start gap-3 p-5 text-start", className)}
       role="status"
     >
       {icon ? (
