@@ -5,7 +5,7 @@
  */
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { RotateCcw, Trash2, MapPin, Gauge, Dumbbell } from "lucide-react";
+import { RotateCcw, Trash2, MapPin, Gauge, Dumbbell, Footprints } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
@@ -14,6 +14,7 @@ import { Chip } from "@/components/catalog/shared";
 import { ConfirmDialog } from "@/components/catalog/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { restoreEquipment, restoreLocation, restoreTreadmill, useTrashItems } from "@/lib/catalog";
+import { runsRepo, useTrashedRuns, RUN_TYPE_LABELS } from "@/lib/runs";
 
 export const Route = createFileRoute("/trash")({
   head: () => ({
@@ -29,7 +30,9 @@ export const Route = createFileRoute("/trash")({
 
 function TrashPage() {
   const trash = useTrashItems();
-  const total = trash.locations.length + trash.treadmills.length + trash.equipment.length;
+  const trashedRuns = useTrashedRuns();
+  const total =
+    trash.locations.length + trash.treadmills.length + trash.equipment.length + trashedRuns.length;
 
   return (
     <AppShell topBar={{ title: "סל מחזור", back: { to: "/more" } }}>
@@ -93,6 +96,21 @@ function TrashPage() {
                 secondary: [e.manufacturer, e.model].filter(Boolean).join(" · ") || undefined,
               }))}
               onRestore={restoreEquipment}
+            />
+          ) : null}
+
+          {trashedRuns.length > 0 ? (
+            <TrashSection
+              title="ריצות"
+              icon={<Footprints aria-hidden />}
+              items={trashedRuns.map((r) => ({
+                id: r.id,
+                primary: `${RUN_TYPE_LABELS[r.run_type]} · ${new Date(r.started_at).toLocaleDateString("he-IL")}`,
+                secondary: r.distance_meters
+                  ? `${(r.distance_meters / 1000).toFixed(2)} ק"מ`
+                  : undefined,
+              }))}
+              onRestore={runsRepo.restoreRun}
             />
           ) : null}
         </div>
