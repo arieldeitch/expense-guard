@@ -212,13 +212,25 @@ function calcRunCurrent(goal: Goal, ctx: CalcContext): Calc {
 function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
   const now = ctx.now ?? new Date();
   const sessions = activeStrength(ctx.strengthSessions);
+  const sessionExercises = (ctx.strengthSessionExercises ?? []).filter(
+    (e) => e.deleted_at == null,
+  );
   const sets = (ctx.strengthSets ?? []).filter((s) => s.deleted_at == null);
+  // map session_exercise_id → {exercise_id, session_id}
+  const seIndex = new Map<string, { exercise_id: string; session_id: string }>();
+  for (const e of sessionExercises)
+    seIndex.set(e.id, { exercise_id: e.exercise_id, session_id: e.session_id });
+  const setExerciseId = (s: StrengthSet) => seIndex.get(s.session_exercise_id)?.exercise_id ?? null;
+  const setSessionId = (s: StrengthSet) => seIndex.get(s.session_exercise_id)?.session_id ?? "";
+  const w = (s: StrengthSet) => s.actual_weight ?? s.planned_weight ?? 0;
+  const r = (s: StrengthSet) => s.actual_reps ?? s.planned_reps ?? 0;
+
   switch (goal.goal_type) {
     case "gym_exercise_top_weight": {
       const exId = goal.linked_exercise_id;
       if (!exId)
         return { current_value: null, source_activity_ids: [], details: "לא נבחר תרגיל", data_available: false };
-      const relevant = sets.filter((s) => s.exercise_id === exId && (s.weight ?? 0) > 0);
+      const relevant = sets.filter((s) => setExerciseId(s) === exId && w(s) > 0);
       if (relevant.length === 0)
         return {
           current_value: null,
@@ -226,10 +238,10 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
           details: "אין סטים בתרגיל זה",
           data_available: false,
         };
-      const top = relevant.reduce((b, s) => ((s.weight ?? 0) > (b.weight ?? 0) ? s : b));
+      const top = relevant.reduce((b, s) => (w(s) > w(b) ? s : b));
       return {
-        current_value: top.weight,
-        source_activity_ids: [top.session_id],
+        current_value: w(top),
+        source_activity_ids: [setSessionId(top)],
         details: `שיא משקל מתוך ${relevant.length} סטים בתרגיל`,
         data_available: true,
       };
@@ -240,7 +252,7 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
       if (!exId || wantWeight == null)
         return { current_value: null, source_activity_ids: [], details: "חסר תרגיל או משקל", data_available: false };
       const relevant = sets.filter(
-        (s) => s.exercise_id === exId && (s.weight ?? -1) === wantWeight && (s.reps ?? 0) > 0,
+        (s) => setExerciseId(s) === exId && w(s) === wantWeight && r(s) > 0,
       );
       if (relevant.length === 0)
         return {
@@ -249,10 +261,10 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
           details: `אין סטים בתרגיל במשקל ${wantWeight}kg`,
           data_available: false,
         };
-      const top = relevant.reduce((b, s) => ((s.reps ?? 0) > (b.reps ?? 0) ? s : b));
+      const top = relevant.reduce((b, s) => (r(s) > r(b) ? s : b));
       return {
-        current_value: top.reps,
-        source_activity_ids: [top.session_id],
+        current_value: r(top),
+        source_activity_ids: [setSessionId(top)],
         details: `שיא חזרות במשקל ${wantWeight}kg מתוך ${relevant.length} סטים`,
         data_available: true,
       };
@@ -261,19 +273,16 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
       const exId = goal.linked_exercise_id;
       if (!exId)
         return { current_value: null, source_activity_ids: [], details: "לא נבחר תרגיל", data_available: false };
-      const relevant = sets.filter(
-        (s) => s.exercise_id === exId && (s.weight ?? 0) > 0 && (s.reps ?? 0) > 0,
-      );
+      const relevant = sets.filter((s) => setExerciseId(s) === exId && w(s) > 0 && r(s) > 0);
       if (relevant.length === 0)
         return { current_value: null, source_activity_ids: [], details: "אין סטים לחישוב 1RM", data_available: false };
-      // Epley: w * (1 + reps/30)
       let best = 0;
       let bestSid = "";
       for (const s of relevant) {
-        const e = (s.weight ?? 0) * (1 + (s.reps ?? 0) / 30);
+        const e = w(s) * (1 + r(s) / 30);
         if (e > best) {
           best = e;
-          bestSid = s.session_id;
+          bestSid = setSessionId(s);
         }
       }
       return {
@@ -312,7 +321,7 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
       let completed = 0;
       const scopeSet = new Set(scope.map((s) => s.id));
       for (const s of sets) {
-        if (!scopeSet.has(s.session_id)) continue;
+        if (!scopeSet.has(setSessionId(s))) continue;
         planned++;
         if (s.completed) completed++;
       }
@@ -324,10 +333,7 @@ function calcGymCurrent(goal: Goal, ctx: CalcContext): Calc {
         data_available: planned > 0,
       };
     }
-    case "gym_custom_metric":
-    case "gym_custom":
-      return {
-        current_value: ctx.manualCurrent ?? goal.current_value,
+
         source_activity_ids: [],
         details: "יעד מותאם — ערך מוזן ידנית",
         data_available: (ctx.manualCurrent ?? goal.current_value) != null,
