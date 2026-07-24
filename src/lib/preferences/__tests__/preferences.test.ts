@@ -5,7 +5,9 @@ import {
   hasLandedThisSession,
   markLandedThisSession,
   LANDING_MODULE_ROUTES,
+  _resetPreferencesCache,
 } from "../index";
+
 
 // Minimal in-memory storage polyfill (vitest node env has no Web Storage).
 class MemStorage {
@@ -33,6 +35,7 @@ class MemStorage {
 beforeEach(() => {
   (globalThis as unknown as { localStorage: MemStorage }).localStorage = new MemStorage();
   (globalThis as unknown as { sessionStorage: MemStorage }).sessionStorage = new MemStorage();
+  _resetPreferencesCache();
 });
 
 describe("preferences", () => {
