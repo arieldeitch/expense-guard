@@ -52,6 +52,30 @@ function GymPage() {
         description="תבניות אימון, סטים, סופרסטים. שיאים מחושבים מהדיווח."
       />
 
+      {activeSession ? (
+        <div className="px-4 sm:px-6">
+          <Link
+            to="/sessions/$id"
+            params={{ id: activeSession.id }}
+            className="tile-interactive flex items-center gap-3 rounded-2xl border border-gym/50 bg-gym-soft/40 p-3 shadow-tile"
+          >
+            <div className="grid size-11 place-items-center rounded-xl bg-gym text-white">
+              <Play aria-hidden className="size-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <Chip tone="success">בהתקדמות</Chip>
+                <span className="text-xs text-muted-foreground">אימון פעיל</span>
+              </div>
+              <div className="mt-0.5 truncate text-sm font-black">{activeSession.name}</div>
+            </div>
+            <span className="text-xs font-bold text-primary">המשך ←</span>
+          </Link>
+        </div>
+      ) : null}
+
+
+
       <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-4 sm:px-6">
         <Tile variant="gym" tone="soft" size="sm">
           <TileLabel>{summary?.primary.label ?? "אימונים החודש"}</TileLabel>
