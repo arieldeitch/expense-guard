@@ -112,11 +112,13 @@ function GymPage() {
       <SectionHeader title="אימונים אחרונים" />
       <div className="px-4 sm:px-6">
         {hasActivity ? (
-          <Tile>
-            <TileFootnote>
-              רשומות פרטניות ייטענו כשמודול ההיסטוריה יופעל. עד אז — סיכומים בלבד.
-            </TileFootnote>
-          </Tile>
+          <Link to="/gym/history" className="block">
+            <Tile variant="gym" tone="soft" interactive>
+              <TileFootnote>
+                מסך היסטוריה מלא — סטים, שיאים, מדד איכות והשוואות בין אימונים.
+              </TileFootnote>
+            </Tile>
+          </Link>
         ) : (
           <EmptyState
             icon={<Dumbbell aria-hidden />}
