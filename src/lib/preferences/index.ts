@@ -1,8 +1,6 @@
 /**
  * Preferences repository — abstraction ל־user preferences.
  * כרגע מגובה localStorage. יוחלף ב־Supabase profile row בעתיד בלי לגעת ב־UI.
- *
- * מוצע: כל preference הוא string simple, עם schema ברור.
  */
 
 export type LandingModule = "home" | "running" | "gym" | "home-workout";
@@ -33,7 +31,9 @@ function safeGetStorage(): Storage | null {
   }
 }
 
-export function readPreferences(): Preferences {
+let cachedSnapshot: Preferences | null = null;
+
+function loadFromStorage(): Preferences {
   const storage = safeGetStorage();
   if (!storage) return { ...DEFAULTS };
   try {
@@ -43,13 +43,22 @@ export function readPreferences(): Preferences {
     if (!parsed || typeof parsed !== "object") return { ...DEFAULTS };
     const obj = parsed as Record<string, unknown>;
     return {
-      landingModule: isLandingModule(obj.landingModule)
-        ? obj.landingModule
-        : DEFAULTS.landingModule,
+      landingModule: isLandingModule(obj.landingModule) ? obj.landingModule : DEFAULTS.landingModule,
     };
   } catch {
     return { ...DEFAULTS };
   }
+}
+
+/** Snapshot יציב — חובה עבור useSyncExternalStore (ללא זה = infinite re-render). */
+export function readPreferences(): Preferences {
+  if (cachedSnapshot === null) cachedSnapshot = loadFromStorage();
+  return cachedSnapshot;
+}
+
+/** Server snapshot — קבוע ל־SSR (חייב להיות אותו reference בין קריאות). */
+export function readPreferencesServerSnapshot(): Preferences {
+  return DEFAULTS;
 }
 
 const listeners = new Set<() => void>();
@@ -57,6 +66,7 @@ const listeners = new Set<() => void>();
 export function writePreferences(next: Partial<Preferences>): Preferences {
   const current = readPreferences();
   const merged: Preferences = { ...current, ...next };
+  cachedSnapshot = merged;
   const storage = safeGetStorage();
   if (storage) {
     try {
@@ -72,6 +82,11 @@ export function writePreferences(next: Partial<Preferences>): Preferences {
 export function subscribePreferences(fn: () => void): () => void {
   listeners.add(fn);
   return () => listeners.delete(fn);
+}
+
+/** Testing helper — reset snapshot cache. לא לשימוש ב־UI. */
+export function _resetPreferencesCache(): void {
+  cachedSnapshot = null;
 }
 
 /** ל־session-scoped flag: "כבר בוצע redirect לפי landing preference בסשן הזה?" */
