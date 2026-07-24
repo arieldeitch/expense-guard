@@ -1,0 +1,603 @@
+/**
+ * Seed data — קבוצות שריר בסיסיות ותרגילים מערכת ראשוניים.
+ *
+ * קטלוג התחלתי מצומצם ומדויק — לא מאות תרגילים. משתמש יכול לערוך, לשכפל,
+ * לארכב או ליצור משלו. seed מסומן ב־is_system=true; owner_id הוא הבעלים
+ * היחיד ב־app (single-user), ומאפשר עתידית העברה ל־Supabase RLS.
+ *
+ * שמות מקוריים; אין תוכן משוכפל מ־Hevy/Strong/Fitbod/etc.
+ */
+import type {
+  BodyRegion,
+  Difficulty,
+  Exercise,
+  ExerciseCategory,
+  MovementPattern,
+  MuscleGroup,
+  TrackingType,
+} from "./types";
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function stableId(prefix: string, key: string): string {
+  // דטרמיניסטי — כדי שרשומות seed לא יווצרו מחדש אם seed רץ שוב.
+  return `${prefix}_${key}`;
+}
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^\w\u0590-\u05FF]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+interface SeedMuscle {
+  code: string;
+  name_he: string;
+  name_en: string;
+  body_region: BodyRegion;
+  display_order: number;
+}
+
+const MG_SEED: SeedMuscle[] = [
+  { code: "chest", name_he: "חזה", name_en: "Chest", body_region: "chest", display_order: 10 },
+  { code: "back", name_he: "גב", name_en: "Back", body_region: "back", display_order: 20 },
+  { code: "lats", name_he: "רחב הגב", name_en: "Lats", body_region: "back", display_order: 21 },
+  { code: "traps", name_he: "טרפז", name_en: "Traps", body_region: "back", display_order: 22 },
+  { code: "shoulders", name_he: "כתפיים", name_en: "Shoulders", body_region: "shoulders", display_order: 30 },
+  { code: "biceps", name_he: "יד קדמית", name_en: "Biceps", body_region: "arms", display_order: 40 },
+  { code: "triceps", name_he: "יד אחורית", name_en: "Triceps", body_region: "arms", display_order: 41 },
+  { code: "forearms", name_he: "אמות", name_en: "Forearms", body_region: "arms", display_order: 42 },
+  { code: "core", name_he: "בטן וליבה", name_en: "Core", body_region: "core", display_order: 50 },
+  { code: "obliques", name_he: "בטן צדדית", name_en: "Obliques", body_region: "core", display_order: 51 },
+  { code: "glutes", name_he: "ישבן", name_en: "Glutes", body_region: "glutes", display_order: 60 },
+  { code: "quads", name_he: "ארבע ראשי", name_en: "Quadriceps", body_region: "legs", display_order: 70 },
+  { code: "hamstrings", name_he: "ירך אחורית", name_en: "Hamstrings", body_region: "legs", display_order: 71 },
+  { code: "calves", name_he: "תאומים", name_en: "Calves", body_region: "calves", display_order: 72 },
+  { code: "full_body", name_he: "גוף מלא", name_en: "Full body", body_region: "full_body", display_order: 90 },
+];
+
+export function seedMuscleGroups(ownerId: string): MuscleGroup[] {
+  const now = nowIso();
+  return MG_SEED.map((m) => ({
+    id: stableId("mg", m.code),
+    owner_id: ownerId,
+    code: m.code,
+    name_he: m.name_he,
+    name_en: m.name_en,
+    body_region: m.body_region,
+    description: null,
+    icon: null,
+    color_token: null,
+    display_order: m.display_order,
+    is_active: true,
+    is_system: true,
+    created_at: now,
+    updated_at: now,
+    deleted_at: null,
+  }));
+}
+
+interface SeedExercise {
+  name_he: string;
+  name_en: string;
+  aliases?: string[];
+  primary: string; // muscle group code
+  secondary?: string[];
+  category: ExerciseCategory;
+  movement: MovementPattern;
+  tracking: TrackingType;
+  difficulty?: Difficulty;
+  required_equipment_types?: string[];
+  optional_equipment_types?: string[];
+  unilateral?: boolean;
+  bodyweight_based?: boolean;
+  default_sets?: number;
+  default_reps?: number | null;
+  default_rest?: number | null;
+  instructions?: string;
+  cues?: string[];
+  mistakes?: string[];
+  parent_slug?: string;
+}
+
+/**
+ * Cross-domain seed (~30 items). Balance across gym / home / bodyweight.
+ * required_equipment_types מפנה ל־EquipmentType (dumbbells/barbell/bench/pullup_bar/...).
+ */
+const EX_SEED: SeedExercise[] = [
+  // ---- Gym compounds ----
+  {
+    name_he: "לחיצת חזה במוט",
+    name_en: "Barbell Bench Press",
+    aliases: ["בנץ'", "לחיצת מוט"],
+    primary: "chest",
+    secondary: ["triceps", "shoulders"],
+    category: "compound",
+    movement: "horizontal_push",
+    tracking: "weight_reps",
+    difficulty: "intermediate",
+    required_equipment_types: ["barbell", "bench"],
+    optional_equipment_types: ["plates"],
+    default_sets: 4,
+    default_reps: 6,
+    default_rest: 150,
+    cues: ["גב תחתון צמוד לספסל", "מרפקים ~45°", "מוט מעל קו החזה התחתון"],
+    mistakes: ["הרמת גב מהספסל", "מרפקים פתוחים מדי"],
+  },
+  {
+    name_he: "סקוואט אחורי",
+    name_en: "Back Squat",
+    aliases: ["סקוואט מוט"],
+    primary: "quads",
+    secondary: ["glutes", "hamstrings", "core"],
+    category: "legs",
+    movement: "squat",
+    tracking: "weight_reps",
+    difficulty: "intermediate",
+    required_equipment_types: ["barbell"],
+    optional_equipment_types: ["plates"],
+    default_sets: 4,
+    default_reps: 6,
+    default_rest: 180,
+    cues: ["ליבה נעולה", "ברכיים לכיוון הבהונות", "עומק מתחת למקביל"],
+  },
+  {
+    name_he: "דדליפט קלאסי",
+    name_en: "Conventional Deadlift",
+    primary: "back",
+    secondary: ["glutes", "hamstrings", "forearms", "core"],
+    category: "compound",
+    movement: "hip_hinge",
+    tracking: "weight_reps",
+    difficulty: "advanced",
+    required_equipment_types: ["barbell", "plates"],
+    default_sets: 3,
+    default_reps: 5,
+    default_rest: 180,
+    cues: ["גב נייטרלי", "מוט צמוד לשוקיים", "דחיפה עם הרגליים"],
+    mistakes: ["עיגול גב תחתון", "מוט רחוק מהגוף"],
+  },
+  {
+    name_he: "לחיצת כתפיים ישיבה עם משקולות",
+    name_en: "Seated Dumbbell Shoulder Press",
+    primary: "shoulders",
+    secondary: ["triceps"],
+    category: "compound",
+    movement: "vertical_push",
+    tracking: "weight_reps",
+    required_equipment_types: ["dumbbells", "bench"],
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 90,
+  },
+  {
+    name_he: "חתירה עם מוט בהטיה",
+    name_en: "Bent-over Barbell Row",
+    primary: "back",
+    secondary: ["biceps", "traps", "lats"],
+    category: "pull",
+    movement: "horizontal_pull",
+    tracking: "weight_reps",
+    difficulty: "intermediate",
+    required_equipment_types: ["barbell"],
+    default_sets: 4,
+    default_reps: 8,
+    default_rest: 120,
+  },
+  {
+    name_he: "חתירה בכבל ישיבה",
+    name_en: "Seated Cable Row",
+    primary: "back",
+    secondary: ["biceps", "lats"],
+    category: "pull",
+    movement: "horizontal_pull",
+    tracking: "weight_reps",
+    required_equipment_types: ["cable"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 90,
+  },
+  {
+    name_he: "משיכת פולי עליון",
+    name_en: "Lat Pulldown",
+    primary: "lats",
+    secondary: ["biceps"],
+    category: "pull",
+    movement: "vertical_pull",
+    tracking: "weight_reps",
+    required_equipment_types: ["cable"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 90,
+  },
+  {
+    name_he: "כפיפות מרפקים עם משקולות",
+    name_en: "Dumbbell Bicep Curls",
+    aliases: ["ביי", "קרלים"],
+    primary: "biceps",
+    category: "isolation",
+    movement: "flexion",
+    tracking: "weight_reps",
+    required_equipment_types: ["dumbbells"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+  },
+  {
+    name_he: "פשיטת מרפקים בכבל",
+    name_en: "Triceps Cable Pushdown",
+    primary: "triceps",
+    category: "isolation",
+    movement: "extension",
+    tracking: "weight_reps",
+    required_equipment_types: ["cable"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+  },
+  {
+    name_he: "לחיצת רגליים במכונה",
+    name_en: "Leg Press",
+    primary: "quads",
+    secondary: ["glutes", "hamstrings"],
+    category: "legs",
+    movement: "squat",
+    tracking: "weight_reps",
+    required_equipment_types: ["machine"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 120,
+  },
+  {
+    name_he: "יישור רגליים במכונה",
+    name_en: "Leg Extension",
+    primary: "quads",
+    category: "isolation",
+    movement: "extension",
+    tracking: "weight_reps",
+    required_equipment_types: ["machine"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+  },
+  {
+    name_he: "כפיפות רגליים במכונה",
+    name_en: "Lying Leg Curl",
+    primary: "hamstrings",
+    category: "isolation",
+    movement: "flexion",
+    tracking: "weight_reps",
+    required_equipment_types: ["machine"],
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+  },
+  {
+    name_he: "פאלוף חד־צדדי בכבל",
+    name_en: "Pallof Press",
+    primary: "core",
+    secondary: ["obliques"],
+    category: "core",
+    movement: "anti_rotation",
+    tracking: "weight_reps",
+    required_equipment_types: ["cable"],
+    unilateral: true,
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 45,
+  },
+
+  // ---- Home / bodyweight ----
+  {
+    name_he: "שכיבות סמיכה",
+    name_en: "Push-ups",
+    aliases: ["פוש אפס"],
+    primary: "chest",
+    secondary: ["triceps", "shoulders", "core"],
+    category: "bodyweight",
+    movement: "horizontal_push",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+    cues: ["גוף בקו ישר", "מרפקים ~45°", "יורדים עד קרוב לרצפה"],
+  },
+  {
+    name_he: "שכיבות סמיכה בשיפוע",
+    name_en: "Incline Push-ups",
+    primary: "chest",
+    secondary: ["shoulders", "triceps"],
+    category: "bodyweight",
+    movement: "horizontal_push",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    difficulty: "beginner",
+    default_sets: 3,
+    default_reps: 15,
+    default_rest: 60,
+    parent_slug: "push-ups",
+  },
+  {
+    name_he: "שכיבות סמיכה צרות",
+    name_en: "Close-grip Push-ups",
+    primary: "triceps",
+    secondary: ["chest", "shoulders"],
+    category: "bodyweight",
+    movement: "horizontal_push",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    difficulty: "intermediate",
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 75,
+    parent_slug: "push-ups",
+  },
+  {
+    name_he: "מתח פרונטלי",
+    name_en: "Pull-ups",
+    aliases: ["פולאפ"],
+    primary: "lats",
+    secondary: ["biceps", "back"],
+    category: "bodyweight",
+    movement: "vertical_pull",
+    tracking: "bodyweight_plus_weight",
+    bodyweight_based: true,
+    difficulty: "intermediate",
+    required_equipment_types: ["pullup_bar"],
+    default_sets: 4,
+    default_reps: 6,
+    default_rest: 120,
+  },
+  {
+    name_he: "מתח עם סיוע גומייה",
+    name_en: "Band-assisted Pull-ups",
+    primary: "lats",
+    secondary: ["biceps"],
+    category: "bodyweight",
+    movement: "vertical_pull",
+    tracking: "assisted_reps",
+    bodyweight_based: true,
+    difficulty: "beginner",
+    required_equipment_types: ["pullup_bar", "band"],
+    default_sets: 3,
+    default_reps: 8,
+    default_rest: 90,
+    parent_slug: "pull-ups",
+  },
+  {
+    name_he: "סקוואט משקל גוף",
+    name_en: "Bodyweight Squat",
+    primary: "quads",
+    secondary: ["glutes", "hamstrings"],
+    category: "bodyweight",
+    movement: "squat",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    difficulty: "beginner",
+    default_sets: 3,
+    default_reps: 20,
+    default_rest: 45,
+  },
+  {
+    name_he: "לאנג'ים לסירוגין",
+    name_en: "Walking Lunges",
+    primary: "quads",
+    secondary: ["glutes", "hamstrings"],
+    category: "unilateral",
+    movement: "lunge",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    unilateral: true,
+    default_sets: 3,
+    default_reps: 20,
+    default_rest: 60,
+  },
+  {
+    name_he: "לאנג' בולגרי",
+    name_en: "Bulgarian Split Squat",
+    primary: "quads",
+    secondary: ["glutes"],
+    category: "unilateral",
+    movement: "lunge",
+    tracking: "bodyweight_plus_weight",
+    bodyweight_based: true,
+    unilateral: true,
+    difficulty: "intermediate",
+    optional_equipment_types: ["dumbbells", "bench"],
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 75,
+  },
+  {
+    name_he: "גשר ישבן",
+    name_en: "Glute Bridge",
+    primary: "glutes",
+    secondary: ["hamstrings"],
+    category: "bodyweight",
+    movement: "hip_hinge",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    difficulty: "beginner",
+    default_sets: 3,
+    default_reps: 15,
+    default_rest: 45,
+    optional_equipment_types: ["mat"],
+  },
+  {
+    name_he: "היפ תראסט",
+    name_en: "Hip Thrust",
+    primary: "glutes",
+    secondary: ["hamstrings"],
+    category: "compound",
+    movement: "hip_hinge",
+    tracking: "weight_reps",
+    required_equipment_types: ["bench"],
+    optional_equipment_types: ["barbell", "dumbbells"],
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 90,
+  },
+  {
+    name_he: "פלאנק",
+    name_en: "Plank",
+    primary: "core",
+    category: "core",
+    movement: "core",
+    tracking: "static_hold",
+    bodyweight_based: true,
+    default_sets: 3,
+    default_reps: null,
+    default_rest: 45,
+    optional_equipment_types: ["mat"],
+    cues: ["גוף בקו ישר", "אגן לא צונח", "נשימה שקטה"],
+  },
+  {
+    name_he: "פלאנק צד",
+    name_en: "Side Plank",
+    primary: "obliques",
+    secondary: ["core"],
+    category: "core",
+    movement: "anti_rotation",
+    tracking: "static_hold",
+    bodyweight_based: true,
+    unilateral: true,
+    default_sets: 3,
+    default_reps: null,
+    default_rest: 45,
+    optional_equipment_types: ["mat"],
+    parent_slug: "plank",
+  },
+  {
+    name_he: "רולאאוט גלגלת",
+    name_en: "Ab Wheel Rollout",
+    primary: "core",
+    category: "core",
+    movement: "anti_rotation",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    difficulty: "advanced",
+    default_sets: 3,
+    default_reps: 8,
+    default_rest: 60,
+  },
+  {
+    name_he: "טיפוס הרים",
+    name_en: "Mountain Climbers",
+    primary: "core",
+    secondary: ["shoulders"],
+    category: "core",
+    movement: "core",
+    tracking: "time",
+    bodyweight_based: true,
+    default_sets: 3,
+    default_reps: null,
+    default_rest: 45,
+  },
+  {
+    name_he: "משיכת גומייה חתירה",
+    name_en: "Band Row",
+    primary: "back",
+    secondary: ["biceps"],
+    category: "pull",
+    movement: "horizontal_pull",
+    tracking: "reps_only",
+    required_equipment_types: ["band"],
+    default_sets: 3,
+    default_reps: 15,
+    default_rest: 45,
+  },
+  {
+    name_he: "סווינג קטלבל",
+    name_en: "Kettlebell Swing",
+    primary: "glutes",
+    secondary: ["hamstrings", "core"],
+    category: "compound",
+    movement: "hip_hinge",
+    tracking: "weight_reps",
+    required_equipment_types: ["kettlebell"],
+    default_sets: 4,
+    default_reps: 15,
+    default_rest: 60,
+  },
+  {
+    name_he: "נשיאת חוואי",
+    name_en: "Farmer's Carry",
+    primary: "forearms",
+    secondary: ["core", "traps"],
+    category: "carry",
+    movement: "carry",
+    tracking: "weight_time",
+    required_equipment_types: ["dumbbells"],
+    default_sets: 3,
+    default_reps: null,
+    default_rest: 60,
+  },
+];
+
+export function seedExercises(ownerId: string, muscleGroups: MuscleGroup[]): Exercise[] {
+  const now = nowIso();
+  const codeToId = new Map(muscleGroups.map((m) => [m.code, m.id]));
+
+  const bySlug = new Map<string, Exercise>();
+  const output: Exercise[] = [];
+
+  for (const s of EX_SEED) {
+    const slug = slugify(s.name_en);
+    const primaryId = codeToId.get(s.primary);
+    if (!primaryId) continue; // מוגן — code seed קיים תמיד
+    const parent = s.parent_slug ? (bySlug.get(s.parent_slug) ?? null) : null;
+    const exercise: Exercise = {
+      id: stableId("ex", slug),
+      owner_id: ownerId,
+      is_system: true,
+      name_he: s.name_he,
+      name_en: s.name_en,
+      aliases: s.aliases ?? [],
+      slug,
+      category: s.category,
+      primary_muscle_group_id: primaryId,
+      secondary_muscle_group_ids: (s.secondary ?? [])
+        .map((code) => codeToId.get(code))
+        .filter((id): id is string => Boolean(id)),
+      movement_pattern: s.movement,
+      tracking_type: s.tracking,
+      required_equipment_ids: [],
+      optional_equipment_ids: [],
+      required_equipment_types: s.required_equipment_types ?? [],
+      optional_equipment_types: s.optional_equipment_types ?? [],
+      unilateral: s.unilateral ?? false,
+      bodyweight_based: s.bodyweight_based ?? false,
+      difficulty: s.difficulty ?? "intermediate",
+      default_sets: s.default_sets ?? 3,
+      default_reps: s.default_reps ?? 12,
+      default_rep_range_min: null,
+      default_rep_range_max: null,
+      default_rest_seconds: s.default_rest ?? 60,
+      default_rpe: null,
+      default_rir: null,
+      instructions: s.instructions ?? null,
+      technique_cues: s.cues ?? [],
+      common_mistakes: s.mistakes ?? [],
+      safety_notes: null,
+      personal_notes: null,
+      location_ids: [],
+      is_custom: false,
+      is_favorite: false,
+      is_active: true,
+      parent_exercise_id: parent?.id ?? null,
+      variation_type: parent ? "grip" : null,
+      variation_notes: null,
+      created_at: now,
+      updated_at: now,
+      deleted_at: null,
+    };
+    bySlug.set(slug, exercise);
+    output.push(exercise);
+  }
+
+  return output;
+}
