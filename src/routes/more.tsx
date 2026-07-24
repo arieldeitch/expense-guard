@@ -22,6 +22,7 @@ import type { LandingModule } from "@/lib/preferences";
 import { LANDING_MODULE_LABELS } from "@/lib/preferences";
 import { activeRepoKind } from "@/lib/repo";
 import { useTrashItems } from "@/lib/catalog";
+import { useTrashedRuns } from "@/lib/runs";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/more")({
@@ -205,7 +206,8 @@ function CatalogLinkTile({
 
 function TrashLinkTile() {
   const { locations, treadmills, equipment } = useTrashItems();
-  const total = locations.length + treadmills.length + equipment.length;
+  const runs = useTrashedRuns();
+  const total = locations.length + treadmills.length + equipment.length + runs.length;
   return (
     <CatalogLinkTile
       to="/trash"
