@@ -200,7 +200,7 @@ describe("templates: sessions", () => {
     activateTemplate(t.id);
     const session = startSessionFromTemplate(t.id);
     expect(session).not.toBeNull();
-    expect(session!.snapshot!.blocks).toHaveLength(2);
+    expect(session!.template_snapshot!.blocks).toHaveLength(2);
     expect(session!.template_version).toBe(1);
     // template usage bumped
     const list = listTemplates();
@@ -215,7 +215,7 @@ describe("templates: sessions", () => {
     // remove an exercise from live template
     removeTemplateExercise(e1.id);
     // snapshot unchanged
-    expect(session.snapshot!.blocks[0].exercises[0].planned_sets).toBe(DEFAULT_SETS);
-    expect(session.snapshot!.blocks[0].exercises).toHaveLength(1);
+    expect(session.template_snapshot!.blocks[0].exercises[0].planned_sets).toBe(DEFAULT_SETS);
+    expect(session.template_snapshot!.blocks[0].exercises).toHaveLength(1);
   });
 });
