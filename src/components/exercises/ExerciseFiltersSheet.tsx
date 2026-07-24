@@ -79,7 +79,10 @@ export function ExerciseFiltersSheet({
 
         <div className="mt-4 flex flex-col gap-5">
           <FieldGroup label="נראות">
-            <Select value={filters.visibility} onValueChange={(v) => set("visibility", v as ExerciseFilters["visibility"])}>
+            <Select
+              value={filters.visibility}
+              onValueChange={(v) => set("visibility", v as ExerciseFilters["visibility"])}
+            >
               <SelectTrigger className="min-h-11 rounded-xl border-border-strong">
                 <SelectValue />
               </SelectTrigger>
@@ -124,23 +127,32 @@ export function ExerciseFiltersSheet({
 
           <ChipGroup
             label="דפוס תנועה"
-            items={MOVEMENT_PATTERNS_ORDERED.map((p) => ({ id: p, label: MOVEMENT_PATTERN_LABEL[p] }))}
+            items={MOVEMENT_PATTERNS_ORDERED.map((p) => ({
+              id: p,
+              label: MOVEMENT_PATTERN_LABEL[p],
+            }))}
             selected={filters.movementPatterns}
-            onToggle={(id) => set("movementPatterns", toggleIn(filters.movementPatterns, id as MovementPattern))}
+            onToggle={(id) =>
+              set("movementPatterns", toggleIn(filters.movementPatterns, id as MovementPattern))
+            }
           />
 
           <ChipGroup
             label="סוג מעקב"
             items={TRACKING_TYPES_ORDERED.map((t) => ({ id: t, label: TRACKING_TYPE_LABEL[t] }))}
             selected={filters.trackingTypes}
-            onToggle={(id) => set("trackingTypes", toggleIn(filters.trackingTypes, id as TrackingType))}
+            onToggle={(id) =>
+              set("trackingTypes", toggleIn(filters.trackingTypes, id as TrackingType))
+            }
           />
 
           <ChipGroup
             label="קטגוריה"
             items={CATEGORIES_ORDERED.map((c) => ({ id: c, label: CATEGORY_LABEL[c] }))}
             selected={filters.categories}
-            onToggle={(id) => set("categories", toggleIn(filters.categories, id as ExerciseCategory))}
+            onToggle={(id) =>
+              set("categories", toggleIn(filters.categories, id as ExerciseCategory))
+            }
           />
 
           <ChipGroup

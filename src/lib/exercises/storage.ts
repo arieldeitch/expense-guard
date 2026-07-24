@@ -130,10 +130,7 @@ function applySeed(state: ExercisesState): ExercisesState {
 
   const exSeeded = seedExercises(CURRENT_OWNER_ID, mergedMgs);
   const existingSlugs = new Set(state.exercises.map((e) => e.slug));
-  const mergedEx = [
-    ...state.exercises,
-    ...exSeeded.filter((e) => !existingSlugs.has(e.slug)),
-  ];
+  const mergedEx = [...state.exercises, ...exSeeded.filter((e) => !existingSlugs.has(e.slug))];
 
   return {
     ...state,

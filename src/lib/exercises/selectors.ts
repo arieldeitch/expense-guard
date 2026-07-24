@@ -13,7 +13,11 @@ interface FilterContext {
   locationEquipment?: EquipmentItem[];
 }
 
-export function filterExercises({ exercises, filters, locationEquipment }: FilterContext): Exercise[] {
+export function filterExercises({
+  exercises,
+  filters,
+  locationEquipment,
+}: FilterContext): Exercise[] {
   const snapshot: LocationEquipmentSnapshot | null = filters.onlyAvailableInLocation
     ? { locationId: filters.onlyAvailableInLocation, items: locationEquipment ?? [] }
     : null;
@@ -38,7 +42,10 @@ export function filterExercises({ exercises, filters, locationEquipment }: Filte
       );
       if (!inPrimary && !inSecondary) return false;
     }
-    if (filters.movementPatterns.length > 0 && !filters.movementPatterns.includes(e.movement_pattern))
+    if (
+      filters.movementPatterns.length > 0 &&
+      !filters.movementPatterns.includes(e.movement_pattern)
+    )
       return false;
     if (filters.trackingTypes.length > 0 && !filters.trackingTypes.includes(e.tracking_type))
       return false;
@@ -51,11 +58,7 @@ export function filterExercises({ exercises, filters, locationEquipment }: Filte
     }
 
     if (query) {
-      const haystacks = [
-        e.name_he,
-        e.name_en ?? "",
-        ...e.aliases,
-      ].map(normalizeExerciseName);
+      const haystacks = [e.name_he, e.name_en ?? "", ...e.aliases].map(normalizeExerciseName);
       if (!haystacks.some((h) => h.includes(query))) return false;
     }
 

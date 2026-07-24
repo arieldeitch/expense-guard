@@ -55,8 +55,9 @@ export function findAlternatives(
       reasons.push("קבוצת שריר משנית זהה");
     } else {
       // No primary overlap — skip unless secondary overlap exists.
-      const overlap = candidate.secondary_muscle_group_ids.filter((id) =>
-        target.secondary_muscle_group_ids.includes(id) || id === target.primary_muscle_group_id,
+      const overlap = candidate.secondary_muscle_group_ids.filter(
+        (id) =>
+          target.secondary_muscle_group_ids.includes(id) || id === target.primary_muscle_group_id,
       );
       if (overlap.length === 0) continue;
     }

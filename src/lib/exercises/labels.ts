@@ -123,7 +123,12 @@ export const DIFFICULTY_LABEL: Record<Difficulty, string> = {
   expert: "מומחה",
 };
 
-export const DIFFICULTIES_ORDERED: Difficulty[] = ["beginner", "intermediate", "advanced", "expert"];
+export const DIFFICULTIES_ORDERED: Difficulty[] = [
+  "beginner",
+  "intermediate",
+  "advanced",
+  "expert",
+];
 
 export const BODY_REGION_LABEL: Record<BodyRegion, string> = {
   chest: "חזה",
@@ -155,7 +160,10 @@ export const VERIFICATION_LABEL: Record<VerificationStatus, string> = {
   archived: "בארכיון",
 };
 
-export const VERIFICATION_TONE: Record<VerificationStatus, "success" | "warning" | "info" | "destructive" | "default"> = {
+export const VERIFICATION_TONE: Record<
+  VerificationStatus,
+  "success" | "warning" | "info" | "destructive" | "default"
+> = {
   unverified: "info",
   verified: "success",
   missing_source: "warning",

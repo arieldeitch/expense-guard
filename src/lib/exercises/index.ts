@@ -9,9 +9,5 @@ export * from "./hooks";
 export * from "./selectors";
 export * from "./availability";
 export * from "./alternatives";
-export {
-  exerciseFormSchema,
-  normalizeExerciseName,
-  type ExerciseFormValues,
-} from "./schemas";
+export { exerciseFormSchema, normalizeExerciseName, type ExerciseFormValues } from "./schemas";
 export { _resetExercisesStateForTests, CURRENT_OWNER_ID as EXERCISES_OWNER_ID } from "./storage";

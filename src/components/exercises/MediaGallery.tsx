@@ -116,8 +116,8 @@ function MediaPlaceholder() {
         <div className="min-w-0">
           <div className="text-sm font-bold">אין עדיין מדיה</div>
           <p className="text-xs text-muted-foreground">
-            כאשר יחובר אחסון בטוח, ניתן יהיה להעלות תמונות או סרטונים. עד אז, שימוש בהוראות
-            הטכניקה למטה.
+            כאשר יחובר אחסון בטוח, ניתן יהיה להעלות תמונות או סרטונים. עד אז, שימוש בהוראות הטכניקה
+            למטה.
           </p>
         </div>
       </div>

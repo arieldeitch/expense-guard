@@ -116,7 +116,14 @@ function toState(e: Exercise | null | undefined, muscleGroups: MuscleGroup[]): F
   };
 }
 
-export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroups, onSaved }: Props) {
+export function ExerciseForm({
+  open,
+  onOpenChange,
+  exercise,
+  parent,
+  muscleGroups,
+  onSaved,
+}: Props) {
   const initial = useMemo(() => toState(exercise, muscleGroups), [exercise, muscleGroups]);
   const [state, setState] = useState<FormState>(initial);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -136,7 +143,8 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
   const dirty = useMemo(() => JSON.stringify(state) !== JSON.stringify(initial), [state, initial]);
 
   const similar = useMemo(
-    () => (state.name_he.trim().length > 1 ? findSimilarExercises(state.name_he, exercise?.id) : []),
+    () =>
+      state.name_he.trim().length > 1 ? findSimilarExercises(state.name_he, exercise?.id) : [],
     [state.name_he, exercise?.id],
   );
 
@@ -256,14 +264,12 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
       personal_notes: data.personal_notes ?? null,
       location_ids: data.location_ids ?? [],
       parent_exercise_id: data.parent_exercise_id ?? null,
-      variation_type: parent ? "grip" as const : null,
+      variation_type: parent ? ("grip" as const) : null,
       variation_notes: null,
       is_custom: true,
       is_favorite: state.is_favorite,
     };
-    const saved = exercise
-      ? updateExercise(exercise.id, payload)
-      : createExercise({ ...payload });
+    const saved = exercise ? updateExercise(exercise.id, payload) : createExercise({ ...payload });
     if (saved) onSaved?.(saved);
     onOpenChange(false);
   }
@@ -314,9 +320,14 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                 </Label>
                 <Select
                   value={state.category}
-                  onValueChange={(v) => setState((s) => ({ ...s, category: v as ExerciseCategory }))}
+                  onValueChange={(v) =>
+                    setState((s) => ({ ...s, category: v as ExerciseCategory }))
+                  }
                 >
-                  <SelectTrigger id="ex-category" className="min-h-11 rounded-xl border-border-strong">
+                  <SelectTrigger
+                    id="ex-category"
+                    className="min-h-11 rounded-xl border-border-strong"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent dir="rtl">
@@ -337,7 +348,10 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                   value={state.difficulty}
                   onValueChange={(v) => setState((s) => ({ ...s, difficulty: v as Difficulty }))}
                 >
-                  <SelectTrigger id="ex-difficulty" className="min-h-11 rounded-xl border-border-strong">
+                  <SelectTrigger
+                    id="ex-difficulty"
+                    className="min-h-11 rounded-xl border-border-strong"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent dir="rtl">
@@ -358,7 +372,10 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                   value={state.primary_muscle_group_id}
                   onValueChange={(v) => setState((s) => ({ ...s, primary_muscle_group_id: v }))}
                 >
-                  <SelectTrigger id="ex-primary" className="min-h-11 rounded-xl border-border-strong">
+                  <SelectTrigger
+                    id="ex-primary"
+                    className="min-h-11 rounded-xl border-border-strong"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent dir="rtl">
@@ -380,9 +397,14 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                 </Label>
                 <Select
                   value={state.tracking_type}
-                  onValueChange={(v) => setState((s) => ({ ...s, tracking_type: v as TrackingType }))}
+                  onValueChange={(v) =>
+                    setState((s) => ({ ...s, tracking_type: v as TrackingType }))
+                  }
                 >
-                  <SelectTrigger id="ex-tracking" className="min-h-11 rounded-xl border-border-strong">
+                  <SelectTrigger
+                    id="ex-tracking"
+                    className="min-h-11 rounded-xl border-border-strong"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent dir="rtl">
@@ -401,9 +423,14 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                 </Label>
                 <Select
                   value={state.movement_pattern}
-                  onValueChange={(v) => setState((s) => ({ ...s, movement_pattern: v as MovementPattern }))}
+                  onValueChange={(v) =>
+                    setState((s) => ({ ...s, movement_pattern: v as MovementPattern }))
+                  }
                 >
-                  <SelectTrigger id="ex-movement" className="min-h-11 rounded-xl border-border-strong">
+                  <SelectTrigger
+                    id="ex-movement"
+                    className="min-h-11 rounded-xl border-border-strong"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent dir="rtl">
@@ -474,7 +501,9 @@ export function ExerciseForm({ open, onOpenChange, exercise, parent, muscleGroup
                         setState((s) => ({
                           ...s,
                           required_equipment_types: toggleType(s.required_equipment_types, t),
-                          optional_equipment_types: s.optional_equipment_types.filter((x) => x !== t),
+                          optional_equipment_types: s.optional_equipment_types.filter(
+                            (x) => x !== t,
+                          ),
                         }))
                       }
                       className={`rounded-lg border px-2.5 py-1.5 text-xs font-semibold ${

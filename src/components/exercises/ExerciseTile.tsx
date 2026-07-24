@@ -63,9 +63,7 @@ export function ExerciseTile({
   const isTrashed = exercise.deleted_at !== null;
   const isArchived = !exercise.is_active && !isTrashed;
 
-  const availabilityTone = availability
-    ? AVAILABILITY_STATUS_TONE[availability.status]
-    : "default";
+  const availabilityTone = availability ? AVAILABILITY_STATUS_TONE[availability.status] : "default";
   const availabilityLabel = availability ? AVAILABILITY_STATUS_LABEL[availability.status] : null;
 
   const equipmentSummary = summarizeEquipment(exercise);
@@ -127,7 +125,15 @@ export function ExerciseTile({
           <Chip tone="info">{DIFFICULTY_LABEL[exercise.difficulty]}</Chip>
           {availabilityLabel ? (
             <Chip
-              tone={availabilityTone === "success" ? "success" : availabilityTone === "warning" ? "warning" : availabilityTone === "info" ? "info" : "default"}
+              tone={
+                availabilityTone === "success"
+                  ? "success"
+                  : availabilityTone === "warning"
+                    ? "warning"
+                    : availabilityTone === "info"
+                      ? "info"
+                      : "default"
+              }
             >
               {availabilityLabel}
             </Chip>
@@ -161,7 +167,9 @@ export function ExerciseTile({
 
 function summarizeEquipment(e: Exercise): ReactNode {
   if (e.bodyweight_based && e.required_equipment_types.length === 0) return "משקל גוף";
-  const types = e.required_equipment_types.slice(0, 3).map((t) => EQUIPMENT_TYPE_LABEL[t as EquipmentType] ?? t);
+  const types = e.required_equipment_types
+    .slice(0, 3)
+    .map((t) => EQUIPMENT_TYPE_LABEL[t as EquipmentType] ?? t);
   if (types.length === 0) return null;
   return types.join(" · ");
 }

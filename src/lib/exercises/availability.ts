@@ -10,11 +10,7 @@
  * ה־service אינו קורא ל־storage — הוא מקבל את הציוד כפרמטר.
  */
 import type { EquipmentItem } from "@/lib/catalog";
-import type {
-  AvailabilityStatus,
-  EquipmentAvailabilitySummary,
-  Exercise,
-} from "./types";
+import type { AvailabilityStatus, EquipmentAvailabilitySummary, Exercise } from "./types";
 
 export interface LocationEquipmentSnapshot {
   locationId: string;
@@ -67,13 +63,21 @@ export function getExerciseAvailability(
   const availableTypes = new Set(active.map((i) => i.equipment_type));
   const availableIds = new Set(active.map((i) => i.id));
 
-  const matchedRequiredTypes = exercise.required_equipment_types.filter((t) => availableTypes.has(t as never));
-  const missingRequiredTypes = exercise.required_equipment_types.filter((t) => !availableTypes.has(t as never));
+  const matchedRequiredTypes = exercise.required_equipment_types.filter((t) =>
+    availableTypes.has(t as never),
+  );
+  const missingRequiredTypes = exercise.required_equipment_types.filter(
+    (t) => !availableTypes.has(t as never),
+  );
   const matchedRequiredIds = exercise.required_equipment_ids.filter((id) => availableIds.has(id));
   const missingRequiredIds = exercise.required_equipment_ids.filter((id) => !availableIds.has(id));
 
-  const matchedOptionalTypes = exercise.optional_equipment_types.filter((t) => availableTypes.has(t as never));
-  const missingOptionalTypes = exercise.optional_equipment_types.filter((t) => !availableTypes.has(t as never));
+  const matchedOptionalTypes = exercise.optional_equipment_types.filter((t) =>
+    availableTypes.has(t as never),
+  );
+  const missingOptionalTypes = exercise.optional_equipment_types.filter(
+    (t) => !availableTypes.has(t as never),
+  );
   const matchedOptionalIds = exercise.optional_equipment_ids.filter((id) => availableIds.has(id));
   const missingOptionalIds = exercise.optional_equipment_ids.filter((id) => !availableIds.has(id));
 

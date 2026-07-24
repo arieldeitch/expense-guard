@@ -39,10 +39,7 @@ export function MuscleMap({ primaryRegion, secondaryRegions, className }: Props)
         <BodyView side="front" color={color} highlight={highlight} label="קדמי" />
         <BodyView side="back" color={color} highlight={highlight} label="אחורי" />
       </div>
-      <Legend
-        primary={primaryRegion}
-        secondaries={secondaryRegions}
-      />
+      <Legend primary={primaryRegion} secondaries={secondaryRegions} />
     </div>
   );
 }
@@ -60,7 +57,11 @@ function BodyView({
 }) {
   return (
     <figure className="flex flex-col items-center gap-1">
-      <svg viewBox="0 0 100 200" aria-label={`מפת שרירים ${label}`} className="h-56 w-full max-w-32">
+      <svg
+        viewBox="0 0 100 200"
+        aria-label={`מפת שרירים ${label}`}
+        className="h-56 w-full max-w-32"
+      >
         {/* silhouette */}
         <path
           d="M50 8 c9 0 15 7 15 16 c0 6 -2 10 -6 13 c8 3 14 10 15 20 l3 22 c0 3 -2 5 -5 5 h-2 l3 44 c1 6 -2 10 -6 12 l2 40 c0 3 -3 5 -6 5 h-6 l-2 -38 h-4 l-2 38 h-6 c-3 0 -6 -2 -6 -5 l2 -40 c-4 -2 -7 -6 -6 -12 l3 -44 h-2 c-3 0 -5 -2 -5 -5 l3 -22 c1 -10 7 -17 15 -20 c-4 -3 -6 -7 -6 -13 c0 -9 6 -16 15 -16 z"
@@ -72,47 +73,231 @@ function BodyView({
         {side === "front" ? (
           <>
             {/* chest */}
-            <Rect x={30} y={45} w={40} h={16} r={4} region="chest" color={color} highlight={highlight} />
+            <Rect
+              x={30}
+              y={45}
+              w={40}
+              h={16}
+              r={4}
+              region="chest"
+              color={color}
+              highlight={highlight}
+            />
             {/* shoulders */}
             <Circle cx={26} cy={45} r={7} region="shoulders" color={color} highlight={highlight} />
             <Circle cx={74} cy={45} r={7} region="shoulders" color={color} highlight={highlight} />
             {/* arms (biceps) */}
-            <Rect x={17} y={55} w={9} h={26} r={4} region="arms" color={color} highlight={highlight} />
-            <Rect x={74} y={55} w={9} h={26} r={4} region="arms" color={color} highlight={highlight} />
+            <Rect
+              x={17}
+              y={55}
+              w={9}
+              h={26}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={74}
+              y={55}
+              w={9}
+              h={26}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+            />
             {/* forearms */}
-            <Rect x={16} y={82} w={9} h={22} r={4} region="arms" color={color} highlight={highlight} opacity={0.85} />
-            <Rect x={75} y={82} w={9} h={22} r={4} region="arms" color={color} highlight={highlight} opacity={0.85} />
+            <Rect
+              x={16}
+              y={82}
+              w={9}
+              h={22}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+              opacity={0.85}
+            />
+            <Rect
+              x={75}
+              y={82}
+              w={9}
+              h={22}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+              opacity={0.85}
+            />
             {/* core */}
-            <Rect x={35} y={64} w={30} h={30} r={4} region="core" color={color} highlight={highlight} />
+            <Rect
+              x={35}
+              y={64}
+              w={30}
+              h={30}
+              r={4}
+              region="core"
+              color={color}
+              highlight={highlight}
+            />
             {/* quads */}
-            <Rect x={31} y={100} w={16} h={44} r={5} region="legs" color={color} highlight={highlight} />
-            <Rect x={53} y={100} w={16} h={44} r={5} region="legs" color={color} highlight={highlight} />
+            <Rect
+              x={31}
+              y={100}
+              w={16}
+              h={44}
+              r={5}
+              region="legs"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={53}
+              y={100}
+              w={16}
+              h={44}
+              r={5}
+              region="legs"
+              color={color}
+              highlight={highlight}
+            />
             {/* calves (below knee) */}
-            <Rect x={33} y={148} w={12} h={30} r={4} region="calves" color={color} highlight={highlight} />
-            <Rect x={55} y={148} w={12} h={30} r={4} region="calves" color={color} highlight={highlight} />
+            <Rect
+              x={33}
+              y={148}
+              w={12}
+              h={30}
+              r={4}
+              region="calves"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={55}
+              y={148}
+              w={12}
+              h={30}
+              r={4}
+              region="calves"
+              color={color}
+              highlight={highlight}
+            />
           </>
         ) : (
           <>
             {/* upper back (traps + back) */}
-            <Rect x={28} y={40} w={44} h={16} r={4} region="back" color={color} highlight={highlight} />
+            <Rect
+              x={28}
+              y={40}
+              w={44}
+              h={16}
+              r={4}
+              region="back"
+              color={color}
+              highlight={highlight}
+            />
             {/* lats */}
-            <Rect x={26} y={56} w={48} h={22} r={6} region="back" color={color} highlight={highlight} opacity={0.85} />
+            <Rect
+              x={26}
+              y={56}
+              w={48}
+              h={22}
+              r={6}
+              region="back"
+              color={color}
+              highlight={highlight}
+              opacity={0.85}
+            />
             {/* rear delts */}
             <Circle cx={26} cy={46} r={6} region="shoulders" color={color} highlight={highlight} />
             <Circle cx={74} cy={46} r={6} region="shoulders" color={color} highlight={highlight} />
             {/* triceps */}
-            <Rect x={17} y={55} w={9} h={30} r={4} region="arms" color={color} highlight={highlight} />
-            <Rect x={74} y={55} w={9} h={30} r={4} region="arms" color={color} highlight={highlight} />
+            <Rect
+              x={17}
+              y={55}
+              w={9}
+              h={30}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={74}
+              y={55}
+              w={9}
+              h={30}
+              r={4}
+              region="arms"
+              color={color}
+              highlight={highlight}
+            />
             {/* low back */}
-            <Rect x={38} y={80} w={24} h={12} r={3} region="back" color={color} highlight={highlight} opacity={0.9} />
+            <Rect
+              x={38}
+              y={80}
+              w={24}
+              h={12}
+              r={3}
+              region="back"
+              color={color}
+              highlight={highlight}
+              opacity={0.9}
+            />
             {/* glutes */}
-            <Rect x={31} y={94} w={38} h={16} r={8} region="glutes" color={color} highlight={highlight} />
+            <Rect
+              x={31}
+              y={94}
+              w={38}
+              h={16}
+              r={8}
+              region="glutes"
+              color={color}
+              highlight={highlight}
+            />
             {/* hamstrings */}
-            <Rect x={31} y={112} w={16} h={34} r={5} region="legs" color={color} highlight={highlight} />
-            <Rect x={53} y={112} w={16} h={34} r={5} region="legs" color={color} highlight={highlight} />
+            <Rect
+              x={31}
+              y={112}
+              w={16}
+              h={34}
+              r={5}
+              region="legs"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={53}
+              y={112}
+              w={16}
+              h={34}
+              r={5}
+              region="legs"
+              color={color}
+              highlight={highlight}
+            />
             {/* calves */}
-            <Rect x={33} y={148} w={12} h={30} r={4} region="calves" color={color} highlight={highlight} />
-            <Rect x={55} y={148} w={12} h={30} r={4} region="calves" color={color} highlight={highlight} />
+            <Rect
+              x={33}
+              y={148}
+              w={12}
+              h={30}
+              r={4}
+              region="calves"
+              color={color}
+              highlight={highlight}
+            />
+            <Rect
+              x={55}
+              y={148}
+              w={12}
+              h={30}
+              r={4}
+              region="calves"
+              color={color}
+              highlight={highlight}
+            />
           </>
         )}
       </svg>
@@ -180,14 +365,7 @@ function Circle({
   const stroke = highlight(region) !== "none" ? "oklch(0.95 0.02 260)" : OUTLINE;
   const strokeWidth = highlight(region) === "primary" ? 1.5 : 0.5;
   return (
-    <circle
-      cx={cx}
-      cy={cy}
-      r={r}
-      fill={color(region)}
-      stroke={stroke}
-      strokeWidth={strokeWidth}
-    />
+    <circle cx={cx} cy={cy} r={r} fill={color(region)} stroke={stroke} strokeWidth={strokeWidth} />
   );
 }
 
@@ -214,7 +392,11 @@ function Legend({
     <ul className="mt-3 flex flex-wrap gap-2 text-[11px]" aria-label="מקרא">
       {primary ? (
         <li className="inline-flex items-center gap-1.5 rounded-md border border-run/60 bg-run-soft/40 px-2 py-1 font-bold text-foreground">
-          <span aria-hidden className="inline-block size-2 rounded-full" style={{ background: PRIMARY_FILL }} />
+          <span
+            aria-hidden
+            className="inline-block size-2 rounded-full"
+            style={{ background: PRIMARY_FILL }}
+          />
           ראשי: {REGION_LABELS[primary]}
         </li>
       ) : null}
@@ -223,7 +405,11 @@ function Legend({
           key={r}
           className="inline-flex items-center gap-1.5 rounded-md border border-gym/60 bg-gym-soft/40 px-2 py-1 font-semibold text-foreground"
         >
-          <span aria-hidden className="inline-block size-2 rounded-full" style={{ background: SECONDARY_FILL }} />
+          <span
+            aria-hidden
+            className="inline-block size-2 rounded-full"
+            style={{ background: SECONDARY_FILL }}
+          />
           משני: {REGION_LABELS[r]}
         </li>
       ))}

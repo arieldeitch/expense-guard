@@ -2,11 +2,7 @@
  * React hooks — reactive access ל־exercises state.
  */
 import { useSyncExternalStore } from "react";
-import {
-  readExercisesState,
-  readExercisesServerSnapshot,
-  subscribeExercises,
-} from "./storage";
+import { readExercisesState, readExercisesServerSnapshot, subscribeExercises } from "./storage";
 import * as repo from "./repo";
 import type { Exercise, ExerciseMedia, MuscleGroup } from "./types";
 

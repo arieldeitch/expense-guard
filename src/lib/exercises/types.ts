@@ -112,7 +112,13 @@ export interface MuscleGroup {
 
 // ---------- Exercise media ----------
 
-export type MediaType = "image" | "image_sequence" | "gif" | "video" | "illustration" | "muscle_map";
+export type MediaType =
+  | "image"
+  | "image_sequence"
+  | "gif"
+  | "video"
+  | "illustration"
+  | "muscle_map";
 
 export type VerificationStatus =
   | "unverified"
@@ -226,13 +232,7 @@ export type NewExercise = Omit<
 
 export type NewMuscleGroup = Omit<
   MuscleGroup,
-  | "id"
-  | "owner_id"
-  | "created_at"
-  | "updated_at"
-  | "deleted_at"
-  | "is_active"
-  | "is_system"
+  "id" | "owner_id" | "created_at" | "updated_at" | "deleted_at" | "is_active" | "is_system"
 > &
   Partial<Pick<MuscleGroup, "is_system">>;
 
@@ -276,11 +276,7 @@ export const EMPTY_EXERCISE_FILTERS: ExerciseFilters = {
 
 // ---------- Availability ----------
 
-export type AvailabilityStatus =
-  | "available"
-  | "partial"
-  | "unavailable"
-  | "unknown";
+export type AvailabilityStatus = "available" | "partial" | "unavailable" | "unknown";
 
 export interface EquipmentAvailabilitySummary {
   status: AvailabilityStatus;

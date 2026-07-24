@@ -58,7 +58,10 @@ export function AlternativesList({
                       {MOVEMENT_PATTERN_LABEL[alt.exercise.movement_pattern]}
                     </div>
                   </div>
-                  <ChevronLeft aria-hidden className="size-4 text-muted-foreground rtl:rotate-180" />
+                  <ChevronLeft
+                    aria-hidden
+                    className="size-4 text-muted-foreground rtl:rotate-180"
+                  />
                 </div>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
                   <Chip
