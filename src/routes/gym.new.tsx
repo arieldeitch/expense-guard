@@ -138,3 +138,34 @@ function NewGymPage() {
     </AppShell>
   );
 }
+
+function TemplateStartTile({
+  template,
+  onStart,
+}: {
+  template: ReturnType<typeof useAllTemplates>[number];
+  onStart: (id: string) => void;
+}) {
+  const exercises = useTemplateExercises(template.id);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        const s = startSessionFromTemplate(template.id);
+        if (s) onStart(s.id);
+      }}
+      className="tile-interactive rounded-xl border border-border-strong bg-surface p-3 text-start"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <div className="truncate text-sm font-black">{template.name}</div>
+          <div className="mt-0.5 text-xs text-muted-foreground">
+            {exercises.length} תרגילים · v{template.version}
+          </div>
+        </div>
+        <Chip>התחל</Chip>
+      </div>
+    </button>
+  );
+}
+
