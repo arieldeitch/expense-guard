@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TrashRouteImport } from './routes/trash'
+import { Route as TemplatesRouteImport } from './routes/templates'
 import { Route as RunningRouteImport } from './routes/running'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as LocationsRouteImport } from './routes/locations'
@@ -18,6 +19,8 @@ import { Route as GymRouteImport } from './routes/gym'
 import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TreadmillsIdRouteImport } from './routes/treadmills.$id'
+import { Route as TemplatesIdRouteImport } from './routes/templates.$id'
+import { Route as SessionsIdRouteImport } from './routes/sessions.$id'
 import { Route as RunningRoutesRouteImport } from './routes/running.routes'
 import { Route as RunningNewRouteImport } from './routes/running.new'
 import { Route as RunningHistoryRouteImport } from './routes/running.history'
@@ -26,12 +29,19 @@ import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 import { Route as HomeNewRouteImport } from './routes/home.new'
 import { Route as GymNewRouteImport } from './routes/gym.new'
 import { Route as ExercisesIdRouteImport } from './routes/exercises.$id'
+import { Route as TemplatesIdHistoryRouteImport } from './routes/templates.$id.history'
+import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit'
 import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
 
 const TrashRoute = TrashRouteImport.update({
   id: '/trash',
   path: '/trash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TemplatesRoute = TemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunningRoute = RunningRouteImport.update({
@@ -74,6 +84,16 @@ const TreadmillsIdRoute = TreadmillsIdRouteImport.update({
   path: '/treadmills/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TemplatesIdRoute = TemplatesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => TemplatesRoute,
+} as any)
+const SessionsIdRoute = SessionsIdRouteImport.update({
+  id: '/sessions/$id',
+  path: '/sessions/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RunningRoutesRoute = RunningRoutesRouteImport.update({
   id: '/routes',
   path: '/routes',
@@ -114,6 +134,16 @@ const ExercisesIdRoute = ExercisesIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ExercisesRoute,
 } as any)
+const TemplatesIdHistoryRoute = TemplatesIdHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => TemplatesIdRoute,
+} as any)
+const TemplatesIdEditRoute = TemplatesIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => TemplatesIdRoute,
+} as any)
 const RunningNewTypeRoute = RunningNewTypeRouteImport.update({
   id: '/$type',
   path: '/$type',
@@ -133,6 +163,7 @@ export interface FileRoutesByFullPath {
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
+  '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
   '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
@@ -142,9 +173,13 @@ export interface FileRoutesByFullPath {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/sessions/$id': typeof SessionsIdRoute
+  '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
+  '/templates/$id/edit': typeof TemplatesIdEditRoute
+  '/templates/$id/history': typeof TemplatesIdHistoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -154,6 +189,7 @@ export interface FileRoutesByTo {
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
+  '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
   '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
@@ -163,9 +199,13 @@ export interface FileRoutesByTo {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/sessions/$id': typeof SessionsIdRoute
+  '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
+  '/templates/$id/edit': typeof TemplatesIdEditRoute
+  '/templates/$id/history': typeof TemplatesIdHistoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -176,6 +216,7 @@ export interface FileRoutesById {
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
+  '/templates': typeof TemplatesRouteWithChildren
   '/trash': typeof TrashRoute
   '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
@@ -185,9 +226,13 @@ export interface FileRoutesById {
   '/running/history': typeof RunningHistoryRoute
   '/running/new': typeof RunningNewRouteWithChildren
   '/running/routes': typeof RunningRoutesRoute
+  '/sessions/$id': typeof SessionsIdRoute
+  '/templates/$id': typeof TemplatesIdRouteWithChildren
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/new/$type': typeof RunningNewTypeRoute
+  '/templates/$id/edit': typeof TemplatesIdEditRoute
+  '/templates/$id/history': typeof TemplatesIdHistoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -199,6 +244,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/more'
     | '/running'
+    | '/templates'
     | '/trash'
     | '/exercises/$id'
     | '/gym/new'
@@ -208,9 +254,13 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/sessions/$id'
+    | '/templates/$id'
     | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
+    | '/templates/$id/edit'
+    | '/templates/$id/history'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -220,6 +270,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/more'
     | '/running'
+    | '/templates'
     | '/trash'
     | '/exercises/$id'
     | '/gym/new'
@@ -229,9 +280,13 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/sessions/$id'
+    | '/templates/$id'
     | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
+    | '/templates/$id/edit'
+    | '/templates/$id/history'
   id:
     | '__root__'
     | '/'
@@ -241,6 +296,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/more'
     | '/running'
+    | '/templates'
     | '/trash'
     | '/exercises/$id'
     | '/gym/new'
@@ -250,9 +306,13 @@ export interface FileRouteTypes {
     | '/running/history'
     | '/running/new'
     | '/running/routes'
+    | '/sessions/$id'
+    | '/templates/$id'
     | '/treadmills/$id'
     | '/running/$id/edit'
     | '/running/new/$type'
+    | '/templates/$id/edit'
+    | '/templates/$id/history'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,7 +323,9 @@ export interface RootRouteChildren {
   LocationsRoute: typeof LocationsRouteWithChildren
   MoreRoute: typeof MoreRoute
   RunningRoute: typeof RunningRouteWithChildren
+  TemplatesRoute: typeof TemplatesRouteWithChildren
   TrashRoute: typeof TrashRoute
+  SessionsIdRoute: typeof SessionsIdRoute
   TreadmillsIdRoute: typeof TreadmillsIdRoute
 }
 
@@ -274,6 +336,13 @@ declare module '@tanstack/react-router' {
       path: '/trash'
       fullPath: '/trash'
       preLoaderRoute: typeof TrashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/templates': {
+      id: '/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof TemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/running': {
@@ -332,6 +401,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TreadmillsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/templates/$id': {
+      id: '/templates/$id'
+      path: '/$id'
+      fullPath: '/templates/$id'
+      preLoaderRoute: typeof TemplatesIdRouteImport
+      parentRoute: typeof TemplatesRoute
+    }
+    '/sessions/$id': {
+      id: '/sessions/$id'
+      path: '/sessions/$id'
+      fullPath: '/sessions/$id'
+      preLoaderRoute: typeof SessionsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/running/routes': {
       id: '/running/routes'
       path: '/routes'
@@ -387,6 +470,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/exercises/$id'
       preLoaderRoute: typeof ExercisesIdRouteImport
       parentRoute: typeof ExercisesRoute
+    }
+    '/templates/$id/history': {
+      id: '/templates/$id/history'
+      path: '/history'
+      fullPath: '/templates/$id/history'
+      preLoaderRoute: typeof TemplatesIdHistoryRouteImport
+      parentRoute: typeof TemplatesIdRoute
+    }
+    '/templates/$id/edit': {
+      id: '/templates/$id/edit'
+      path: '/edit'
+      fullPath: '/templates/$id/edit'
+      preLoaderRoute: typeof TemplatesIdEditRouteImport
+      parentRoute: typeof TemplatesIdRoute
     }
     '/running/new/$type': {
       id: '/running/new/$type'
@@ -490,6 +587,32 @@ const RunningRouteChildren: RunningRouteChildren = {
 const RunningRouteWithChildren =
   RunningRoute._addFileChildren(RunningRouteChildren)
 
+interface TemplatesIdRouteChildren {
+  TemplatesIdEditRoute: typeof TemplatesIdEditRoute
+  TemplatesIdHistoryRoute: typeof TemplatesIdHistoryRoute
+}
+
+const TemplatesIdRouteChildren: TemplatesIdRouteChildren = {
+  TemplatesIdEditRoute: TemplatesIdEditRoute,
+  TemplatesIdHistoryRoute: TemplatesIdHistoryRoute,
+}
+
+const TemplatesIdRouteWithChildren = TemplatesIdRoute._addFileChildren(
+  TemplatesIdRouteChildren,
+)
+
+interface TemplatesRouteChildren {
+  TemplatesIdRoute: typeof TemplatesIdRouteWithChildren
+}
+
+const TemplatesRouteChildren: TemplatesRouteChildren = {
+  TemplatesIdRoute: TemplatesIdRouteWithChildren,
+}
+
+const TemplatesRouteWithChildren = TemplatesRoute._addFileChildren(
+  TemplatesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExercisesRoute: ExercisesRouteWithChildren,
@@ -498,7 +621,9 @@ const rootRouteChildren: RootRouteChildren = {
   LocationsRoute: LocationsRouteWithChildren,
   MoreRoute: MoreRoute,
   RunningRoute: RunningRouteWithChildren,
+  TemplatesRoute: TemplatesRouteWithChildren,
   TrashRoute: TrashRoute,
+  SessionsIdRoute: SessionsIdRoute,
   TreadmillsIdRoute: TreadmillsIdRoute,
 }
 export const routeTree = rootRouteImport
