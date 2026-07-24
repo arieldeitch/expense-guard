@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Dumbbell, Plus, Target } from "lucide-react";
+import { Dumbbell, Play, Plus, Target } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
+import { Chip } from "@/components/catalog/shared";
 import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
 import { formatDaysSince } from "@/lib/selectors/domain-summary";
 import { useAllTemplates } from "@/lib/templates";
+import { useActiveSession } from "@/lib/sessions";
 
 export const Route = createFileRoute("/gym")({
   head: () => ({
@@ -23,6 +25,7 @@ export const Route = createFileRoute("/gym")({
 function GymPage() {
   const { data: summary, isPending } = useDomainSummary("gym");
   const templates = useAllTemplates();
+  const activeSession = useActiveSession();
   const hasActivity = summary?.hasAnyActivity ?? false;
 
   return (
@@ -46,6 +49,28 @@ function GymPage() {
         title="חדר כושר"
         description="תבניות אימון, סטים, סופרסטים. שיאים מחושבים מהדיווח."
       />
+
+      {activeSession ? (
+        <div className="px-4 sm:px-6">
+          <Link
+            to="/sessions/$id"
+            params={{ id: activeSession.id }}
+            className="tile-interactive flex items-center gap-3 rounded-2xl border border-gym/50 bg-gym-soft/40 p-3 shadow-tile"
+          >
+            <div className="grid size-11 place-items-center rounded-xl bg-gym text-white">
+              <Play aria-hidden className="size-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <Chip tone="success">בהתקדמות</Chip>
+                <span className="text-xs text-muted-foreground">אימון פעיל</span>
+              </div>
+              <div className="mt-0.5 truncate text-sm font-black">{activeSession.name}</div>
+            </div>
+            <span className="text-xs font-bold text-primary">המשך ←</span>
+          </Link>
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-4 sm:px-6">
         <Tile variant="gym" tone="soft" size="sm">
