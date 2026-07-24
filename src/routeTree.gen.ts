@@ -15,6 +15,7 @@ import { Route as MoreRouteImport } from './routes/more'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as HomeRouteImport } from './routes/home'
 import { Route as GymRouteImport } from './routes/gym'
+import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TreadmillsIdRouteImport } from './routes/treadmills.$id'
 import { Route as RunningRoutesRouteImport } from './routes/running.routes'
@@ -24,6 +25,7 @@ import { Route as RunningIdRouteImport } from './routes/running.$id'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 import { Route as HomeNewRouteImport } from './routes/home.new'
 import { Route as GymNewRouteImport } from './routes/gym.new'
+import { Route as ExercisesIdRouteImport } from './routes/exercises.$id'
 import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
 
@@ -55,6 +57,11 @@ const HomeRoute = HomeRouteImport.update({
 const GymRoute = GymRouteImport.update({
   id: '/gym',
   path: '/gym',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesRoute = ExercisesRouteImport.update({
+  id: '/exercises',
+  path: '/exercises',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -102,6 +109,11 @@ const GymNewRoute = GymNewRouteImport.update({
   path: '/new',
   getParentRoute: () => GymRoute,
 } as any)
+const ExercisesIdRoute = ExercisesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ExercisesRoute,
+} as any)
 const RunningNewTypeRoute = RunningNewTypeRouteImport.update({
   id: '/$type',
   path: '/$type',
@@ -115,12 +127,14 @@ const RunningIdEditRoute = RunningIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRouteWithChildren
   '/gym': typeof GymRouteWithChildren
   '/home': typeof HomeRouteWithChildren
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
   '/trash': typeof TrashRoute
+  '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -134,12 +148,14 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRouteWithChildren
   '/gym': typeof GymRouteWithChildren
   '/home': typeof HomeRouteWithChildren
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
   '/trash': typeof TrashRoute
+  '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -154,12 +170,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/exercises': typeof ExercisesRouteWithChildren
   '/gym': typeof GymRouteWithChildren
   '/home': typeof HomeRouteWithChildren
   '/locations': typeof LocationsRouteWithChildren
   '/more': typeof MoreRoute
   '/running': typeof RunningRouteWithChildren
   '/trash': typeof TrashRoute
+  '/exercises/$id': typeof ExercisesIdRoute
   '/gym/new': typeof GymNewRoute
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
@@ -175,12 +193,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/exercises'
     | '/gym'
     | '/home'
     | '/locations'
     | '/more'
     | '/running'
     | '/trash'
+    | '/exercises/$id'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -194,12 +214,14 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/exercises'
     | '/gym'
     | '/home'
     | '/locations'
     | '/more'
     | '/running'
     | '/trash'
+    | '/exercises/$id'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -213,12 +235,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/exercises'
     | '/gym'
     | '/home'
     | '/locations'
     | '/more'
     | '/running'
     | '/trash'
+    | '/exercises/$id'
     | '/gym/new'
     | '/home/new'
     | '/locations/$id'
@@ -233,6 +257,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ExercisesRoute: typeof ExercisesRouteWithChildren
   GymRoute: typeof GymRouteWithChildren
   HomeRoute: typeof HomeRouteWithChildren
   LocationsRoute: typeof LocationsRouteWithChildren
@@ -284,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/gym'
       fullPath: '/gym'
       preLoaderRoute: typeof GymRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises': {
+      id: '/exercises'
+      path: '/exercises'
+      fullPath: '/exercises'
+      preLoaderRoute: typeof ExercisesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -349,6 +381,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GymNewRouteImport
       parentRoute: typeof GymRoute
     }
+    '/exercises/$id': {
+      id: '/exercises/$id'
+      path: '/$id'
+      fullPath: '/exercises/$id'
+      preLoaderRoute: typeof ExercisesIdRouteImport
+      parentRoute: typeof ExercisesRoute
+    }
     '/running/new/$type': {
       id: '/running/new/$type'
       path: '/$type'
@@ -365,6 +404,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ExercisesRouteChildren {
+  ExercisesIdRoute: typeof ExercisesIdRoute
+}
+
+const ExercisesRouteChildren: ExercisesRouteChildren = {
+  ExercisesIdRoute: ExercisesIdRoute,
+}
+
+const ExercisesRouteWithChildren = ExercisesRoute._addFileChildren(
+  ExercisesRouteChildren,
+)
 
 interface GymRouteChildren {
   GymNewRoute: typeof GymNewRoute
@@ -441,6 +492,7 @@ const RunningRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ExercisesRoute: ExercisesRouteWithChildren,
   GymRoute: GymRouteWithChildren,
   HomeRoute: HomeRouteWithChildren,
   LocationsRoute: LocationsRouteWithChildren,

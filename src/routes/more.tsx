@@ -12,6 +12,7 @@ import {
   Check,
   Database,
   ChevronLeft,
+  BookOpen,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { AppShell } from "@/components/shell/AppShell";
@@ -23,6 +24,7 @@ import { LANDING_MODULE_LABELS } from "@/lib/preferences";
 import { activeRepoKind } from "@/lib/repo";
 import { useTrashItems } from "@/lib/catalog";
 import { useTrashedRuns } from "@/lib/runs";
+import { useTrashedExercises } from "@/lib/exercises";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/more")({
@@ -55,6 +57,12 @@ function MorePage() {
           title="מקומות וציוד"
           hint="חדרי כושר, מסלולי ריצה, הליכונים, ציוד ביתי"
           icon={<MapPin aria-hidden />}
+        />
+        <CatalogLinkTile
+          to="/exercises"
+          title="ספריית תרגילים"
+          hint="חדר כושר · בית · משקל גוף — עם חלופות וזמינות ציוד"
+          icon={<BookOpen aria-hidden />}
         />
         <TrashLinkTile />
       </div>
@@ -176,7 +184,7 @@ function CatalogLinkTile({
   icon,
   badge,
 }: {
-  to: "/locations" | "/trash";
+  to: "/locations" | "/trash" | "/exercises";
   title: string;
   hint: string;
   icon: ReactNode;
@@ -207,7 +215,9 @@ function CatalogLinkTile({
 function TrashLinkTile() {
   const { locations, treadmills, equipment } = useTrashItems();
   const runs = useTrashedRuns();
-  const total = locations.length + treadmills.length + equipment.length + runs.length;
+  const exercises = useTrashedExercises();
+  const total =
+    locations.length + treadmills.length + equipment.length + runs.length + exercises.length;
   return (
     <CatalogLinkTile
       to="/trash"
