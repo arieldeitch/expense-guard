@@ -25,7 +25,7 @@ function computeWindow(
   sessions: StrengthSession[],
   exerciseId: string,
 ): WindowStats {
-  let stats: WindowStats = {
+  const stats: WindowStats = {
     sessions: sessions.length,
     avg1RM: null,
     avgTopWeight: null,

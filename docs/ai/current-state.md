@@ -2,6 +2,25 @@
 
 תאריך עדכון: 2026-08-XX (שלב מודול כוח בבית)
 
+---
+
+## ⚠️ Reconciliation — Product Alignment Audit (2026-07-24)
+
+> החלקים הישנים במסמך זה ("מה קיים בפועל" ואילך) **מיושנים** — הם מתארים מצב מוקדם של 5 routes ו"אין קוד לוגי". המצב האמיתי מתקדם בהרבה. להלן התמונה המאומתת. פירוט מלא: `route-inventory.md`, `entity-inventory.md`, `design-system-audit.md`, `product-alignment-audit.md`.
+
+**מצב אמיתי (מאומת ע"י audit):**
+- **41 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link.
+- **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
+- **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
+- **בדיקות: 150/150 עוברות** (10 קבצים). typecheck (`tsc --noEmit`) נקי. build עובר.
+- שלושת התחומים בנויים במלואם: ריצה (חוץ/הליכון/Suunto/כיול/מסלולים), כוח (תבניות/סופרסטים/אימון פעיל/היסטוריה/analytics), בית (quick entry/סטים גמישים/תבניות). goals engine מלא (26 goal types).
+- **אין קוד legacy** מחוץ להיקף (people/transport/roles/PIN/coach/clients/team — נעדרים). **אין secrets/service_role/network egress** (למעט Google Fonts).
+- **פער מוצרי יחיד:** משטח goals — `/goals` גלובלי קיים אך orphan (לא מקושר מניווט), סותר §6 "יעדים בתוך התחום". `DomainPrimaryGoalTile` בנוי אך לא מרונדר. ← דורש החלטת משתמש (`open-tasks.md`).
+- **פערי UI:** restore ל-sessions/home/goals לא מחובר ל-`/trash`; 404/Error components באנגלית.
+- **הערה:** שם התיקייה `expense-guard` הוא scaffold מטעה — הקוד הוא אפליקציית כושר.
+
+---
+
 ## עדכון אחרון — Home Strength Module
 
 - `src/lib/home/` — data layer מלא: `types.ts`, `storage.ts`, `repo.ts`, `metrics.ts`, `records.ts`, `hooks.ts`, `seed.ts`, `index.ts`.

@@ -91,7 +91,7 @@ export function getExerciseHistorySummary(exerciseId: string): ExerciseHistorySu
   let topReps = 0;
   let topSetVol = 0;
   let topSessionVol = 0;
-  let allWorking: Array<{ w: number; r: number; setId: string; snapshotUnilateral: boolean }> = [];
+  const allWorking: Array<{ w: number; r: number; setId: string; snapshotUnilateral: boolean }> = [];
 
   for (const row of rows) {
     if (row.totalVolumeKg > topSessionVol) topSessionVol = row.totalVolumeKg;

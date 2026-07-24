@@ -1,6 +1,16 @@
 # Test Plan
 
-## כרגע
+## סטטוס בפועל (מאומת 2026-07-24)
+
+> החלק "כרגע" למטה **מיושן**. המצב האמיתי:
+- **150 בדיקות עוברות** (`vitest run`), **10 קבצי בדיקה**: `runs` (calc, repo), `suunto`, `catalog`?, `exercises`, `templates` (repo), `home`, `goals`, `analytics`, `preferences`, `selectors/domain-summary`. משך ~2s.
+- **typecheck** (`tsc --noEmit`) — נקי. **build** — עובר. **lint** — ראה `risks.md` R-17 (CRLF מקומי; על LF: 8 warnings + 1 rules-of-hooks false-positive).
+- כיסוי חזק לשכבת הלוגיקה (analytics/repos/metrics). **חסר:** בדיקות component (`Tile`, טפסים), E2E (Playwright), ובדיקות RLS (אין DB עדיין).
+- הפקודות: `bun run test` (=vitest run), `bunx tsc --noEmit` או `bunx tsgo`, `bun run build`, `bun run lint`.
+
+---
+
+## כרגע (מיושן — נשמר להשוואה)
 
 **אין קוד מוצרי → אין בדיקות פונקציונליות.** רק בדיקות שלד: build עובר, typecheck נקי, lint נקי.
 

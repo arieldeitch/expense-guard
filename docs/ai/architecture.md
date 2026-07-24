@@ -10,7 +10,22 @@
 - **Pkg manager:** Bun.
 - **Runtime target:** Cloudflare Workers (edge) — עם `nodejs_compat`.
 
-## מבנה תיקיות (מתוכנן)
+## מבנה בפועל (מאומת 2026-07-24) מול המתוכנן
+
+> ה-audit גילה שהמבנה בפועל **שונה** מהמתוכנן למטה. המימוש אינו לפי `domain/data/application/features` אלא לפי **feature-folder פר-תחום תחת `src/lib/`**:
+> ```
+> src/lib/<domain>/   (runs, suunto, catalog, exercises, templates,
+>                      sessions, home, goals, preferences, analytics)
+>   types.ts schemas.ts storage.ts repo.ts hooks.ts selectors.ts seed.ts index.ts
+> src/lib/repo/        חוזה Repository מאוחד (façade קריאה-בלבד, mock) — התפר ל-Supabase
+> src/lib/analytics/   derived טהור, ללא persistence
+> src/components/<domain>/  קומפוננטות UI פר-תחום
+> src/components/{shell,tile,ui}/  מעטפת + Tile + shadcn primitives
+> src/routes/          41 route modules (file-based)
+> ```
+> **Persistence אמיתי:** localStorage (`fitlog:<domain>:v<n>`), דפוס `useSyncExternalStore`. לא TanStack Query עדיין (מותקן, לא בשימוש לנתונים). זהו מצב ביניים תקין לפני Supabase — ראה `migration-plan.md` Phase 11-12. הבלוק "מתוכנן" למטה נשאר כיעד ל-server state.
+
+## מבנה תיקיות (מתוכנן — יעד ל-Supabase/server-state)
 
 ```
 src/

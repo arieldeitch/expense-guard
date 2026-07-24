@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-07-24 · Product Alignment Audit (Claude Code)
+
+- **audit** · בוצע audit מלא ללא שינוי פונקציונלי. מופו 41 route modules, ~40 ישויות ב-9 תחומי `src/lib`, App Shell, design system, שכבת נתונים, ואבטחה.
+- **docs (חדשים)** · `route-inventory.md`, `entity-inventory.md`, `design-system-audit.md`, `product-alignment-audit.md`, `migration-plan.md`, `claude-session-log.md`.
+- **docs (עודכנו)** · `current-state.md` (reconciliation — הסרת טענות מיושנות "אין קוד"), `architecture.md` (מבנה בפועל `src/lib/<domain>` מול המתוכנן), `decisions.md` (ADR-0019 היררכיית מקורות אמת, ADR-0020 audit), `open-tasks.md` (Human Decisions Required), `risks.md` (R-17 CRLF, R-18 goals orphan), `test-plan.md` (עדכון סטטוס בדיקות אמיתי).
+- **fix (בטוח)** · 4 שגיאות `prefer-const` (`analytics/exerciseHistory.ts:94`, `progress.ts:28`, `quality.ts:161-162`) — `let`→`const`, ללא שינוי התנהגות.
+- **baseline** · `tsc --noEmit` נקי · `vitest` 150/150 (10 קבצים) · `build` עובר · `lint` — ראה R-17 (CRLF מקומי; על LF: 8 warnings + 1 error rules-of-hooks false-positive).
+- **ממצא מפתח** · הפרויקט מיושר היטב עם הדרישות; רוב תחומי הליבה כבר בנויים (localStorage). אין קוד legacy (people/transport/roles/PIN/coach — כולם נעדרים). הפער המוצרי היחיד: משטח goals (`/goals` orphan מול "יעדים בתוך התחום"). שם התיקייה `expense-guard` מטעה — הקוד הוא אפליקציית כושר.
+
 ## 2026-07-30 · Strength history + analytics
 
 - **analytics** · `src/lib/analytics/` — `formulas.ts` (רשם 1RM: Epley/Brzycki v1), `oneRM.ts` (שער כשירות דטרמיניסטי + `reason` לפסילה), `comparability.ts` (`compareSets` — פסילת חימום, יחידת משקל, פערי חזרות, snapshot תרגיל שונה), `volume.ts` (נורמליזציה ל־kg + `unilateral × 2`), `records.ts` (`detectSessionRecords` עם baseline לאימון ראשון של תרגיל), `quality.ts` (Workout Quality Score מרובה־רכיבים עם נירמול הרכיבים שנעדרים ורשימת excluded), `progress.ts`, `sessionHistory.ts`, `sessionComparison.ts`, `muscleLoad.ts`, `chartData.ts`, `time.ts`.

@@ -65,3 +65,17 @@
 ## R-16 · Bottom nav מפריע ל־sticky action buttons — 🟢 Low (הוסף 2026-07-25)
 **תרחיש:** בעמוד עם CTA sticky (למשל "סיים אימון") — יסתתר מאחורי BottomNav.
 **מיטיגציה:** `main` ב־`AppShell` מקבל `pb-28` (מקום ל־56px nav + safe-area + מרווח). Sticky CTA עתידי — מומלץ להשתמש ב־`bottom-[calc(theme(spacing.20)+env(safe-area-inset-bottom))]`.
+
+## R-17 · CRLF / line-endings שובר lint מקומית ב-Windows — 🟡 Medium (הוסף 2026-07-24)
+**תרחיש:** `core.autocrlf=true` **ללא `.gitattributes`** → checkout ב-Windows מייצר CRLF, אך prettier/ESLint מצפים ל-LF. תוצאה: `bun run lint` מדווח ~39,760 שגיאות `Delete ␍` מקומית, בעוד על CI/Lovable (LF) הבעיה אינה קיימת.
+**עובדות baseline (2026-07-24):** על LF הבדיקה מציגה **13 בעיות** בלבד: 8 warnings (`react-refresh/only-export-components` בקבצי shadcn ui) + 1 error `react-hooks/rules-of-hooks` (false-positive של TanStack ב-`goals.new.tsx` — `Route.useSearch` בפונקציה בשם `component`). (4 שגיאות `prefer-const` תוקנו ב-audit.)
+**מיטיגציה מומלצת (לא בוצעה — דורשת renormalize מכוון):** להוסיף `.gitattributes` עם `* text=auto eol=lf` ואז `git add --renormalize .`. **אזהרה:** renormalize נוגע בכל קובץ (diff ענק) ועלול להשפיע על Lovable sync — לבצע רק בהחלטה מכוונת, לא כתיקון אגבי. עד אז: להריץ lint עם `--rule '{"prettier/prettier":"off"}'` לבדיקת בעיות אמיתיות בלבד, או להסתמך על CI.
+
+## R-18 · goals surface orphan סותר §6 — 🟡 Medium (הוסף 2026-07-24)
+**תרחיש:** `/goals` גלובלי קיים ובדוק אך מנותק מהניווט; `DomainPrimaryGoalTile` בנוי אך לא מרונדר. סתירה ל-§6 ("יעד בתוך התחום, אין עמוד גלובלי"). סיכון: החלטת מוצר תיפול דרך הסדקים, או route ימחק בטעות.
+**מיטיגציה:** מתועד ב-ADR-0021 + `open-tasks.md → Human Decisions Required #1`. לא למחוק ולא לחווט עד החלטת משתמש. מנוע `lib/goals` נשמר.
+
+## R-19 · `routeTree.gen.ts` drift ב-build מקומי → typecheck נשבר — 🟡 Medium (הוסף 2026-07-24)
+**תרחיש:** הרצת `bun run build` מקומית מחדשת (regenerate) את `src/routeTree.gen.ts` בגרסה שונה מהמחויב (נצפו +10 שורות), וה-typecheck (`tsc`) נשבר עם 4 שגיאות `Route.useParams()` "possibly undefined" (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`). על הגרסה ה**מחויבת** (מה ש-CI/Lovable משתמשים) typecheck **נקי**.
+**סיבה:** drift בין גרסת `@tanstack/router-plugin` המקומית למה שיצר את הקובץ המחויב.
+**מיטיגציה:** `routeTree.gen.ts` הוא auto-generated — **לא לערוך ולא לקמט שינויי build שלו**. אם build מקומי שינה אותו והרס typecheck: `git checkout -- src/routeTree.gen.ts`. לבדוק typecheck **לפני** build, או בבידוד. לשקול יישור גרסת ה-plugin בעתיד.

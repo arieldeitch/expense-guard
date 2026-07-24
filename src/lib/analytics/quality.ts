@@ -158,8 +158,8 @@ function computeRestAdherence(exercises: StrengthSessionExercise[]): QualityComp
   // ללא זמני מנוחה בפועל שנמדדו — אין רכיב.
   // דוגמה מינימלית: אם planned rest_seconds הוגדר אך אין נתון בפועל → מוחרג.
   let hasAnyPlanned = false;
-  let considered = 0;
-  let close = 0;
+  const considered = 0;
+  const close = 0;
   for (const ex of exercises) {
     for (const s of listExerciseSets(ex.id)) {
       if (s.set_type === "warmup") continue;
