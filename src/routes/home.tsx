@@ -24,7 +24,7 @@ import {
 } from "@/lib/home";
 import { useAllExercises } from "@/lib/exercises";
 import { daysSince, frequencyPerWeek } from "@/lib/home";
-import { HomeSessionTile } from "@/components/home/HomeSessionTile";
+import { HomeSessionTileWrapper } from "@/components/home/HomeSessionTileWrapper";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
@@ -211,7 +211,7 @@ function HomePage() {
             .slice()
             .sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime())
             .slice(0, 3)
-            .map((s) => <MiniHistoryTile key={s.id} sessionId={s.id} />)
+            .map((s) => <HomeSessionTileWrapper key={s.id} sessionId={s.id} />)
         ) : (
           <EmptyState
             icon={<Zap aria-hidden />}
