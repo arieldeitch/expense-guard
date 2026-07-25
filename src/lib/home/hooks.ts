@@ -14,6 +14,7 @@ import {
   listHomeTemplateEntries,
   listSessionEntries,
   listActiveHomeDrafts,
+  listTrashedHomeSessions,
 } from "./repo";
 import type { HomeTemplateEntry } from "./types";
 
@@ -23,6 +24,11 @@ function useHome<T>(selector: (s: HomeState) => T): T {
     () => selector(readHomeState()),
     () => selector(readHomeServerSnapshot()),
   );
+}
+
+export function useTrashedHomeSessions(): HomeSession[] {
+  useHome((s) => s.sessions);
+  return listTrashedHomeSessions();
 }
 
 export function useHomeSessions(): HomeSession[] {

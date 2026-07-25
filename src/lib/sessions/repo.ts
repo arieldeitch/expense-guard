@@ -81,6 +81,13 @@ export function getSession(id: string): StrengthSession | null {
   return readSessionsState().sessions.find((s) => s.id === id) ?? null;
 }
 
+/** אימונים שנשלחו לסל (deleted_at) — לשחזור מ-/trash. */
+export function listTrashedSessions(): StrengthSession[] {
+  return readSessionsState()
+    .sessions.filter((s) => s.deleted_at != null)
+    .sort((a, b) => b.started_at.localeCompare(a.started_at));
+}
+
 export function getActiveSession(): StrengthSession | null {
   return (
     readSessionsState()

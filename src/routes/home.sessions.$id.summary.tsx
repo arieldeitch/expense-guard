@@ -2,8 +2,8 @@
  * /home/sessions/$id/summary — סיכום אימון בית שהושלם.
  * מציג נתונים עובדתיים בלבד: תרגיל, סטים, חזרות, ממוצע, חציון, שינוי מפעם קודמת, שיאים אמיתיים.
  */
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, History as HistoryIcon } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, BadgeCheck, History as HistoryIcon, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
@@ -16,6 +16,7 @@ import {
   sumDurationSeconds,
   sumReps,
   summarizeSets,
+  trashHomeSession,
   useHomeSession,
   useHomeSessionEntries,
 } from "@/lib/home";
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/home/sessions/$id/summary")({
 
 function SummaryPage() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
   const session = useHomeSession(id);
   const entries = useHomeSessionEntries(id);
   if (!session) {
@@ -177,6 +179,22 @@ function SummaryPage() {
         >
           חזרה לתחום בית
         </Link>
+      </div>
+
+      <div className="mt-3 px-4 sm:px-6">
+        <button
+          type="button"
+          onClick={() => {
+            if (confirm("להעביר את האימון לסל המחזור? אפשר לשחזר משם.")) {
+              trashHomeSession(id);
+              navigate({ to: "/home" });
+            }
+          }}
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-border-strong bg-surface px-4 text-sm font-bold text-destructive"
+        >
+          <Trash2 aria-hidden className="size-4" />
+          מחק אימון לסל
+        </button>
       </div>
     </AppShell>
   );

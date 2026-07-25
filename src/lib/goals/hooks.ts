@@ -29,6 +29,12 @@ export function useAllGoals(includeTrash = false): Goal[] {
   return listGoals(includeTrash);
 }
 
+/** יעדים שנשלחו לסל — לשחזור מ-/trash. */
+export function useTrashedGoals(): Goal[] {
+  useGoalsState();
+  return listGoals(true).filter((g) => g.status === "trashed");
+}
+
 export function useGoalsByDomain(domain: GoalDomain, includeTrash = false): Goal[] {
   useGoalsState();
   return listGoalsByDomain(domain, includeTrash);

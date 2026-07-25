@@ -28,6 +28,11 @@ export function useAllSessions(): StrengthSession[] {
   useSessionsStore();
   return repo.listSessions();
 }
+
+export function useTrashedSessions(): StrengthSession[] {
+  useSessionsStore();
+  return repo.listTrashedSessions();
+}
 export function useSession(id: string | undefined): StrengthSession | null {
   useSessionsStore();
   if (!id) return null;

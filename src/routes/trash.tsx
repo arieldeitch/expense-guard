@@ -14,6 +14,8 @@ import {
   Footprints,
   BookOpen,
   Layers,
+  House,
+  Target,
 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -26,6 +28,16 @@ import { restoreEquipment, restoreLocation, restoreTreadmill, useTrashItems } fr
 import { runsRepo, useTrashedRuns, RUN_TYPE_LABELS } from "@/lib/runs";
 import { restoreExercise, useTrashedExercises } from "@/lib/exercises";
 import { restoreTemplate, useTrashedTemplates } from "@/lib/templates";
+import { useTrashedSessions, restoreSession } from "@/lib/sessions";
+import { useTrashedHomeSessions, restoreHomeSession } from "@/lib/home";
+import { useTrashedGoals, restoreGoal } from "@/lib/goals";
+import { GOAL_DOMAIN_LABEL } from "@/components/goals/goalDomainConfig";
+
+function shortDate(iso: string | null | undefined): string | undefined {
+  if (!iso) return undefined;
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? undefined : d.toLocaleDateString("he-IL");
+}
 
 export const Route = createFileRoute("/trash")({
   head: () => ({
@@ -44,13 +56,19 @@ function TrashPage() {
   const trashedRuns = useTrashedRuns();
   const trashedExercises = useTrashedExercises();
   const trashedTemplates = useTrashedTemplates();
+  const trashedSessions = useTrashedSessions();
+  const trashedHomeSessions = useTrashedHomeSessions();
+  const trashedGoals = useTrashedGoals();
   const total =
     trash.locations.length +
     trash.treadmills.length +
     trash.equipment.length +
     trashedRuns.length +
     trashedExercises.length +
-    trashedTemplates.length;
+    trashedTemplates.length +
+    trashedSessions.length +
+    trashedHomeSessions.length +
+    trashedGoals.length;
 
   return (
     <AppShell topBar={{ title: "סל מחזור", back: { to: "/more" } }}>
@@ -155,6 +173,61 @@ function TrashPage() {
                 secondary: `גרסה ${t.version} · בוצעה ${t.usage_count}×`,
               }))}
               onRestore={restoreTemplate}
+            />
+          ) : null}
+
+          {trashedSessions.length > 0 ? (
+            <TrashSection
+              title="אימוני חדר כושר"
+              icon={<Dumbbell aria-hidden />}
+              items={trashedSessions.map((s) => ({
+                id: s.id,
+                primary: s.name,
+                secondary: [
+                  `אומן ${shortDate(s.started_at) ?? "—"}`,
+                  s.deleted_at ? `נמחק ${shortDate(s.deleted_at)}` : undefined,
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
+              }))}
+              onRestore={restoreSession}
+            />
+          ) : null}
+
+          {trashedHomeSessions.length > 0 ? (
+            <TrashSection
+              title="אימוני בית"
+              icon={<House aria-hidden />}
+              items={trashedHomeSessions.map((s) => ({
+                id: s.id,
+                primary: s.name,
+                secondary: [
+                  `אומן ${shortDate(s.started_at) ?? "—"}`,
+                  s.deleted_at ? `נמחק ${shortDate(s.deleted_at)}` : undefined,
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
+              }))}
+              onRestore={restoreHomeSession}
+            />
+          ) : null}
+
+          {trashedGoals.length > 0 ? (
+            <TrashSection
+              title="יעדים"
+              icon={<Target aria-hidden />}
+              items={trashedGoals.map((g) => ({
+                id: g.id,
+                primary: g.name,
+                secondary: [
+                  GOAL_DOMAIN_LABEL[g.domain],
+                  g.target_value != null ? `יעד ${g.target_value} ${g.target_unit}` : undefined,
+                  g.deleted_at ? `נמחק ${shortDate(g.deleted_at)}` : undefined,
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
+              }))}
+              onRestore={restoreGoal}
             />
           ) : null}
         </div>
