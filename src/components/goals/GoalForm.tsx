@@ -14,7 +14,7 @@ import {
   type GoalDomain,
   type GoalType,
 } from "@/lib/goals";
-import { GOAL_DOMAIN_LABEL } from "./goalDomainConfig";
+import { GOAL_DOMAIN_LABEL, goalMatchesDomain } from "./goalDomainConfig";
 
 interface Props {
   domain: GoalDomain;
@@ -65,6 +65,15 @@ export function GoalForm({ domain, goalId, onSaved, onCancel }: Props) {
       target_date: targetDate || null,
     });
     onSaved(g.id);
+  }
+
+  // הגנת תחום: אין לערוך במסלול זה יעד ששייך לתחום אחר (isolation — מונע מעבר שקט).
+  if (goalId && editing && !goalMatchesDomain(editing, domain)) {
+    return (
+      <div className="rounded-2xl border border-border-strong bg-surface p-4 text-sm text-muted-foreground">
+        לא ניתן לערוך יעד זה כאן — הוא שייך לתחום אחר.
+      </div>
+    );
   }
 
   return (

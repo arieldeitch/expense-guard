@@ -16,8 +16,10 @@ import {
   updateGoal,
   trashGoal,
   restoreGoal,
+  archiveGoal,
   type GoalDomain,
 } from "@/lib/goals";
+import { goalMatchesDomain } from "@/components/goals/goalDomainConfig";
 
 beforeEach(() => _resetGoalsStateForTests());
 
@@ -67,6 +69,54 @@ describe("goals — domain scoping", () => {
     expect(getPrimaryGoal("running")!.id).toBe(a.id);
     // תחום ללא יעד → null (אין progress מזויף)
     expect(getPrimaryGoal("gym")).toBeNull();
+  });
+});
+
+describe("goals — cross-domain isolation guard", () => {
+  it("goalMatchesDomain: יעד מוצג/נערך רק בתחום שלו; ה-domain נקבע מהישות ולא מה-route", () => {
+    const gymGoal = createGoal({ domain: "gym", goal_type: "gym_sessions_in_period", target_value: 10 });
+    expect(goalMatchesDomain(gymGoal, "gym")).toBe(true);
+    // ניסיון להציג/לערוך יעד gym במסלול running/home → נחסם
+    expect(goalMatchesDomain(gymGoal, "running")).toBe(false);
+    expect(goalMatchesDomain(gymGoal, "home")).toBe(false);
+    // ישות חסרה
+    expect(goalMatchesDomain(null, "gym")).toBe(false);
+    expect(goalMatchesDomain(undefined, "gym")).toBe(false);
+  });
+
+  it("עריכה אינה משנה domain של יעד קיים (updateGoal שומר domain)", () => {
+    const g = createGoal({ domain: "gym", goal_type: "gym_sessions_in_period", target_value: 10 });
+    // גם אם מנסים לדחוף domain אחר ב-patch — הישות שומרת על התחום המקורי דרך goal_type/spec.
+    const updated = updateGoal(g.id, { target_value: 15 });
+    expect(updated!.domain).toBe("gym");
+  });
+});
+
+describe("goals — primary selection excludes non-active", () => {
+  it("יעד בארכיון/סל אינו נבחר כ-primary ואינו נספר כפעיל", () => {
+    const g = createGoal({ domain: "home", goal_type: "home_consecutive_reps", target_value: 40 });
+    expect(getPrimaryGoal("home")!.id).toBe(g.id);
+    archiveGoal(g.id);
+    expect(getPrimaryGoal("home")).toBeNull(); // archived לא primary
+    expect(listActiveGoals("home").length).toBe(0);
+  });
+});
+
+describe("goals — restore preserves domain + links, no fabrication", () => {
+  it("שחזור יעד שומר domain, קישורים ולא יוצר קשר שקרי, ללא כפילות", () => {
+    const g = createGoal({
+      domain: "running",
+      goal_type: "run_monthly_distance",
+      target_value: 100,
+      linked_route_id: "route_ghost", // dependency שלא קיימת
+    });
+    trashGoal(g.id);
+    restoreGoal(g.id);
+    const after = getGoal(g.id)!;
+    expect(after.domain).toBe("running"); // domain לא השתנה
+    expect(after.linked_route_id).toBe("route_ghost"); // הקישור נשמר כפי שהיה — לא הוחלף/נמחק בשקט
+    expect(after.status).toBe("active");
+    expect(listGoals(true).filter((x) => x.id === g.id).length).toBe(1); // אין כפילות
   });
 });
 

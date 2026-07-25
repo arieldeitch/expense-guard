@@ -26,6 +26,7 @@ import {
   type GoalDomain,
 } from "@/lib/goals";
 import { GoalEditLink } from "./goalLinks";
+import { goalMatchesDomain } from "./goalDomainConfig";
 
 interface Props {
   domain: GoalDomain;
@@ -45,8 +46,8 @@ export function GoalDetailView({ domain, goalId, onTrashed }: Props) {
     return <PageHeader title="היעד לא נמצא" description="ייתכן שנמחק או שהמזהה שגוי." />;
   }
 
-  // הגנת תחום: אם היעד שייך לתחום אחר — לא מציגים אותו כאן.
-  if (goal.domain !== domain) {
+  // הגנת תחום: אם היעד שייך לתחום אחר — לא מציגים אותו כאן (isolation).
+  if (!goalMatchesDomain(goal, domain)) {
     return (
       <PageHeader
         title="היעד אינו בתחום זה"
