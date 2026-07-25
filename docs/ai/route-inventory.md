@@ -4,7 +4,9 @@
 
 ## סיכום
 
-- **41 route modules** (`.tsx`) + `__root.tsx` = **42 קבצים** ב־`src/routes/` (מאומת מול `routeTree.gen.ts` → `FileRoutesById` מונה 41 route IDs + `__root__`). קובץ נוסף `src/routes/README.md` אינו route.
+> **עודכן 2026-07-24 (Phase 1):** נוספו **12 domain-goals routes**; `/goals*` הומרו ל-compatibility redirects. סה"כ כעת **53 route modules**. ראה סעיף "Domain goals" למטה.
+
+- **41 route modules מקוריים** + **12 domain-goals** = **53** (`.tsx`) + `__root.tsx` ב־`src/routes/`. `src/routes/README.md` אינו route.
 - הניווט (`Nav.tsx`) חושף **5 טאבים** בלבד: `/` (ראשי), `/running`, `/gym`, `/home`, `/more`. כל השאר נגישים דרך `<Link>` פנימי (deep-link) או orphan.
 - **הכול מחווט לרפוזיטוריז אמיתיים** (localStorage-backed mock repo, `activeRepoKind === "mock"`). אין מסכי דמה ריקים.
 - **38/41** modules RELEVANT ונגישים בפועל. נקודת ההחלטה היחידה: משטח ה־**goals** (routes 37–39) — ממומש ובדוק אך מנותק מהניווט וסותר את עקרון "יעדים בתוך התחום".
@@ -67,4 +69,26 @@
 - **QuickAddSheet ל־6 ישויות:** **לא קיים**. אין sheet אחיד חוצה-תחומים. הזרימה היחידה מסוג "מהיר" היא דיווח מהיר ביתי (`/home/quick`) — תרגיל בודד, בתוך היקף. יצירת ישויות אחרות דרך sheets ייעודיים לכל תחום (`LocationForm`, `EquipmentForm`, `TreadmillForm`, `ExerciseForm`, `RunForm`).
 - **קוד legacy (people/peopleDirectory/transport/roles/PIN/coach/clients/team):** **לא נמצא** בכל `src`. חיפוש case-insensitive החזיר רק false positives: `MapPin` (אייקון), `input-otp.tsx` (primitive shadcn לא בשימוש). אין scaffolding של CRM/מאמנים/רב-משתמש. עקבי עם single-user.
 - **Redirect stubs (תאימות לאחור):** `/home/new` → `/home/quick`; `/home/history/$id` → summary; `/goals/new` → `/goals`. מכוונים ובלתי מזיקים.
-- **הערת goals:** הרכיב היחיד שמקשר ל־`/goals*` הוא `src/components/goals/DomainPrimaryGoalTile.tsx`, ו**הוא לא מיובא/מוצג בשום מקום**. `/gym` מציג אריח יעד פעיל אך **לא** מקשר ל־`/goals`. לכן routes 37–39 הם orphan/URL-only. מנוע ה־goals (`lib/goals`) בנוי ובדוק במלואו, אך משטח ה־UI אינו מחובר לניווט וסותר את "אין עמוד יעדים גלובלי". ראה `open-tasks.md` → Human Decisions Required.
+- **הערת goals (עודכן — נפתר Phase 1):** ראה סעיף Domain goals למטה.
+
+## Domain goals (Phase 1 — 2026-07-24)
+
+החלטת מוצר מאושרת: **אין מסך יעדים גלובלי**. יעדים מנוהלים בתוך התחום.
+
+**12 domain-goals routes** (KEEP), כולם מציגים/יוצרים/עורכים רק יעדי התחום שלהם דרך רכיבים משותפים (`src/components/goals/*`):
+
+| Route | קובץ | תחום | מטרה |
+|---|---|---|---|
+| `/running/goals` | `running.goals.tsx` | running | רשימת יעדי ריצה |
+| `/running/goals/new` | `running.goals.new.tsx` | running | יצירת יעד ריצה |
+| `/running/goals/$id` | `running.goals.$id.tsx` | running | פרטי יעד ריצה |
+| `/running/goals/$id/edit` | `running.goals.$id.edit.tsx` | running | עריכת יעד ריצה |
+| `/gym/goals[...]` | `gym.goals.*.tsx` | gym | list/new/detail/edit (×4) |
+| `/home/goals[...]` | `home.goals.*.tsx` | home | list/new/detail/edit (×4) |
+
+**Compatibility redirects** (DEPRECATE_LATER — לא בניווט):
+- `/goals` — `?domain=` → redirect לרשימת התחום; אחרת בחירת 3 אריחים. אין רשימה גלובלית.
+- `/goals/new` — `?domain=` → redirect ליצירה בתחום; אחרת בחירת 3 אריחים.
+- `/goals/$id` — טוען יעד → redirect לפי `goal.domain`; יעד חסר → 404 עברית; אין redirect loop.
+
+`DomainPrimaryGoalTile` מחובר ל-`/running`,`/gym`,`/home` (section `#goals`).

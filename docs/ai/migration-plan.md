@@ -11,17 +11,14 @@
 - verify typecheck/lint/test/build; יצירת `docs/ai/*` (route/entity/design/alignment/migration/test).
 - **Acceptance:** baseline מתועד; מטריצת alignment קיימת. **Rollback:** מחיקת קבצי docs חדשים.
 
-## Phase 1 — Navigation &amp; Domain Alignment `[A/D]`
-- verify: 5 tabs, RTL, safe-area, tiles (הכל ✅). תיקון copy: 404/Error לעברית (`[A]` — UI copy מותר).
-- **החלטה D:** goals surface — עמוד גלובלי מול תוך-תחום (ראה Phase 9). לא לגעת ב-routes עד החלטה.
-- **Acceptance:** אין overflow אופקי; 404/Error עברית. **Rollback:** revert copy.
-- **Tests:** shell render + RTL. **Docs:** `design-system-audit.md`.
+## Phase 1 — Navigation &amp; Domain Alignment `[A/D]` — ✅ **הושלם 2026-07-24**
+- ✅ 404/Error לעברית+RTL. ✅ goals surface הוכרע (domain-scoped, ראה Phase 9). ✅ אין overflow.
+- **Acceptance מולא:** 404/Error עברית; 12 domain-goals routes; `/goals*` compat.
 
-## Phase 2 — Domain Model Foundations `[A]`
-- verify soft-delete/timestamps/provenance בכל store (✅). **חבר restore ל-sessions/home/goals ב-`/trash`** (`[A]`, repos כבר תומכים).
-- אחד naming `owner_id` מול `user_id` (goals) — refactor בטוח.
-- **Acceptance:** כל ישות עסקית ניתנת לשחזור מ-`/trash`. **Rollback:** revert route + selector.
-- **Tests:** trash restore לכל domain. **Deps:** אין.
+## Phase 2 — Domain Model Foundations `[A]` — ✅ **הושלם 2026-07-24 (חלק trash)**
+- ✅ **restore ל-gym/home sessions + goals ב-`/trash`** (שחזור דו-שלבי; recompute דרך subscribers).
+- ⏳ נותר (עתידי): איחוד naming `owner_id` מול `user_id`.
+- **Acceptance מולא:** כל 3 הישויות ניתנות לשחזור מ-`/trash`; בדיקות `trash-restore.test.ts` ירוקות.
 
 ## Phase 3 — Locations, Treadmills, Equipment `[A]` ✅ בנוי
 - verify `catalog/` + `/locations*` + `/treadmills/$id`. **פעולה:** בדיקות + polish. **Acceptance:** CRUD+trash עובד.
@@ -42,10 +39,9 @@
 ## Phase 8 — Home Quick Entry `[A]` ✅ בנוי
 - verify `home/` + `/home/quick*` + `home.sessions.$id`. **Acceptance:** דיווח מהיר + סטים גמישים (round/side).
 
-## Phase 9 — Goals `[D]` ✅ בנוי (מנוע) — דורש החלטה
-- **החלטה D קריטית:** האם goals מוצג (א) בתוך כל תחום [§6], (ב) עמוד גלובלי `/goals`, או (ג) שניהם (גלובלי כניהול משני).
-- אם (א)/(ג): לרנדר `DomainPrimaryGoalTile` בתוך `/running`,`/gym`,`/home` ולחווט קישורים. אם לא-(ב): לסמן `/goals*` `DEPRECATE_LATER` (לא למחוק).
-- **Acceptance:** יעד מוצג בהקשר התחום; אין סתירה ל-§6. **Rollback:** revert render. **Deps:** החלטת משתמש.
+## Phase 9 — Goals `[D]` — ✅ **הושלם 2026-07-24**
+- ✅ הוכרע (א): יעדים בתוך כל תחום. 12 domain-goals routes + `DomainPrimaryGoalTile` מחובר ל-3 המסכים. `/goals*` = compat redirects (DEPRECATE_LATER, לא נמחקו).
+- **Acceptance מולא:** יעד מוצג בהקשר התחום; אין מסך גלובלי; אין סתירה ל-§6. ADR-0021.
 
 ## Phase 10 — History &amp; Analytics `[A]` ✅ בנוי
 - verify `analytics/` + `*.history*` + `gym.compare`. **חסר:** dashboards גרפיים + export CSV/JSON. **Acceptance:** חישובים מוסברים; 1RM=estimated.

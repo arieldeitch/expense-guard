@@ -2,11 +2,11 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
-> החלק "כרגע" למטה **מיושן**. המצב האמיתי:
-- **150 בדיקות עוברות** (`vitest run`), **10 קבצי בדיקה**: `runs` (calc, repo), `suunto`, `catalog`?, `exercises`, `templates` (repo), `home`, `goals`, `analytics`, `preferences`, `selectors/domain-summary`. משך ~2s.
-- **typecheck** (`tsc --noEmit`) — נקי. **build** — עובר. **lint** — ראה `risks.md` R-17 (CRLF מקומי; על LF: 8 warnings + 1 rules-of-hooks false-positive).
-- כיסוי חזק לשכבת הלוגיקה (analytics/repos/metrics). **חסר:** בדיקות component (`Tile`, טפסים), E2E (Playwright), ובדיקות RLS (אין DB עדיין).
-- הפקודות: `bun run test` (=vitest run), `bunx tsc --noEmit` או `bunx tsgo`, `bun run build`, `bun run lint`.
+> החלק "כרגע" למטה **מיושן**. המצב האמיתי (עודכן Phase 1+2):
+- **158 בדיקות עוברות** (`vitest run`), **12 קבצי בדיקה**. חדשים: `goals/__tests__/domain-scope.test.ts` (domain scoping, type restriction, edit, getPrimaryGoal, goal trash/restore) + `lib/__tests__/trash-restore.test.ts` (gym/home session trash/restore, no-duplicate, source recompute).
+- **typecheck** (`bun run typecheck`) — נקי. **build** — עובר. **routeTree.gen.ts דטרמיניסטי** (build×2 ללא diff). **lint** — 0 errors, 8 warnings (shadcn upstream); ראה `risks.md` R-17 (CRLF מקומי — הרץ עם `--rule '{"prettier/prettier":"off"}'`).
+- סביבת הבדיקות: **vitest `node`** (ללא DOM). לכן הבדיקות ברמת לוגיקה/repo. **חסר (עתידי):** בדיקות render/route (דורש `@testing-library` + jsdom + router test setup — לא הותקן במכוון, אין dep חדש), E2E (Playwright), RLS (אין DB). התנהגות ה-redirect/route מאומתת ע"י typecheck + חוזי הנתונים (`getGoal().domain`, `listGoalTypesByDomain`, `listGoalsByDomain`).
+- הפקודות: `bun run typecheck`, `bun run lint`, `bun run test`, `bun run build`.
 
 ---
 

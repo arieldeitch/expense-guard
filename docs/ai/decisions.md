@@ -122,8 +122,19 @@
 **החלטה:** בוצע audit קריאה-בלבד; תיעוד ב-`docs/ai/` (route/entity/design/alignment/migration/session-log); תיקונים בטוחים בלבד (`prefer-const` ×4). אין מחיקת routes/entities, אין שינוי schema/navigation/design, אין חיבור backend, אין פעולות Git מרוחקות.
 **נימוק:** ADR-0011 (אין שכתוב רחב בשלב סריקה) + הנחיות המשתמש. **השלכה:** כל החלטה מוצרית שהתגלתה רוכזה תחת `open-tasks.md → Human Decisions Required` במקום ליישום.
 
-## ADR-0021 · 2026-07-24 · goals surface — פתוח להחלטה (לא הוכרע)
+## ADR-0021 · 2026-07-24 · goals surface — **פתור**: יעדים מנוהלים לפי domain
 
-**הקשר:** §6 מחייב "יעד מוצג בתוך התחום, אין עמוד יעדים גלובלי". בפועל קיימים `/goals`, `/goals/$id`, `/goals/new` (orphan מהניווט), ו-`DomainPrimaryGoalTile` בנוי אך לא מרונדר.
-**החלטה:** **טרם הוכרע** — דורש החלטת משתמש. עד אז: לא מוחקים `/goals*`, לא מחווטים. מתועד ב-`open-tasks.md`.
-**נימוק:** מחיקה/חיווט = החלטת מוצר בלתי הפיכה. **השלכה:** מנוע ה-goals (`lib/goals`, בדוק) נשמר ללא שינוי.
+**הקשר:** §6 מחייב "יעד מוצג בתוך התחום, אין עמוד יעדים גלובלי".
+**החלטה (מאושרת ע"י המשתמש, Phase 1):** **אין מסך יעדים גלובלי בחוויית המשתמש.** יעדים מנוהלים בתוך כל תחום (12 domain-goals routes). `/goals`, `/goals/new`, `/goals/$id` נשמרים **זמנית** כ-compatibility redirects בלבד ומפנים ל-domain המתאים; אינם בניווט. המשתמש בלבד יוצר יעד; אין המצאת ערך/תאריך/milestone.
+**נימוק:** תואם §6; שימור מנוע `lib/goals` הבדוק + `DomainPrimaryGoalTile` דרך רכיבים משותפים ללא duplication.
+**השלכה:** `DomainPrimaryGoalTile` מחובר ל-3 המסכים; goal detail כולל edit; type-restriction לפי domain (`listGoalTypesByDomain`).
+
+## ADR-0022 · 2026-07-24 · route-gen drift (R-19) — פתור ע"י `useParams`
+
+**הקשר:** `routeTree.gen.ts` שנוצר מחדש ע"י ה-generator המקומי שבר typecheck ב-4 routes שהשתמשו ב-`Route.useLoaderData()` (הוקלד `| undefined`), בעוד הגרסה המחויבת הישנה (generator שונה) לא.
+**החלטה:** לא לשחזר generated ישן ולא לערוך אותו ידנית. במקום — לתקן את ה-source: `exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type` עברו לקרוא `id`/`type` מ-`Route.useParams()` (ה-loaders + `notFound()` נשמרו; ערכים זהים).
+**נימוק:** `useParams()` מוקלד נכון בעץ הקנוני; אין שינוי התנהגות. **השלכה:** generation דטרמיניסטי (build×2 ללא diff), typecheck ירוק. R-19 סגור.
+
+## ADR-0023 · 2026-07-24 · `typecheck` script + `.gitattributes`
+
+**החלטה:** נוסף `"typecheck": "tsc --noEmit"` ל-package.json (ללא שינוי compiler options). נוסף `.gitattributes` (`* text=auto eol=lf`) לייצוב CRLF (R-17) — **ללא** renormalize גורף (נדחה ל-commit ייעודי אם יידרש).

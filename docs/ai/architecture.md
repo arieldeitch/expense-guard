@@ -24,6 +24,8 @@
 > src/routes/          41 route modules (file-based)
 > ```
 > **Persistence אמיתי:** localStorage (`fitlog:<domain>:v<n>`), דפוס `useSyncExternalStore`. לא TanStack Query עדיין (מותקן, לא בשימוש לנתונים). זהו מצב ביניים תקין לפני Supabase — ראה `migration-plan.md` Phase 11-12. הבלוק "מתוכנן" למטה נשאר כיעד ל-server state.
+>
+> **Goals UI (Phase 1):** רכיבים משותפים ב-`src/components/goals/` (`goalLinks`, `goalDomainConfig`, `GoalForm`, `GoalsListView`, `GoalDetailView`, `GoalDomainChooser`, `DomainPrimaryGoalTile`) מוזרקים ל-12 domain-goals routes (`{running,gym,home}.goals.*`) — ללא duplication. `/goals*` = compatibility redirects בלבד. **Route params:** קרא `id`/`type` דרך `Route.useParams()` (לא `useLoaderData`) כדי להתאים ל-route tree הקנוני (ADR-0022).
 
 ## מבנה תיקיות (מתוכנן — יעד ל-Supabase/server-state)
 

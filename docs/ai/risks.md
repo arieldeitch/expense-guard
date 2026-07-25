@@ -71,11 +71,11 @@
 **עובדות baseline (2026-07-24):** על LF הבדיקה מציגה **13 בעיות** בלבד: 8 warnings (`react-refresh/only-export-components` בקבצי shadcn ui) + 1 error `react-hooks/rules-of-hooks` (false-positive של TanStack ב-`goals.new.tsx` — `Route.useSearch` בפונקציה בשם `component`). (4 שגיאות `prefer-const` תוקנו ב-audit.)
 **מיטיגציה מומלצת (לא בוצעה — דורשת renormalize מכוון):** להוסיף `.gitattributes` עם `* text=auto eol=lf` ואז `git add --renormalize .`. **אזהרה:** renormalize נוגע בכל קובץ (diff ענק) ועלול להשפיע על Lovable sync — לבצע רק בהחלטה מכוונת, לא כתיקון אגבי. עד אז: להריץ lint עם `--rule '{"prettier/prettier":"off"}'` לבדיקת בעיות אמיתיות בלבד, או להסתמך על CI.
 
-## R-18 · goals surface orphan סותר §6 — 🟡 Medium (הוסף 2026-07-24)
-**תרחיש:** `/goals` גלובלי קיים ובדוק אך מנותק מהניווט; `DomainPrimaryGoalTile` בנוי אך לא מרונדר. סתירה ל-§6 ("יעד בתוך התחום, אין עמוד גלובלי"). סיכון: החלטת מוצר תיפול דרך הסדקים, או route ימחק בטעות.
-**מיטיגציה:** מתועד ב-ADR-0021 + `open-tasks.md → Human Decisions Required #1`. לא למחוק ולא לחווט עד החלטת משתמש. מנוע `lib/goals` נשמר.
+## R-18 · goals surface orphan סותר §6 — ✅ נפתר (Phase 1, 2026-07-24)
+**היה:** `/goals` גלובלי מנותק מהניווט; `DomainPrimaryGoalTile` לא מרונדר.
+**נפתר:** יעדים מנוהלים לפי domain (12 routes), `/goals*` = compat redirects, `DomainPrimaryGoalTile` מחובר ל-3 המסכים. ראה ADR-0021.
 
-## R-19 · `routeTree.gen.ts` drift ב-build מקומי → typecheck נשבר — 🟡 Medium (הוסף 2026-07-24)
-**תרחיש:** הרצת `bun run build` מקומית מחדשת (regenerate) את `src/routeTree.gen.ts` בגרסה שונה מהמחויב (נצפו +10 שורות), וה-typecheck (`tsc`) נשבר עם 4 שגיאות `Route.useParams()` "possibly undefined" (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`). על הגרסה ה**מחויבת** (מה ש-CI/Lovable משתמשים) typecheck **נקי**.
-**סיבה:** drift בין גרסת `@tanstack/router-plugin` המקומית למה שיצר את הקובץ המחויב.
-**מיטיגציה:** `routeTree.gen.ts` הוא auto-generated — **לא לערוך ולא לקמט שינויי build שלו**. אם build מקומי שינה אותו והרס typecheck: `git checkout -- src/routeTree.gen.ts`. לבדוק typecheck **לפני** build, או בבידוד. לשקול יישור גרסת ה-plugin בעתיד.
+## R-19 · `routeTree.gen.ts` drift ב-build מקומי → typecheck נשבר — ✅ נפתר (Phase 1, 2026-07-24)
+**היה:** build מקומי חידש את `routeTree.gen.ts` בגרסה ששברה typecheck ב-4 routes שהשתמשו ב-`Route.useLoaderData()`.
+**סיבה:** ה-generator המקומי מקליד loader data כ-`| undefined` (מחמיר יותר מהעץ המחויב הישן).
+**נפתר (ADR-0022):** 4 ה-routes עברו ל-`Route.useParams()` (ערכים זהים, loaders+notFound נשמרו). כעת generation **דטרמיניסטי** (build×2 ללא diff) ו-typecheck ירוק על העץ הקנוני. אין צורך ב-`git checkout` של הקובץ. עדיין: `routeTree.gen.ts` auto-generated — לא לערוך ידנית.

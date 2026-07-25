@@ -34,7 +34,7 @@
 | 20 | שיאים/1RM מסומן כהערכה | `analytics/oneRM` (`epley/brzycki`), `records` baseline-aware | ALIGNED | `lib/analytics`, `lib/home/records` | — | נמוך | — | KEEP | — | 10 | 1RM מסומן estimated |
 | 21 | מדד איכות/התקדמות שקוף | `quality.ts`, `progress.ts`, `data_completeness`, `formula_version` | ALIGNED | `lib/analytics`, `lib/home/metrics` | — | נמוך | — | KEEP | — | 10 | ציון איכות מוסבר |
 | 22 | יעדים — נוצרים רק ע"י המשתמש | `goals/`; אין המצאת ערך; `auto_mark_achieved=false` | ALIGNED (מנוע) | `lib/goals` | — | נמוך | — | KEEP | — | 9 | המערכת לא ממציאה יעד |
-| 23 | יעד מוצג בתוך התחום (לא עמוד גלובלי) | קיים עמוד גלובלי `/goals` (orphan) + אריח יעד ב-DomainSummaryTile | **NOT_ALIGNED** | `routes/goals.*`, `components/goals/DomainPrimaryGoalTile` (לא מרונדר) | עמוד גלובלי סותר §6; משטח דומיין לא מחובר | בינוני | מנוע+UI קיימים | **REQUIRES_PRODUCT_DECISION** | החלטת משתמש | 9 | יעד מוצג בתוך run/gym/home |
+| 23 | יעד מוצג בתוך התחום (לא עמוד גלובלי) | 12 domain-goals routes + `DomainPrimaryGoalTile` ב-3 המסכים; `/goals*` = compat redirects | **ALIGNED** ✅ | `routes/{running,gym,home}.goals.*`, `components/goals/*` | — | נמוך | — | KEEP (Phase 1 done) | — | 9 ✅ | יעד מוצג בתוך run/gym/home |
 | 24 | snapshots + היסטוריית גרסאות ליעד | `GoalSnapshot` + `GoalVersion` + `GoalActivityLink` | ALIGNED | `lib/goals` | — | נמוך | — | KEEP | — | 9 | כל שינוי יעד → snapshot |
 | 25 | תחזית מסומנת כהערכה; יעד שעבר ≠ כישלון | `projected_value`+`confidence_label`; status `not_achieved` נפרד | ALIGNED | `lib/goals` | לוודא ב-UI שלא מוצג ככישלון | נמוך | — | KEEP | — | 9 | תחזית=הערכה, אין "נכשל" |
 | 26 | History (רלוונטית בהקשר) | היסטוריה פר-תחום (running/gym/home/exercise/template) | ALIGNED | `routes/*.history*` | — | נמוך | — | KEEP | — | 10 | היסטוריה נגישה בהקשר |
@@ -45,7 +45,7 @@
 | 31 | עברית + RTL | `dir="rtl"`, logical props, Heebo, `ltr-nums` | ALIGNED | `__root.tsx`, `styles.css` | 404/Error באנגלית | נמוך | — | KEEP_AND_ADAPT | — | 1 | כל טקסט עברי+RTL |
 | 32 | אין גלילה אופקית | `min-w-0`/`truncate`/SVG chart | ALIGNED | `shell/*`, `analytics/MiniLineChart` | — | נמוך | — | KEEP | — | 1 | 0 overflow אופקי |
 | 33 | Soft delete | `deleted_at` בכל ישות עסקית | ALIGNED | `*/storage.ts` | — | נמוך | — | KEEP | — | 2 | אין hard delete ב-UI |
-| 34 | Restore (סל) + 2 פעולות למחיקה | `/trash` ל-6 ישויות עם `ConfirmDialog` | PARTIALLY_ALIGNED | `routes/trash.tsx` | sessions/home/goals לא בסל UI | בינוני | dוrrepos מוכנים | KEEP_AND_ADAPT | — | 2/10 | כל ישות ניתנת לשחזור |
+| 34 | Restore (סל) + 2 פעולות למחיקה | `/trash` ל-9 ישויות (כולל gym/home sessions + goals) עם `ConfirmDialog`/confirm | **ALIGNED** ✅ | `routes/trash.tsx` | — | נמוך | — | KEEP (Phase 2 done) | — | 2 ✅ | כל ישות ניתנת לשחזור |
 | 35 | Offline | draft ב-localStorage לטופס פעיל טרם; autosave קיים | PARTIALLY_ALIGNED | `lib/*/storage` | אין offline queue/sync | נמוך (R-10) | — | DEPRECATE_LATER | Backend | 11+ | דיווח לא אובד ללא רשת |
 | 36 | Auth | אין (במכוון) | MISSING | — | לבנות email+password | גבוה (עתידי) | — | REQUIRES_PRODUCT_DECISION (timing) | Supabase | 12 | login מוגן |
 | 37 | Supabase (persistence אמיתי) | localStorage בלבד; `RepoKind="supabase"` seam קיים | MISSING | `lib/repo` | להפעיל Lovable Cloud + migrations | גבוה | seam+חוזי repo מוכנים | REUSE_INFRASTRUCTURE | אישור משתמש | 12 | דאטה נשמרת בשרת |
@@ -56,10 +56,10 @@
 | 42 | provenance/units/timestamps לכל מדידה | סיומות יחידה, `provenance`/`source`, `created/updated/deleted_at` | ALIGNED | `lib/runs`, `lib/suunto` | אין `profile` units/locale | נמוך | — | KEEP | — | 2 | מדידה נושאת unit+source+ts |
 | 43 | raw ≠ derived | Suunto readings נפרד; `derive()` מסמן ולא דורס | ALIGNED | `lib/suunto`, `lib/runs` | — | נמוך | — | KEEP | — | 5 | raw לא נדרס ע"י מחושב |
 
-## סתירות דרישה↔מימוש (לתיעוד, לא לשינוי עכשיו)
+## סתירות דרישה↔מימוש — עודכן 2026-07-24
 
-1. **§6 "יעדים בתוך התחום, אין עמוד גלובלי"** מול קיום `/goals`, `/goals/$id`, `/goals/new`. הפתרון הטכני (DomainPrimaryGoalTile) בנוי אך לא מרונדר. ← החלטת משתמש נדרשת (`open-tasks.md`).
-2. **404/Error components** באנגלית — סותר "עברית+RTL". תיקון copy עתידי (לא בשלב זה — שינוי UI/copy מותר אך נדחה עד החלטה על ניסוח).
-3. **restore לא מלא** — sessions/home/goals לא בסל ה-UI למרות תמיכת repo. ← פער UI לתיקון עתידי (לא סתירה עקרונית).
+1. ~~§6 "יעדים בתוך התחום"~~ — ✅ **נפתר (Phase 1)**: 12 domain-goals routes, `/goals*` compat, `DomainPrimaryGoalTile` מחובר. ADR-0021.
+2. ~~404/Error באנגלית~~ — ✅ **נפתר**: תורגם לעברית+RTL (`__root.tsx`).
+3. ~~restore לא מלא~~ — ✅ **נפתר (Phase 2)**: gym/home sessions + goals ב-`/trash`.
 
-אין סתירות נוספות. אין קוד legacy מחוץ להיקף. שם התיקייה `expense-guard` מטעה (scaffold) אך אינו משפיע על קוד.
+אין סתירות נותרות. אין קוד legacy מחוץ להיקף. שם התיקייה `expense-guard` מטעה (scaffold) אך אינו משפיע על קוד (פתוח — `open-tasks.md`).

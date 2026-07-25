@@ -1,0 +1,23 @@
+# Normalize line endings to LF for text files (prettier/eslint expect LF).
+# NOTE: this only affects how Git handles files going forward. A one-time
+# `git add --renormalize .` (large diff) is intentionally NOT run here — see
+# docs/ai/risks.md R-17. Do it in a dedicated commit if/when desired.
+* text=auto eol=lf
+
+# Generated route tree is text/LF like the rest.
+src/routeTree.gen.ts text eol=lf
+
+# Binary assets — never normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.eot binary
+*.pdf binary

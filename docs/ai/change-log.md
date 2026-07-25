@@ -1,5 +1,29 @@
 # Change Log
 
+## 2026-07-24 · Phase 1+2 — Domain-scoped goals + Trash/Restore (Claude Code)
+
+**Phase 1 — goal surfaces scoped to domains (החלטת מוצר מאושרת: אין מסך יעדים גלובלי).**
+- **חדש** · `src/components/goals/`: `goalLinks.tsx` (Link/redirect helpers type-safe פר-domain), `goalDomainConfig.ts` (labels), `GoalForm.tsx` (יצירה+עריכה, domain נעול → סוגי יעד מוגבלים לתחום), `GoalsListView.tsx`, `GoalDetailView.tsx`, `GoalDomainChooser.tsx`.
+- **חדש** · 12 route modules: `{running,gym,home}.goals[.new|.$id|.$id.edit].tsx` — כל route מציג/יוצר/עורך רק יעדי התחום שלו.
+- **compat** · `/goals`, `/goals/new`, `/goals/$id` הומרו ל-compatibility redirects: `?domain=` → redirect לתחום; ללא domain → בחירת 3 אריחים; `/goals/$id` → redirect לפי `goal.domain`, יעד חסר → 404 עברית. אין קישור גלובלי בניווט.
+- **wiring** · `DomainPrimaryGoalTile` חובר ל-`/running`,`/gym`,`/home` (הוחלף מקטע ה-goals הישן ב-gym שהתבסס על façade ריק). קישורי האריח → routes תחומיים.
+- **route-gen fix** · תוקן drift של `routeTree.gen.ts` (R-19): 4 routes (`exercises.$id`,`locations.$id`,`running.$id`,`running.new.$type`) עברו מ-`Route.useLoaderData()` ל-`Route.useParams()` (loaders + notFound guards נשמרו; ערכים זהים). generation כעת דטרמיניסטי ו-typecheck ירוק.
+- **script** · נוסף `"typecheck": "tsc --noEmit"` ל-package.json.
+
+**Phase 2 — trash/restore הושלם ל-3 ישויות.**
+- **lib** · `listTrashedSessions`+`useTrashedSessions` (sessions), `useTrashedHomeSessions` (home), `useTrashedGoals` (goals).
+- **`/trash`** · 3 מקטעים חדשים: אימוני חדר כושר, אימוני בית, יעדים — שחזור דו-שלבי (`ConfirmDialog`).
+- **delete-to-trash** · אימון בית: כפתור "מחק לסל" (2-step) ב-summary. יעד: אישור לפני מחיקה ב-`GoalDetailView`. gym כבר היה קיים.
+- **recompute** · restore דרך `commit()` → subscribers → analytics/records/summaries/goal-progress מחושבים מחדש מ-raw (ארכיטקטורת `useSyncExternalStore`).
+
+**i18n + hygiene.**
+- `__root.tsx` — 404 + error boundary תורגמו לעברית + RTL + `role="alert"`/`aria-live` + focus.
+- נוסף `.gitattributes` (LF; ללא renormalize גורף — R-17).
+- lint hook false-positive (`goals.new.tsx`) נפתר ע"י named component (ללא disable).
+
+**בדיקות** · +8 (סה"כ **158/158**, 12 קבצים): domain scoping, type restriction, edit, getPrimaryGoal, trash/restore ל-3 ישויות + no-duplicate + source recompute.
+**checks** · typecheck ✅ · lint 0 errors/8 warnings (shadcn) · build ✅ · routeTree דטרמיניסטי (build×2 ללא diff).
+
 ## 2026-07-24 · Product Alignment Audit (Claude Code)
 
 - **audit** · בוצע audit מלא ללא שינוי פונקציונלי. מופו 41 route modules, ~40 ישויות ב-9 תחומי `src/lib`, App Shell, design system, שכבת נתונים, ואבטחה.

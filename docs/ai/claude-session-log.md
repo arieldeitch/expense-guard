@@ -4,6 +4,25 @@
 
 ---
 
+## 2026-07-24 · Phase 1+2 — Domain-scoped goals + Trash/Restore
+
+**מטרה:** יישום Phase 1 (ניווט/route/copy alignment + goals לפי domain) ו-Phase 2 (trash/restore מלא), על branch `feat/domain-alignment-and-restore`.
+
+**route-gen (חסם שנפתר):** אין CLI ל-generator; הדרך הקנונית = `vite build` (plugin של `@lovable.dev/vite-tanstack-config`). ה-generator המקומי הקליד `Route.useLoaderData()` כ-`| undefined` ושבר 4 routes ישנים. **פתרון (ADR-0022):** מעבר ל-`Route.useParams()` ב-`exercises.$id`/`locations.$id`/`running.$id`/`running.new.$type` (ערכים זהים, loaders+notFound נשמרו). generation כעת דטרמיניסטי (build×2 ללא diff), typecheck ירוק. R-19 סגור.
+
+**נעשה:**
+- 6 רכיבי goals משותפים + 12 domain-goals routes + 3 compat redirects.
+- `DomainPrimaryGoalTile` מחובר ל-3 המסכים (כללי בחירה: is_primary→priority→date→updated).
+- `/trash`: +3 מקטעים (gym/home sessions, goals) + list-trashed hooks; delete-to-trash 2-step (home summary + goal detail confirm; gym כבר קיים). recompute דרך subscribers.
+- `__root.tsx` 404/error → עברית+RTL+aria-live. `.gitattributes` (LF). lint hook false-positive נפתר ע"י named component.
+- `typecheck` script ל-package.json.
+
+**בדיקות:** +8 → **158/158** (12 קבצים). typecheck/lint(0 err)/build ✅.
+
+**commits (מקומיים, ללא push):** `feat(goals): scope goal surfaces to workout domains`, `feat(trash): wire restore for sessions and goals`, `fix(ui): localize system errors and stabilize route generation`.
+
+**הבא המומלץ:** Phase 5 (פורמט ייבוא Suunto — החלטת משתמש) או Phase 11 (persistence abstraction) לפני Supabase (Phase 12, דורש Approval Brief).
+
 ## 2026-07-24 · Product Alignment Audit
 
 **מטרה:** audit מלא ויישור הפרויקט לדרישות המוצר ללא שבירת הקיים, ויצירת מקור אמת ב-`docs/ai/`.
