@@ -12,6 +12,8 @@
 3. **עצירת חקירת ה-hang** — הוראה מפורשת להפסיק profiling/bisect/pool experiments ולעבור לפתרון דטרמיניסטי.
 4. **הסרת custom runner** — לעבור ל-package scripts מפורשים, קובץ אחד לתהליך.
 5. **פיצול מבני יחיד** — לפצל את `systemErrors.test.tsx` לפי אחריות; ניסיון אחד בלבד. **הצליח.**
+6. **Push בטוח** — אימות מוקדם (status/branch/ahead-behind) ואז `git push` ללא force. בוצע: `5af65bd..a4d24e2`.
+7. **סנכרון תיעוד** — עדכון `docs/ai/` בלבד כך שישקף את מצב ה-remote אחרי ה-push, תוך סימון רשומות היסטוריות כ-Superseded במקום מחיקתן.
 
 **לקח לתיעוד:** דוח שנכתב לפני סוף העבודה עלול לסתור את Git. יש לאמת טענות push/working-tree מול `git reflog` ו-`git status` בזמן הכתיבה, לא מהזיכרון.
 

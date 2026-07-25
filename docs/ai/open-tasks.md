@@ -29,8 +29,9 @@
 - [x] ✅ **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): loader רץ ו-`notFound()` על מזהה חסר — נבדק ב-`runningRouteLoaders.test.tsx` + `catalogRouteLoaders.test.tsx`.
 - [x] ✅ **התנהגות 404 ברמת render** — `systemScreens.test.tsx` (404 root + error boundary, עברית/RTL/a11y) ו-`domainGoalRoutes.test.tsx` (guard cross-domain ב-detail וב-edit, 19 בדיקות).
 - [x] ✅ **route layout nesting** (התגלה בהתאוששות 2026-07-25) — 24 route modules שוטחו ל-`*.index.tsx`; `__root.tsx` הוא ה-layout היחיד. URLs ו-compat routes נשמרו. ADR-0025.
-- [x] ✅ **התאוששות מריסטרט** — freeze `6fb22c3`, checkpoint `da20f72`, סיום. אין push.
-- [ ] **Git push / PR** של `feat/domain-alignment-and-restore` — **לא בוצע** (ללא upstream). דורש החלטת משתמש/מדיניות (ראה `SESSION_HANDOFF.md`). **פתוח.**
+- [x] ✅ **התאוששות מריסטרט** — freeze `6fb22c3`, checkpoint `da20f72`, סיום `a4d24e2`. **הושלמה ונדחפה.**
+- [x] ✅ **Git push** של `feat/domain-alignment-and-restore` — **בוצע 2026-07-25**: `5af65bd..a4d24e2` (fast-forward, ללא force). הענף מסונכרן: **ahead 0 / behind 0**. *(PR עדיין לא נפתח — החלטת משתמש, לא חוסמת.)*
+- [ ] **`main` המקומי מקדים את `origin/main` ב-commit אחד** (`eca9163` — docs של ה-audit) ולא נדחף. החלטת משתמש: לדחוף או להשאיר. **פתוח, לא חוסם.**
 - [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`. **פתוח.** *(בהתאוששות 2026-07-25 לא בוצעה המרת CRLF גורפת — במכוון.)*
 
 ### 🔵 P2 — לא חוסם

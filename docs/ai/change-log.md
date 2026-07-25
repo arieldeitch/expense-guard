@@ -10,7 +10,9 @@
 - **fix(testing)** · פיצול `systemErrors.test.tsx` לפי תחומי אחריות ל-`systemScreens` / `runningRouteLoaders` / `catalogRouteLoaders` (ADR-0026). `test:router` = רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest. `test:unit` = `src/lib`. `test` = שניהם. **ללא dependency חדשה, ללא custom runner, ללא force-exit, ללא הפחתת כיסוי.**
 - **verify** · typecheck ✅ exit 0 · `test:unit` **162/162** (12 קבצים) ✅ · `test:router` **38/38** (5 קבצים) ✅ · `bun run test` ✅ exit 0 · eslint (ללא prettier) **0 errors, 8 warnings** ✅ · build ×2 ✅ · `git diff --exit-code -- src/routeTree.gen.ts` ✅ ריק.
 - **סיכון חדש:** R-20 — hang מצטבר ב-Vitest/jsdom בקובץ router-test גדול. **P2, לא חוסם.**
-- ללא backend/Supabase/Auth/RLS/CI-CD (לא קיימים בריפו) · ללא המרת CRLF גורפת (R-17) · **ללא push, ללא deploy, ללא עלות חדשה**.
+- ללא backend/Supabase/Auth/RLS/CI-CD (לא קיימים בריפו) · ללא המרת CRLF גורפת (R-17) · ללא deploy, ללא עלות חדשה. ~~ללא push~~ → **עודכן, ראה למטה**.
+
+**עדכון 2026-07-25 (אחרי הרשומה לעיל) — Push של ההתאוששות:** שלושת commits ההתאוששות — `6fb22c3` (freeze) · `da20f72` (checkpoint) · `a4d24e2` (`fix(testing): split cumulative router error suite`) — **נדחפו ל-`origin/feat/domain-alignment-and-restore`** ב-fast-forward `5af65bd..a4d24e2`. הענף **ahead 0 / behind 0**, working tree נקי לפני ואחרי. **ללא force push, ללא merge, ללא deploy**; `main` לא נגעו בו. ההערה "ללא push" ברשומה לעיל וב-commit messages הייתה נכונה לרגע כתיבתן — **מבוטלת מכאן ואילך**.
 
 ## 2026-07-25 · Phase 1+2 finalize — domain isolation guard + regressions (Claude Code)
 

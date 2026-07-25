@@ -10,11 +10,23 @@
 2. **"working tree נקי" — שגוי** נכון לרגע הריסטרט: 24 קבצים משתנים + 4 untracked.
 3. **"לא הותקנו dependencies (כולל `@testing-library`)" — שגוי.** `@testing-library/{react,jest-dom,user-event}` + `jsdom` הותקנו כ-devDeps ב-10:02.
 
-**מצב נוכחי:**
-- **Branch:** `feat/domain-alignment-and-restore`. **HEAD מקומי מקדים את `origin`** ב-3 commits שלא נדחפו: `6fb22c3` (freeze), `da20f72` (checkpoint), + commit הסיום של פיצול הבדיקות.
-- **Working tree נקי.**
+**מצב נוכחי — ההתאוששות הושלמה ונדחפה (2026-07-25):**
+- **Branch:** `feat/domain-alignment-and-restore` · **HEAD = `a4d24e2`** · **ahead 0 / behind 0** מול `origin/feat/domain-alignment-and-restore`.
+- **שלושת commits ההתאוששות נדחפו בהצלחה** (`5af65bd..a4d24e2`, fast-forward):
+  - `6fb22c3` — freeze: הקפאת העבודה שנמצאה, לפני כל תיקון
+  - `da20f72` — checkpoint: שיטוח routes + fixtures מטופסים
+  - `a4d24e2` — סגירת חסם ה-router tests (פיצול `systemErrors.test.tsx`)
+- **לא בוצעו force push, merge או deploy.** `main` לא נגעו בו (עדיין `ahead 1` מול `origin/main`, לא נדחף).
+- **Working tree נקי** לפני ה-push ואחריו.
 - **בדיקות: 200 עוברות** — `bun run test:unit` 162/162 · `bun run test:router` 38/38 · `bun run test` exit 0.
 - typecheck exit 0 · eslint (ללא prettier) 0 errors / 8 warnings · build ×2 · `routeTree.gen.ts` דטרמיניסטי.
+
+**⛔ סעיפים מבוטלים (Superseded) בגוף המסמך למטה** — נכתבו לפני ה-push ואינם נכונים עוד:
+"מצב מול remote" · "לא בוצע push / rebase / force-push" · "פעולות ידניות שעדיין נדרשות → החלטת push/PR" · "GPT continuation context → **לא pushed**". הם נשמרים כרשומה היסטורית בלבד; **הסעיף הזה גובר עליהם**.
+
+**חסם Router tests — נסגר.** `systemErrors.test.tsx` פוצל לשלושה קבצים לפי תחום אחריות (`systemScreens` / `runningRouteLoaders` / `catalogRouteLoaders`). ראה ADR-0026.
+
+**הפעולה הבאה היחידה המומלצת:** לבחור **יעד פיתוח מוצר אחד** מתוך `open-tasks.md` המעודכן (למשל Workout Execution screen, או אחת מ-4 ההחלטות המוצריות הפתוחות). **אין להמשיך בחקירת Vitest** — היא P2 ואינה חוסמת.
 
 **מה הושלם בהתאוששות:**
 - **route layout nesting (ADR-0025)** — התגלה שקובץ route עם ילדים בשם הופך אוטומטית ל-layout parent, ואף route פרט ל-`__root.tsx` אינו מרנדר `<Outlet />`. **24 route modules שוטחו ל-`*.index.tsx`**. URLs, redirects ו-compat routes נשמרו במלואם.
@@ -47,7 +59,7 @@
   - `1288e5b` feat(goals): scope goal surfaces to workout domains
   - `eca9163` docs(ai): add product alignment audit and migration plan  ← גם ראש `main` המקומי
   - `82de6bf` בנה מערכת יעדים אישית  ← (origin/main)
-- **מצב מול remote:** `origin` = `https://github.com/arieldeitch/expense-guard.git`. ל-`feat/domain-alignment-and-restore` **אין upstream** ו**אינו קיים ב-origin** (לא בוצע push). `main` המקומי (`eca9163`) **מקדים ב-1** את `origin/main` (`82de6bf`) — גם הוא לא נדחף.
+- ~~**מצב מול remote:** `origin` = `https://github.com/arieldeitch/expense-guard.git`. ל-`feat/domain-alignment-and-restore` **אין upstream** ו**אינו קיים ב-origin** (לא בוצע push). `main` המקומי (`eca9163`) **מקדים ב-1** את `origin/main` (`82de6bf`) — גם הוא לא נדחף.~~ **⛔ Superseded (2026-07-25):** הענף קיים ב-origin עם upstream ומסונכרן ב-`a4d24e2` (ahead 0/behind 0). ראה סעיף העדכון בראש המסמך. *(החלק על `main` עדיין נכון.)*
 
 ## עבודה שהושלמה
 **Phase 1 — יעדים לפי domain (החלטת מוצר מאושרת: אין מסך יעדים גלובלי).**
@@ -115,7 +127,7 @@
 - לא בוצע push / rebase / force-push / מחיקת branches.
 
 ## פעולות ידניות שעדיין נדרשות
-- **החלטת push/PR**: `feat/domain-alignment-and-restore` מקומי בלבד. push דורש הרשאת auth + מדיניות (הנחיות קודמות אסרו push). גם `main` המקומי מקדים את origin ב-commit ה-audit. אם רוצים לשמר בענן — לדחוף ידנית או לפתוח PR (החלטת משתמש). כניסה אינטראקטיבית: `! git push -u origin feat/domain-alignment-and-restore`.
+- ~~**החלטת push/PR**: `feat/domain-alignment-and-restore` מקומי בלבד. push דורש הרשאת auth + מדיניות (הנחיות קודמות אסרו push).~~ **⛔ Superseded (2026-07-25):** ה-push בוצע — הענף מסונכרן ב-`a4d24e2`. **נותר פתוח:** `main` המקומי עדיין מקדים את origin ב-commit ה-audit ולא נדחף (החלטת משתמש); פתיחת PR גם היא עדיין החלטת משתמש.
 
 ## המסמכים שה-session הבא חייב לקרוא תחילה (לפי סדר)
 1. `docs/ai/SESSION_HANDOFF.md` (זה)
@@ -167,7 +179,7 @@
 ## GPT continuation context
 אם ה-continuation הוא ב-GPT/agent אחר (אין מסמך context נפרד ל-GPT — זהו):
 - **מקור אמת:** `AGENTS.md` + `docs/ai/*` (lowercase). אל תיצור מסמכי-על מתחרים.
-- **מצב:** Phase 1+2 + finalize הושלמו ו-committed ב-branch `feat/domain-alignment-and-restore` (HEAD = docs commit מעל `764cfb8`), **לא pushed**. working tree נקי. 162 tests.
+- **מצב (מעודכן 2026-07-25):** Phase 1+2 + finalize + **התאוששות מריסטרט** הושלמו. branch `feat/domain-alignment-and-restore`, **HEAD = `a4d24e2`, pushed, ahead 0/behind 0**. working tree נקי. **200 tests** (162 unit + 38 router). *(הטענה הקודמת "לא pushed" — מבוטלת.)*
 - **כללי ברזל:** soft-delete בלבד; אין עלות/secret/Supabase/Auth/RLS ללא Approval Brief מפורש (ראה `CLAUDE.md` הגלובלי + `AGENTS.md`); `routeTree.gen.ts` generated (regenerate ע"י `bun run build`, קרא params דרך `useParams`); yeda רק ע"י המשתמש (אין המצאת יעד/ערך/תאריך).
 - **פקודות אימות:** `bun install --frozen-lockfile` → `bun run typecheck` → `bun run test` → `bunx eslint . --rule '{"prettier/prettier":"off"}'` → `bun run build`.
 - **פעולה ראשונה מומלצת:** ראה "פעולה מומלצת אחת בלבד" למעלה.

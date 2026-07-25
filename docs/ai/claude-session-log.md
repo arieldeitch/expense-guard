@@ -14,13 +14,17 @@
 
 **ממצא מרכזי #3 — hang בתשתית הבדיקות.** `vitest run src/test` לא הסתיים. נשללו: pool forks/threads, OOM (heap יציב), custom process runner קובץ-לתהליך. **תיקון עובדתי לדיווח ביניים שלי:** ההצהרה "כל קובץ עובר בנפרד" הייתה **שגויה** — מה שעבר היה תתי-קבוצות `-t`; הקובץ המלא נתקע עקבית. הפתרון שעבד: פיצול `systemErrors.test.tsx` (8 בדיקות) לשלושה קבצים לפי אחריות + רצף `&&` מפורש.
 
-**commits (מקומיים, ללא push):** `6fb22c3` freeze (הקפאה לפני כל תיקון) · `da20f72` checkpoint (routing + fixtures; מציין במפורש שאין טענת מצב ירוק) · commit סיום (פיצול הבדיקות).
+**commits:** `6fb22c3` freeze (הקפאה לפני כל תיקון) · `da20f72` checkpoint (routing + fixtures; מציין במפורש שאין טענת מצב ירוק) · `a4d24e2` סיום (פיצול הבדיקות). *(נוצרו כמקומיים; ראה עדכון ה-push למטה.)*
 
 **בדיקות בסיום:** typecheck exit 0 · `test:unit` 162/162 · `test:router` 38/38 (5 קבצים) · `bun run test` exit 0 (**200 בדיקות**) · eslint ללא prettier 0 errors/8 warnings · build ×2 · routeTree דטרמיניסטי.
 
 **ADR:** 0025 (route flattening), 0026 (isolated router tests). **סיכון:** R-20 (P2, לא חוסם).
 
-**הבא המומלץ:** ראה `SESSION_HANDOFF.md` — פעולה מומלצת אחת בלבד.
+**Push (2026-07-25, בסיום):** שלושת ה-commits נדחפו ל-`origin/feat/domain-alignment-and-restore` ב-fast-forward `5af65bd..a4d24e2`. הענף **ahead 0 / behind 0**, working tree נקי. **ללא force push, ללא merge, ללא deploy.** `main` לא נגעו בו (עדיין ahead 1 מול origin, לא נדחף). כל טענה קודמת ביומן זה על "מקומיים בלבד / ללא push" **מבוטלת** נכון לתאריך הזה.
+
+**מצב סופי:** typecheck ✅ · **200 בדיקות** (162 unit + 38 router) ✅ · eslint 0 errors / 8 baseline warnings ✅ · build ×2 ✅ · `routeTree.gen.ts` דטרמיניסטי ✅. אין Supabase/Auth/RLS/migrations/CI-CD בריפו.
+
+**הבא המומלץ:** לקבוע **יעד פיתוח מוצר אחד** מתוך `open-tasks.md` המעודכן. **אין להמשיך בחקירת ה-Vitest hang** — P2, לא חוסמת (R-20).
 
 ---
 
