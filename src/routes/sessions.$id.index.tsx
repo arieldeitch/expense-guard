@@ -34,7 +34,7 @@ import {
   useSessionVolume,
 } from "@/lib/sessions";
 
-export const Route = createFileRoute("/sessions/$id")({
+export const Route = createFileRoute("/sessions/$id/")({
   head: () => ({
     meta: [
       { title: "אימון פעיל · Fit Log" },

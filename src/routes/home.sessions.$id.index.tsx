@@ -43,7 +43,7 @@ import {
 } from "@/lib/home";
 import { useAllExercises, useExercise } from "@/lib/exercises";
 
-export const Route = createFileRoute("/home/sessions/$id")({
+export const Route = createFileRoute("/home/sessions/$id/")({
   head: ({ params }) => ({
     meta: [
       { title: "אימון בית · Fit Log" },

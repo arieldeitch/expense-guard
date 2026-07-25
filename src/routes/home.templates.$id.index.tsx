@@ -14,7 +14,7 @@ import {
 } from "@/lib/home";
 import { useExercise } from "@/lib/exercises";
 
-export const Route = createFileRoute("/home/templates/$id")({
+export const Route = createFileRoute("/home/templates/$id/")({
   head: () => ({
     meta: [
       { title: "תבנית בית · Fit Log" },

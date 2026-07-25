@@ -29,7 +29,7 @@ import {
   useSuuntoSnapshot,
 } from "@/lib/suunto";
 
-export const Route = createFileRoute("/running/$id")({
+export const Route = createFileRoute("/running/$id/")({
   head: ({ params }) => ({
     meta: [
       { title: "פרטי ריצה · Fit Log" },

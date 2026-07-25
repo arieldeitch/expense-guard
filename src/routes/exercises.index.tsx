@@ -28,7 +28,7 @@ import {
 } from "@/lib/exercises";
 import { useAllLocations, useEquipmentInLocation } from "@/lib/catalog";
 
-export const Route = createFileRoute("/exercises")({
+export const Route = createFileRoute("/exercises/")({
   head: () => ({
     meta: [
       { title: "ספריית תרגילים · Fit Log" },

@@ -10,7 +10,12 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "bun run test:unit && bun run test:router",
+    "test:unit": "vitest run src/lib",
+    "test:router": "bun run test:router:system-errors && bun run test:router:domain-goals && bun run test:router:compat",
+    "test:router:system-errors": "vitest run src/test/systemErrors.test.tsx",
+    "test:router:domain-goals": "vitest run src/test/domainGoalRoutes.test.tsx",
+    "test:router:compat": "vitest run src/test/compatRoutes.test.tsx",
     "format": "prettier --write ."
   },
   "dependencies": {

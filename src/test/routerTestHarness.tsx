@@ -21,6 +21,11 @@ import { routeTree } from "@/routeTree.gen";
 import { _resetGoalsStateForTests } from "@/lib/goals";
 import { _resetSessionsStateForTests } from "@/lib/sessions";
 import { _resetHomeStateForTests } from "@/lib/home/storage";
+import { _resetCatalogStateForTests } from "@/lib/catalog/storage";
+import { _resetExercisesStateForTests } from "@/lib/exercises/storage";
+import { _resetTemplatesStateForTests } from "@/lib/templates/storage";
+import { __resetRunsStateForTests } from "@/lib/runs/storage";
+import { __resetSuuntoStateForTests } from "@/lib/suunto/storage";
 
 // ---- jsdom polyfills (APIs שדפדפן מספק ו-jsdom לא) — לא mocks שמסתירים תקלות ----
 function installBrowserPolyfills() {
@@ -44,9 +49,14 @@ function installBrowserPolyfills() {
       disconnect() {}
     };
   }
-  if (!window.scrollTo) {
-    window.scrollTo = () => {};
-  }
+  // jsdom *כן* מגדיר scrollTo/scrollBy אך הם זורקים "Not implemented" לקונסולה
+  // הווירטואלית בכל ניווט. לכן דריסה ללא תנאי (`if (!window.scrollTo)` לעולם לא
+  // היה נכנס לתוקף). זו התאמת סביבה, לא mock שמסתיר התנהגות מוצר — הגלילה עצמה
+  // אינה חלק מה-contract שנבדק כאן.
+  window.scrollTo = () => {};
+  window.scrollBy = () => {};
+  Element.prototype.scrollTo = () => {};
+  Element.prototype.scrollIntoView = () => {};
 }
 installBrowserPolyfills();
 
@@ -60,14 +70,35 @@ export function resetAllStores() {
   _resetGoalsStateForTests();
   _resetSessionsStateForTests();
   _resetHomeStateForTests();
+  _resetCatalogStateForTests();
+  _resetExercisesStateForTests();
+  _resetTemplatesStateForTests();
+  __resetRunsStateForTests();
+  __resetSuuntoStateForTests();
 }
+
+/**
+ * routers/queryClients שנוצרו בבדיקה הנוכחית. פירוק מפורש ב-afterEach מונע
+ * subscriptions/timers פתוחים שמעכבים את סיום ה-worker של Vitest.
+ */
+const activeTeardowns: Array<() => void> = [];
 
 beforeEach(() => {
   resetAllStores();
 });
 
 afterEach(() => {
+  // סדר חשוב: קודם unmount (מפעיל את ה-cleanup של ה-effects ומנקה intervals),
+  // ורק אז פירוק ה-router/queryClient.
   cleanup();
+  while (activeTeardowns.length > 0) {
+    const teardown = activeTeardowns.pop();
+    try {
+      teardown?.();
+    } catch {
+      /* teardown לא אמור להפיל בדיקה */
+    }
+  }
   resetAllStores();
 });
 
@@ -91,6 +122,15 @@ export async function renderRoute(initialPath: string): Promise<RenderRouteResul
     context: { queryClient },
     history,
     defaultPreloadStaleTime: 0,
+    // preload מייצר ניווטים/loaders ברקע שאינם חלק מהבדיקה ועלולים להישאר
+    // תלויים אחרי ה-unmount. בבדיקות אנחנו מנווטים במפורש.
+    defaultPreload: false,
+  });
+
+  activeTeardowns.push(() => {
+    queryClient.cancelQueries();
+    queryClient.clear();
+    queryClient.unmount();
   });
 
   // מרֵנדר את ההתאמה ההתחלתית + loaders לפני ה-render (memory history).

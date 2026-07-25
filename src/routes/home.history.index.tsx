@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/shell/EmptyState";
 import { HomeSessionTileWrapper } from "@/components/home/HomeSessionTileWrapper";
 import { useHomeSessions } from "@/lib/home";
 
-export const Route = createFileRoute("/home/history")({
+export const Route = createFileRoute("/home/history/")({
   head: () => ({
     meta: [
       { title: "היסטוריית בית · Fit Log" },

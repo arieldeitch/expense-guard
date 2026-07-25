@@ -21,7 +21,7 @@ import {
 } from "@/lib/templates";
 import { startSessionFromTemplate } from "@/lib/sessions";
 
-export const Route = createFileRoute("/templates/$id")({
+export const Route = createFileRoute("/templates/$id/")({
   head: () => ({
     meta: [
       { title: "תבנית · Fit Log" },

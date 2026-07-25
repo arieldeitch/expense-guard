@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote } from "@/components/tile/Tile";
 import { runsRepo } from "@/lib/runs";
 
-export const Route = createFileRoute("/running/new")({
+export const Route = createFileRoute("/running/new/")({
   head: () => ({
     meta: [
       { title: "דיווח ריצה חדש · Fit Log" },

@@ -17,7 +17,7 @@ import {
 } from "@/lib/templates";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/templates")({
+export const Route = createFileRoute("/templates/")({
   head: () => ({
     meta: [
       { title: "תבניות אימון · Fit Log" },

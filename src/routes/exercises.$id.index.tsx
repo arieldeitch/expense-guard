@@ -60,7 +60,7 @@ import {
   useVariationsOf,
 } from "@/lib/exercises";
 
-export const Route = createFileRoute("/exercises/$id")({
+export const Route = createFileRoute("/exercises/$id/")({
   head: ({ params }) => ({
     meta: [
       { title: "תרגיל · Fit Log" },

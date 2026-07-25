@@ -21,7 +21,7 @@ import { LocationTile } from "@/components/catalog/LocationTile";
 import { LocationForm } from "@/components/catalog/LocationForm";
 import { useAllLocations, type TrainingLocation } from "@/lib/catalog";
 
-export const Route = createFileRoute("/locations")({
+export const Route = createFileRoute("/locations/")({
   head: () => ({
     meta: [
       { title: "מקומות · Fit Log" },

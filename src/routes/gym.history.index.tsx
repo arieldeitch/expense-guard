@@ -18,7 +18,7 @@ import type {
 import { useAllSessions } from "@/lib/sessions";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/gym/history")({
+export const Route = createFileRoute("/gym/history/")({
   head: () => ({
     meta: [
       { title: "היסטוריית אימוני כוח · Fit Log" },

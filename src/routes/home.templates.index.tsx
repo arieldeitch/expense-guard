@@ -14,7 +14,7 @@ import {
   useHomeTemplates,
 } from "@/lib/home";
 
-export const Route = createFileRoute("/home/templates")({
+export const Route = createFileRoute("/home/templates/")({
   head: () => ({
     meta: [
       { title: "תבניות בית · Fit Log" },

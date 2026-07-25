@@ -14,7 +14,7 @@ import { useAllExercises } from "@/lib/exercises";
 import type { Exercise } from "@/lib/exercises";
 import { recentExerciseIds, startQuickEntry } from "@/lib/home";
 
-export const Route = createFileRoute("/home/quick")({
+export const Route = createFileRoute("/home/quick/")({
   head: () => ({
     meta: [
       { title: "דיווח מהיר · Fit Log" },

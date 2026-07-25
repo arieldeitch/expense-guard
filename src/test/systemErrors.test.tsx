@@ -6,6 +6,7 @@
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderRoute } from "./routerTestHarness";
+import { runInput } from "./fixtures";
 import { createRun } from "@/lib/runs/repo";
 
 describe("not-found rendering (Hebrew, RTL, a11y)", () => {
@@ -28,7 +29,7 @@ describe("corrected routes — loaders + notFound run (useParams migration)", ()
   });
 
   it("/running/$id renders the run when it exists (loader passes)", async () => {
-    const run = createRun({ run_type: "treadmill" });
+    const run = createRun(runInput({ run_type: "treadmill" }));
     const r = await renderRoute(`/running/${run.id}`);
     expect(r.currentPath()).toContain("/running/");
     // מסך פרטי ריצה נטען (לא 404)
