@@ -4,7 +4,7 @@ import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { GoalsListView } from "@/components/goals/GoalsListView";
 
-export const Route = createFileRoute("/gym/goals")({
+export const Route = createFileRoute("/gym/goals/")({
   head: () => ({
     meta: [
       { title: "יעדי כוח · Fit Log" },

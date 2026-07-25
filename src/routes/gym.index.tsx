@@ -11,7 +11,7 @@ import { formatDaysSince } from "@/lib/selectors/domain-summary";
 import { useAllTemplates } from "@/lib/templates";
 import { useActiveSession } from "@/lib/sessions";
 
-export const Route = createFileRoute("/gym")({
+export const Route = createFileRoute("/gym/")({
   head: () => ({
     meta: [
       { title: "חדר כושר · Fit Log" },

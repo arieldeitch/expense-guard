@@ -16,7 +16,7 @@ import {
 } from "@/lib/runs";
 import { useAllLocations } from "@/lib/catalog";
 
-export const Route = createFileRoute("/running")({
+export const Route = createFileRoute("/running/")({
   head: () => ({
     meta: [
       { title: "ריצה · Fit Log" },

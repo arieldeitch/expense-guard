@@ -16,7 +16,7 @@ const searchSchema = z.object({
   domain: z.enum(["running", "gym", "home"]).optional(),
 });
 
-export const Route = createFileRoute("/goals")({
+export const Route = createFileRoute("/goals/")({
   head: () => ({
     meta: [
       { title: "יעדים · Fit Log" },

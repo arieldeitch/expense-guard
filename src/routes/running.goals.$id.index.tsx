@@ -4,7 +4,7 @@ import { AppShell } from "@/components/shell/AppShell";
 import { GoalDetailView } from "@/components/goals/GoalDetailView";
 import { useGoal } from "@/lib/goals";
 
-export const Route = createFileRoute("/running/goals/$id")({
+export const Route = createFileRoute("/running/goals/$id/")({
   head: () => ({ meta: [{ title: "יעד ריצה · Fit Log" }] }),
   component: RunningGoalDetailPage,
 });

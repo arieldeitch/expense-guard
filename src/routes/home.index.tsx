@@ -27,7 +27,7 @@ import { daysSince, frequencyPerWeek } from "@/lib/home";
 import { HomeSessionTileWrapper } from "@/components/home/HomeSessionTileWrapper";
 import { DomainPrimaryGoalTile } from "@/components/goals/DomainPrimaryGoalTile";
 
-export const Route = createFileRoute("/home")({
+export const Route = createFileRoute("/home/")({
   head: () => ({
     meta: [
       { title: "כוח בבית · Fit Log" },
