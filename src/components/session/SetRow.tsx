@@ -167,6 +167,37 @@ export function SetRow({ set, trackingType, weightIncrement = 2.5, onComplete }:
           )}
         </button>
       </div>
+
+      {/* RPE — נתמך בחוזה (`StrengthSet.rpe`). אופציונלי: null = לא דווח. */}
+      <div className="flex items-center gap-2">
+        <span className="shrink-0 text-[11px] font-bold text-muted-foreground">RPE</span>
+        <NumberField
+          compact
+          value={set.rpe}
+          onChange={(v) => updateSet(set.id, { rpe: v })}
+          step={0.5}
+          min={1}
+          max={10}
+          ariaLabel={`RPE סט ${set.set_number}`}
+          placeholder="—"
+          className="max-w-[9.5rem]"
+        />
+        {skipped ? (
+          <button
+            type="button"
+            onClick={() => updateSet(set.id, { skipped: false, completed_at: null })}
+            className="ms-auto min-h-9 rounded-lg px-2 text-[11px] font-bold text-warning underline"
+          >
+            בטל דילוג
+          </button>
+        ) : null}
+      </div>
+
+      {skipped ? (
+        <p className="text-[11px] text-muted-foreground">
+          סט זה דולג. הערכים שהוזנו נשמרו.
+        </p>
+      ) : null}
     </div>
   );
 }

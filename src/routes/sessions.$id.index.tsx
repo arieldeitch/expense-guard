@@ -4,15 +4,33 @@
  * ה־session נשמר autosave לכל שינוי דרך storage. snapshot של התבנית קפוא.
  */
 import { useMemo, useState } from "react";
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
-import { CheckCircle2, MapPin, Pause, Play, Plus, Save, StopCircle, Trash2 } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  MapPin,
+  Pause,
+  Play,
+  Plus,
+  Save,
+  StopCircle,
+  Trash2,
+} from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import { Chip } from "@/components/catalog/shared";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { ExerciseCard } from "@/components/session/ExerciseCard";
 import { RestTimer } from "@/components/session/RestTimer";
 import { ExercisePickerSheet } from "@/components/templates/ExercisePickerSheet";
@@ -21,6 +39,7 @@ import {
   abandonSession,
   addExerciseToSession,
   finishSession,
+  finishSessionPartial,
   pauseSession,
   resumeSession,
   substituteExercise,
@@ -28,10 +47,12 @@ import {
   updateSession,
   updateSessionExercise,
   useLiveSessionDuration,
+  usePersistenceStatus,
   useSession,
   useSessionBlocks,
   useSessionExercises,
   useSessionVolume,
+  type PersistenceStatus,
 } from "@/lib/sessions";
 
 export const Route = createFileRoute("/sessions/$id/")({
@@ -58,20 +79,19 @@ function SessionPage() {
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [substituteFor, setSubstituteFor] = useState<string | null>(null);
+  const [finishOpen, setFinishOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [notesFor, setNotesFor] = useState<string | null>(null);
+  const [confirmTrash, setConfirmTrash] = useState(false);
+  const persistence = usePersistenceStatus();
 
   const activeLocation = useMemo(
     () => locations.find((l) => l.id === session?.location_id) ?? null,
     [locations, session?.location_id],
   );
 
-  if (!session) throw notFound();
-
-  const status = session.status;
-  const isActive = status === "in_progress";
-  const isPaused = status === "paused";
-  const isFinished = status === "completed";
-
-  // Group exercises by block for A1/A2 labels
+  // קיבוץ תרגילים לפי בלוק (תוויות A1/A2). חייב להיקרא לפני כל early return —
+  // hooks חייבים לרוץ באותו סדר בכל render.
   const byBlock = useMemo(() => {
     const map = new Map<string, typeof exercises>();
     for (const ex of exercises) {
@@ -82,11 +102,54 @@ function SessionPage() {
     return map;
   }, [exercises]);
 
-  function handleFinish() {
-    const incomplete = exercises.some((e) => !e.completed);
-    if (incomplete && !confirm("יש תרגילים לא מסומנים כהושלמו. לסיים בכל זאת?")) return;
+  if (!session) {
+    // מצב שגיאה/התאוששות — לא 404 גנרי: מסביר מה קרה ומציע יציאה בטוחה.
+    return (
+      <AppShell topBar={{ title: "אימון", back: { to: "/gym" } }}>
+        <div className="px-4 sm:px-6">
+          <EmptyState
+            title="האימון לא נמצא"
+            description="ייתכן שהאימון נמחק או שהקישור אינו תקין. אימונים אחרים לא הושפעו."
+            action={
+              <Link
+                to="/gym"
+                className="inline-flex min-h-11 items-center rounded-xl bg-gym px-4 text-sm font-bold text-white"
+              >
+                חזרה לחדר כושר
+              </Link>
+            }
+          />
+        </div>
+      </AppShell>
+    );
+  }
+
+  const status = session.status;
+  const isActive = status === "in_progress";
+  const isPaused = status === "paused";
+  const isFinished = status === "completed";
+
+  const remainingSets = volume.totalSets - volume.completedSets - volume.skippedSets;
+  const isPartial = remainingSets > 0;
+
+  /** סיום מלא — אין סטים פתוחים. */
+  function finishComplete() {
     finishSession(id);
     navigate({ to: "/sessions/$id/summary", params: { id } });
+  }
+
+  /** סיום חלקי — סטים שלא בוצעו מסומנים כדולגו; מה שבוצע נשמר. */
+  function finishPartial() {
+    finishSessionPartial(id);
+    navigate({ to: "/sessions/$id/summary", params: { id } });
+  }
+
+  function handleFinish() {
+    if (isPartial) {
+      setFinishOpen(true);
+      return;
+    }
+    finishComplete();
   }
 
   return (
@@ -122,9 +185,7 @@ function SessionPage() {
                 {isActive ? <Chip tone="success">בהתקדמות</Chip> : null}
                 {isPaused ? <Chip tone="warning">מושהה</Chip> : null}
                 {isFinished ? <Chip tone="info">הסתיים</Chip> : null}
-                <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-                  <Save aria-hidden className="size-3" /> נשמר אוטומטית
-                </span>
+                <SaveStatus status={persistence} />
               </div>
               <div className="mt-1 text-lg font-black leading-tight">{session.name}</div>
               <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
@@ -185,14 +246,7 @@ function SessionPage() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent align="end" className="w-56 p-1">
-                  <MenuBtn
-                    onClick={() => {
-                      const name = prompt("שם אימון", session.name);
-                      if (name) updateSession(id, { name });
-                    }}
-                  >
-                    שינוי שם
-                  </MenuBtn>
+                  <MenuBtn onClick={() => setRenaming(true)}>שינוי שם</MenuBtn>
                   <LocationSubmenu
                     current={session.location_id}
                     locations={locations}
@@ -208,12 +262,7 @@ function SessionPage() {
                   </MenuBtn>
                   <MenuBtn
                     danger
-                    onClick={() => {
-                      if (confirm("להעביר את האימון לסל המחזור?")) {
-                        trashSession(id);
-                        navigate({ to: "/gym" });
-                      }
-                    }}
+                    onClick={() => setConfirmTrash(true)}
                     icon={<Trash2 className="size-4" aria-hidden />}
                   >
                     מחק אימון
@@ -269,11 +318,7 @@ function SessionPage() {
                       isSuper && blockExercises.length > 1 ? `${letter}${i + 1}` : undefined
                     }
                     onSubstitute={setSubstituteFor}
-                    onEditNotes={(exId) => {
-                      const cur = exercises.find((e) => e.id === exId);
-                      const val = prompt("הערה על התרגיל", cur?.notes ?? "");
-                      if (val != null) updateSessionExercise(exId, { notes: val || null });
-                    }}
+                    onEditNotes={setNotesFor}
                   />
                 ))}
               </section>
@@ -355,8 +400,158 @@ function SessionPage() {
         }}
       />
 
+      {/* סיום חלקי — bottom sheet קליל, לא confirm() חוסם */}
+      <Sheet open={finishOpen} onOpenChange={setFinishOpen}>
+        <SheetContent side="bottom" className="rounded-t-2xl">
+          <SheetHeader>
+            <SheetTitle>סיום אימון חלקי</SheetTitle>
+            <SheetDescription>
+              נותרו {remainingSets} סטים שלא בוצעו. סיום עכשיו יסמן אותם כדולגו. הסטים שכבר
+              בוצעו נשמרים.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 flex flex-col gap-2">
+            <Button
+              type="button"
+              onClick={() => {
+                setFinishOpen(false);
+                finishPartial();
+              }}
+              className="min-h-12 rounded-xl bg-gym text-white"
+            >
+              סיים אימון חלקי
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setFinishOpen(false)}
+              className="min-h-12 rounded-xl border-border-strong"
+            >
+              חזרה לאימון
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* שינוי שם — inline, ללא prompt() */}
+      <Sheet open={renaming} onOpenChange={setRenaming}>
+        <SheetContent side="bottom" className="rounded-t-2xl">
+          <SheetHeader>
+            <SheetTitle>שם האימון</SheetTitle>
+          </SheetHeader>
+          <form
+            className="mt-4 flex flex-col gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = new FormData(e.currentTarget).get("name");
+              if (typeof value === "string" && value.trim()) {
+                updateSession(id, { name: value.trim() });
+              }
+              setRenaming(false);
+            }}
+          >
+            <Input name="name" defaultValue={session.name} aria-label="שם האימון" autoFocus />
+            <Button type="submit" className="min-h-12 rounded-xl bg-gym text-white">
+              שמור
+            </Button>
+          </form>
+        </SheetContent>
+      </Sheet>
+
+      {/* הערת תרגיל — inline, ללא prompt() */}
+      <Sheet open={!!notesFor} onOpenChange={(v) => !v && setNotesFor(null)}>
+        <SheetContent side="bottom" className="rounded-t-2xl">
+          <SheetHeader>
+            <SheetTitle>הערה על התרגיל</SheetTitle>
+          </SheetHeader>
+          <form
+            className="mt-4 flex flex-col gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const value = new FormData(e.currentTarget).get("notes");
+              if (notesFor && typeof value === "string") {
+                updateSessionExercise(notesFor, { notes: value.trim() || null });
+              }
+              setNotesFor(null);
+            }}
+          >
+            <Input
+              name="notes"
+              defaultValue={exercises.find((e) => e.id === notesFor)?.notes ?? ""}
+              aria-label="הערה על התרגיל"
+              autoFocus
+            />
+            <Button type="submit" className="min-h-12 rounded-xl bg-gym text-white">
+              שמור הערה
+            </Button>
+          </form>
+        </SheetContent>
+      </Sheet>
+
+      {/* מחיקה — פעולה הרסנית, מופרדת חזותית */}
+      <Sheet open={confirmTrash} onOpenChange={setConfirmTrash}>
+        <SheetContent side="bottom" className="rounded-t-2xl">
+          <SheetHeader>
+            <SheetTitle>מחיקת אימון</SheetTitle>
+            <SheetDescription>
+              האימון יעבור לסל המחזור וניתן יהיה לשחזר אותו משם. הנתונים לא נמחקים לצמיתות.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 flex flex-col gap-2">
+            <Button
+              type="button"
+              onClick={() => {
+                setConfirmTrash(false);
+                trashSession(id);
+                navigate({ to: "/gym" });
+              }}
+              className="min-h-12 rounded-xl bg-destructive text-white"
+            >
+              העבר לסל המחזור
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setConfirmTrash(false)}
+              className="min-h-12 rounded-xl border-border-strong"
+            >
+              ביטול
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       <RestTimer sessionId={id} />
     </AppShell>
+  );
+}
+
+/**
+ * סטטוס שמירה — טקסט **ואייקון**, לא צבע בלבד (a11y).
+ * מציג "נשמר" רק אחרי שה-repository אישר כתיבה מוצלחת ל-localStorage.
+ */
+function SaveStatus({ status }: { status: PersistenceStatus }) {
+  if (status === "memory") {
+    return (
+      <span
+        role="status"
+        className="inline-flex items-center gap-1 text-xs font-bold text-destructive"
+      >
+        <AlertTriangle aria-hidden className="size-3" /> לא נשמר במכשיר — לא ישרוד רענון
+      </span>
+    );
+  }
+  if (status === "saved") {
+    return (
+      <span role="status" className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+        <Save aria-hidden className="size-3" /> נשמר במכשיר
+      </span>
+    );
+  }
+  return (
+    <span role="status" className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+      <Save aria-hidden className="size-3" /> שמירה אוטומטית
+    </span>
   );
 }
 

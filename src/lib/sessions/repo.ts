@@ -482,6 +482,53 @@ export function finishSession(
   return getSession(id);
 }
 
+/**
+ * סיום חלקי — האימון נגמר בעוד יש סטים שלא בוצעו.
+ *
+ * הסטים שכבר הושלמו **נשמרים כפי שהם**; רק סטים שלא הושלמו ולא דולגו מסומנים
+ * כדולגו (`skipSet` שומר על הערכים שהוזנו — הוא משנה דגלים בלבד). כך אימון חלקי
+ * הוא מצב תקף ומדיד: `SessionVolume.completionRate` ו-`skippedSets` משקפים אותו
+ * עובדתית, ללא ניסוח שיפוטי ובלי לאבד נתונים.
+ *
+ * הסטטוס הסופי הוא `completed` — האימון אכן הסתיים. `abandoned` שמור ליציאה
+ * ללא סיום. ראה ADR-0027.
+ */
+export function finishSessionPartial(
+  id: string,
+  extras?: Parameters<typeof finishSession>[1],
+): StrengthSession | null {
+  const session = getSession(id);
+  if (!session) return null;
+  for (const ex of listSessionExercises(id)) {
+    for (const set of listExerciseSets(ex.id)) {
+      if (!set.completed && !set.skipped) skipSet(set.id);
+    }
+  }
+  return finishSession(id, extras);
+}
+
+/**
+ * דילוג על תרגיל שלם. סטים שכבר הושלמו **אינם נמחקים ואינם משתנים** — רק סטים
+ * שטרם הושלמו מסומנים כדולגו. `recomputeExerciseCompletion` יסמן את התרגיל
+ * כהושלם ברגע שכל סטיו completed או skipped.
+ */
+export function skipExercise(id: string): void {
+  const ex = getSessionExercise(id);
+  if (!ex) return;
+  for (const set of listExerciseSets(id)) {
+    if (!set.completed && !set.skipped) skipSet(set.id);
+  }
+}
+
+/** ביטול דילוג — מחזיר סטים שדולגו למצב "לא בוצע". סטים שהושלמו לא מושפעים. */
+export function unskipExercise(id: string): void {
+  const ex = getSessionExercise(id);
+  if (!ex) return;
+  for (const set of listExerciseSets(id)) {
+    if (set.skipped) updateSet(set.id, { skipped: false, completed_at: null });
+  }
+}
+
 export function abandonSession(id: string, saveAsDraft: boolean): void {
   if (saveAsDraft) {
     updateSession(id, { status: "draft" });

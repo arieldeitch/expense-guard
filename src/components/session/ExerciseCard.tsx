@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   Plus,
   Repeat,
+  SkipForward,
   Trash2,
 } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -20,6 +21,8 @@ import {
   addSet,
   moveExercise,
   removeExerciseFromSession,
+  skipExercise,
+  unskipExercise,
   updateSessionExercise,
   usePersonalRecords,
   usePreviousPerformance,
@@ -59,7 +62,10 @@ export function ExerciseCard({
   );
 
   const [expanded, setExpanded] = useState(true);
+  const [confirmRemove, setConfirmRemove] = useState(false);
   const completedCount = sets.filter((s) => s.completed).length;
+  const skippedCount = sets.filter((s) => s.skipped).length;
+  const hasSkipped = skippedCount > 0;
 
   return (
     <article
@@ -81,6 +87,7 @@ export function ExerciseCard({
             </h3>
             {exercise.substituted_from_exercise_id ? <Chip tone="warning">הוחלף</Chip> : null}
             {exercise.completed ? <Chip tone="success">הושלם</Chip> : null}
+            {hasSkipped ? <Chip tone="warning">דולג</Chip> : null}
           </div>
           <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
             {primaryMuscle ? <span>{primaryMuscle.name_he}</span> : null}
@@ -88,6 +95,12 @@ export function ExerciseCard({
             <span>
               {completedCount}/{sets.length} סטים
             </span>
+            {hasSkipped ? (
+              <>
+                <span>•</span>
+                <span>{skippedCount} דולגו</span>
+              </>
+            ) : null}
             {ex?.unilateral ? (
               <>
                 <span>•</span>
@@ -143,18 +156,57 @@ export function ExerciseCard({
               {exercise.completed ? "בטל השלמה" : "סמן כהושלם"}
             </ItemBtn>
             <ItemBtn
+              icon={<SkipForward className="size-4" aria-hidden />}
+              onClick={() => (hasSkipped ? unskipExercise(exercise.id) : skipExercise(exercise.id))}
+            >
+              {hasSkipped ? "בטל דילוג על התרגיל" : "דלג על התרגיל"}
+            </ItemBtn>
+            <ItemBtn
               danger
               icon={<Trash2 className="size-4" aria-hidden />}
-              onClick={() => {
-                if (confirm(`להסיר את "${exercise.snapshot.exercise_name}" מהאימון?`))
-                  removeExerciseFromSession(exercise.id);
-              }}
+              onClick={() => setConfirmRemove(true)}
             >
               הסר מהאימון
             </ItemBtn>
           </PopoverContent>
         </Popover>
       </header>
+
+      {confirmRemove ? (
+        <div
+          role="alertdialog"
+          aria-label="אישור הסרת תרגיל"
+          className="mt-2 rounded-xl border border-destructive/50 bg-destructive/10 p-2"
+        >
+          <p className="text-xs font-bold">
+            להסיר את &quot;{exercise.snapshot.exercise_name}&quot; מהאימון?
+          </p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
+            {completedCount > 0
+              ? `${completedCount} סטים שבוצעו יוסרו מהתצוגה. ניתן לשחזר מסל המחזור.`
+              : "ניתן לשחזר מסל המחזור."}
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                removeExerciseFromSession(exercise.id);
+                setConfirmRemove(false);
+              }}
+              className="min-h-11 flex-1 rounded-xl bg-destructive px-3 text-sm font-bold text-white"
+            >
+              הסר
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirmRemove(false)}
+              className="min-h-11 flex-1 rounded-xl border border-border-strong px-3 text-sm font-bold"
+            >
+              ביטול
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {previous || prs.length ? (
         <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px]">

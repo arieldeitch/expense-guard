@@ -91,19 +91,53 @@ export function subscribeSessions(fn: () => void): () => void {
   return () => listeners.delete(fn);
 }
 
+/**
+ * תוצאת השמירה האחרונה.
+ * - `idle`     — עוד לא נכתב דבר ב-session הנוכחי.
+ * - `saved`    — נכתב ל-localStorage בהצלחה. **שורד refresh.**
+ * - `memory`   — הכתיבה ל-localStorage נכשלה (מכסה מלאה / מצב פרטי) או שאין
+ *                localStorage כלל. הנתונים קיימים בזיכרון בלבד ו**לא ישרדו refresh**.
+ *
+ * קיים כדי שה-UI לא יציג "נשמר" כשבפועל השמירה נכשלה. ראה ADR-0028.
+ */
+export type PersistenceStatus = "idle" | "saved" | "memory";
+
+let persistenceStatus: PersistenceStatus = "idle";
+let lastWriteAt: number | null = null;
+const statusListeners = new Set<() => void>();
+
+export function getPersistenceStatus(): PersistenceStatus {
+  return persistenceStatus;
+}
+export function getLastWriteAt(): number | null {
+  return lastWriteAt;
+}
+export function subscribePersistence(fn: () => void): () => void {
+  statusListeners.add(fn);
+  return () => statusListeners.delete(fn);
+}
+
 export function writeSessionsState(next: SessionsState): void {
   cache = next;
   const storage = safeStorage();
+  let ok = false;
   if (storage) {
     try {
       storage.setItem(STORAGE_KEY, JSON.stringify(next));
+      ok = true;
     } catch {
+      // מכסה מלאה / מצב פרטי — נשמר בזיכרון בלבד ולא ישרוד refresh.
       inMemoryFallback = next;
     }
   } else {
     inMemoryFallback = next;
   }
+  const nextStatus: PersistenceStatus = ok ? "saved" : "memory";
+  const changed = nextStatus !== persistenceStatus;
+  persistenceStatus = nextStatus;
+  lastWriteAt = Date.now();
   listeners.forEach((l) => l());
+  if (changed) statusListeners.forEach((l) => l());
 }
 
 /** helper — mutation מרוכזת. */
@@ -111,21 +145,11 @@ export function commit(fn: (s: SessionsState) => SessionsState): void {
   writeSessionsState(fn(readSessionsState()));
 }
 
-/** מציין מתי הייתה שמירה אחרונה — משמש את SaveStatus indicator. */
-let lastWriteAt: number | null = null;
-const origWrite = writeSessionsState;
-export function writeSessionsStateWithStamp(next: SessionsState): void {
-  lastWriteAt = Date.now();
-  origWrite(next);
-}
-export function getLastWriteAt(): number | null {
-  return lastWriteAt;
-}
-
 export function _resetSessionsStateForTests(state?: SessionsState): void {
   cache = null;
   inMemoryFallback = state ? { ...state } : null;
   lastWriteAt = null;
+  persistenceStatus = "idle";
   const storage = safeStorage();
   if (storage) {
     try {

@@ -3,7 +3,14 @@
  * כל hook קורא state עדכני ומחזיר derived data.
  */
 import { useSyncExternalStore, useEffect, useState } from "react";
-import { readSessionsState, readSessionsServerSnapshot, subscribeSessions } from "./storage";
+import {
+  getPersistenceStatus,
+  readSessionsState,
+  readSessionsServerSnapshot,
+  subscribePersistence,
+  subscribeSessions,
+  type PersistenceStatus,
+} from "./storage";
 import * as repo from "./repo";
 import {
   computeDataCompleteness,
@@ -75,6 +82,18 @@ export function usePersonalRecords(sessionId: string, exerciseId: string) {
   useSessionsStore();
   return detectPersonalRecords(sessionId, exerciseId);
 }
+/**
+ * מצב ההתמדה של ה-store. משמש להצגת סטטוס שמירה אמיתי — ה-UI לא מכריז
+ * "נשמר" אלא אחרי שה-repository אישר כתיבה. ראה ADR-0028.
+ */
+export function usePersistenceStatus(): PersistenceStatus {
+  return useSyncExternalStore(
+    subscribePersistence,
+    getPersistenceStatus,
+    () => "idle" as PersistenceStatus,
+  );
+}
+
 export function useSessionPrefs() {
   useSessionsStore();
   return repo.getPrefs();
