@@ -11,6 +11,7 @@ import type {
   HomeTemplateEntry,
   HomeTemplateVersion,
 } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 const STORAGE_KEY = "fitlog:home:v1";
 
@@ -102,17 +103,8 @@ let lastWriteAt: number | null = null;
 
 export function writeHomeState(next: HomeState): void {
   cache = next;
-  lastWriteAt = Date.now();
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      inMemoryFallback = next;
-    }
-  } else {
-    inMemoryFallback = next;
-  }
+  const result = reportWrite("home", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
   listeners.forEach((l) => l());
 }
 

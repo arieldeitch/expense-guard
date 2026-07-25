@@ -10,6 +10,7 @@ import type {
   StrengthSessionExercise,
   StrengthSet,
 } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 const STORAGE_KEY = "fitlog:sessions:v2";
 
@@ -119,20 +120,10 @@ export function subscribePersistence(fn: () => void): () => void {
 
 export function writeSessionsState(next: SessionsState): void {
   cache = next;
-  const storage = safeStorage();
-  let ok = false;
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-      ok = true;
-    } catch {
-      // מכסה מלאה / מצב פרטי — נשמר בזיכרון בלבד ולא ישרוד refresh.
-      inMemoryFallback = next;
-    }
-  } else {
-    inMemoryFallback = next;
-  }
-  const nextStatus: PersistenceStatus = ok ? "saved" : "memory";
+  const result = reportWrite("sessions", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
+
+  const nextStatus: PersistenceStatus = result.status === "saved" ? "saved" : "memory";
   const changed = nextStatus !== persistenceStatus;
   persistenceStatus = nextStatus;
   lastWriteAt = Date.now();

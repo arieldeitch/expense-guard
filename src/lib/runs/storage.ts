@@ -3,6 +3,7 @@
  * מפתח יחיד `fitlog:runs:v1`. בעתיד יוחלף ב-Supabase repo באותו contract.
  */
 import type { RunSession, RunningRoute } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 const STORAGE_KEY = "fitlog:runs:v1";
 export const CURRENT_OWNER_ID = "single-user";
@@ -97,16 +98,9 @@ export function subscribeRuns(fn: () => void): () => void {
 
 export function writeRunsState(next: RunsState): void {
   cache = next;
-  inMemoryFallback = next;
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // ignore quota errors — cache still updated
-    }
-  }
-  for (const fn of listeners) fn();
+  const result = reportWrite("runs", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
+  listeners.forEach((l) => l());
 }
 
 /** Testing helper — reset. */

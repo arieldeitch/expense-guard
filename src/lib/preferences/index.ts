@@ -2,6 +2,7 @@
  * Preferences repository — abstraction ל־user preferences.
  * כרגע מגובה localStorage. יוחלף ב־Supabase profile row בעתיד בלי לגעת ב־UI.
  */
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 export type LandingModule = "home" | "running" | "gym" | "home-workout";
 
@@ -69,14 +70,7 @@ export function writePreferences(next: Partial<Preferences>): Preferences {
   const current = readPreferences();
   const merged: Preferences = { ...current, ...next };
   cachedSnapshot = merged;
-  const storage = safeGetStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(merged));
-    } catch {
-      /* ignore */
-    }
-  }
+  reportWrite("preferences", safeWriteStorage(STORAGE_KEY, merged));
   listeners.forEach((l) => l());
   return merged;
 }

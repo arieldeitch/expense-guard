@@ -8,6 +8,7 @@
  * זהו יישום mock; כשיחובר Supabase, יוחלף ב־repository שקורא ל־server functions.
  */
 import type { EquipmentItem, TrainingLocation, TreadmillProfile } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 const STORAGE_KEY = "fitlog:catalog:v1";
 export const CURRENT_OWNER_ID = "single-user";
@@ -83,16 +84,8 @@ export function subscribeCatalog(fn: () => void): () => void {
 
 export function writeCatalogState(next: CatalogState): void {
   cache = next;
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      inMemoryFallback = next;
-    }
-  } else {
-    inMemoryFallback = next;
-  }
+  const result = reportWrite("catalog", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
   listeners.forEach((l) => l());
 }
 
