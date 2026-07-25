@@ -70,7 +70,7 @@ function MissingLocation() {
 }
 
 function LocationDetailPage() {
-  const { id } = Route.useLoaderData();
+  const { id } = Route.useParams();
   const location = useLocation(id);
   const treadmills = useTreadmillsInLocation(id);
   const equipment = useEquipmentInLocation(id);

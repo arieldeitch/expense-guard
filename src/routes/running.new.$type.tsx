@@ -22,8 +22,8 @@ export const Route = createFileRoute("/running/new/$type")({
 });
 
 function NewRunForm() {
-  const data = Route.useLoaderData();
-  const runType = data.runType as RunType;
+  const { type } = Route.useParams();
+  const runType = type as RunType;
   return (
     <AppShell
       topBar={{

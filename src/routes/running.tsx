@@ -5,6 +5,7 @@ import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import { RunTile } from "@/components/runs/RunTile";
+import { DomainPrimaryGoalTile } from "@/components/goals/DomainPrimaryGoalTile";
 import {
   computeRunAggregates,
   formatDistanceKm,
@@ -135,6 +136,11 @@ function RunningPage() {
             }
           />
         )}
+      </div>
+
+      <SectionHeader title="יעדי ריצה" />
+      <div id="goals" className="px-4 sm:px-6">
+        <DomainPrimaryGoalTile domain="running" />
       </div>
 
       <SectionHeader title="עוד" />

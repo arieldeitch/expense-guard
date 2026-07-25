@@ -2,12 +2,12 @@
  * GoalTile — אריח יעד מבוסס נתונים אמיתיים ממודול goals.
  * מציג progress bar דטרמיניסטי, פרטים עובדתיים, ללא שפת עידוד.
  */
-import { Link } from "@tanstack/react-router";
 import { Target } from "lucide-react";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { useGoalProgress, usePrimaryGoal, useActiveGoalsCount } from "@/lib/goals";
 import type { GoalDomain } from "@/lib/goals";
+import { GoalDetailLink, GoalListLink, GoalNewLink } from "./goalLinks";
 
 interface Props {
   domain: GoalDomain;
@@ -25,13 +25,12 @@ export function DomainPrimaryGoalTile({ domain }: Props) {
         title="אין יעדים פעילים"
         description="יעדים מוגדרים על ידך בלבד — לחיצה להוספה."
         action={
-          <Link
-            to="/goals/new"
-            search={{ domain }}
+          <GoalNewLink
+            domain={domain}
             className="tile-interactive inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground"
           >
             הוספת יעד
-          </Link>
+          </GoalNewLink>
         }
       />
     );
@@ -54,7 +53,7 @@ export function DomainPrimaryGoalTile({ domain }: Props) {
 
   return (
     <div className="space-y-2">
-      <Link to="/goals/$id" params={{ id: goal.id }}>
+      <GoalDetailLink domain={domain} id={goal.id}>
         <Tile variant="goal" tone="soft" interactive>
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0">
@@ -70,15 +69,14 @@ export function DomainPrimaryGoalTile({ domain }: Props) {
             {daysLabel ? ` · ${daysLabel}` : ""}
           </TileFootnote>
         </Tile>
-      </Link>
+      </GoalDetailLink>
       {activeCount > 1 ? (
-        <Link
-          to="/goals"
-          search={{ domain }}
+        <GoalListLink
+          domain={domain}
           className="block text-xs font-bold text-primary underline-offset-2 hover:underline"
         >
           עוד {activeCount - 1} יעדים פעילים ←
-        </Link>
+        </GoalListLink>
       ) : null}
     </div>
   );

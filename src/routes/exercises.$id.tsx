@@ -96,7 +96,7 @@ function MissingExercise() {
 }
 
 function ExerciseDetailPage() {
-  const { id } = Route.useLoaderData();
+  const { id } = Route.useParams();
   const exercise = useExercise(id);
   const muscleGroups = useMuscleGroups();
   const allExercises = useAllExercises();

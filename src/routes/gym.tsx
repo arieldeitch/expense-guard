@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Dumbbell, Play, Plus, Target } from "lucide-react";
+import { Dumbbell, Play, Plus } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
+import { DomainPrimaryGoalTile } from "@/components/goals/DomainPrimaryGoalTile";
 import { Chip } from "@/components/catalog/shared";
 import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
 import { formatDaysSince } from "@/lib/selectors/domain-summary";
@@ -139,23 +140,7 @@ function GymPage() {
 
       <SectionHeader title="יעדי כוח" />
       <div id="goals" className="px-4 sm:px-6">
-        {summary?.activeGoal ? (
-          <Tile variant="goal" tone="soft">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <TileLabel>יעד פעיל</TileLabel>
-                <div className="truncate text-base font-bold">{summary.activeGoal.title}</div>
-              </div>
-              <div className="ltr-nums text-lg font-black">{summary.activeGoal.percent}%</div>
-            </div>
-          </Tile>
-        ) : (
-          <EmptyState
-            icon={<Target aria-hidden />}
-            title="אין יעדים פעילים"
-            description="יעדים מוגדרים על ידך בלבד."
-          />
-        )}
+        <DomainPrimaryGoalTile domain="gym" />
       </div>
     </AppShell>
   );

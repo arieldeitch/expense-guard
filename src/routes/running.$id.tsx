@@ -47,7 +47,7 @@ export const Route = createFileRoute("/running/$id")({
 });
 
 function RunDetail() {
-  const { id } = Route.useLoaderData();
+  const { id } = Route.useParams();
   const run = useRun(id);
   const navigate = useNavigate();
   const locations = useAllLocations();
