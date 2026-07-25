@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-07-25 · סנכרון `main` לקראת Visual QA
+
+**מטרה:** להפוך את `origin/main` למקור האמת לגרסה שעליה יבוצע Visual QA.
+
+**אסטרטגיה:** בדיקת ancestry הראתה ש-`main`, `origin/main` ו-`eca9163` הם **כולם ancestors** של ה-feature branch — היסטוריה ליניארית ללא divergence. לכן **fast-forward** (`git merge --ff-only`), **ללא merge commit, ללא conflicts, ללא branch גיבוי**. `main`: `eca9163` → `f33d00a`.
+
+**אימות הורץ על `main` עצמו** (לא הוסק מה-feature branch): typecheck exit 0 · 216 בדיקות · eslint 0 errors · build ×2 · routeTree דטרמיניסטי · working tree נקי.
+
+**push:** `git push origin main` ללא force. `eca9163` נשמר. ה-feature branch לא נמחק.
+
+**נותר פתוח:** Visual QA ב-360px. **לא בוצע deploy.**
+
+---
+
 ## 2026-07-25 · Workout Execution — סגירת פערים
 
 **מטרה:** להשלים את מסך האימון הפעיל לשימוש אמיתי במובייל, ביד אחת, ללא אובדן נתונים.

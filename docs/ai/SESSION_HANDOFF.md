@@ -28,6 +28,8 @@
 
 **עדכון 2026-07-25 — Workout Execution הושלם.** `/sessions/$id` שמיש לאימון אמיתי: RPE, דילוג תרגיל, סיום מלא/חלקי, סטטוס שמירה אמיתי, מצב התאוששות, ללא `prompt()`/`confirm()` חוסמים. **216 בדיקות** (170 unit + 46 router). ADR-0027/0028. סיכון חדש R-21 (Radix Sheet ב-harness, P2). פערים שנותרו מפורטים ב-`open-tasks.md` תחת "Workout Execution — פערים שנותרו" (RIR ב-UI, scroll position, בדיקת render לסיום חלקי).
 
+**✅ `main` מסונכרן (2026-07-25).** `main` עודכן ב-**fast-forward** ל-`f33d00a` (ללא merge commit) ונדחף ל-`origin/main`. **`origin/main` הוא כעת מקור האמת** לגרסה שעליה יש לבצע Visual QA. ה-commit `eca9163` נשמר בהיסטוריה. ה-feature branch `feat/domain-alignment-and-restore` **לא נמחק** — יישמר עד שה-Visual QA ב-360px יעבור. אימות מלא הורץ **על `main` עצמו**: typecheck exit 0 · 216 בדיקות · eslint 0 errors · build ×2 · routeTree ללא שינוי. **לא בוצע deploy.**
+
 **⚠️ חוב אימות פתוח — 360px.** התאמת המסך לרוחב 360px נבדקה **סטטית בלבד** (מבנה ו-CSS). **הקריטריון אינו מאומת** עד ל-Visual QA ידני בדפדפן או ב-Lovable Preview. **הוחלט מפורשות לא** להוסיף בדיקת `scrollWidth` ב-jsdom — jsdom אינו מחשב layout ובדיקה כזו אינה מוכיחה דבר. אין להוסיף Playwright/Cypress ללא אישור.
 
 **סטטוס פערים:** RPE ✅ ממומש · RIR ❌ לא ממומש (משימת המשך) · שמירת מיקום גלילה ו-drag reorder — **אינם חוסמי MVP** · R-21 (Radix Sheet בבדיקות) — **סיכון בדיקות נקודתי, אינו חוסם שימוש בפועל**.

@@ -1,5 +1,13 @@
 # Change Log
 
+## 2026-07-25 · סנכרון `main` לקראת Visual QA (Claude Code)
+
+- **git** · `main` עודכן ב-**fast-forward** מ-`feat/domain-alignment-and-restore` ל-**`f33d00a`**. `main` היה **ancestor** מלא של ה-feature branch (אומת ב-`git merge-base --is-ancestor` על `main`, `origin/main` ו-`eca9163`), ולכן **לא נוצר merge commit ולא היו conflicts**. לא נדרש branch גיבוי.
+- **שימור היסטוריה** · `eca9163` (docs של ה-audit, ה-commit שהיה ahead ב-`main`) נשמר במלואו בהיסטוריה. ה-feature branch **לא נמחק** — יישמר עד שה-Visual QA ב-360px יעבור.
+- **אימות על `main` עצמו** · typecheck exit 0 · `test:unit` 170/170 (13 קבצים) · `test:router` 46/46 (8 קבצים) · `bun run test` **216/216** exit 0 · eslint **0 errors**, 8 baseline warnings (shadcn) · build ×2 · `git diff --exit-code -- src/routeTree.gen.ts` ריק · working tree נקי.
+- **push** · `git push origin main` ללא force. `origin/main` הוא כעת **מקור האמת** לגרסה שעליה יבוצע Visual QA.
+- **פתוח:** Visual QA ב-360px (בדפדפן/Lovable Preview) — הקריטריון היחיד שנותר בלתי מאומת. **לא בוצע deploy.**
+
 ## 2026-07-25 · Workout Execution — השלמת פערים (Claude Code)
 
 **מצב קודם:** המסך `/sessions/$id` היה **קיים ומלא ברובו** (לא skeleton): כותרת, בלוקים/סופרסטים, עריכת משקל/חזרות inline דרך `NumberField` (`inputMode="decimal"`), השלמה/ביטול סט, הוספה/שכפול/דילוג סט, החלפת תרגיל, rest timer, pause/resume, autosave. הפער היה בקצוות. **הערה:** `WorkoutSessionSnapshot` שהוזכר בתיעוד **אינו קיים**; החוזה בפועל הוא `StrengthSession` → `StrengthSessionExercise` (עם `StrengthSessionExerciseSnapshot`) → `StrengthSet`.
