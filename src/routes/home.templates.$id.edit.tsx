@@ -22,8 +22,10 @@ import {
   updateHomeTemplateEntry,
   useHomeTemplate,
   useHomeTemplateEntries,
+  useRecentHomeExerciseIds,
 } from "@/lib/home";
-import { useAllExercises, useExercise } from "@/lib/exercises";
+import { useExercise } from "@/lib/exercises";
+import { HomeExercisePicker } from "@/components/home/HomeExercisePicker";
 
 export const Route = createFileRoute("/home/templates/$id/edit")({
   head: () => ({
@@ -313,65 +315,29 @@ function IconBtn({
 
 function AddExerciseButton({ templateId }: { templateId: string }) {
   const [open, setOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const all = useAllExercises();
-  const results = all
-    .filter((e) => !e.deleted_at && e.is_active)
-    .filter((e) => e.bodyweight_based || e.category === "bodyweight")
-    .filter((e) => (q ? e.name_he.toLowerCase().includes(q.toLowerCase()) : true))
-    .slice(0, 20);
+  const entries = useHomeTemplateEntries(templateId);
+  const alreadyInPlan = entries.map((e) => e.exercise_id);
+  const recentIds = useRecentHomeExerciseIds();
+
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-9 items-center gap-1 rounded-xl bg-home px-3 text-xs font-black text-white"
+        className="inline-flex min-h-11 items-center gap-1 rounded-xl bg-home px-3 text-xs font-black text-white"
       >
         <Plus className="size-3.5" aria-hidden />
         תרגיל
       </button>
-      {open ? (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-black/50 sm:place-items-center">
-          <div className="w-full max-w-md rounded-t-2xl bg-background p-3 sm:rounded-2xl">
-            <div className="mb-2 flex items-center gap-2">
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="חפש תרגיל…"
-                aria-label="חיפוש"
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="סגור"
-                className="min-h-11 min-w-11 rounded-xl bg-tint p-2"
-              >
-                <X className="size-4" aria-hidden />
-              </button>
-            </div>
-            <div className="grid max-h-[60vh] grid-cols-1 gap-1 overflow-auto">
-              {results.map((e) => (
-                <button
-                  key={e.id}
-                  type="button"
-                  onClick={() => {
-                    addHomeTemplateEntry(templateId, e.id);
-                    setOpen(false);
-                    setQ("");
-                  }}
-                  className="rounded-xl px-3 py-2 text-start text-sm font-bold text-foreground hover:bg-tint"
-                >
-                  {e.name_he}
-                </button>
-              ))}
-              {results.length === 0 ? (
-                <div className="p-3 text-center text-xs text-muted-foreground">אין תוצאות</div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      ) : null}
+      <HomeExercisePicker
+        open={open}
+        onOpenChange={setOpen}
+        alreadyInPlan={alreadyInPlan}
+        recentIds={recentIds}
+        onAdd={(ids) => {
+          for (const exerciseId of ids) addHomeTemplateEntry(templateId, exerciseId);
+        }}
+      />
     </>
   );
 }

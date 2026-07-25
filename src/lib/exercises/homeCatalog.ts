@@ -11,7 +11,7 @@
  *
  * המאגר המלא נשאר זמין; זהו סינון תצוגה בלבד. ראה ADR-0029.
  */
-import type { Exercise } from "./types";
+import type { Exercise, NewExercise } from "./types";
 
 /** קבוצות בשפת משתמש — לא muscle groups טכניים. */
 export type HomeGroupId = "push" | "pull" | "legs" | "core" | "arms" | "fullbody";
@@ -133,6 +133,57 @@ export function curatedGroups(all: Exercise[]): Array<{ group: HomeGroup; exerci
       .map((slug) => bySlug.get(slug))
       .filter((e): e is Exercise => e !== undefined),
   }));
+}
+
+/**
+ * בונה `NewExercise` שלם עבור **תרגיל מותאם** שנוצר מתוך בחירת תרגילים.
+ * המשתמש מזין שם, סוג מדידה וציוד בלבד; כל השאר מקבל ברירת מחדל שמרנית.
+ * ה-contract לא הוחלש — כל השדות מסופקים במפורש.
+ */
+export function buildCustomHomeExercise(input: {
+  name_he: string;
+  measure: "reps" | "time";
+  equipment: HomeEquipmentFilter;
+  /** נדרש ע"י החוזה; מועבר מהקטלוג הקיים. */
+  primaryMuscleGroupId: string;
+}): NewExercise {
+  const isTime = input.measure === "time";
+  return {
+    is_system: false,
+    name_he: input.name_he,
+    name_en: null,
+    aliases: [],
+    slug: "",
+    category: "bodyweight",
+    primary_muscle_group_id: input.primaryMuscleGroupId,
+    secondary_muscle_group_ids: [],
+    movement_pattern: "custom",
+    tracking_type: isTime ? "time" : "bodyweight_reps",
+    required_equipment_ids: [],
+    optional_equipment_ids: [],
+    required_equipment_types: input.equipment === "none" ? [] : [input.equipment],
+    optional_equipment_types: [],
+    unilateral: false,
+    bodyweight_based: input.equipment === "none",
+    difficulty: "beginner",
+    default_sets: 3,
+    default_reps: isTime ? null : 12,
+    default_rep_range_min: null,
+    default_rep_range_max: null,
+    default_rest_seconds: 60,
+    default_rpe: null,
+    default_rir: null,
+    instructions: null,
+    technique_cues: [],
+    common_mistakes: [],
+    safety_notes: null,
+    personal_notes: null,
+    location_ids: [],
+    is_custom: true,
+    parent_exercise_id: null,
+    variation_type: null,
+    variation_notes: null,
+  };
 }
 
 /** חיפוש חופשי בעברית או באנגלית (שם, שם משני, aliases). */
