@@ -1,5 +1,17 @@
 # Change Log
 
+## 2026-07-25 · התאוששות מריסטרט — route flattening + router test suite (Claude Code)
+
+**רקע:** ריסטרט לא מתוכנן קטע עבודה לא מחויבת. הענף כבר היה מסונכרן ל-`origin` ב-`5af65bd` לפני הריסטרט (push ב-10:01), כך שההיסטוריה המחויבת לא הייתה בסיכון — רק העבודה שבדיסק.
+
+- **wip `6fb22c3`** · freeze commit: הקפאת כל העבודה הלא-מחויבת כפי שנמצאה, לפני כל תיקון (10 renames, routeTree, harness + 3 test files, devDeps, vitest include).
+- **checkpoint `da20f72`** · **fix(routing)** · שיטוח 14 route modules נוספים ל-`*.index.tsx` (ADR-0025). התגלה שקובץ route עם ילדים בשם הופך אוטומטית ל-layout parent; אף route פרט ל-`__root.tsx` אינו מרנדר `<Outlet />`, כלומר אף אחד מהם לא נועד להיות layout. **סה"כ 24 route modules שוטחו.** `routeTree.gen.ts` מכיל כעת רק `RootRouteChildren`. **כל ה-URLs, ה-redirects וה-compat routes נשמרו** (הגנרטור מייצר גם `/x` וגם `/x/`).
+- **checkpoint `da20f72`** · **test fixtures** · `src/test/fixtures.ts` — builder מלא ותקף ל-`RunSessionInput`; תיקן שגיאת typecheck **ללא** `any`/cast/`@ts-ignore`. harness: דריסת `scrollTo`/`scrollBy`/`scrollIntoView` ללא תנאי (jsdom מגדיר אותם אך הם זורקים), בידוד מלא של 8 stores, teardown מפורש ל-router/queryClient, `defaultPreload: false`.
+- **fix(testing)** · פיצול `systemErrors.test.tsx` לפי תחומי אחריות ל-`systemScreens` / `runningRouteLoaders` / `catalogRouteLoaders` (ADR-0026). `test:router` = רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest. `test:unit` = `src/lib`. `test` = שניהם. **ללא dependency חדשה, ללא custom runner, ללא force-exit, ללא הפחתת כיסוי.**
+- **verify** · typecheck ✅ exit 0 · `test:unit` **162/162** (12 קבצים) ✅ · `test:router` **38/38** (5 קבצים) ✅ · `bun run test` ✅ exit 0 · eslint (ללא prettier) **0 errors, 8 warnings** ✅ · build ×2 ✅ · `git diff --exit-code -- src/routeTree.gen.ts` ✅ ריק.
+- **סיכון חדש:** R-20 — hang מצטבר ב-Vitest/jsdom בקובץ router-test גדול. **P2, לא חוסם.**
+- ללא backend/Supabase/Auth/RLS/CI-CD (לא קיימים בריפו) · ללא המרת CRLF גורפת (R-17) · **ללא push, ללא deploy, ללא עלות חדשה**.
+
 ## 2026-07-25 · Phase 1+2 finalize — domain isolation guard + regressions (Claude Code)
 
 - **fix(goals)** · אכיפת cross-domain isolation: helper טהור `goalMatchesDomain(goal, domain)` ב-`goalDomainConfig.ts`; guard ב-`GoalDetailView` (קיים, הועבר ל-helper) וב-`GoalForm` **edit mode** — יעד ששייך לתחום אחר לא ניתן לעריכה במסלול (מונע מעבר domain שקט). מקור האמת ל-domain הוא הישות, לא ה-route/param.

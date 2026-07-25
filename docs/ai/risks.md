@@ -71,6 +71,14 @@
 **עובדות baseline (2026-07-24):** על LF הבדיקה מציגה **13 בעיות** בלבד: 8 warnings (`react-refresh/only-export-components` בקבצי shadcn ui) + 1 error `react-hooks/rules-of-hooks` (false-positive של TanStack ב-`goals.new.tsx` — `Route.useSearch` בפונקציה בשם `component`). (4 שגיאות `prefer-const` תוקנו ב-audit.)
 **מיטיגציה מומלצת (לא בוצעה — דורשת renormalize מכוון):** להוסיף `.gitattributes` עם `* text=auto eol=lf` ואז `git add --renormalize .`. **אזהרה:** renormalize נוגע בכל קובץ (diff ענק) ועלול להשפיע על Lovable sync — לבצע רק בהחלטה מכוונת, לא כתיקון אגבי. עד אז: להריץ lint עם `--rule '{"prettier/prettier":"off"}'` לבדיקת בעיות אמיתיות בלבד, או להסתמך על CI.
 
+## R-20 · Vitest/jsdom — hang מצטבר בקובץ router-test גדול — 🟡 Medium · **P2, לא חוסם** (הוסף 2026-07-25)
+**תרחיש:** קובץ router-test אחד שמצטברות בו הרבה בדיקות render (memory router + route tree מלא) עלול לא לסיים: hang + `Worker exited unexpectedly`. נצפה ב-`systemErrors.test.tsx` (8 בדיקות) — עקבי, גם בהרצה של הקובץ לבדו.
+**reproduction (היסטורי):** `bunx vitest run src/test/systemErrors.test.tsx` → exit 124. הקובץ פוצל ואינו קיים עוד; לשחזור יש לאחד מחדש את `systemScreens` + `runningRouteLoaders` + `catalogRouteLoaders` לקובץ אחד.
+**מה נשלל:** pool `forks` ו-`threads` (שניהם נתקעו) · heap יציב ~90–130MB (לא OOM) · custom process runner קובץ-לתהליך (לא הסתיים דטרמיניסטית; הוסר) · תתי-קבוצות עם `-t` עברו תמיד.
+**מיטיגציה (בתוקף):** ADR-0026 — פיצול לפי תחומי אחריות + `test:router` כרצף `&&` מפורש, קובץ אחד לתהליך. **כל 5 הקבצים עוברים ומסתיימים; 38 בדיקות; אין force-exit ואין הפחתת כיסוי.**
+**סטטוס:** לא חוסם פיתוח. אין ראיה להשפעה מוצרית — הבאג הוא בתשתית הבדיקות, לא במוצר. **אין לטפל לפני משימות הליבה ללא ראיה להשפעה מוצרית.**
+**סימן אזהרה להמשך:** אם קובץ router-test חדש מתקרב לגודל שנצפה כבעייתי — לפצל מראש לפי אחריות.
+
 ## R-18 · goals surface orphan סותר §6 — ✅ נפתר (Phase 1, 2026-07-24)
 **היה:** `/goals` גלובלי מנותק מהניווט; `DomainPrimaryGoalTile` לא מרונדר.
 **נפתר:** יעדים מנוהלים לפי domain (12 routes), `/goals*` = compat redirects, `DomainPrimaryGoalTile` מחובר ל-3 המסכים. ראה ADR-0021.

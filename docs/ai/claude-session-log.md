@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-07-25 · התאוששות מריסטרט לא מתוכנן — route flattening + router test suite
+
+**מטרה:** לשחזר מצב אחרי ריסטרט שקטע עבודה, לשמר אותה ללא אובדן, ולהחזיר את הריפו למצב ירוק.
+
+**ממצא מרכזי #1 — התיעוד סתר את Git.** `SESSION_HANDOFF`/`current-state`/`open-tasks` טענו "לא בוצע push, אין upstream, working tree נקי". Git הוכיח אחרת: `origin/feat/domain-alignment-and-restore` עודכן ב-push ב-10:01:13, שמונה דקות **אחרי** שהתיעוד נכתב, ובדיסק היו 24 קבצים משתנים + 4 untracked. ההיסטוריה המחויבת הייתה מגובה; רק העבודה שבדיסק הייתה בסיכון.
+
+**ממצא מרכזי #2 — באג routing אמיתי.** ה-router harness החדש הפיל שתי בדיקות (`/exercises/$id`, `/locations/$id`). הסיבה: ב-flat routing, `foo.tsx` שקיים לצדו `foo.bar.tsx` הופך אוטומטית ל-**layout parent**; בלי `<Outlet />` באב, תוכן הילד לא מגיע ל-DOM. `grep` הראה שאף route בריפו אינו מרנדר `Outlet` פרט ל-`__root.tsx` — כלומר אף אחד מ-24 היחסים האלה לא היה מכוון. שוטחו 24 route modules ל-`*.index.tsx` (10 לפני הריסטרט + 14 בהתאוששות). URLs נשמרו במלואם.
+
+**ממצא מרכזי #3 — hang בתשתית הבדיקות.** `vitest run src/test` לא הסתיים. נשללו: pool forks/threads, OOM (heap יציב), custom process runner קובץ-לתהליך. **תיקון עובדתי לדיווח ביניים שלי:** ההצהרה "כל קובץ עובר בנפרד" הייתה **שגויה** — מה שעבר היה תתי-קבוצות `-t`; הקובץ המלא נתקע עקבית. הפתרון שעבד: פיצול `systemErrors.test.tsx` (8 בדיקות) לשלושה קבצים לפי אחריות + רצף `&&` מפורש.
+
+**commits (מקומיים, ללא push):** `6fb22c3` freeze (הקפאה לפני כל תיקון) · `da20f72` checkpoint (routing + fixtures; מציין במפורש שאין טענת מצב ירוק) · commit סיום (פיצול הבדיקות).
+
+**בדיקות בסיום:** typecheck exit 0 · `test:unit` 162/162 · `test:router` 38/38 (5 קבצים) · `bun run test` exit 0 (**200 בדיקות**) · eslint ללא prettier 0 errors/8 warnings · build ×2 · routeTree דטרמיניסטי.
+
+**ADR:** 0025 (route flattening), 0026 (isolated router tests). **סיכון:** R-20 (P2, לא חוסם).
+
+**הבא המומלץ:** ראה `SESSION_HANDOFF.md` — פעולה מומלצת אחת בלבד.
+
+---
+
 ## 2026-07-25 · Phase 1+2 finalize — domain isolation + regressions
 
 **מטרה:** לאמת ולסגור את Phase 1+2 (isolation, compat, trash/restore, route-tree, regression coverage) ללא phase חדש.

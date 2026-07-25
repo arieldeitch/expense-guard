@@ -1,5 +1,32 @@
 # Session Handoff
 
+> ⚠️ **עודכן 2026-07-25 אחרי ריסטרט לא מתוכנן.** קרא קודם את הסעיף הזה — הוא מתקן טענות
+> שגויות בגוף המסמך שמתחתיו.
+
+## 🔴 עדכון התאוששות (2026-07-25) — קרא ראשון
+
+**תיקוני עובדות לגוף המסמך למטה (Git הוא מקור האמת):**
+1. **"לא בוצע push / אין upstream" — שגוי.** הענף נדחף ל-`origin` ב-`5af65bd` בשעה 10:01:13 (`git reflog show origin/feat/...` → `update by push`), שמונה דקות אחרי שהמסמך נכתב. upstream מוגדר, ahead/behind = 0/0.
+2. **"working tree נקי" — שגוי** נכון לרגע הריסטרט: 24 קבצים משתנים + 4 untracked.
+3. **"לא הותקנו dependencies (כולל `@testing-library`)" — שגוי.** `@testing-library/{react,jest-dom,user-event}` + `jsdom` הותקנו כ-devDeps ב-10:02.
+
+**מצב נוכחי:**
+- **Branch:** `feat/domain-alignment-and-restore`. **HEAD מקומי מקדים את `origin`** ב-3 commits שלא נדחפו: `6fb22c3` (freeze), `da20f72` (checkpoint), + commit הסיום של פיצול הבדיקות.
+- **Working tree נקי.**
+- **בדיקות: 200 עוברות** — `bun run test:unit` 162/162 · `bun run test:router` 38/38 · `bun run test` exit 0.
+- typecheck exit 0 · eslint (ללא prettier) 0 errors / 8 warnings · build ×2 · `routeTree.gen.ts` דטרמיניסטי.
+
+**מה הושלם בהתאוששות:**
+- **route layout nesting (ADR-0025)** — התגלה שקובץ route עם ילדים בשם הופך אוטומטית ל-layout parent, ואף route פרט ל-`__root.tsx` אינו מרנדר `<Outlet />`. **24 route modules שוטחו ל-`*.index.tsx`**. URLs, redirects ו-compat routes נשמרו במלואם.
+- **router test harness + 38 בדיקות render** — נסגרו הפערים שהיו פתוחים: loaders + `notFound()`, 404 בעברית/RTL/a11y, error boundary, compat redirects, domain isolation ברמת route.
+- **`fixtures.ts`** — builder מלא ל-`RunSessionInput`, בלי `any`/cast/`@ts-ignore`.
+
+**מגבלה ידועה (R-20, ADR-0026, P2 — לא חוסמת):** `vitest run src/test` בהפעלה אחת נתקע. הפקודה הקנונית `test:router` מריצה **קובץ אחד לכל תהליך Vitest** ברצף `&&` מפורש. **אין להחזיר glob של `src/test`** ואין להשתמש ב-force-exit. הכיסוי לא הופחת.
+
+**עדיין נכון:** אין Supabase/Auth/RLS/migrations/CI-CD/sync engine. אין `.env` ואין secrets. R-17 (CRLF) פעיל — לא בוצעה המרה גורפת.
+
+---
+
 > מסמך מעבר בין sessions. נכתב לסגירה בטוחה לפני restart. מבוסס על **ראיות repo בלבד**
 > (2026-07-25, HEAD `16f4444`). מסמכי מקור האמת האחרים (lowercase) נשארים סמכותיים; זה
 > מסמך handoff שמצביע עליהם — לא מקור אמת מתחרה.

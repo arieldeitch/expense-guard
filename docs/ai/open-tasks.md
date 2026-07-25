@@ -25,10 +25,22 @@
 - [x] ✅ **מניעת חציית תחום בעריכה / דריסת domain מה-route** — GoalForm חוסם עריכת יעד מתחום אחר; `listGoalTypesByDomain` מגביל סוגים; updateGoal שומר domain. נבדק.
 - [x] ✅ **primary selection מחריג archived/trashed** — נבדק.
 - [x] ✅ **restore שומר domain+links ולא יוצר קשר שקרי (dependency חסרה)** — נבדק.
-- [ ] **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): loader רץ ו-`notFound()` על מזהה חסר. **עדיין לא נבדק ע"י טסט executable** — דורש router test harness (אין `@testing-library`/jsdom; לא הותקן במכוון). התנהגות נשמרה ב-source. **פתוח.**
-- [ ] **התנהגות 404 ברמת render** (`/{domain}/goals/$id` / `/goals/$id` עם id חסר): לוגיקת ה-domain-match/getGoal→null נבדקת; **ה-render של 404 עצמו** דורש router harness. **פתוח (חלקי).**
+- [x] ✅ **Router test harness** — `src/test/routerTestHarness.tsx`: memory router מול route tree האמיתי, loaders אמיתיים, בידוד stores + localStorage, teardown מפורש. `@testing-library/{react,jest-dom,user-event}` + `jsdom` נוספו כ-devDeps.
+- [x] ✅ **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): loader רץ ו-`notFound()` על מזהה חסר — נבדק ב-`runningRouteLoaders.test.tsx` + `catalogRouteLoaders.test.tsx`.
+- [x] ✅ **התנהגות 404 ברמת render** — `systemScreens.test.tsx` (404 root + error boundary, עברית/RTL/a11y) ו-`domainGoalRoutes.test.tsx` (guard cross-domain ב-detail וב-edit, 19 בדיקות).
+- [x] ✅ **route layout nesting** (התגלה בהתאוששות 2026-07-25) — 24 route modules שוטחו ל-`*.index.tsx`; `__root.tsx` הוא ה-layout היחיד. URLs ו-compat routes נשמרו. ADR-0025.
+- [x] ✅ **התאוששות מריסטרט** — freeze `6fb22c3`, checkpoint `da20f72`, סיום. אין push.
 - [ ] **Git push / PR** של `feat/domain-alignment-and-restore` — **לא בוצע** (ללא upstream). דורש החלטת משתמש/מדיניות (ראה `SESSION_HANDOFF.md`). **פתוח.**
-- [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`. **פתוח.**
+- [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`. **פתוח.** *(בהתאוששות 2026-07-25 לא בוצעה המרת CRLF גורפת — במכוון.)*
+
+### 🔵 P2 — לא חוסם
+
+- [ ] **Investigate cumulative Vitest/jsdom router test hang in a single worker lifecycle.**
+  - **Reproduction:** לאחד מחדש את `systemScreens` + `runningRouteLoaders` + `catalogRouteLoaders` לקובץ אחד ולהריץ `bunx vitest run <file>` → hang, exit 124, `Worker exited unexpectedly`. (הקובץ המקורי `systemErrors.test.tsx` פוצל ואינו קיים.)
+  - **מה כן עובד:** כל אחד מחמשת קובצי ה-router עובר ומסתיים בתהליך Vitest נפרד (38 בדיקות). תתי-קבוצות עם `-t` עברו תמיד.
+  - **מה נשלל:** pool `forks` ו-`threads` — שניהם נתקעו. custom process runner קובץ-לתהליך — לא הסתיים דטרמיניסטית, הוסר.
+  - **heap:** יציב ~90–130MB — לא OOM.
+  - **סטטוס:** אינה חוסמת פיתוח; אין ראיה להשפעה מוצרית (תשתית בדיקות בלבד). **אין לטפל לפני משימות הליבה ללא ראיה להשפעה מוצרית.** ראה R-20 + ADR-0026.
 
 ---
 

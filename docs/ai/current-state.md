@@ -12,13 +12,15 @@
 - **53 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals חדשים מ-Phase 1.)
 - **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
 - **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
-- **בדיקות: 162/162 עוברות** (12 קבצים). typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי. cross-domain isolation נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק.
+- **בדיקות (עודכן 2026-07-25): 200 עוברות** — `test:unit` **162/162** (12 קבצים, `src/lib`, סביבת node) + `test:router` **38/38** (5 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026). typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי. cross-domain isolation נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק **גם ברמת render דרך routes אמיתיים**.
+- **route structure (עודכן 2026-07-25):** כל route module המשמש מסך עצמאי הוא `*.index.tsx`. **`__root.tsx` הוא ה-layout היחיד** (ה-`<Outlet />` היחיד בריפו); `routeTree.gen.ts` מכיל רק `RootRouteChildren`. ראה ADR-0025.
 - שלושת התחומים בנויים במלואם: ריצה (חוץ/הליכון/Suunto/כיול/מסלולים), כוח (תבניות/סופרסטים/אימון פעיל/היסטוריה/analytics), בית (quick entry/סטים גמישים/תבניות). goals engine מלא (26 goal types).
 - **אין קוד legacy** מחוץ להיקף (people/transport/roles/PIN/coach/clients/team — נעדרים). **אין secrets/service_role/network egress** (למעט Google Fonts).
 - **goals surface (נפתר, Phase 1):** אין מסך יעדים גלובלי. יעדים מנוהלים בתוך כל תחום — 12 domain-goals routes + `DomainPrimaryGoalTile` מחובר ל-3 המסכים. `/goals*` נשמרו כ-compatibility redirects בלבד (לא בניווט). ראה ADR-0021 (פתור).
 - **trash/restore (נפתר, Phase 2):** `/trash` מכסה כעת גם gym sessions, home sessions ו-goals (שחזור דו-שלבי). recompute אוטומטי דרך subscribers.
 - **i18n:** 404/Error של `__root.tsx` תורגמו לעברית+RTL.
-- **Git (2026-07-25):** Phase 1+2 committed ב-branch `feat/domain-alignment-and-restore`. **לא בוצע push** (אין upstream). פרטים מלאים ו-HEAD עדכני: `SESSION_HANDOFF.md`.
+- **Git (מתוקן 2026-07-25):** branch `feat/domain-alignment-and-restore`. **הענף כן נדחף** ל-`origin` ב-`5af65bd` (10:01:13) — הטענה הקודמת "לא בוצע push / אין upstream" **הייתה שגויה**; upstream מוגדר. `main` המקומי מקדים את `origin/main` ב-commit אחד ולא נדחף. commits ההתאוששות (`6fb22c3`, `da20f72`, ואילך) **מקומיים בלבד**. פרטים מלאים ו-HEAD עדכני: `SESSION_HANDOFF.md`.
+- **אין Supabase / Auth / RLS / migrations / CI-CD / sync engine** בריפו (אומת 2026-07-25). Persistence = localStorage בלבד. אין קובצי `.env` ואין secrets.
 - **הערה:** שם התיקייה `expense-guard` הוא scaffold מטעה — הקוד הוא אפליקציית כושר.
 
 ---

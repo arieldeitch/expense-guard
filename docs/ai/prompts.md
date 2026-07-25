@@ -4,6 +4,17 @@
 
 כרגע: **אין** קריאות AI מתוך האפליקציה. נוסיף בעתיד עם approval flow (ראה `product-requirements.md` §5).
 
+## Prompt history — sessions של סוכנים
+
+### 2026-07-25 · התאוששות מריסטרט לא מתוכנן
+1. **STATUS-ONLY RECOVERY AUDIT** — מיפוי read-only של מצב הריפו אחרי ריסטרט; אסור לשנות קוד/Git/DB. תוצאה: זוהתה עבודה לא מחויבת, פער תיעוד מול Git (push), ובאג route nesting.
+2. **הקפאה + השלמת תיקון** — freeze commit לפני כל שינוי, ואז שיטוח routes, תיקון harness ו-fixtures, אימות מלא.
+3. **עצירת חקירת ה-hang** — הוראה מפורשת להפסיק profiling/bisect/pool experiments ולעבור לפתרון דטרמיניסטי.
+4. **הסרת custom runner** — לעבור ל-package scripts מפורשים, קובץ אחד לתהליך.
+5. **פיצול מבני יחיד** — לפצל את `systemErrors.test.tsx` לפי אחריות; ניסיון אחד בלבד. **הצליח.**
+
+**לקח לתיעוד:** דוח שנכתב לפני סוף העבודה עלול לסתור את Git. יש לאמת טענות push/working-tree מול `git reflog` ו-`git status` בזמן הכתיבה, לא מהזיכרון.
+
 ## תבניות עתידיות (מתוכננות)
 
 ### AI Suggestion — יעד שבועי מומלץ

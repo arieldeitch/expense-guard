@@ -12,8 +12,10 @@
     "typecheck": "tsc --noEmit",
     "test": "bun run test:unit && bun run test:router",
     "test:unit": "vitest run src/lib",
-    "test:router": "bun run test:router:system-errors && bun run test:router:domain-goals && bun run test:router:compat",
-    "test:router:system-errors": "vitest run src/test/systemErrors.test.tsx",
+    "test:router": "bun run test:router:system-screens && bun run test:router:running-loaders && bun run test:router:catalog-loaders && bun run test:router:domain-goals && bun run test:router:compat",
+    "test:router:system-screens": "vitest run src/test/systemScreens.test.tsx",
+    "test:router:running-loaders": "vitest run src/test/runningRouteLoaders.test.tsx",
+    "test:router:catalog-loaders": "vitest run src/test/catalogRouteLoaders.test.tsx",
     "test:router:domain-goals": "vitest run src/test/domainGoalRoutes.test.tsx",
     "test:router:compat": "vitest run src/test/compatRoutes.test.tsx",
     "format": "prettier --write ."

@@ -2,6 +2,16 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
+> **עדכון 2026-07-25 (התאוששות מריסטרט)** — הבדיקות מחולקות כעת לשתי משפחות:
+> - **`bun run test:unit`** → `vitest run src/lib` — **162 בדיקות, 12 קבצים**, סביבת `node`. יציב ומהיר.
+> - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **38 בדיקות, 5 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
+>   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11).
+> - **`bun run test`** = `test:unit && test:router` → **200 בדיקות**, exit 0.
+>
+> **למה רצף מפורש ולא glob:** הרצת כל `src/test` בהפעלת Vitest אחת נתקעת (`Worker exited unexpectedly`). ראה ADR-0026 + R-20. **אין להחזיר `vitest run src/test` כפקודה קנונית** ואין להשתמש ב-force-exit. הכיסוי לא הופחת.
+>
+> **מה ה-router tests מכסים כעת** (פערים שהיו פתוחים ונסגרו): render אמיתי מול route tree האמיתי · loaders + `notFound()` של 4 ה-routes שתוקנו ב-ADR-0022 · 404 בעברית + RTL + a11y · error boundary · compat redirects של `/goals*` · domain isolation ברמת route (detail + edit) על 12 domain-goals routes.
+>
 > החלק "כרגע" למטה **מיושן**. המצב האמיתי (עודכן Phase 1+2 finalize):
 - **162 בדיקות עוברות** (`vitest run`), **12 קבצי בדיקה**. `goals/__tests__/domain-scope.test.ts` (domain scoping, type restriction, edit, getPrimaryGoal, **cross-domain isolation `goalMatchesDomain`, updateGoal לא משנה domain, primary מחריג archived/trashed, restore שומר domain+links ללא קשר שקרי**, goal trash/restore) + `lib/__tests__/trash-restore.test.ts` (gym/home session trash/restore, no-duplicate, source recompute).
 - **typecheck** (`bun run typecheck`) — נקי. **build** — עובר. **routeTree.gen.ts דטרמיניסטי** (build×2 ללא diff). **lint** — 0 errors, 8 warnings (shadcn upstream); ראה `risks.md` R-17 (CRLF מקומי — הרץ עם `--rule '{"prettier/prettier":"off"}'`).

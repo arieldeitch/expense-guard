@@ -143,4 +143,32 @@
 
 **הקשר:** יעדים מנוהלים לפי domain; יש למנוע צפייה/עריכה של יעד מתחום אחר במסלול תחום שגוי, ומניעת דריסת ה-domain שמסופק ע"י ה-route.
 **החלטה:** **מקור האמת ל-domain הוא הישות** (`goal.domain`), לא ה-route/query-param. helper טהור `goalMatchesDomain(goal, domain)` (`components/goals/goalDomainConfig.ts`) אוכף זאת: `GoalDetailView` ו-`GoalForm` (edit) מסרבים להציג/לערוך יעד שאינו תואם; `updateGoal` שומר domain; יצירה מגבילה סוגים ל-`listGoalTypesByDomain(domain)`; compat `/goals/$id` מפנה לפי `goal.domain`.
-**נימוק:** אכיפה ברמת application/view (לא רק סינון רשימה). **השלכה:** נבדק ב-`domain-scope.test.ts`. (בדיקת ה-render של 404/guard עצמה דורשת router harness — פתוח ב-`open-tasks.md`.)
+**נימוק:** אכיפה ברמת application/view (לא רק סינון רשימה). **השלכה:** נבדק ב-`domain-scope.test.ts`. (בדיקת ה-render של 404/guard נסגרה ב-ADR-0025/0026 — `domainGoalRoutes.test.tsx`.)
+
+## ADR-0025 · 2026-07-25 · שיטוח route modules ל-`*.index.tsx` (route layout nesting)
+
+**הקשר:** ב-flat file routing של TanStack, קובץ `foo.tsx` שקיים לצדו `foo.bar.tsx` הופך **אוטומטית ל-layout parent** של `foo.bar`. הילד מרונדר בתוך ה-`<Outlet />` של האב — ואם לאב אין `Outlet`, תוכן הילד פשוט לא מוצג. הדפוס הזה נוצר בלי כוונה ב-24 יחסי parent-child.
+
+**ראיה:** אף קובץ route בריפו **אינו** מרנדר `<Outlet />` פרט ל-`__root.tsx` (`grep -rln "Outlet" src/routes/`). כלומר אף אחד מה-parents האלה לא נועד להיות layout. הבאג התגלה כשה-router render harness החדש הפיל שתי בדיקות (`/exercises/$id`, `/locations/$id`) שחיפשו טקסט not-found שהיה קיים ב-source אך לא הגיע ל-DOM.
+
+**החלטה:** כל route module המשמש **מסך עצמאי** מומר ל-`*.index.tsx` עם `createFileRoute("/x/")`. סה"כ **24 קבצים** (10 לפני הריסטרט: goals/gym/home/running + וריאנטי goals; 14 בהתאוששות: exercises, exercises.$id, locations, templates, templates.$id, home.templates, home.templates.$id, gym.history, home.history, home.quick, home.sessions.$id, running.$id, running.new, sessions.$id).
+
+**נשארו layouts במכוון:** **רק `__root.tsx`** — הוא ה-shell היחיד עם `<Outlet />` אמיתי. לאחר השינוי `routeTree.gen.ts` מכיל אך ורק `RootRouteChildren`.
+
+**שימור URL:** ה-generator מייצר גם `/x` וגם `/x/` לאותו route, ולכן **כל ה-URLs הציבוריים, ה-redirects וה-compat routes נשמרו ללא שינוי**. אין צורך ב-redirect חדש.
+
+**כלל להמשך:** קובץ route שאין בו `<Outlet />` ושקיימים לו ילדים בשם — חייב להיות `*.index.tsx`. אחרת נוצר layout שקט ששובר את הילדים.
+
+## ADR-0026 · 2026-07-25 · Router tests רצים כל קובץ בתהליך Vitest נפרד
+
+**הקשר:** אחרי הוספת ה-router render harness, הרצת כל `src/test` בהפעלת Vitest אחת לא הסתיימה: hang + `Worker exited unexpectedly`. הבדיקות עצמן עברו.
+
+**מה נבדק ונשלל:** pool `forks` מול `threads` (שניהם נתקעו) · heap יציב (~90–130MB, לא OOM) · custom process runner (`scripts/run-isolated-router-tests.ts`) שהריץ קובץ-לתהליך — **גם הוא לא הסתיים דטרמיניסטית ולכן הוסר**.
+
+**תיקון עובדתי:** ההנחה שנרשמה בשלב ביניים — "כל קובץ עובר בנפרד" — **הייתה שגויה**. מה שעבר בפועל היה **תתי-קבוצות** שנבחרו עם `-t`. הקובץ המלא `systemErrors.test.tsx` (8 בדיקות) נתקע **עקבית**, גם כשהורץ לבדו.
+
+**החלטה:** `systemErrors.test.tsx` פוצל לפי תחומי אחריות לשלושה קבצים — `systemScreens` (root 404 + error boundary), `runningRouteLoaders` (loaders של routes ריצה), `catalogRouteLoaders` (exercises/locations). הפיצול **פתר** את הבעיה: כל חמשת קובצי ה-router עוברים ומסתיימים. הפקודה הקנונית `test:router` היא **רצף `&&` מפורש**, קובץ אחד לכל תהליך Vitest — ללא glob של `src/test`, ללא custom runner, ללא force-exit.
+
+**כיסוי:** ללא הפחתה — 8 הבדיקות עברו verbatim (2+4+2), assertions ללא שינוי. סה"כ router tests: **38**.
+
+**נימוק:** גבול העומס הוא ברמת קובץ-בדיקה בודד; פיצול לפי אחריות הוא גם שיפור מבני לגיטימי בפני עצמו ולא עקיפה. חקירת root-cause נשארת **P2** ואינה חוסמת פיתוח (ראה `risks.md` R-20).
