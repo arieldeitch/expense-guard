@@ -30,6 +30,13 @@
 
 **✅ `main` מסונכרן (2026-07-25).** `main` עודכן ב-**fast-forward** ל-`f33d00a` (ללא merge commit) ונדחף ל-`origin/main`. **`origin/main` הוא כעת מקור האמת** לגרסה שעליה יש לבצע Visual QA. ה-commit `eca9163` נשמר בהיסטוריה. ה-feature branch `feat/domain-alignment-and-restore` **לא נמחק** — יישמר עד שה-Visual QA ב-360px יעבור. אימות מלא הורץ **על `main` עצמו**: typecheck exit 0 · 216 בדיקות · eslint 0 errors · build ×2 · routeTree ללא שינוי. **לא בוצע deploy.**
 
+**🆕 עדכון 2026-07-25 — פישוט תוכניות בית + Audit נתונים (branch `feat/home-plan-simple-flow`).**
+בניית תוכנית בית פושטה: picker חדש עם **אחרונים → מועדפים → 6 קבוצות בשפת משתמש**, חיפוש עברית/אנגלית, פילטר ציוד פשוט, **בחירה מרובה**, ו"תרגיל מותאם" בתוך אותו גיליון. קטלוג curated של **34 תרגילים** (המאגר המלא נשמר). יצירה ועריכה כבר חלקו מסך אחד — נשמר. **232 בדיקות.** ADR-0029.
+
+**🔴 החלטה נדרשת — מוכנות נתונים (ADR-0030, R-22).** האפליקציה **אינה** מחוברת לבסיס נתונים ענני: אין Supabase client, env, migrations או Auth/RLS; `activeRepoKind="mock"`; הכול ב-localStorage; **אין export, אין import, אין העברה בין מכשירים**; 7 מתוך 8 מודולי storage בולעים כשל כתיבה בשקט. שימוש מחר בבוקר בטוח **על מכשיר אחד בלבד**.
+- **A. שימוש מקומי בטוח במכשיר יחיד + גיבוי** — להוסיף export/import JSON ולהרחיב את `PersistenceStatus` לכל המודולים. ללא עלות, ללא credentials.
+- **B. חיבור Supabase מלא** — Auth + RLS + migrations. דורש Approval Brief (CLAUDE.md), יוצר פרויקט/עלות.
+
 **⚠️ חוב אימות פתוח — 360px.** התאמת המסך לרוחב 360px נבדקה **סטטית בלבד** (מבנה ו-CSS). **הקריטריון אינו מאומת** עד ל-Visual QA ידני בדפדפן או ב-Lovable Preview. **הוחלט מפורשות לא** להוסיף בדיקת `scrollWidth` ב-jsdom — jsdom אינו מחשב layout ובדיקה כזו אינה מוכיחה דבר. אין להוסיף Playwright/Cypress ללא אישור.
 
 **סטטוס פערים:** RPE ✅ ממומש · RIR ❌ לא ממומש (משימת המשך) · שמירת מיקום גלילה ו-drag reorder — **אינם חוסמי MVP** · R-21 (Radix Sheet בבדיקות) — **סיכון בדיקות נקודתי, אינו חוסם שימוש בפועל**.

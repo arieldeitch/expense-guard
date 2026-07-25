@@ -4,6 +4,26 @@
 
 ---
 
+## 🗄️ מוכנות נתונים (עודכן 2026-07-25) — **local בלבד, לא בסיס נתונים ענני**
+
+| רכיב | מצב | ראיה |
+|---|---|---|
+| Supabase client | ❌ אין | אין import; אזכורים בקוד הם הערות בלבד |
+| env contract | ❌ אין | אין `.env`; אין `import.meta.env`/`process.env` בקוד |
+| Migrations | ❌ אין | אין `supabase/` ואין `migrations/` |
+| Auth / RLS | ❌ אין | אין מסך auth, אין policies |
+| Active repository | `mock` | `activeRepoKind === "mock"` |
+| Persistence | localStorage · 9 מפתחות `fitlog:*` | `catalog, exercises, goals, home, preferences, runs, sessions, suunto, templates` |
+| שורד refresh | ✅ כן, במכשיר ובדפדפן הזה בלבד | — |
+| Export | ❌ אין | — |
+| Import / Restore | ❌ אין | — |
+| זיהוי כשל כתיבה | 🟡 חלקי — `sessions` בלבד | `PersistenceStatus` (ADR-0028); 7 מודולים אחרים בולעים `catch {}` |
+| schema version + migration | ❌ אין framework | — |
+| גיבוי לפני שינוי schema | ❌ אין | — |
+| העברה למכשיר אחר | ❌ לא אפשרי | — |
+
+**מסקנה:** שימוש אמיתי בטוח **על מכשיר אחד בלבד**. ניקוי דפדפן / מצב פרטי / מכסה מלאה = אובדן. ראה R-22 ו-ADR-0030.
+
 ## ⚠️ Reconciliation — Product Alignment Audit (2026-07-24)
 
 > החלקים הישנים במסמך זה ("מה קיים בפועל" ואילך) **מיושנים** — הם מתארים מצב מוקדם של 5 routes ו"אין קוד לוגי". המצב האמיתי מתקדם בהרבה. להלן התמונה המאומתת. פירוט מלא: `route-inventory.md`, `entity-inventory.md`, `design-system-audit.md`, `product-alignment-audit.md`.

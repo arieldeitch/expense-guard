@@ -133,3 +133,17 @@
 
 ### 🟢 Future
 - [ ] Insights derived, AI suggestions (עם approval flow), offline draft, analytics dashboards, export CSV/JSON, media לתרגילים, Playwright E2E.
+
+### 🏠 תוכניות בית — מצב 2026-07-25
+
+- [x] ✅ **פישוט בחירת תרגילים** — picker חדש: אחרונים → מועדפים → 6 קבוצות בשפת משתמש, חיפוש he/en, פילטר ציוד פשוט, בחירה מרובה, תרגיל מותאם באותו גיליון. ADR-0029.
+- [x] ✅ **קטלוג curated** — 34 תרגילים (מתוך מאגר של 51). IDs קיימים לא שונו.
+- [x] ✅ **יצירה ועריכה במסך אחד** — `/home/templates/$id/edit` (כבר היה כך; נשמר).
+- [ ] **עריכת ערכי entry inline** — קיימת דרך `NumberField` במסך העריכה; **טרם נבדקה ב-render test**. לא חוסם.
+- [ ] **Undo להסרת תרגיל** — כרגע הסרה ישירה (soft-delete ב-repo). לשקול Undo קצר.
+- [ ] **Visual QA ב-360px** למסך התוכנית וה-picker — כמו במסך Workout Execution, **לא אומת**.
+
+### 🔴 מוכנות נתונים — דורש החלטת משתמש (R-22, ADR-0030)
+
+- [ ] **A. שימוש מקומי בטוח** — export/import JSON + הרחבת `PersistenceStatus` ל-7 מודולי storage שעדיין בולעים כשל כתיבה. ללא עלות.
+- [ ] **B. חיבור Supabase מלא** — Auth + RLS + migrations. **דורש Approval Brief.**

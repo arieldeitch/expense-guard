@@ -6,7 +6,7 @@
 > - **`bun run test:unit`** → `vitest run src/lib` — **170 בדיקות, 13 קבצים**, סביבת `node`. יציב ומהיר.
 > - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **46 בדיקות, 8 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
 >   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11) · `workoutExecution` (4) · `workoutExecutionEditing` (3) · `workoutExecutionAddSet` (1).
-> - **`bun run test`** = `test:unit && test:router` → **216 בדיקות**, exit 0.
+> - **`bun run test`** = `test:unit && test:router` → **232 בדיקות**, exit 0 (עודכן 2026-07-25: `test:unit` 184 · `test:router` 48, כולל `homePlanPicker` (2)).
 >
 > **Workout Execution — היכן נבדק מה:** שימור נתונים בדילוג/סיום חלקי/החלפת תרגיל, וסטטוס ההתמדה — ברמת **repository** (`src/lib/sessions/__tests__/workout-execution.test.ts`). טעינה, שרידות ב-localStorage, סטטוס שמירה, מצב התאוששות, ועריכת סט (משקל/RPE/השלמה/הוספה) — ברמת **render**. **פער ידוע:** בדיקת render שפותחת Radix Sheet נתקעת (R-21), ולכן הלחיצה בתוך גיליון הסיום החלקי אינה מכוסה ב-render — רק ההתנהגות ברמת repository.
 >

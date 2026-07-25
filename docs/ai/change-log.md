@@ -1,5 +1,15 @@
 # Change Log
 
+## 2026-07-25 · פישוט תוכניות בית + Audit מוכנות נתונים (Claude Code)
+
+- **feat(exercises)** · `homeCatalog.ts` — קטלוג curated: **34 תרגילים ב-6 קבוצות בשפת משתמש**, פילטר ציוד פשוט (5 ערכים), חיפוש עברית/אנגלית. Seed: **+16 תרגילי בית נפוצים**. **אין שינוי `name_en` קיים** ולכן אין שינוי ID ואין שבירת תוכניות שמורות. ADR-0029.
+- **feat(home)** · `HomeExercisePicker` — אחרונים → מועדפים → קבוצות · **בחירה מרובה** (אישור אחד) · ללא מטא-דאטה מלא · "תרגיל מותאם" **בתוך אותו גיליון** (אין dialog בתוך dialog) · יעדי מגע 44px+ · aria-labels. מחליף picker שהיה חיפוש-עברית-בלבד, בחירה בודדת, ללא קבוצות.
+- **feat(home)** · `useRecentHomeExerciseIds` — "אחרונים" נגזר מנתונים קיימים, **ללא storage key חדש**.
+- **audit** · דוח מוכנות נתונים עובדתי (ADR-0030): אין Supabase client · אין env · אין migrations · אין Auth/RLS · `activeRepoKind="mock"` · 9 מפתחות localStorage · **אין export/import** · **אין העברה בין מכשירים**. R-22 נפתח כ-🔴 High.
+- **tests** · +18 (סה"כ **232**): `exercises/__tests__/home-catalog.test.ts` (16) — כל slug נפתר, אין כפילויות, גבול 30–36, יציבות ID; `test/homePlanPicker.test.tsx` (2) — קבוצות, בחירה מרובה, חיפוש he/en.
+- **verify** · typecheck exit 0 · `test:unit` 184/184 · `bun run test` exit 0 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא שינוי.
+- **לא בוצע:** Supabase/Auth/RLS/migration/deploy · לא נוספה dependency · לא שונה חוזה domain.
+
 ## 2026-07-25 · סנכרון `main` לקראת Visual QA (Claude Code)
 
 - **git** · `main` עודכן ב-**fast-forward** מ-`feat/domain-alignment-and-restore` ל-**`f33d00a`**. `main` היה **ancestor** מלא של ה-feature branch (אומת ב-`git merge-base --is-ancestor` על `main`, `origin/main` ו-`eca9163`), ולכן **לא נוצר merge commit ולא היו conflicts**. לא נדרש branch גיבוי.

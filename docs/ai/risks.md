@@ -94,3 +94,9 @@
 **היה:** build מקומי חידש את `routeTree.gen.ts` בגרסה ששברה typecheck ב-4 routes שהשתמשו ב-`Route.useLoaderData()`.
 **סיבה:** ה-generator המקומי מקליד loader data כ-`| undefined` (מחמיר יותר מהעץ המחויב הישן).
 **נפתר (ADR-0022):** 4 ה-routes עברו ל-`Route.useParams()` (ערכים זהים, loaders+notFound נשמרו). כעת generation **דטרמיניסטי** (build×2 ללא diff) ו-typecheck ירוק על העץ הקנוני. אין צורך ב-`git checkout` של הקובץ. עדיין: `routeTree.gen.ts` auto-generated — לא לערוך ידנית.
+
+## R-22 · אין גיבוי, ייצוא או העברה בין מכשירים — 🔴 High (הוסף 2026-07-25)
+**תרחיש:** כל הנתונים ב-localStorage של דפדפן אחד. ניקוי היסטוריה/אתר, מצב פרטי, מכסה מלאה או מעבר מכשיר → **אובדן מלא ובלתי הפיך**. אין export, אין import/restore, אין sync.
+**ראיה:** `grep` על export/import/Blob ב-`src` → אין. 9 מפתחות `fitlog:*` ב-localStorage. `activeRepoKind === "mock"`.
+**מיטיגציה חלקית קיימת:** `sessions` בלבד חושף `PersistenceStatus` ומזהיר כשהכתיבה נכשלה (ADR-0028). **7 מודולי storage אחרים עדיין בולעים כשל כתיבה בשקט** (`catch {}`).
+**פעולה נדרשת לפני הסתמכות ארוכת-טווח:** export/import JSON מקומי, או מעבר ל-Supabase. ראה "החלטה נדרשת" ב-`SESSION_HANDOFF.md`.
