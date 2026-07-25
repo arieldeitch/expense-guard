@@ -73,6 +73,12 @@ function MorePage() {
           icon={<Layers aria-hidden />}
         />
         <TrashLinkTile />
+        <CatalogLinkTile
+          to="/backup"
+          title="גיבוי ושחזור"
+          hint="הורדת קובץ גיבוי מקומי ושחזור ממנו — ללא ענן"
+          icon={<Download aria-hidden />}
+        />
       </div>
 
       <SectionHeader title="ניהול המוצר" />
@@ -162,7 +168,6 @@ function DataSourceTile() {
 
 const futureItems: { title: string; hint: string; icon: ReactNode }[] = [
   { title: "הגדרות פרופיל", hint: "פרופיל, יחידות, שפה", icon: <Settings2 aria-hidden /> },
-  { title: "ייצוא נתונים", hint: "כל מה שהזנת — CSV / JSON", icon: <Download aria-hidden /> },
   { title: "הגדרות AI", hint: "רק כשיופעל. תמיד עם אישור.", icon: <Cpu aria-hidden /> },
 ];
 
@@ -192,7 +197,7 @@ function CatalogLinkTile({
   icon,
   badge,
 }: {
-  to: "/locations" | "/trash" | "/exercises" | "/templates";
+  to: "/locations" | "/trash" | "/exercises" | "/templates" | "/backup";
   title: string;
   hint: string;
   icon: ReactNode;
