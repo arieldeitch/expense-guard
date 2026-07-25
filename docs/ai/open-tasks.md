@@ -17,6 +17,21 @@
 
 ---
 
+## 🟠 Phase 1/2 — פערי אימות ורגרסיה (פתוחים; נדרש לסגור לפני phase הבא)
+
+מבוסס על מצב ה-repo ב-2026-07-25 (HEAD `16f4444`). אלו פתוחים כי אין להם הוכחת completion אוטומטית (executable test), למעט מה שמצוין.
+
+- [ ] **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): לוודא שה-loader עדיין רץ ו-`notFound()` נזרק על מזהה חסר. **סטטוס נוכחי: לא נבדק ע"י טסט** — התנהגות נשמרה ב-source בלבד (הקוד לא נגע ב-loaders).
+- [ ] **התנהגות מזהה לא-קיים/שגוי**: `/{domain}/goals/$id` עם id לא קיים; `/goals/$id` compat עם id חסר → 404 עברית. אין טסט executable כרגע.
+- [ ] **`running.new.$type` נתמך/לא-נתמך**: `type=treadmill|outdoor` תקין; ערך אחר → `notFound()`. אין טסט executable.
+- [ ] **בדיקות domain-isolation ל-goals ברמת route**: כניסה ל-`/running/goals/$id` עם יעד של gym → אסור להציג/לערוך (יש guard `goal.domain !== domain` ב-`GoalDetailView`, אך **ללא טסט**).
+- [ ] **מניעת חציית תחום בעריכה**: `GoalForm` נעול ל-domain של ה-route; `listGoalTypesByDomain` מוגבל לתחום (נבדק ב-`domain-scope.test.ts`). מניעת **דריסת ה-domain שמסופק ע"י ה-route** — אין טסט ייעודי.
+- [ ] **ראיות מלאות Typecheck/Lint/Test/Build** בתיעוד — קיימות מ-2026-07-25 (ראה `SESSION_HANDOFF.md`); לחזור ולהריץ בתחילת ה-session הבא לאימות.
+- [ ] **Git push / PR** של `feat/domain-alignment-and-restore` — **לא בוצע** (ללא upstream). דורש החלטת משתמש/מדיניות (ראה `SESSION_HANDOFF.md`).
+- [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`.
+
+---
+
 ## 🔴 Critical (חוסם התקדמות)
 
 - [ ] **Workout Execution screen** — מסך ביצוע האימון שקורא מ־`sessions.$id`: סטים בפועל, RPE/RIR, מנוחה, סימון סופרסט. Data contract כבר קיים (`WorkoutSessionSnapshot`).

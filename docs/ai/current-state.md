@@ -18,6 +18,7 @@
 - **goals surface (נפתר, Phase 1):** אין מסך יעדים גלובלי. יעדים מנוהלים בתוך כל תחום — 12 domain-goals routes + `DomainPrimaryGoalTile` מחובר ל-3 המסכים. `/goals*` נשמרו כ-compatibility redirects בלבד (לא בניווט). ראה ADR-0021 (פתור).
 - **trash/restore (נפתר, Phase 2):** `/trash` מכסה כעת גם gym sessions, home sessions ו-goals (שחזור דו-שלבי). recompute אוטומטי דרך subscribers.
 - **i18n:** 404/Error של `__root.tsx` תורגמו לעברית+RTL.
+- **Git (2026-07-25, סגירת session):** Phase 1+2 committed ב-branch `feat/domain-alignment-and-restore` (HEAD `16f4444`, 3 commits מעל `main`@`eca9163`). **לא בוצע push** (אין upstream). working tree נקי. פרטים מלאים: `SESSION_HANDOFF.md`.
 - **הערה:** שם התיקייה `expense-guard` הוא scaffold מטעה — הקוד הוא אפליקציית כושר.
 
 ---
