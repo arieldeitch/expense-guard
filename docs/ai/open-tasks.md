@@ -34,6 +34,13 @@
 - [ ] **`main` המקומי מקדים את `origin/main` ב-commit אחד** (`eca9163` — docs של ה-audit) ולא נדחף. החלטת משתמש: לדחוף או להשאיר. **פתוח, לא חוסם.**
 - [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`. **פתוח.** *(בהתאוששות 2026-07-25 לא בוצעה המרת CRLF גורפת — במכוון.)*
 
+### 🟡 Workout Execution — פערים שנותרו (לא חוסמים שימוש)
+
+- [ ] **RIR ב-UI** — `StrengthSet.rir` קיים בחוזה ואינו נחשף במסך (RPE כן). החלטה: להוסיף כשדה שני או להשאיר RPE בלבד.
+- [ ] **שינוי סדר תרגילים** — `moveExercise` (מעלה/מטה) קיים ופעיל בתפריט. גרירה (drag) לא מומשה — לא נדרש.
+- [ ] **שמירת מיקום גלילה בין ניווטים** — לא מומש; המבנה הנוכחי לא שומר scroll position בחזרה למסך.
+- [ ] **בדיקת render לסיום חלקי** — חסומה ע"י R-21 (Radix Sheet ב-harness). ההתנהגות מכוסה ברמת repository.
+
 ### 🔵 P2 — לא חוסם
 
 - [ ] **Investigate cumulative Vitest/jsdom router test hang in a single worker lifecycle.**
@@ -47,7 +54,8 @@
 
 ## 🔴 Critical (חוסם התקדמות)
 
-- [ ] **Workout Execution screen** — מסך ביצוע האימון שקורא מ־`sessions.$id`: סטים בפועל, RPE/RIR, מנוחה, סימון סופרסט. Data contract כבר קיים (`WorkoutSessionSnapshot`).
+- [x] ✅ **Workout Execution screen** — `/sessions/$id`: סטים בפועל, **RPE**, מנוחה, סופרסטים, דילוג תרגיל, סיום מלא/חלקי, סטטוס שמירה אמיתי, מצב התאוששות. *(המסך היה קיים ומלא ברובו; באיטרציה זו נסגרו הפערים.)* **RIR עדיין לא נחשף ב-UI** (קיים בחוזה) — ראה למטה. ADR-0027/0028.
+  - **תיקון תיעוד:** `WorkoutSessionSnapshot` **אינו קיים** בקוד. החוזה בפועל: `StrengthSession` → `StrengthSessionExercise` (+`StrengthSessionExerciseSnapshot`) → `StrengthSet`.
 - [ ] הפעלת **Lovable Cloud** + מיגרציות (עדיין ב־localStorage בלבד).
 - [ ] Auth flow (email+password, `_authenticated/route.tsx`).
 

@@ -26,7 +26,9 @@
 
 **חסם Router tests — נסגר.** `systemErrors.test.tsx` פוצל לשלושה קבצים לפי תחום אחריות (`systemScreens` / `runningRouteLoaders` / `catalogRouteLoaders`). ראה ADR-0026.
 
-**הפעולה הבאה היחידה המומלצת:** לבחור **יעד פיתוח מוצר אחד** מתוך `open-tasks.md` המעודכן (למשל Workout Execution screen, או אחת מ-4 ההחלטות המוצריות הפתוחות). **אין להמשיך בחקירת Vitest** — היא P2 ואינה חוסמת.
+**עדכון 2026-07-25 — Workout Execution הושלם.** `/sessions/$id` שמיש לאימון אמיתי: RPE, דילוג תרגיל, סיום מלא/חלקי, סטטוס שמירה אמיתי, מצב התאוששות, ללא `prompt()`/`confirm()` חוסמים. **216 בדיקות** (170 unit + 46 router). ADR-0027/0028. סיכון חדש R-21 (Radix Sheet ב-harness, P2). פערים שנותרו מפורטים ב-`open-tasks.md` תחת "Workout Execution — פערים שנותרו" (RIR ב-UI, scroll position, בדיקת render לסיום חלקי).
+
+**הפעולה הבאה היחידה המומלצת:** לבחור **יעד פיתוח מוצר אחד** מתוך `open-tasks.md` המעודכן — המועמדים הפתוחים הבולטים הם 4 ההחלטות המוצריות (Suunto / Supabase / שם הריפו / גיזום shadcn) או Design tokens. **אין להמשיך בחקירת Vitest** (R-20/R-21) — P2, לא חוסמות.
 
 **מה הושלם בהתאוששות:**
 - **route layout nesting (ADR-0025)** — התגלה שקובץ route עם ילדים בשם הופך אוטומטית ל-layout parent, ואף route פרט ל-`__root.tsx` אינו מרנדר `<Outlet />`. **24 route modules שוטחו ל-`*.index.tsx`**. URLs, redirects ו-compat routes נשמרו במלואם.

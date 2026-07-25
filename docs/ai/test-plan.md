@@ -2,11 +2,13 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
-> **עדכון 2026-07-25 (התאוששות מריסטרט)** — הבדיקות מחולקות כעת לשתי משפחות:
-> - **`bun run test:unit`** → `vitest run src/lib` — **162 בדיקות, 12 קבצים**, סביבת `node`. יציב ומהיר.
-> - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **38 בדיקות, 5 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
->   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11).
-> - **`bun run test`** = `test:unit && test:router` → **200 בדיקות**, exit 0.
+> **עדכון 2026-07-25 (Workout Execution)** — הבדיקות מחולקות לשתי משפחות:
+> - **`bun run test:unit`** → `vitest run src/lib` — **170 בדיקות, 13 קבצים**, סביבת `node`. יציב ומהיר.
+> - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **46 בדיקות, 8 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
+>   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11) · `workoutExecution` (4) · `workoutExecutionEditing` (3) · `workoutExecutionAddSet` (1).
+> - **`bun run test`** = `test:unit && test:router` → **216 בדיקות**, exit 0.
+>
+> **Workout Execution — היכן נבדק מה:** שימור נתונים בדילוג/סיום חלקי/החלפת תרגיל, וסטטוס ההתמדה — ברמת **repository** (`src/lib/sessions/__tests__/workout-execution.test.ts`). טעינה, שרידות ב-localStorage, סטטוס שמירה, מצב התאוששות, ועריכת סט (משקל/RPE/השלמה/הוספה) — ברמת **render**. **פער ידוע:** בדיקת render שפותחת Radix Sheet נתקעת (R-21), ולכן הלחיצה בתוך גיליון הסיום החלקי אינה מכוסה ב-render — רק ההתנהגות ברמת repository.
 >
 > **למה רצף מפורש ולא glob:** הרצת כל `src/test` בהפעלת Vitest אחת נתקעת (`Worker exited unexpectedly`). ראה ADR-0026 + R-20. **אין להחזיר `vitest run src/test` כפקודה קנונית** ואין להשתמש ב-force-exit. הכיסוי לא הופחת.
 >

@@ -1,5 +1,18 @@
 # Change Log
 
+## 2026-07-25 · Workout Execution — השלמת פערים (Claude Code)
+
+**מצב קודם:** המסך `/sessions/$id` היה **קיים ומלא ברובו** (לא skeleton): כותרת, בלוקים/סופרסטים, עריכת משקל/חזרות inline דרך `NumberField` (`inputMode="decimal"`), השלמה/ביטול סט, הוספה/שכפול/דילוג סט, החלפת תרגיל, rest timer, pause/resume, autosave. הפער היה בקצוות. **הערה:** `WorkoutSessionSnapshot` שהוזכר בתיעוד **אינו קיים**; החוזה בפועל הוא `StrengthSession` → `StrengthSessionExercise` (עם `StrengthSessionExerciseSnapshot`) → `StrengthSet`.
+
+- **feat(repo)** · `skipExercise` / `unskipExercise` — דילוג על תרגיל שלם. סטים שבוצעו **אינם נמחקים ואינם משתנים**; רק סטים פתוחים מסומנים כדולגו (`skipSet` שומר ערכים).
+- **feat(repo)** · `finishSessionPartial` — סיום חלקי. מה שבוצע נשמר, הנותר מסומן כדולג, הסטטוס `completed`. ADR-0027. ללא שינוי חוזה.
+- **fix(persistence)** · `writeSessionsState` **בלע** כשלי כתיבה ל-localStorage ונפל בשקט ל-in-memory, בעוד ה-UI הכריז "נשמר אוטומטית". נוסף `PersistenceStatus` (`idle`/`saved`/`memory`) + `usePersistenceStatus`; המסך מציג "נשמר במכשיר" רק אחרי אישור ה-repository, ואזהרה מפורשת כשהנתונים בזיכרון בלבד. טקסט+אייקון, לא צבע בלבד. ADR-0028. הוסר `writeSessionsStateWithStamp` המת.
+- **feat(ui)** · RPE ניתן לעריכה בכל סט (`StrengthSet.rpe` כבר היה בחוזה) · דילוג/ביטול דילוג על תרגיל + צ׳יפ "דולג" וספירה · כל `prompt()`/`confirm()` החוסמים הוחלפו בפאנלים inline / bottom sheets · פעולות הרסניות מופרדות חזותית ומסבירות שהמידע עובר לסל המחזור · אימון חסר מציג מצב התאוששות מוסבר במקום `notFound()` גנרי · תוקן `useMemo` מותנה.
+- **tests** · **+16** (סה"כ **216**): `sessions/__tests__/workout-execution.test.ts` (8, unit) + `workoutExecution` (4) / `workoutExecutionEditing` (3) / `workoutExecutionAddSet` (1) ב-`src/test`. כל קובץ router בתהליך נפרד (ADR-0026).
+- **verify** · typecheck exit 0 · `test:unit` 170/170 (13 קבצים) · `test:router` 46/46 (8 קבצים) · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 · `routeTree.gen.ts` ללא שינוי.
+- **סיכון חדש:** R-21 — בדיקות render שפותחות Radix Sheet נתקעות ב-harness. ההתנהגות מכוסה ברמת repository. P2, לא חוסם.
+- ללא dependency חדשה · ללא backend/Supabase · ללא שינוי חוזה domain · ללא שינוי URL/routes · **ללא deploy**.
+
 ## 2026-07-25 · התאוששות מריסטרט — route flattening + router test suite (Claude Code)
 
 **רקע:** ריסטרט לא מתוכנן קטע עבודה לא מחויבת. הענף כבר היה מסונכרן ל-`origin` ב-`5af65bd` לפני הריסטרט (push ב-10:01), כך שההיסטוריה המחויבת לא הייתה בסיכון — רק העבודה שבדיסק.

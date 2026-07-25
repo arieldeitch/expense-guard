@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-07-25 · Workout Execution — סגירת פערים
+
+**מטרה:** להשלים את מסך האימון הפעיל לשימוש אמיתי במובייל, ביד אחת, ללא אובדן נתונים.
+
+**ממצא #1 — המסך לא היה skeleton.** `/sessions/$id` (470 שורות) כבר כלל כותרת, בלוקים/סופרסטים, עריכת משקל/חזרות inline, השלמת סט, הוספה/שכפול/דילוג סט, החלפת תרגיל, rest timer, pause/resume ו-autosave. הפערים היו בקצוות בלבד.
+
+**ממצא #2 — `WorkoutSessionSnapshot` אינו קיים.** ההקשר שניתן (וגם `open-tasks`) הפנה לחוזה בשם זה; `grep` החזיר אפס. החוזה בפועל: `StrengthSession` → `StrengthSessionExercise` (+`StrengthSessionExerciseSnapshot`) → `StrengthSet`. התיעוד תוקן.
+
+**ממצא #3 — באג אובדן נתונים.** `writeSessionsState` בלע כשלי כתיבה ל-localStorage ונפל בשקט ל-in-memory, בעוד המסך הציג "נשמר אוטומטית" קבוע. תוקן ע"י `PersistenceStatus` אמיתי (ADR-0028).
+
+**נעשה:** `skipExercise`/`unskipExercise` + `finishSessionPartial` (ADR-0027, ללא שינוי חוזה) · RPE ב-UI · החלפת כל `prompt()`/`confirm()` בפאנלים inline / bottom sheets · מצב התאוששות לאימון חסר · תיקון `useMemo` מותנה.
+
+**בדיקות:** +16 → **216**. הבדיקות שלי תפסו שלוש הנחות פיקסצ׳ר שגויות שלי (מספר סטים התחלתי, היעדר localStorage ב-node, תווית כפתור של סט שהושלם) — תוקנו בבדיקות, לא בקוד המוצר.
+
+**חסם שנתקלתי בו:** בדיקת render שפותחת Radix Sheet נתקעת ב-harness גם כבדיקה יחידה בקובץ (R-21). לא בוצעה חקירה מעבר לשני ניסיונות; ההתנהגות של הסיום החלקי מכוסה ברמת repository, והפער תועד במפורש ולא הוסתר.
+
+**verify:** typecheck exit 0 · test:unit 170/170 · test:router 46/46 · `bun run test` exit 0 · eslint 0 errors/8 warnings · build ×2 · routeTree ללא שינוי.
+
+---
+
 ## 2026-07-25 · התאוששות מריסטרט לא מתוכנן — route flattening + router test suite
 
 **מטרה:** לשחזר מצב אחרי ריסטרט שקטע עבודה, לשמר אותה ללא אובדן, ולהחזיר את הריפו למצב ירוק.
