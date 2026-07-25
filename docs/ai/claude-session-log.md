@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-07-25 · Phase 1+2 finalize — domain isolation + regressions
+
+**מטרה:** לאמת ולסגור את Phase 1+2 (isolation, compat, trash/restore, route-tree, regression coverage) ללא phase חדש.
+
+**baseline טרי (נצפה):** typecheck ✅ · tests 158→**162** ✅ · lint 0 errors/8 warnings ✅ · build ✅ · routeTree יציב (build×2 ללא diff; committed==generated; 12 domain-goals רשומים).
+
+**שינוי (fix):** אכיפת cross-domain isolation — helper טהור `goalMatchesDomain` + guard ב-`GoalDetailView`/`GoalForm(edit)`; domain מהישות ולא מה-param. commit `764cfb8`.
+
+**בדיקות (+4):** cross-domain guard, updateGoal שומר domain, primary מחריג archived/trashed, restore שומר domain+links ללא קשר שקרי (dependency חסרה).
+
+**עדיין פתוח (unverified):** בדיקות loader/notFound ל-4 ה-routes ו-render של 404/guard — דורשים router harness (אין `@testing-library`; לא הותקן). push — לא בוצע.
+
+**commits:** `764cfb8` fix(goals) + `docs(ai): finalize domain alignment phase`. ללא push.
+
 ## 2026-07-24 · Phase 1+2 — Domain-scoped goals + Trash/Restore
 
 **מטרה:** יישום Phase 1 (ניווט/route/copy alignment + goals לפי domain) ו-Phase 2 (trash/restore מלא), על branch `feat/domain-alignment-and-restore`.

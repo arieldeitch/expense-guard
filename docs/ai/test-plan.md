@@ -2,8 +2,8 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
-> החלק "כרגע" למטה **מיושן**. המצב האמיתי (עודכן Phase 1+2):
-- **158 בדיקות עוברות** (`vitest run`), **12 קבצי בדיקה**. חדשים: `goals/__tests__/domain-scope.test.ts` (domain scoping, type restriction, edit, getPrimaryGoal, goal trash/restore) + `lib/__tests__/trash-restore.test.ts` (gym/home session trash/restore, no-duplicate, source recompute).
+> החלק "כרגע" למטה **מיושן**. המצב האמיתי (עודכן Phase 1+2 finalize):
+- **162 בדיקות עוברות** (`vitest run`), **12 קבצי בדיקה**. `goals/__tests__/domain-scope.test.ts` (domain scoping, type restriction, edit, getPrimaryGoal, **cross-domain isolation `goalMatchesDomain`, updateGoal לא משנה domain, primary מחריג archived/trashed, restore שומר domain+links ללא קשר שקרי**, goal trash/restore) + `lib/__tests__/trash-restore.test.ts` (gym/home session trash/restore, no-duplicate, source recompute).
 - **typecheck** (`bun run typecheck`) — נקי. **build** — עובר. **routeTree.gen.ts דטרמיניסטי** (build×2 ללא diff). **lint** — 0 errors, 8 warnings (shadcn upstream); ראה `risks.md` R-17 (CRLF מקומי — הרץ עם `--rule '{"prettier/prettier":"off"}'`).
 - סביבת הבדיקות: **vitest `node`** (ללא DOM). לכן הבדיקות ברמת לוגיקה/repo. **חסר (עתידי):** בדיקות render/route (דורש `@testing-library` + jsdom + router test setup — לא הותקן במכוון, אין dep חדש), E2E (Playwright), RLS (אין DB). התנהגות ה-redirect/route מאומתת ע"י typecheck + חוזי הנתונים (`getGoal().domain`, `listGoalTypesByDomain`, `listGoalsByDomain`).
 - הפקודות: `bun run typecheck`, `bun run lint`, `bun run test`, `bun run build`.

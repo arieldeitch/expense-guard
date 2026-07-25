@@ -12,13 +12,13 @@
 - **53 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals חדשים מ-Phase 1.)
 - **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
 - **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
-- **בדיקות: 158/158 עוברות** (12 קבצים). typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי.
+- **בדיקות: 162/162 עוברות** (12 קבצים). typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי. cross-domain isolation נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק.
 - שלושת התחומים בנויים במלואם: ריצה (חוץ/הליכון/Suunto/כיול/מסלולים), כוח (תבניות/סופרסטים/אימון פעיל/היסטוריה/analytics), בית (quick entry/סטים גמישים/תבניות). goals engine מלא (26 goal types).
 - **אין קוד legacy** מחוץ להיקף (people/transport/roles/PIN/coach/clients/team — נעדרים). **אין secrets/service_role/network egress** (למעט Google Fonts).
 - **goals surface (נפתר, Phase 1):** אין מסך יעדים גלובלי. יעדים מנוהלים בתוך כל תחום — 12 domain-goals routes + `DomainPrimaryGoalTile` מחובר ל-3 המסכים. `/goals*` נשמרו כ-compatibility redirects בלבד (לא בניווט). ראה ADR-0021 (פתור).
 - **trash/restore (נפתר, Phase 2):** `/trash` מכסה כעת גם gym sessions, home sessions ו-goals (שחזור דו-שלבי). recompute אוטומטי דרך subscribers.
 - **i18n:** 404/Error של `__root.tsx` תורגמו לעברית+RTL.
-- **Git (2026-07-25, סגירת session):** Phase 1+2 committed ב-branch `feat/domain-alignment-and-restore` (HEAD `16f4444`, 3 commits מעל `main`@`eca9163`). **לא בוצע push** (אין upstream). working tree נקי. פרטים מלאים: `SESSION_HANDOFF.md`.
+- **Git (2026-07-25):** Phase 1+2 committed ב-branch `feat/domain-alignment-and-restore`. **לא בוצע push** (אין upstream). פרטים מלאים ו-HEAD עדכני: `SESSION_HANDOFF.md`.
 - **הערה:** שם התיקייה `expense-guard` הוא scaffold מטעה — הקוד הוא אפליקציית כושר.
 
 ---

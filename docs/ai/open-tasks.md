@@ -21,14 +21,14 @@
 
 מבוסס על מצב ה-repo ב-2026-07-25 (HEAD `16f4444`). אלו פתוחים כי אין להם הוכחת completion אוטומטית (executable test), למעט מה שמצוין.
 
-- [ ] **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): לוודא שה-loader עדיין רץ ו-`notFound()` נזרק על מזהה חסר. **סטטוס נוכחי: לא נבדק ע"י טסט** — התנהגות נשמרה ב-source בלבד (הקוד לא נגע ב-loaders).
-- [ ] **התנהגות מזהה לא-קיים/שגוי**: `/{domain}/goals/$id` עם id לא קיים; `/goals/$id` compat עם id חסר → 404 עברית. אין טסט executable כרגע.
-- [ ] **`running.new.$type` נתמך/לא-נתמך**: `type=treadmill|outdoor` תקין; ערך אחר → `notFound()`. אין טסט executable.
-- [ ] **בדיקות domain-isolation ל-goals ברמת route**: כניסה ל-`/running/goals/$id` עם יעד של gym → אסור להציג/לערוך (יש guard `goal.domain !== domain` ב-`GoalDetailView`, אך **ללא טסט**).
-- [ ] **מניעת חציית תחום בעריכה**: `GoalForm` נעול ל-domain של ה-route; `listGoalTypesByDomain` מוגבל לתחום (נבדק ב-`domain-scope.test.ts`). מניעת **דריסת ה-domain שמסופק ע"י ה-route** — אין טסט ייעודי.
-- [ ] **ראיות מלאות Typecheck/Lint/Test/Build** בתיעוד — קיימות מ-2026-07-25 (ראה `SESSION_HANDOFF.md`); לחזור ולהריץ בתחילת ה-session הבא לאימות.
-- [ ] **Git push / PR** של `feat/domain-alignment-and-restore` — **לא בוצע** (ללא upstream). דורש החלטת משתמש/מדיניות (ראה `SESSION_HANDOFF.md`).
-- [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`.
+- [x] ✅ **domain-isolation ל-goals** — נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק ב-`domain-scope.test.ts` (cross-domain, updateGoal לא משנה domain, restore שומר domain).
+- [x] ✅ **מניעת חציית תחום בעריכה / דריסת domain מה-route** — GoalForm חוסם עריכת יעד מתחום אחר; `listGoalTypesByDomain` מגביל סוגים; updateGoal שומר domain. נבדק.
+- [x] ✅ **primary selection מחריג archived/trashed** — נבדק.
+- [x] ✅ **restore שומר domain+links ולא יוצר קשר שקרי (dependency חסרה)** — נבדק.
+- [ ] **בדיקות רגרסיה ל-4 ה-routes שתוקנו** (`exercises.$id`, `locations.$id`, `running.$id`, `running.new.$type`): loader רץ ו-`notFound()` על מזהה חסר. **עדיין לא נבדק ע"י טסט executable** — דורש router test harness (אין `@testing-library`/jsdom; לא הותקן במכוון). התנהגות נשמרה ב-source. **פתוח.**
+- [ ] **התנהגות 404 ברמת render** (`/{domain}/goals/$id` / `/goals/$id` עם id חסר): לוגיקת ה-domain-match/getGoal→null נבדקת; **ה-render של 404 עצמו** דורש router harness. **פתוח (חלקי).**
+- [ ] **Git push / PR** של `feat/domain-alignment-and-restore` — **לא בוצע** (ללא upstream). דורש החלטת משתמש/מדיניות (ראה `SESSION_HANDOFF.md`). **פתוח.**
+- [ ] **הערת lint**: `bun run lint` נכשל מקומית עקב CRLF (R-17); הריצה האמיתית = `bunx eslint . --rule '{"prettier/prettier":"off"}'` → 0 errors, 8 warnings (shadcn). לשקול commit ייעודי ל-`git add --renormalize`. **פתוח.**
 
 ---
 

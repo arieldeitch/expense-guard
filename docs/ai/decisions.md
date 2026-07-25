@@ -138,3 +138,9 @@
 ## ADR-0023 · 2026-07-24 · `typecheck` script + `.gitattributes`
 
 **החלטה:** נוסף `"typecheck": "tsc --noEmit"` ל-package.json (ללא שינוי compiler options). נוסף `.gitattributes` (`* text=auto eol=lf`) לייצוב CRLF (R-17) — **ללא** renormalize גורף (נדחה ל-commit ייעודי אם יידרש).
+
+## ADR-0024 · 2026-07-25 · אכיפת domain isolation ליעדים (לא רק UI filtering)
+
+**הקשר:** יעדים מנוהלים לפי domain; יש למנוע צפייה/עריכה של יעד מתחום אחר במסלול תחום שגוי, ומניעת דריסת ה-domain שמסופק ע"י ה-route.
+**החלטה:** **מקור האמת ל-domain הוא הישות** (`goal.domain`), לא ה-route/query-param. helper טהור `goalMatchesDomain(goal, domain)` (`components/goals/goalDomainConfig.ts`) אוכף זאת: `GoalDetailView` ו-`GoalForm` (edit) מסרבים להציג/לערוך יעד שאינו תואם; `updateGoal` שומר domain; יצירה מגבילה סוגים ל-`listGoalTypesByDomain(domain)`; compat `/goals/$id` מפנה לפי `goal.domain`.
+**נימוק:** אכיפה ברמת application/view (לא רק סינון רשימה). **השלכה:** נבדק ב-`domain-scope.test.ts`. (בדיקת ה-render של 404/guard עצמה דורשת router harness — פתוח ב-`open-tasks.md`.)

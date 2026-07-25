@@ -6,12 +6,15 @@
 
 ## תאריך ומטרת ה-session
 - **תאריכים:** 2026-07-24 → 2026-07-25.
-- **מטרה:** ביצוע Phase 1 (יישור ניווט/route/copy + יעדים לפי domain) ו-Phase 2 (trash/restore מלא), ואז סגירת session בטוחה.
+- **מטרה:** Phase 1 (יעדים לפי domain) + Phase 2 (trash/restore) + **finalize** (אכיפת domain isolation + regressions), ואז סגירת session בטוחה.
 
 ## Branch / Commit — התחלה וסיום
 - **Branch:** `feat/domain-alignment-and-restore` (נוצר מ-`main`@`eca9163`).
-- **HEAD בסיום:** `16f4444` — `fix(ui): localize system errors and stabilize route generation`.
+- **HEAD בסיום:** commit `docs(ai): finalize domain alignment phase` **מעל** `764cfb8` (`fix(goals): enforce cross-domain isolation guard and add regressions`).
 - **שרשרת commits (מהחדש לישן):**
+  - `docs(ai): finalize domain alignment phase`  ← docs-only (session finalize)
+  - `764cfb8` fix(goals): enforce cross-domain isolation guard and add regressions
+  - `dcc486f` docs: finalize phase 1 and 2 session handoff
   - `16f4444` fix(ui): localize system errors and stabilize route generation
   - `f66b411` feat(trash): wire restore for sessions and goals
   - `1288e5b` feat(goals): scope goal surfaces to workout domains
@@ -33,6 +36,10 @@
 - delete-to-trash דו-שלבי: home summary (חדש), goal detail confirm (חדש), gym (קיים).
 - recompute אחרי restore: אוטומטי דרך `commit()` → `useSyncExternalStore` subscribers.
 
+**Finalize (2026-07-25) — domain isolation + regressions.**
+- helper טהור `goalMatchesDomain(goal, domain)` (`goalDomainConfig.ts`); guard ב-`GoalDetailView` וב-`GoalForm` (edit) — יעד מתחום אחר לא ניתן להצגה/עריכה במסלול. domain נקבע מהישות, לא מה-param.
+- +4 tests (162 סה"כ): cross-domain guard, updateGoal שומר domain, primary מחריג archived/trashed, restore שומר domain+links ללא קשר שקרי.
+
 **i18n + hygiene.** `__root.tsx` 404/error → עברית+RTL+`role="alert"`/`aria-live`+focus; `.gitattributes` (LF, ללא renormalize); lint hook false-positive נפתר ע"י named component; נוסף `typecheck` script.
 
 ## קבצים שהשתנו (לפי commit)
@@ -49,7 +56,7 @@
 | בדיקה | פקודה | תוצאה |
 |---|---|---|
 | Typecheck | `bun run typecheck` (`tsc --noEmit`) | ✅ **PASS** (exit 0, גם אחרי build) |
-| Tests | `bun run test` (vitest) | ✅ **PASS** — 12 קבצים, **158/158** |
+| Tests | `bun run test` (vitest) | ✅ **PASS** — 12 קבצים, **162/162** |
 | Lint (אמיתי) | `bunx eslint . --rule '{"prettier/prettier":"off"}'` | ✅ **0 errors, 8 warnings** (react-refresh בקבצי shadcn upstream) |
 | Lint (`bun run lint` כפי שהוא) | `bun run lint` | ⚠️ **FAIL מקומית** — אלפי שגיאות `Delete ␍` (CRLF, R-17). לא בעיית קוד. |
 | Build | `bun run build` | ✅ **PASS** (exit 0, ×2+) |
@@ -66,9 +73,9 @@
 - סביבת vitest = `node` → אין בדיקות render/route/E2E.
 
 ## פריטים לא-מאומתים (unverified)
-- **loaders + `notFound()` של 4 ה-routes שתוקנו**: נשמרו ב-source (לא נגעתי בגוף ה-loaders), אך **אין טסט executable** שמוכיח שהם עדיין רצים/זורקים. → פתוח ב-`open-tasks.md`.
-- **domain-isolation ברמת route** (כניסה ל-`/running/goals/$id` עם יעד gym): קיים guard `goal.domain !== domain` ב-`GoalDetailView`, **ללא טסט**.
-- **מזהה חסר/שגוי** ב-routes תחומיים ובקומפט: התנהגות 404 קיימת בקוד, **ללא טסט**.
+- **loaders + `notFound()` של 4 ה-routes שתוקנו**: נשמרו ב-source (לא נגעתי בגוף ה-loaders), אך **אין טסט executable** שמוכיח שהם עדיין רצים/זורקים (דורש router harness). → פתוח ב-`open-tasks.md`.
+- **render של 404/guard**: לוגיקת domain-match/getGoal→null **נבדקה** (`goalMatchesDomain`), אך ה-**render** של מסך 404/guard דורש router harness → פתוח (חלקי).
+- ✅ **domain-isolation (לוגיקה)**: נאכף ע"י `goalMatchesDomain` ב-`GoalDetailView`+`GoalForm` ו**נבדק** ב-`domain-scope.test.ts` (כבר לא unverified).
 
 ## סיכונים פעילים (ראה `risks.md`)
 - **R-17** CRLF/lint מקומי — פעיל (מיטיגציה: `.gitattributes` נוסף; renormalize גורף נדחה).
@@ -133,7 +140,7 @@
 ## GPT continuation context
 אם ה-continuation הוא ב-GPT/agent אחר (אין מסמך context נפרד ל-GPT — זהו):
 - **מקור אמת:** `AGENTS.md` + `docs/ai/*` (lowercase). אל תיצור מסמכי-על מתחרים.
-- **מצב:** Phase 1+2 הושלמו ו-committed ב-branch `feat/domain-alignment-and-restore` (HEAD `16f4444`), **לא pushed**. working tree נקי.
+- **מצב:** Phase 1+2 + finalize הושלמו ו-committed ב-branch `feat/domain-alignment-and-restore` (HEAD = docs commit מעל `764cfb8`), **לא pushed**. working tree נקי. 162 tests.
 - **כללי ברזל:** soft-delete בלבד; אין עלות/secret/Supabase/Auth/RLS ללא Approval Brief מפורש (ראה `CLAUDE.md` הגלובלי + `AGENTS.md`); `routeTree.gen.ts` generated (regenerate ע"י `bun run build`, קרא params דרך `useParams`); yeda רק ע"י המשתמש (אין המצאת יעד/ערך/תאריך).
 - **פקודות אימות:** `bun install --frozen-lockfile` → `bun run typecheck` → `bun run test` → `bunx eslint . --rule '{"prettier/prettier":"off"}'` → `bun run build`.
 - **פעולה ראשונה מומלצת:** ראה "פעולה מומלצת אחת בלבד" למעלה.

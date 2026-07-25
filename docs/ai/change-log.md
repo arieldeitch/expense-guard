@@ -1,5 +1,12 @@
 # Change Log
 
+## 2026-07-25 · Phase 1+2 finalize — domain isolation guard + regressions (Claude Code)
+
+- **fix(goals)** · אכיפת cross-domain isolation: helper טהור `goalMatchesDomain(goal, domain)` ב-`goalDomainConfig.ts`; guard ב-`GoalDetailView` (קיים, הועבר ל-helper) וב-`GoalForm` **edit mode** — יעד ששייך לתחום אחר לא ניתן לעריכה במסלול (מונע מעבר domain שקט). מקור האמת ל-domain הוא הישות, לא ה-route/param.
+- **tests** · +4 (סה"כ **162/162**): goalMatchesDomain cross-domain, updateGoal לא משנה domain, primary selection מחריג archived/trashed, restore שומר domain+linked ids ולא יוצר קשר שקרי (dependency חסרה) ללא כפילות.
+- **verify** · baseline טרי: typecheck ✅ · test 162/162 ✅ · lint 0 errors/8 warnings ✅ · build ✅ · routeTree יציב (build×2 ללא diff; committed==generated; 12 domain-goals רשומים).
+- ללא שינוי routes/routeTree · ללא backend/dep חדש · ללא push.
+
 ## 2026-07-24 · Phase 1+2 — Domain-scoped goals + Trash/Restore (Claude Code)
 
 **Phase 1 — goal surfaces scoped to domains (החלטת מוצר מאושרת: אין מסך יעדים גלובלי).**
