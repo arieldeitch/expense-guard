@@ -147,3 +147,15 @@
 
 - [ ] **A. שימוש מקומי בטוח** — export/import JSON + הרחבת `PersistenceStatus` ל-7 מודולי storage שעדיין בולעים כשל כתיבה. ללא עלות.
 - [ ] **B. חיבור Supabase מלא** — Auth + RLS + migrations. **דורש Approval Brief.**
+
+### 💾 מסלול A — גיבוי מקומי (2026-07-25)
+
+- [x] ✅ **Export JSON versioned** עם validation, counts ו-checksum.
+- [x] ✅ **Import/Restore** עם preview, snapshot אוטומטי ומדיניות קונפליקטים מפורשת.
+- [x] ✅ **Round-trip מאומת** — אותם IDs, קשרים, ערכים, סדר ו-checksum.
+- [x] ✅ **Idempotency** — ייבוא חוזר ללא כפילויות.
+- [x] ✅ **חוזה הגירה ל-Supabase** — `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md`.
+- [ ] 🔴 **טיפול בכשל כתיבה ב-7 מודולי storage** — רק `sessions` מדווח `PersistenceStatus`. השאר עדיין בולעים `catch {}`. **הפער המשמעותי ביותר שנותר.**
+- [ ] **migration framework versioned + idempotent** — כרגע `schema_version` קיים במעטפת בלבד; אין framework למיגרציה של ה-state המקומי.
+- [ ] **Fake Supabase rehearsal** (`InMemoryCloudRepository`) — טרם נכתב.
+- [ ] **בדיקות UI ל-Export/Restore** — הלוגיקה מכוסה ברמת unit; מסך `/backup` טרם נבדק ב-render.

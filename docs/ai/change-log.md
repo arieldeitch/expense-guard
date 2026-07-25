@@ -1,5 +1,17 @@
 # Change Log
 
+## 2026-07-25 · גיבוי ושחזור מקומי (מסלול A, חלקי) (Claude Code)
+
+- **feat(backup)** · מעטפת קנונית versioned (`workout-data-system` / `schema_version` 1.0.0) עם `entity_counts` ו-checksum (FNV-1a, ללא dependency). כל 9 מודולי `fitlog:*` נכללים.
+- **feat(backup)** · `validateBackup` — format, schema version, מזהים כפולים, **dangling references** (template entries, session entries/exercises/sets/blocks), שדות חסרים, חותמות זמן. **Export מסרב לייצר קובץ שנכשל באימות.**
+- **feat(backup)** · `previewImport` (added/unchanged/conflicts) · `importBackup` עם **snapshot אוטומטי לפני כל כתיבה**; `merge_keep_local` הוא ברירת המחדל ו**אינו דורס** קונפליקטים; `merge_prefer_backup`/`replace` דורשים בחירה מפורשת. ייבוא שנכשל באימות **אינו כותב דבר**.
+- **fix** · זיהוי שדה זהות פר-אוסף — `sessions.timers` ממופתח ב-`session_id` ולא ב-`id`. הבדיקות תפסו זאת (כל שורת timer דווחה כחסרת מזהה).
+- **feat(ui)** · route `/backup` — counts, הורדת קובץ (שם עם תאריך ושעה), שחזור עם preview וטיפול מפורש בקונפליקטים. מקושר מ-`/more` במקום אריח "בקרוב".
+- **docs** · `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md` — מיפוי מלא של 16 ישויות: טבלה עתידית, PK, ownership, תלות, סדר ייבוא, מדיניות קונפליקט, טרנספורמציה. ADR-0031.
+- **tests** · +14 (סה"כ **246**): round-trip מלא (export → ניקוי → import → אותם IDs/קשרים/ערכים/סדר/checksum), idempotency בייבוא משולש, זיהוי קונפליקט ואי-דריסה, snapshot קריא, ייבוא כושל שאינו משנה נתונים, 5 מצבי כשל באימות.
+- **verify** · typecheck exit 0 · `test:unit` 198/198 · `bun run test` exit 0 · eslint 0 errors / 8 baseline · build ×2 · routeTree דטרמיניסטי.
+- **לא הושלם במסלול A:** הרחבת `PersistenceStatus` ל-7 מודולי storage · migration framework versioned · Fake Supabase rehearsal · בדיקות UI ל-Export/Restore. ראה `open-tasks.md`.
+
 ## 2026-07-25 · פישוט תוכניות בית + Audit מוכנות נתונים (Claude Code)
 
 - **feat(exercises)** · `homeCatalog.ts` — קטלוג curated: **34 תרגילים ב-6 קבוצות בשפת משתמש**, פילטר ציוד פשוט (5 ערכים), חיפוש עברית/אנגלית. Seed: **+16 תרגילי בית נפוצים**. **אין שינוי `name_en` קיים** ולכן אין שינוי ID ואין שבירת תוכניות שמורות. ADR-0029.

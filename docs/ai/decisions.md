@@ -215,3 +215,16 @@
 **מצב עובדתי (2026-07-25):** אין Supabase client · אין `.env` ואין שימוש ב-`import.meta.env`/`process.env` · אין migrations · אין Auth/RLS · `activeRepoKind === "mock"` · 9 מפתחות localStorage · **אין export ואין import/restore** · אין schema-version framework · אין גיבוי לפני שינוי schema · **הנתונים אינם ניתנים להעברה למכשיר אחר**.
 
 **השלכה:** שימוש אמיתי מחר בבוקר בטוח **על מכשיר אחד בלבד**. ניקוי דפדפן, מצב פרטי או מכסה מלאה = אובדן. ראה R-22.
+
+## ADR-0031 · 2026-07-25 · LocalRepository הוא adapter של מודל portable
+
+**החלטה:**
+1. **`LocalRepository` (localStorage) הוא adapter זמני** של מודל נתונים portable — לא הפורמט הקנוני. הפורמט הקנוני הוא מעטפת ה-Backup (`workout-data-system`, `schema_version` 1.0.0).
+2. **Export/Import הוא מקור ההעברה העתידי ל-Supabase.** אותו קובץ שמשמש גיבוי מקומי ישמש לייבוא לענן, ללא הזנה מחדש.
+3. **IDs נשמרים** — ה-`id` המקומי יהיה ה-primary key בענן. אין יצירת מזהים מחדש.
+4. **ownership תיקבע בשרת לפי `auth.uid()`** — `owner_id` שבקובץ אינו סמכות הרשאה.
+5. **מיגרציות schema מקומיות הן versioned ו-idempotent**, עם snapshot לפני כל כתיבה.
+
+**מדיניות קונפליקטים:** `merge_keep_local` היא ברירת המחדל ואינה דורסת. דריסה (`merge_prefer_backup`) או החלפה (`replace`) דורשות בחירה מפורשת.
+
+**ראה:** `docs/ai/LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md`.
