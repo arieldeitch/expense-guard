@@ -2,6 +2,7 @@
  * Preferences repository — abstraction ל־user preferences.
  * כרגע מגובה localStorage. יוחלף ב־Supabase profile row בעתיד בלי לגעת ב־UI.
  */
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
 export type LandingModule = "home" | "running" | "gym" | "home-workout";
 
@@ -10,7 +11,9 @@ export type Preferences = {
   landingModule: LandingModule;
 };
 
-const STORAGE_KEY = "fitlog:preferences:v1";
+/** מפתח ה-localStorage של ההעדפות. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const PREFERENCES_STORAGE_KEY = "fitlog:preferences:v1";
+const STORAGE_KEY = PREFERENCES_STORAGE_KEY;
 
 const DEFAULTS: Preferences = {
   landingModule: "home",
@@ -69,14 +72,7 @@ export function writePreferences(next: Partial<Preferences>): Preferences {
   const current = readPreferences();
   const merged: Preferences = { ...current, ...next };
   cachedSnapshot = merged;
-  const storage = safeGetStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(merged));
-    } catch {
-      /* ignore */
-    }
-  }
+  reportWrite("preferences", safeWriteStorage(STORAGE_KEY, merged));
   listeners.forEach((l) => l());
   return merged;
 }

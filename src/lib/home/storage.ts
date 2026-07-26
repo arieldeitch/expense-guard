@@ -11,8 +11,10 @@ import type {
   HomeTemplateEntry,
   HomeTemplateVersion,
 } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:home:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:home:v1";
 
 export interface HomeState {
   sessions: HomeSession[];
@@ -102,17 +104,8 @@ let lastWriteAt: number | null = null;
 
 export function writeHomeState(next: HomeState): void {
   cache = next;
-  lastWriteAt = Date.now();
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      inMemoryFallback = next;
-    }
-  } else {
-    inMemoryFallback = next;
-  }
+  const result = reportWrite("home", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
   listeners.forEach((l) => l());
 }
 

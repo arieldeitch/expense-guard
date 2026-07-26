@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { GlobalStorageBanner } from "../components/storage/GlobalStorageBanner";
 
 function NotFoundComponent() {
   return (
@@ -137,6 +138,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/*
+        התראת אחסון גלובלית — מעל כל מסך, לא רק מסך האימון. אינה מרנדרת דבר
+        כשכל הכתיבות הצליחו.
+      */}
+      <GlobalStorageBanner />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>

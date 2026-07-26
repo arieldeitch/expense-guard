@@ -4,6 +4,29 @@
 
 ---
 
+## 🗄️ מסלול A — בטיחות נתונים מקומית (עודכן 2026-07-26)
+
+- [x] ✅ **Export / Import / Restore מקומי** — `/backup`, מעטפת versioned, אימות, preview, snapshot לפני כתיבה. ADR-0031.
+- [x] ✅ **כל 9 מודולי האחסון עוברים דרך `safeStorage`** ומדווחים כשל כתיבה. ADR-0032.
+- [x] ✅ **התראת כשל כתיבה גלובלית** — `GlobalStorageBanner` ברמת `__root`; כשל בכל מודול גלוי בכל מסך, `memory_only`=`status`, `failed`=`alert`, קישור ל-`/backup`, התאוששות מסירה. 13 בדיקות render. ADR-0033.
+- [x] ✅ **local schema version** — `fitlog:storage-meta`, `schema_version` 1.0.0. ADR-0033.
+- [x] ✅ **migration registry** — `legacy -> 1.0.0`, idempotent, לא הרסנית, שומרת שדות לא מוכרים.
+- [x] ✅ **snapshot ו-rollback לפני migration** — עם checksum, אימות קריאה, ומפתח נפרד מ-snapshot ה-Restore.
+- [x] ✅ **חסימת future schema version** — גרסה גבוהה מ-1.0.0 אינה נוגעת בנתונים.
+- [x] ✅ **Fake Supabase rehearsal** — `src/lib/migration/`: ענן מדומה בזיכרון, מפת 30 ישויות, סדר ייבוא טופולוגי, ownership מה-session המאומת, idempotency וקונפליקטים. **ללא Supabase, SDK, רשת, env או עלות.** 44 בדיקות. ADR-0034/0035.
+- [x] ✅ **Readiness Gate** — `src/lib/readiness/`: 16 בדיקות ושני gates, **נגזרים מריצות אמיתיות** ולא מקבועים. שניהם `true`. 29 בדיקות. ADR-0036.
+- [ ] 🔴 **Import אמיתי מול Supabase עם Auth/RLS** — **הפער העיקרי שנותר.** ה-rehearsal מוכיח את המודל, לא את המנוע: לא נבדקו RLS, FK constraints, טיפוסי עמודות, טרנזקציות ורשת. דורש **Approval Brief** (CLAUDE.md) כי הוא יוצר פרויקט/עלות.
+- [ ] 🟠 **P1 — `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` בודק שדה שאינו קיים.** הכלל `home.entries → home.sessions` משתמש ב-`session_id`, אך השדה בפועל הוא **`home_session_id`**, ולכן הכלל אינו יורה לעולם. בנוסף, כל כלל מדלג כש-`parents.size === 0`, כך ש"כל ההורים נמחקו" אינו נתפס.
+  **תיקון:** לשנות את השדה ל-`home_session_id`, להוסיף כלל `home.sets → home.entries` על `entry_id`, ולהסיר/לצמצם את דילוג ה-`parents.size === 0`.
+  **למה לא תוקן בסשן ה-rehearsal:** הוא אינו חוסם — ה-import pipeline בונה גרף תלויות משלו ותופס את המקרה. ההוראה הייתה לא לשנות את שכבת האחסון שהושלמה אלא בבאג חוסם. יש בדיקה שמתעדת את הפער (`importPipeline.test.ts`).
+  ⚠️ התיקון **ישנה התנהגות אימות**: גיבויים עם הפניות שבורות שעברו עד היום ייפסלו. זו ההתנהגות הנכונה, אך היא מצדיקה החלטה מפורשת.
+- [ ] 🟡 **`preferences` אינו ממופה לענן** — הוא singleton (שורת `profiles` אחת ממופתחת ב-user id) ולא אוסף מערכים, וה-pipeline הנוכחי עובד ברמת אוספים. מדווח במפורש כ-`deferred_entities` ולכן **אינו נבלע בשקט**. ההשפעה מוגבלת לשדה אחד (`landingModule`).
+- [ ] 🟡 **גיבוי תלוי משמעת משתמש** — אין תזכורת ואין אימות שהקובץ נשמר מחוץ למכשיר. ראה R-22.
+
+**מסלול A סגור לשימוש מקומי במכשיר יחיד** (2026-07-26). מה שנותר אינו חוסם שימוש יומיומי אלא מעבר לענן.
+
+---
+
 ## 🧑‍⚖️ Human Decisions Required (מ-Product Alignment Audit, 2026-07-24)
 
 החלטות אלו **דורשות את המשתמש** — יש להן השפעה מוצרית/בלתי הפיכה. אין ליישם עד תשובה. (נושאים טכניים — שמות/מבנה/refactor — אינם כאן; מוכרעים אוטונומית.)
@@ -133,3 +156,29 @@
 
 ### 🟢 Future
 - [ ] Insights derived, AI suggestions (עם approval flow), offline draft, analytics dashboards, export CSV/JSON, media לתרגילים, Playwright E2E.
+
+### 🏠 תוכניות בית — מצב 2026-07-25
+
+- [x] ✅ **פישוט בחירת תרגילים** — picker חדש: אחרונים → מועדפים → 6 קבוצות בשפת משתמש, חיפוש he/en, פילטר ציוד פשוט, בחירה מרובה, תרגיל מותאם באותו גיליון. ADR-0029.
+- [x] ✅ **קטלוג curated** — 34 תרגילים (מתוך מאגר של 51). IDs קיימים לא שונו.
+- [x] ✅ **יצירה ועריכה במסך אחד** — `/home/templates/$id/edit` (כבר היה כך; נשמר).
+- [ ] **עריכת ערכי entry inline** — קיימת דרך `NumberField` במסך העריכה; **טרם נבדקה ב-render test**. לא חוסם.
+- [ ] **Undo להסרת תרגיל** — כרגע הסרה ישירה (soft-delete ב-repo). לשקול Undo קצר.
+- [ ] **Visual QA ב-360px** למסך התוכנית וה-picker — כמו במסך Workout Execution, **לא אומת**.
+
+### 🔴 מוכנות נתונים — דורש החלטת משתמש (R-22, ADR-0030)
+
+- [ ] **A. שימוש מקומי בטוח** — export/import JSON + הרחבת `PersistenceStatus` ל-7 מודולי storage שעדיין בולעים כשל כתיבה. ללא עלות.
+- [ ] **B. חיבור Supabase מלא** — Auth + RLS + migrations. **דורש Approval Brief.**
+
+### 💾 מסלול A — גיבוי מקומי (2026-07-25)
+
+- [x] ✅ **Export JSON versioned** עם validation, counts ו-checksum.
+- [x] ✅ **Import/Restore** עם preview, snapshot אוטומטי ומדיניות קונפליקטים מפורשת.
+- [x] ✅ **Round-trip מאומת** — אותם IDs, קשרים, ערכים, סדר ו-checksum.
+- [x] ✅ **Idempotency** — ייבוא חוזר ללא כפילויות.
+- [x] ✅ **חוזה הגירה ל-Supabase** — `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md`.
+- [ ] 🔴 **טיפול בכשל כתיבה ב-7 מודולי storage** — רק `sessions` מדווח `PersistenceStatus`. השאר עדיין בולעים `catch {}`. **הפער המשמעותי ביותר שנותר.**
+- [ ] **migration framework versioned + idempotent** — כרגע `schema_version` קיים במעטפת בלבד; אין framework למיגרציה של ה-state המקומי.
+- [ ] **Fake Supabase rehearsal** (`InMemoryCloudRepository`) — טרם נכתב.
+- [ ] **בדיקות UI ל-Export/Restore** — הלוגיקה מכוסה ברמת unit; מסך `/backup` טרם נבדק ב-render.

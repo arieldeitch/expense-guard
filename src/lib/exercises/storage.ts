@@ -7,8 +7,10 @@
  */
 import type { Exercise, ExerciseMedia, MuscleGroup } from "./types";
 import { seedMuscleGroups, seedExercises } from "./seed";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:exercises:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:exercises:v1";
 export const CURRENT_OWNER_ID = "single-user";
 
 export interface ExercisesState {
@@ -101,16 +103,8 @@ export function subscribeExercises(fn: () => void): () => void {
 }
 
 function persist(state: ExercisesState): void {
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(state));
-      return;
-    } catch {
-      /* fallthrough */
-    }
-  }
-  inMemoryFallback = state;
+  const result = reportWrite("exercises", safeWriteStorage(STORAGE_KEY, state));
+  if (result.status !== "saved") inMemoryFallback = state;
 }
 
 export function writeExercisesState(next: ExercisesState): void {

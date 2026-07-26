@@ -26,6 +26,8 @@ import { _resetExercisesStateForTests } from "@/lib/exercises/storage";
 import { _resetTemplatesStateForTests } from "@/lib/templates/storage";
 import { __resetRunsStateForTests } from "@/lib/runs/storage";
 import { __resetSuuntoStateForTests } from "@/lib/suunto/storage";
+import { _resetStorageStatusesForTests } from "@/lib/storage/safeStorage";
+import { _resetMigrationRunCacheForTests } from "@/lib/storage/migrations";
 
 // ---- jsdom polyfills (APIs שדפדפן מספק ו-jsdom לא) — לא mocks שמסתירים תקלות ----
 function installBrowserPolyfills() {
@@ -75,6 +77,9 @@ export function resetAllStores() {
   _resetTemplatesStateForTests();
   __resetRunsStateForTests();
   __resetSuuntoStateForTests();
+  // מצב ההתמדה הגלובלי וה-singleton של המיגרציה — אחרת בדיקה אחת "מדביקה" את הבאה.
+  _resetStorageStatusesForTests();
+  _resetMigrationRunCacheForTests();
 }
 
 /**

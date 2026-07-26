@@ -1,5 +1,61 @@
 # Change Log
 
+## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate (Claude Code)
+
+- **test(migration)** · `InMemoryCloudRepository` — ענן מדומה בזיכרון. **אין Supabase, SDK, SQL, רשת, env, secret או עלות.** טבלאות כמפות לפי primary key יציב (אף פעם לא index של מערך); אותו id + אותו תוכן = no-op · תוכן שונה = conflict **ללא דריסה** · הורה חסר = הרשומה אינה נכתבת.
+- **test(migration)** · `cloudSchema.ts` — מפת **30 ישויות ענן** נגזרת מהמודל בפועל: מפתח יציב, קשרי הורה, שדה סדר, סוג בעלות. **סדר הייבוא מחושב טופולוגית** מהקשרים ואינו רשימה ידנית; self-reference (`home_templates.parent_template_id`) מוחרג ואינו יוצר מעגל.
+- **test(migration)** · `importPipeline.ts` — parse → validate → integrity (checksum + total_records) → normalize → map → graph → topological sort → operations → execute → report. `operation_id` דטרמיניסטי (`table#id`). דוח מלא: total/inserted/unchanged/conflicts/rejected, per-entity, dependency failures, unsupported entities, deferred entities, ownership.
+- **test(migration)** · ownership — `authenticatedUserId` הוא **מקור הסמכות היחיד**. `owner_id`/`user_id` שבקובץ מוסרים מגוף ה-payload ונשמרים כ-`source_metadata` בלבד. taxonomy מערכתי (`is_system`) מקבל `user_id: null`; תרגיל מותאם מקבל בעלות. שדות סוד (`token`/`secret`/`api_key`/`service_role`/...) לעולם אינם עוברים.
+- **feat(readiness)** · `buildReadinessReport` — **פונקציה טהורה** שגוזרת 16 בדיקות ושני gates. ראיה חסרה, ריצה שלא בוצעה או יכולת כושלת = `false`. אין קבוע `true` ואין הסקה מקיום קובץ.
+- **feat(readiness)** · `runReadinessAudit` — מייצר ראיות בכך שהוא **מריץ את היכולות בפועל**: כתיבה דרך כל 9 ה-writers · הסלמה והתאוששות ב-registry · מיגרציה + גרסת schema · אימות snapshot · **rollback אמיתי אחרי שינוי אמיתי** · שתילת גרסה עתידית ואימות חסימה · Export → מחיקה מלאה → Restore → Export והשוואת checksum · rehearsal כפול · בדיקת קונפליקט. בסיום מחזיר את תשעת המפתחות למצבם. ⚠️ מיועד לסביבת אימות מבודדת; **אף רכיב UI אינו קורא לו**.
+- **תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**. שניהם נגזרו מריצה, לא הוצהרו.
+- **backward compatibility** · **אף קובץ קיים לא שונה.** שתי תיקיות חדשות בלבד (`src/lib/migration/`, `src/lib/readiness/`). אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0, domain contracts או UI. כל 293 הבדיקות הקודמות ממשיכות לעבור.
+- **docs** · ADR-0034 (rehearsal כתנאי מוקדם) · ADR-0035 (בעלות ב-Export אינה בעלות הרשאה) · ADR-0036 (Readiness Gate נגזר, לא מוצהר). R-23 ו-R-24 נפתחו.
+- **tests** · +73 (סה"כ **366**): `inMemoryCloudRepository` (11) · `importPipeline` (33) · `readinessReport` (20) · `readinessAudit` (9).
+- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 305/305 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
+- **ממצא (P1, לא תוקן — R-24)** · `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id` עבור `home.entries`, אך השדה בפועל הוא `home_session_id` — הכלל אינו יורה לעולם. ה-import pipeline תופס את המקרה בעצמו ולכן זה **אינו חוסם** את ה-rehearsal; לא שיניתי את שכבת הגיבוי שהושלמה. יש בדיקה שמתעדת את הפער, והתיקון מפורט ב-`open-tasks.md`.
+- **fix(migration) `dc4b57b`** · `preferences` קיים ב-Export ואמור להפוך לשורת `profiles`, אך הוא **singleton** ולא אוסף מערכים — וה-pipeline, שעובד ברמת אוספים, דילג עליו **בלי לדווח**. זה סתר את ההבטחה ש"ישות ללא mapping מדווחת ולא נבלעת". נוספו `DEFERRED_MODULES` ושדה `deferred_entities` בדוח, ובדיקה שמוודאת דיווח ושאין טבלת `profiles` בענן. השפעה ידועה: שדה אחד (`landingModule`).
+- **docs `3fefdcc`** · תיקון ספירת בדיקות אחרי התוספת (366 = 305 unit + 61 router; `importPipeline` 33).
+- **לא בוצע:** חיבור Supabase · SDK · Auth/RLS · env/secret · deploy · dependency חדשה · שינוי UI · merge ל-`main`.
+
+## 2026-07-26 · בטיחות אחסון מקומי — התראה גלובלית + schema גרסאי (Claude Code)
+
+- **fix(ui)** · `GlobalStorageBanner` ברמת `__root` — **כשל כתיבה מכל אחד מ-9 המודולים גלוי בכל מסך**, לא רק ב-Workout Execution. `memory_only` → `role="status"` + "חלק מהשינויים לא נשמרו בדפדפן ועלולים להיעלם לאחר רענון." · `failed` → `role="alert"` + "השמירה נכשלה. הורד גיבוי לפני רענון או סגירת הדפדפן." אייקון + כותרת מילולית (צבע אינו הסמן היחיד) + קישור ל-`/backup`. **banner מתמשך, לא toast בכל שינוי**; כתיבה מוצלחת אחרי כשל מסירה אותו אוטומטית.
+- **fix(ui)** · מסך האימון אינו מצהיר "נשמר במכשיר" כאשר `getWorstStorageStatus()` אינו `saved` — גם אם מודול ה-sessions עצמו נשמר.
+- **feat(storage)** · `fitlog:storage-meta` — `format` `workout-data-system-local`, `schema_version` **1.0.0**, `updated_at` ISO-8601 UTC, ורשימת תשעת מודולי האחסון. **תשעת המפתחות וה-IDs ללא שינוי.** metadata חסר/פגום = legacy · גרסה עתידית = **חסום** (`future_version_blocked`, אין נגיעה בנתונים).
+- **feat(storage)** · registry מפורש `legacy -> 1.0.0`. המיגרציה קוראת את כל תשעת המפתחות, מאמתת parse, וכותבת מחדש בסריאליזציה קנונית. **עובדת על מחרוזות גולמיות** ולא דרך ה-repositories — ולכן שדות לא מוכרים נשמרים במלואם. אין מחיקה, idempotent, הרצה חוזרת = no-op מלא.
+- **feat(storage)** · snapshot מאומת לפני כל שינוי — `snapshot_id`, `created_at`, `from_version`, `target_version`, `keys`, `checksum` (FNV-1a). נכתב ל-`fitlog:migration-snapshot` ו**נקרא בחזרה לאימות**; snapshot שלא ניתן לאמת עוצר את המיגרציה. **אינו דורס** את snapshot ה-Restore (`fitlog:backup-snapshot:*`).
+- **feat(storage)** · סדר קבוע: snapshot → חישוב בזיכרון → הגנת אי-מחיקה → כתיבה → **metadata אחרון**. כשל בחישוב או ב-snapshot → אף מפתח מקור לא נגע. כשל באמצע הכתיבה → `rollbackFromSnapshot` מלא. בכל כשל: `migration_failed`, ה-snapshot נשמר, metadata לא נכתב.
+- **feat(storage)** · `safeWriteRawStorage` / `safeRemoveStorage` / `isStorageAvailable` ב-`safeStorage`; `STORAGE_KEY` נחשף מ-9 מודולי האחסון כדי שמפת המפתחות לא תשוכפל ותסטה.
+- **refactor** · `checksumOf`/`stableStringify` אוחדו ל-`src/lib/storage/checksum.ts` — הגדרה אחת, משותפת עם מודול הגיבוי.
+- **docs** · ADR-0033 (schema מקומי גרסאי) · **ADR-0032 תועד רטרואקטיבית** — הוא הוזכר בקוד מאז `4b2b401` ולא נכתב מעולם ב-`decisions.md`. R-22 הוקטן מ-🔴 High ל-🟡 Medium.
+- **tests** · +36 (סה"כ **293**): `lib/storage/__tests__/localSchema.test.ts` (**23**) — legacy→1.0.0, metadata רק אחרי הצלחה, no-op חוזר, snapshot ו-checksum, rollback, כשל באמצע שאינו משנה מקור, שדות לא מוכרים, גרסה עתידית, אחסון לא זמין · `test/globalPersistenceWarning.test.tsx` (**13**) — כשל ב-catalog/home/templates/goals/runs/preferences, `saved` ללא banner, התאוששות, קישור גיבוי נגיש.
+- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 232/232 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
+- **תיקון עובדתי:** הודעת ה-commit `feat(storage)` אומרת "27 בדיקות חדשות" ב-`localSchema.test.ts`. המספר בפועל הוא **23** (נמדד: `vitest run src/lib/storage/__tests__/localSchema.test.ts`). לא בוצע amend; הרישום כאן הוא הנכון.
+- **לא בוצע:** Fake Supabase rehearsal · Readiness Gate · חיבור Supabase · שינוי בממשק תוכניות הבית · dependency חדשה · merge ל-`main` · deploy.
+
+## 2026-07-25 · גיבוי ושחזור מקומי (מסלול A, חלקי) (Claude Code)
+
+- **feat(backup)** · מעטפת קנונית versioned (`workout-data-system` / `schema_version` 1.0.0) עם `entity_counts` ו-checksum (FNV-1a, ללא dependency). כל 9 מודולי `fitlog:*` נכללים.
+- **feat(backup)** · `validateBackup` — format, schema version, מזהים כפולים, **dangling references** (template entries, session entries/exercises/sets/blocks), שדות חסרים, חותמות זמן. **Export מסרב לייצר קובץ שנכשל באימות.**
+- **feat(backup)** · `previewImport` (added/unchanged/conflicts) · `importBackup` עם **snapshot אוטומטי לפני כל כתיבה**; `merge_keep_local` הוא ברירת המחדל ו**אינו דורס** קונפליקטים; `merge_prefer_backup`/`replace` דורשים בחירה מפורשת. ייבוא שנכשל באימות **אינו כותב דבר**.
+- **fix** · זיהוי שדה זהות פר-אוסף — `sessions.timers` ממופתח ב-`session_id` ולא ב-`id`. הבדיקות תפסו זאת (כל שורת timer דווחה כחסרת מזהה).
+- **feat(ui)** · route `/backup` — counts, הורדת קובץ (שם עם תאריך ושעה), שחזור עם preview וטיפול מפורש בקונפליקטים. מקושר מ-`/more` במקום אריח "בקרוב".
+- **docs** · `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md` — מיפוי מלא של 16 ישויות: טבלה עתידית, PK, ownership, תלות, סדר ייבוא, מדיניות קונפליקט, טרנספורמציה. ADR-0031.
+- **tests** · +14 (סה"כ **246**): round-trip מלא (export → ניקוי → import → אותם IDs/קשרים/ערכים/סדר/checksum), idempotency בייבוא משולש, זיהוי קונפליקט ואי-דריסה, snapshot קריא, ייבוא כושל שאינו משנה נתונים, 5 מצבי כשל באימות.
+- **verify** · typecheck exit 0 · `test:unit` 198/198 · `bun run test` exit 0 · eslint 0 errors / 8 baseline · build ×2 · routeTree דטרמיניסטי.
+- **לא הושלם במסלול A:** הרחבת `PersistenceStatus` ל-7 מודולי storage · migration framework versioned · Fake Supabase rehearsal · בדיקות UI ל-Export/Restore. ראה `open-tasks.md`.
+
+## 2026-07-25 · פישוט תוכניות בית + Audit מוכנות נתונים (Claude Code)
+
+- **feat(exercises)** · `homeCatalog.ts` — קטלוג curated: **34 תרגילים ב-6 קבוצות בשפת משתמש**, פילטר ציוד פשוט (5 ערכים), חיפוש עברית/אנגלית. Seed: **+16 תרגילי בית נפוצים**. **אין שינוי `name_en` קיים** ולכן אין שינוי ID ואין שבירת תוכניות שמורות. ADR-0029.
+- **feat(home)** · `HomeExercisePicker` — אחרונים → מועדפים → קבוצות · **בחירה מרובה** (אישור אחד) · ללא מטא-דאטה מלא · "תרגיל מותאם" **בתוך אותו גיליון** (אין dialog בתוך dialog) · יעדי מגע 44px+ · aria-labels. מחליף picker שהיה חיפוש-עברית-בלבד, בחירה בודדת, ללא קבוצות.
+- **feat(home)** · `useRecentHomeExerciseIds` — "אחרונים" נגזר מנתונים קיימים, **ללא storage key חדש**.
+- **audit** · דוח מוכנות נתונים עובדתי (ADR-0030): אין Supabase client · אין env · אין migrations · אין Auth/RLS · `activeRepoKind="mock"` · 9 מפתחות localStorage · **אין export/import** · **אין העברה בין מכשירים**. R-22 נפתח כ-🔴 High.
+- **tests** · +18 (סה"כ **232**): `exercises/__tests__/home-catalog.test.ts` (16) — כל slug נפתר, אין כפילויות, גבול 30–36, יציבות ID; `test/homePlanPicker.test.tsx` (2) — קבוצות, בחירה מרובה, חיפוש he/en.
+- **verify** · typecheck exit 0 · `test:unit` 184/184 · `bun run test` exit 0 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא שינוי.
+- **לא בוצע:** Supabase/Auth/RLS/migration/deploy · לא נוספה dependency · לא שונה חוזה domain.
+
 ## 2026-07-25 · סנכרון `main` לקראת Visual QA (Claude Code)
 
 - **git** · `main` עודכן ב-**fast-forward** מ-`feat/domain-alignment-and-restore` ל-**`f33d00a`**. `main` היה **ancestor** מלא של ה-feature branch (אומת ב-`git merge-base --is-ancestor` על `main`, `origin/main` ו-`eca9163`), ולכן **לא נוצר merge commit ולא היו conflicts**. לא נדרש branch גיבוי.

@@ -4,6 +4,50 @@
 
 ---
 
+## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate
+
+**מטרה:** להוכיח את חוזה ההגירה **בלי Supabase**, ולגזור Readiness Gate אמיתי מיכולות ולא מקבועים.
+
+**ממצא #1 — שדה ההורה של `home.entries` הוא `home_session_id`, לא `session_id`.** `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id`, ולכן הכלל **אינו יורה לעולם**. בנוסף כל כלל מדלג כש-`parents.size === 0`. מיפוי הישויות שלי בנוי על השדה האמיתי, ולכן ה-pipeline תופס את המקרה גם בלי לתקן את הגיבוי. **לא תוקן** — ההוראה הייתה לא לשנות את שכבת האחסון שהושלמה אלא בבאג חוסם, וזה אינו חוסם. נפתח כ-R-24/P1 עם התיקון המדויק, ויש בדיקה שמתעדת את הפער.
+
+**ממצא #2 — `_resetXStateForTests()` מוחק את מפתח האחסון.** כל תשעת ה-helpers קוראים ל-`removeItem` כשלא מועבר state. זה הפיל שתי בדיקות שכתבתי (זרעתי נתונים ואז "ניקיתי caches", מה שמחק את מה שזרעתי). הכלל שנגזר: **תמיד reset לפני כתיבה, לעולם לא אחריה.** תועד בקוד ובבדיקות.
+
+**ממצא #3 — נורמליזציה של ה-writers חשפה fixture חלקי.** ה-fixture הכיל `runs.lastUsed: {}`, וה-writer השלים אותו לצורתו המלאה — מה שגרם ל"האחסון חזר למצבו" להיכשל. תוקן ב-fixture (scalars מלאים) ולא בהרפיית הבדיקה, כדי ש"שחזור מדויק" יישאר טענה בעלת משמעות.
+
+**החלטת ארכיטקטורה — גזירה מול ראיה.** `buildReadinessReport` היא פונקציה טהורה שרק גוזרת; `runReadinessAudit` מייצר ראיות בכך שהוא מריץ יכולות בפועל (rollback אמיתי, שתילת גרסה עתידית, מחיקה ושחזור מלאים). ראיה חסרה = `false`. המחיר: ה-audit כותב ל-localStorage ולכן מיועד לסביבת בדיקות בלבד — **אף רכיב UI אינו קורא לו**, ולכן אין שינוי UI.
+
+**Backward compatibility:** **אף קובץ קיים לא שונה** — שתי תיקיות חדשות בלבד. אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0 או domain contracts.
+
+**בדיקות:** +73 (11 + 33 + 20 + 9) → **366 סה"כ**. typecheck exit 0 · `test:unit` 305/305 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
+
+**תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**, שניהם נגזרים מריצה.
+
+**נותר פתוח:** Import אמיתי מול Supabase עם Auth/RLS (R-23) · תיקון R-24 · גיבוי תלוי משמעת משתמש.
+
+---
+
+## 2026-07-26 · בטיחות אחסון מקומי — סגירה ממוקדת (1 מתוך 2)
+
+**מטרה:** להשלים **רק** את בטיחות האחסון המקומי — התראת כשל כתיבה גלובלית, local schema version, migration registry, ו-snapshot/rollback לפני מיגרציה. במפורש מחוץ להיקף: Fake Supabase rehearsal, readinessReport, חיבור Supabase, שינוי בממשק תוכניות הבית, dependency חדשה, merge ל-`main`, deploy.
+
+**ממצא #1 — ADR-0032 לא היה קיים בתיעוד.** הקוד (`safeStorage.ts`, מאז `4b2b401`) הפנה ל-ADR-0032, אך `decisions.md` מעולם לא הכיל אותו. תועד רטרואקטיבית, מסומן ככזה.
+
+**ממצא #2 — מפת מפתחות האחסון הייתה מועמדת לשכפול.** תשעת מפתחות `fitlog:*` היו `const` פרטיים בתוך המודולים. במקום לשכפל אותם ב-`schema.ts` (drift מובטח), הם נחשפו כ-`export` ומיובאים משם. `preferences` קיבל שם מפורש (`PREFERENCES_STORAGE_KEY`) כי הוא ה-`index.ts` של המודול.
+
+**ממצא #3 — מיגרציה אינה יכולה לעבור דרך ה-repositories.** `readCatalogState()` וחבריו מבצעים coercion לטיפוסי המודול ומשמיטים שדות לא מוכרים. מיגרציה שהייתה עוברת דרכם הייתה **מוחקת נתונים בשקט** בדיוק בנקודה שבה היא אמורה לשמר אותם. לכן נוספו `safeWriteRawStorage` / `safeRemoveStorage`, וה-framework עובד על מחרוזות גולמיות בלבד.
+
+**ממצא #4 — הרצת המיגרציה בזמן render יוצרת hydration mismatch.** ב-SSR אין `localStorage`, ולכן `useState(initializer)` היה מחזיר תמיד "אחסון לא זמין" בשרת ו-banner שאינו קיים בלקוח. ההרצה הועברה ל-`useEffect`. המחיר: המיגרציה רצה אחרי ה-render הראשון. מכיוון ש-`legacy -> 1.0.0` **אינה משנה תוכן**, אין סיכון ל-cache מיושן — אך זו מגבלה שתועדה במפורש ב-ADR-0033 עבור מיגרציות עתידיות.
+
+**החלטת מבנה commits.** ההוראה נתנה `fix(ui)` לפני `feat(storage)`, אך ה-banner בגרסתו המלאה תלוי ב-framework. במקום להפוך את הסדר או ליצור commit שאינו מתקמפל, ה-banner נכנס ב-commit הראשון **ללא** מודעות למיגרציה, וה-commit השני הוסיף אותה. **commit 1 אומת בבידוד** (stash של השאר → typecheck exit 0 → 13/13 בדיקות).
+
+**בדיקות:** +36 (23 `localSchema` + 13 `globalPersistenceWarning`) → **293 סה"כ**. typecheck exit 0 · `test:unit` 232/232 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
+
+**אי-דיוק שתוקן בתיעוד ולא ב-Git:** הודעת ה-commit `feat(storage)` אומרת "27 בדיקות" ב-`localSchema.test.ts`; בפועל **23**. לא בוצע amend (אסור); התיקון רשום ב-`change-log.md`.
+
+**נותר פתוח:** Fake Supabase rehearsal · Readiness Gate. **מסלול A אינו סגור.**
+
+---
+
 ## 2026-07-25 · סנכרון `main` לקראת Visual QA
 
 **מטרה:** להפוך את `origin/main` למקור האמת לגרסה שעליה יבוצע Visual QA.

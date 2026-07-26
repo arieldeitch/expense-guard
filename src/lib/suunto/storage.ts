@@ -3,8 +3,10 @@
  * חוזה זהה למה שיהיה ב-Supabase (rows + calibrations + exclusions).
  */
 import type { RunDeviceReading, TreadmillCalibrationProfile, CalibrationExclusion } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:suunto:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:suunto:v1";
 export const CURRENT_OWNER_ID = "single-user";
 
 export interface SuuntoState {
@@ -72,16 +74,9 @@ export function subscribeSuunto(fn: () => void): () => void {
 
 export function writeSuuntoState(next: SuuntoState): void {
   cache = next;
-  mem = next;
-  const s = safeStorage();
-  if (s) {
-    try {
-      s.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // ignore
-    }
-  }
-  for (const fn of listeners) fn();
+  const result = reportWrite("suunto", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") mem = next;
+  listeners.forEach((l) => l());
 }
 
 export function __resetSuuntoStateForTests() {

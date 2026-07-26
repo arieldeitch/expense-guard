@@ -56,6 +56,30 @@ export function useEntrySets(entryId: string | null | undefined): HomeExerciseSe
   return entryId ? listEntrySets(entryId) : [];
 }
 
+/**
+ * מזהי תרגילים שהופיעו לאחרונה בשימוש בית — החדש ביותר ראשון.
+ * נגזר מהנתונים הקיימים (sessions + template entries); **אין storage חדש**.
+ */
+export function useRecentHomeExerciseIds(limit = 8): string[] {
+  const state = useHome((s) => s);
+  const seen: string[] = [];
+  const push = (id: string) => {
+    if (id && !seen.includes(id)) seen.push(id);
+  };
+
+  const entriesByRecency = [...state.entries]
+    .filter((e) => !e.deleted_at)
+    .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  for (const e of entriesByRecency) push(e.exercise_id);
+
+  const templateEntriesByRecency = [...state.templateEntries]
+    .filter((e) => !e.deleted_at)
+    .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  for (const e of templateEntriesByRecency) push(e.exercise_id);
+
+  return seen.slice(0, limit);
+}
+
 export function useHomeTemplates(): HomeTemplate[] {
   useHome((s) => s.templates);
   return listHomeTemplates();

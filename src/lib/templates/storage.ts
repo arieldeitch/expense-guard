@@ -8,8 +8,10 @@ import type {
   WorkoutTemplateExercise,
   WorkoutTemplateVersion,
 } from "./types";
+import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:templates:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:templates:v1";
 export const CURRENT_OWNER_ID = "single-user";
 
 export interface TemplatesState {
@@ -83,16 +85,8 @@ export function subscribeTemplates(fn: () => void): () => void {
 
 export function writeTemplatesState(next: TemplatesState): void {
   cache = next;
-  const storage = safeStorage();
-  if (storage) {
-    try {
-      storage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      inMemoryFallback = next;
-    }
-  } else {
-    inMemoryFallback = next;
-  }
+  const result = reportWrite("templates", safeWriteStorage(STORAGE_KEY, next));
+  if (result.status !== "saved") inMemoryFallback = next;
   listeners.forEach((l) => l());
 }
 
