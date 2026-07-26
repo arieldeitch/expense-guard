@@ -57,6 +57,11 @@ function safeStorage(): Storage | null {
   }
 }
 
+/** האם localStorage זמין בכלל בסביבה הנוכחית (SSR / מצב פרטי / הרשאות חסומות). */
+export function isStorageAvailable(): boolean {
+  return safeStorage() !== null;
+}
+
 export function safeReadStorage(key: string): string | null {
   const storage = safeStorage();
   if (!storage) return null;
@@ -64,6 +69,35 @@ export function safeReadStorage(key: string): string | null {
     return storage.getItem(key);
   } catch {
     return null;
+  }
+}
+
+/**
+ * כותב payload שכבר סודר, **בלי לגעת בתוכן**.
+ *
+ * נדרש למיגרציות ול-snapshot: שם אסור לעבור דרך `JSON.parse`/coercion של מודול,
+ * כי זה עלול להשמיט שדות לא מוכרים. סיווג השגיאות זהה ל-`safeWriteStorage`.
+ */
+export function safeWriteRawStorage(key: string, payload: string): StorageWriteResult {
+  const storage = safeStorage();
+  if (!storage) return memoryOnly("storage_unavailable");
+  try {
+    storage.setItem(key, payload);
+    return SAVED;
+  } catch (e) {
+    return memoryOnly(isQuotaError(e) ? "quota_exceeded" : "unknown");
+  }
+}
+
+/** מוחק מפתח. משמש rollback בלבד — להחזרת מפתח שלא היה קיים לפני המיגרציה. */
+export function safeRemoveStorage(key: string): StorageWriteResult {
+  const storage = safeStorage();
+  if (!storage) return memoryOnly("storage_unavailable");
+  try {
+    storage.removeItem(key);
+    return SAVED;
+  } catch {
+    return memoryOnly("unknown");
   }
 }
 
@@ -84,15 +118,7 @@ export function safeWriteStorage(key: string, value: unknown): StorageWriteResul
   }
   if (payload === undefined) return failed("serialization_failed");
 
-  const storage = safeStorage();
-  if (!storage) return memoryOnly("storage_unavailable");
-
-  try {
-    storage.setItem(key, payload);
-    return SAVED;
-  } catch (e) {
-    return memoryOnly(isQuotaError(e) ? "quota_exceeded" : "unknown");
-  }
+  return safeWriteRawStorage(key, payload);
 }
 
 // ---------- registry של מצב ההתמדה לכל המודולים ----------

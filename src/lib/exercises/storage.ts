@@ -9,7 +9,8 @@ import type { Exercise, ExerciseMedia, MuscleGroup } from "./types";
 import { seedMuscleGroups, seedExercises } from "./seed";
 import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:exercises:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:exercises:v1";
 export const CURRENT_OWNER_ID = "single-user";
 
 export interface ExercisesState {

@@ -5,7 +5,8 @@
 import type { Goal, GoalSnapshot, GoalVersion } from "./types";
 import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
-const STORAGE_KEY = "fitlog:goals:v1";
+/** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const STORAGE_KEY = "fitlog:goals:v1";
 
 export interface GoalsState {
   goals: Goal[];

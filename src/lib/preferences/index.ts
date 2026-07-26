@@ -11,7 +11,9 @@ export type Preferences = {
   landingModule: LandingModule;
 };
 
-const STORAGE_KEY = "fitlog:preferences:v1";
+/** מפתח ה-localStorage של ההעדפות. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
+export const PREFERENCES_STORAGE_KEY = "fitlog:preferences:v1";
+const STORAGE_KEY = PREFERENCES_STORAGE_KEY;
 
 const DEFAULTS: Preferences = {
   landingModule: "home",

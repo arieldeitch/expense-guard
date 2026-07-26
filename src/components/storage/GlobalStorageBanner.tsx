@@ -12,17 +12,29 @@
  * - `memory_only` → `role="status"` · `failed` → `role="alert"`.
  * - **אין קריאה ישירה ל-localStorage מכאן** — הכול דרך `@/lib/storage`.
  *
- * ראה ADR-0032.
+ * מציג גם כשל של מיגרציית schema מקומית או נתונים מגרסה עתידית — שם המשתמש
+ * חייב לדעת שהאפליקציה **לא נגעה** בנתונים.
+ *
+ * ראה ADR-0032 ו-ADR-0033.
  */
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle, Info } from "lucide-react";
 import { useWorstStorageStatus } from "@/lib/storage/hooks";
+import { runLocalMigrationsOnce, type MigrationResult } from "@/lib/storage/migrations";
 import { pickStorageNotice } from "./storageNotice";
 
 export function GlobalStorageBanner() {
   const worst = useWorstStorageStatus();
+  const [migration, setMigration] = useState<MigrationResult | null>(null);
 
-  const notice = pickStorageNotice(worst.status);
+  // ב-effect בלבד: המיגרציה נוגעת ב-localStorage, שאינו קיים ב-SSR. הרצה בזמן
+  // render הייתה יוצרת hydration mismatch (בשרת התוצאה תמיד "אחסון לא זמין").
+  useEffect(() => {
+    setMigration(runLocalMigrationsOnce());
+  }, []);
+
+  const notice = pickStorageNotice(worst.status, migration);
   if (!notice) return null;
 
   const isAlert = notice.role === "alert";
