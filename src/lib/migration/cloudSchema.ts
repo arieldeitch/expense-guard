@@ -405,6 +405,15 @@ export const LOCAL_ONLY_COLLECTIONS: readonly string[] = [
   "exercises.seeded",
 ];
 
+/**
+ * מודולים שקיימים ב-Export, **אמורים** לעבור לענן לפי החוזה, וטרם מופו.
+ *
+ * `preferences` הוא singleton (שורת `profiles` אחת ממופתחת ב-user id) ולא אוסף
+ * מערכים, ולכן אינו נתמך ע"י ה-pipeline הנוכחי שעובד ברמת אוספים. הוא מדווח
+ * במפורש כ-`deferred_entities` — **לא נבלע בשקט**. ראה `open-tasks.md`.
+ */
+export const DEFERRED_MODULES: readonly string[] = ["preferences"];
+
 export function findEntity(table: string): CloudEntityDef | null {
   return CLOUD_ENTITIES.find((e) => e.table === table) ?? null;
 }

@@ -429,4 +429,11 @@ describe("פעולות ודוח", () => {
     const report = run(buildRehearsalEnvelope());
     expect(report.unsupported_entities).toEqual([]);
   });
+
+  it("preferences מדווח כ-deferred — לא הועבר, ולא נבלע בשקט", () => {
+    const report = run(buildRehearsalEnvelope());
+    expect(report.deferred_entities).toEqual(["preferences"]);
+    // ובאמת אין לו טבלה בענן.
+    expect(repo.count("profiles")).toBe(0);
+  });
 });

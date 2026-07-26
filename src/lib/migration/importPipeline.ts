@@ -15,6 +15,7 @@ import { BACKUP_FORMAT, validateBackup, type BackupEnvelope, type ValidationRepo
 import { checksumOf } from "@/lib/storage/checksum";
 import {
   CLOUD_ENTITIES,
+  DEFERRED_MODULES,
   LOCAL_ONLY_COLLECTIONS,
   topologicalImportOrder,
   type CloudEntityDef,
@@ -98,6 +99,11 @@ export interface ImportReport {
   conflict_details: ConflictDetail[];
   /** אוספים שנמצאו בקובץ ואין להם ייצוג בענן — מדווחים, לא נבלעים. */
   unsupported_entities: string[];
+  /**
+   * מודולים שקיימים בקובץ ואמורים לעבור לענן לפי החוזה, אך טרם מופו.
+   * מדווחים במפורש כדי שלא ייראה כאילו הועברו.
+   */
+  deferred_entities: string[];
   ownership: OwnershipSummary;
   operations: ImportOperation[];
 }
@@ -229,6 +235,7 @@ export function runCloudImport(input: unknown, options: RunImportOptions): Impor
     dependency_failures: [],
     conflict_details: [],
     unsupported_entities: [],
+    deferred_entities: [],
     ownership: emptyOwnership,
     operations: [],
   });
@@ -251,6 +258,7 @@ export function runCloudImport(input: unknown, options: RunImportOptions): Impor
   const unsupported_entities = allCollectionKeys(normalized).filter(
     (key) => !mappedCollections.has(key) && !LOCAL_ONLY_COLLECTIONS.includes(key),
   );
+  const deferred_entities = DEFERRED_MODULES.filter((m) => m in normalized);
 
   // (7) generate deterministic operations, בסדר הטופולוגי.
   const operations: ImportOperation[] = [];
@@ -408,6 +416,7 @@ export function runCloudImport(input: unknown, options: RunImportOptions): Impor
     dependency_failures,
     conflict_details,
     unsupported_entities,
+    deferred_entities,
     ownership: { ...ownership, ignored_source_owners: [...ignoredOwners].sort() },
     operations,
   };
