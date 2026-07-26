@@ -1,5 +1,15 @@
 # Change Log
 
+## 2026-07-26 · מיזוג מסלול A ל-`main` (Claude Code)
+
+- **merge** · `feat/home-plan-simple-flow` (`8470c4f`) מוזג ל-`main` (`de4c996`) ב-**merge commit `0e51653`** עם `--no-ff`. **היסטוריית ה-feature נשמרה במלואה** — ללא squash, ללא rebase, ללא amend, ללא force. `origin/main` לא התקדם בינתיים ולכן לא היו קונפליקטים.
+- **verify (הורץ על `main` עצמו, לא הוסק מה-feature branch)** · `bun run typecheck` exit 0 · `bun run test:unit` **305/305** (21 קבצים) · `bun run test:router` **61/61** (10 קבצים) · `bun run test` exit 0 · `src/lib/migration` 44/44 · `src/lib/readiness` 29/29 · `src/lib/backup` 14/14 · `src/lib/storage` 34/34 · `bunx eslint . --rule '{"prettier/prettier":"off"}'` **0 errors / 8 baseline warnings** · `bun run build` ×2 exit 0 · `bun run typecheck` אחרי build exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` exit 0 · working tree נקי.
+- **scope verification** · `package.json` שונה **רק בסקריפטי בדיקות**; בלוקי `dependencies`/`devDependencies` **זהים בייט-לבייט** ל-`de4c996`. אין import של `@supabase`, אין `process.env`/`import.meta.env`, אין `fetch`/WebSocket ב-`src/lib/migration` ו-`src/lib/readiness`, ואין קובצי `.env`/secret/credential ב-tracking.
+- **R-24 נשאר ללא שינוי במכוון** · `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` עדיין מכיל `field: "session_id"` עבור `home.entries` (אומת על `main` לאחר המיזוג). Restore מקומי עדיין מקבל `home.entries` יתומים; ה-import pipeline של ה-rehearsal חוסם אותם בנפרד. התיקון יטופל **בענף נפרד** עם אסטרטגיית תאימות לאחור מפורשת, כי הוא עלול לפסול קובצי גיבוי שהתקבלו עד היום.
+- **`preferences`** נשאר מדווח במפורש כ-`deferred_entities` ואינו ממופה לענן.
+- **R-22 נשאר פתוח** · עמידות הגיבוי תלויה בשמירה ידנית של הקובץ מחוץ למכשיר.
+- **לא בוצע:** deploy · פרויקט Supabase · SDK · Auth/RLS · migrations בענן · env/secret/credentials · dependency חדשה · tag · force-push · שינוי היסטוריה.
+
 ## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate (Claude Code)
 
 - **test(migration)** · `InMemoryCloudRepository` — ענן מדומה בזיכרון. **אין Supabase, SDK, SQL, רשת, env, secret או עלות.** טבלאות כמפות לפי primary key יציב (אף פעם לא index של מערך); אותו id + אותו תוכן = no-op · תוכן שונה = conflict **ללא דריסה** · הורה חסר = הרשומה אינה נכתבת.

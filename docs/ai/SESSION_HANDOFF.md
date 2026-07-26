@@ -3,6 +3,22 @@
 > ⚠️ **הסעיף העדכני ביותר הוא זה שמיד למטה.** הסעיפים שאחריו נשמרים כרשומה
 > היסטורית; במקרה של סתירה — **הסעיף העליון גובר**.
 
+## ✅ עדכון 2026-07-26 (ג) — מסלול A מוזג ל-`main` ואומת עליו
+
+**`main` = `origin/main` = `0e51653`** (merge commit). `feat/home-plan-simple-flow` (`8470c4f`) מוזג ב-`--no-ff`; **היסטוריית ה-feature נשמרה במלואה** — ללא squash/rebase/amend/force. ה-feature branch **לא נמחק**.
+
+**אימות מלא הורץ על `main` עצמו:** typecheck exit 0 · `test:unit` **305/305** (21 קבצים) · `test:router` **61/61** (10 קבצים) · `bun run test` exit 0 · migration 44/44 · readiness 29/29 · backup 14/14 · storage 34/34 · eslint **0 errors / 8 baseline warnings** · build ×2 exit 0 · typecheck אחרי build exit 0 · `routeTree.gen.ts` ללא diff · working tree נקי.
+
+**אומת שאין חריגת scope:** `package.json` שונה רק בסקריפטי בדיקות (בלוקי התלויות זהים בייט-לבייט); אין `@supabase`, אין `process.env`/`import.meta.env`, אין `fetch`/WebSocket בספריות החדשות, אין `.env`/secret ב-tracking. **לא בוצע deploy.**
+
+**🔴 הפעולה הידנית שנותרה למשתמש:** ליצור **Export ידני מגרסת `main` המאומתת** דרך `/backup` ולשמור את הקובץ **מחוץ לאחסון הדפדפן** — רצוי במכשיר נפרד או בתיקייה מגובה. **טרם בוצע.** עד אז R-22 פתוח בפועל.
+
+**נדחה במכוון (החלטת משתמש):**
+- **R-24** — הכלל המת ב-`REFERENCE_RULES` (`field: "session_id"` במקום `home_session_id`) **לא תוקן**. אומת שהוא עדיין קיים על `main` אחרי המיזוג. יטופל **בענף נפרד** עם אסטרטגיית תאימות לאחור, tests ותיעוד — כי התיקון עלול לפסול קובצי גיבוי שהתקבלו עד היום.
+- **`preferences`** נשאר מדווח כ-`deferred_entities`, ללא מיפוי לענן.
+
+---
+
 ## 🟢 עדכון 2026-07-26 (ב) — מסלול A נסגר לשימוש מקומי (branch `feat/home-plan-simple-flow`)
 
 **מה נסגר:**
