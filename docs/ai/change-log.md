@@ -1,5 +1,21 @@
 # Change Log
 
+## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate (Claude Code)
+
+- **test(migration)** · `InMemoryCloudRepository` — ענן מדומה בזיכרון. **אין Supabase, SDK, SQL, רשת, env, secret או עלות.** טבלאות כמפות לפי primary key יציב (אף פעם לא index של מערך); אותו id + אותו תוכן = no-op · תוכן שונה = conflict **ללא דריסה** · הורה חסר = הרשומה אינה נכתבת.
+- **test(migration)** · `cloudSchema.ts` — מפת **27 ישויות ענן** נגזרת מהמודל בפועל: מפתח יציב, קשרי הורה, שדה סדר, סוג בעלות. **סדר הייבוא מחושב טופולוגית** מהקשרים ואינו רשימה ידנית; self-reference (`home_templates.parent_template_id`) מוחרג ואינו יוצר מעגל.
+- **test(migration)** · `importPipeline.ts` — parse → validate → integrity (checksum + total_records) → normalize → map → graph → topological sort → operations → execute → report. `operation_id` דטרמיניסטי (`table#id`). דוח מלא: total/inserted/unchanged/conflicts/rejected, per-entity, dependency failures, unsupported entities, ownership.
+- **test(migration)** · ownership — `authenticatedUserId` הוא **מקור הסמכות היחיד**. `owner_id`/`user_id` שבקובץ מוסרים מגוף ה-payload ונשמרים כ-`source_metadata` בלבד. taxonomy מערכתי (`is_system`) מקבל `user_id: null`; תרגיל מותאם מקבל בעלות. שדות סוד (`token`/`secret`/`api_key`/`service_role`/...) לעולם אינם עוברים.
+- **feat(readiness)** · `buildReadinessReport` — **פונקציה טהורה** שגוזרת 16 בדיקות ושני gates. ראיה חסרה, ריצה שלא בוצעה או יכולת כושלת = `false`. אין קבוע `true` ואין הסקה מקיום קובץ.
+- **feat(readiness)** · `runReadinessAudit` — מייצר ראיות בכך שהוא **מריץ את היכולות בפועל**: כתיבה דרך כל 9 ה-writers · הסלמה והתאוששות ב-registry · מיגרציה + גרסת schema · אימות snapshot · **rollback אמיתי אחרי שינוי אמיתי** · שתילת גרסה עתידית ואימות חסימה · Export → מחיקה מלאה → Restore → Export והשוואת checksum · rehearsal כפול · בדיקת קונפליקט. בסיום מחזיר את תשעת המפתחות למצבם. ⚠️ מיועד לסביבת אימות מבודדת; **אף רכיב UI אינו קורא לו**.
+- **תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**. שניהם נגזרו מריצה, לא הוצהרו.
+- **backward compatibility** · **אף קובץ קיים לא שונה.** שתי תיקיות חדשות בלבד (`src/lib/migration/`, `src/lib/readiness/`). אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0, domain contracts או UI. כל 293 הבדיקות הקודמות ממשיכות לעבור.
+- **docs** · ADR-0034 (rehearsal כתנאי מוקדם) · ADR-0035 (בעלות ב-Export אינה בעלות הרשאה) · ADR-0036 (Readiness Gate נגזר, לא מוצהר). R-23 ו-R-24 נפתחו.
+- **tests** · +72 (סה"כ **365**): `inMemoryCloudRepository` (11) · `importPipeline` (32) · `readinessReport` (20) · `readinessAudit` (9).
+- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 304/304 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
+- **ממצא (P1, לא תוקן — R-24)** · `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id` עבור `home.entries`, אך השדה בפועל הוא `home_session_id` — הכלל אינו יורה לעולם. ה-import pipeline תופס את המקרה בעצמו ולכן זה **אינו חוסם** את ה-rehearsal; לא שיניתי את שכבת הגיבוי שהושלמה. יש בדיקה שמתעדת את הפער, והתיקון מפורט ב-`open-tasks.md`.
+- **לא בוצע:** חיבור Supabase · SDK · Auth/RLS · env/secret · deploy · dependency חדשה · שינוי UI · merge ל-`main`.
+
 ## 2026-07-26 · בטיחות אחסון מקומי — התראה גלובלית + schema גרסאי (Claude Code)
 
 - **fix(ui)** · `GlobalStorageBanner` ברמת `__root` — **כשל כתיבה מכל אחד מ-9 המודולים גלוי בכל מסך**, לא רק ב-Workout Execution. `memory_only` → `role="status"` + "חלק מהשינויים לא נשמרו בדפדפן ועלולים להיעלם לאחר רענון." · `failed` → `role="alert"` + "השמירה נכשלה. הורד גיבוי לפני רענון או סגירת הדפדפן." אייקון + כותרת מילולית (צבע אינו הסמן היחיד) + קישור ל-`/backup`. **banner מתמשך, לא toast בכל שינוי**; כתיבה מוצלחת אחרי כשל מסירה אותו אוטומטית.

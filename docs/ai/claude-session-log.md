@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate
+
+**מטרה:** להוכיח את חוזה ההגירה **בלי Supabase**, ולגזור Readiness Gate אמיתי מיכולות ולא מקבועים.
+
+**ממצא #1 — שדה ההורה של `home.entries` הוא `home_session_id`, לא `session_id`.** `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id`, ולכן הכלל **אינו יורה לעולם**. בנוסף כל כלל מדלג כש-`parents.size === 0`. מיפוי הישויות שלי בנוי על השדה האמיתי, ולכן ה-pipeline תופס את המקרה גם בלי לתקן את הגיבוי. **לא תוקן** — ההוראה הייתה לא לשנות את שכבת האחסון שהושלמה אלא בבאג חוסם, וזה אינו חוסם. נפתח כ-R-24/P1 עם התיקון המדויק, ויש בדיקה שמתעדת את הפער.
+
+**ממצא #2 — `_resetXStateForTests()` מוחק את מפתח האחסון.** כל תשעת ה-helpers קוראים ל-`removeItem` כשלא מועבר state. זה הפיל שתי בדיקות שכתבתי (זרעתי נתונים ואז "ניקיתי caches", מה שמחק את מה שזרעתי). הכלל שנגזר: **תמיד reset לפני כתיבה, לעולם לא אחריה.** תועד בקוד ובבדיקות.
+
+**ממצא #3 — נורמליזציה של ה-writers חשפה fixture חלקי.** ה-fixture הכיל `runs.lastUsed: {}`, וה-writer השלים אותו לצורתו המלאה — מה שגרם ל"האחסון חזר למצבו" להיכשל. תוקן ב-fixture (scalars מלאים) ולא בהרפיית הבדיקה, כדי ש"שחזור מדויק" יישאר טענה בעלת משמעות.
+
+**החלטת ארכיטקטורה — גזירה מול ראיה.** `buildReadinessReport` היא פונקציה טהורה שרק גוזרת; `runReadinessAudit` מייצר ראיות בכך שהוא מריץ יכולות בפועל (rollback אמיתי, שתילת גרסה עתידית, מחיקה ושחזור מלאים). ראיה חסרה = `false`. המחיר: ה-audit כותב ל-localStorage ולכן מיועד לסביבת בדיקות בלבד — **אף רכיב UI אינו קורא לו**, ולכן אין שינוי UI.
+
+**Backward compatibility:** **אף קובץ קיים לא שונה** — שתי תיקיות חדשות בלבד. אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0 או domain contracts.
+
+**בדיקות:** +72 (11 + 32 + 20 + 9) → **365 סה"כ**. typecheck exit 0 · `test:unit` 304/304 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
+
+**תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**, שניהם נגזרים מריצה.
+
+**נותר פתוח:** Import אמיתי מול Supabase עם Auth/RLS (R-23) · תיקון R-24 · גיבוי תלוי משמעת משתמש.
+
+---
+
 ## 2026-07-26 · בטיחות אחסון מקומי — סגירה ממוקדת (1 מתוך 2)
 
 **מטרה:** להשלים **רק** את בטיחות האחסון המקומי — התראת כשל כתיבה גלובלית, local schema version, migration registry, ו-snapshot/rollback לפני מיגרציה. במפורש מחוץ להיקף: Fake Supabase rehearsal, readinessReport, חיבור Supabase, שינוי בממשק תוכניות הבית, dependency חדשה, merge ל-`main`, deploy.

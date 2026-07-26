@@ -23,11 +23,14 @@
 | **migration registry** | ✅ `legacy -> 1.0.0` | `src/lib/storage/migrations.ts` — idempotent, לא הרסנית |
 | **snapshot לפני מיגרציה** | ✅ עם checksum ו-rollback | `fitlog:migration-snapshot` — נפרד מ-snapshot ה-Restore |
 | **future schema version** | ✅ נחסם | גרסה גבוהה מ-1.0.0 → `future_version_blocked`, אין נגיעה בנתונים |
-| Fake Supabase rehearsal | ❌ טרם | פתוח — ראה `open-tasks.md` |
-| Readiness Gate | ❌ טרם | פתוח |
+| **Fake Supabase rehearsal** | ✅ **עובר** | `src/lib/migration/` — ענן מדומה בזיכרון, 43 בדיקות (ADR-0034) |
+| **Readiness Gate** | ✅ **נגזר מיכולות** | `src/lib/readiness/` — 16 בדיקות, 2 gates, 29 בדיקות (ADR-0036) |
+| `ready_for_single_device_use` | ✅ **true** | נגזר מ-10 יכולות שהורצו בפועל |
+| `ready_for_future_supabase_migration_contract` | ✅ **true** | נגזר מהאמור לעיל + ids/idempotency/סדר/בעלות/קונפליקטים |
+| **Import אמיתי מול Supabase** | ❌ טרם | הפער העיקרי שנותר — דורש Auth/RLS ופרויקט אמיתי |
 | העברה למכשיר אחר | 🟡 ידני בלבד | דרך קובץ Export/Import; אין sync |
 
-**מסקנה:** שכבת האחסון המקומית **גרסאית, ניתנת לשחזור, וכשלי כתיבה גלויים**. עדיין אין בסיס נתונים ענני ואין sync אוטומטי — העברה בין מכשירים היא ייצוא/ייבוא ידני. ראה R-22, ADR-0030, ADR-0032, ADR-0033.
+**מסקנה:** שכבת האחסון המקומית **גרסאית, ניתנת לשחזור, וכשלי כתיבה גלויים**, והנתונים **הוכחו** כעומדים בחוזה ההגירה מול ענן מדומה. עדיין אין בסיס נתונים ענני, אין Auth/RLS ואין sync — העברה בין מכשירים היא ייצוא/ייבוא ידני, ונדרש מבחן Import אמיתי מול Supabase. ראה R-22, ADR-0030, ADR-0032, ADR-0033, ADR-0034, ADR-0035, ADR-0036.
 
 ## ⚠️ Reconciliation — Product Alignment Audit (2026-07-24)
 
@@ -37,7 +40,7 @@
 - **53 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals חדשים מ-Phase 1.)
 - **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
 - **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
-- **בדיקות (עודכן 2026-07-26): 293 עוברות** — `test:unit` **232/232** (17 קבצים, `src/lib`, סביבת node) + `test:router` **61/61** (10 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026).
+- **בדיקות (עודכן 2026-07-26): 365 עוברות** — `test:unit` **304/304** (21 קבצים, `src/lib`, סביבת node) + `test:router` **61/61** (10 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026).
 - **Workout Execution (`/sessions/$id`) — פעיל ושמיש.** ביצוע אימון כוח: סטים בפועל (משקל/חזרות/זמן/**RPE**) בעריכה inline, השלמה/ביטול, הוספה/שכפול/דילוג סט, **דילוג על תרגיל שלם**, החלפת תרגיל, סופרסטים, rest timer, pause/resume, **סיום מלא או חלקי**, ו**סטטוס שמירה אמיתי** (`נשמר במכשיר` רק אחרי אישור ה-repository; אזהרה כשהנתונים בזיכרון בלבד). autosave מלא — האימון שורד refresh. ADR-0027/0028.
 - **תיקון חוזה בתיעוד:** `WorkoutSessionSnapshot` **אינו קיים**. החוזה בפועל: `StrengthSession` → `StrengthSessionExercise` (+ `StrengthSessionExerciseSnapshot`) → `StrengthSet`. typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי. cross-domain isolation נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק **גם ברמת render דרך routes אמיתיים**.
 - **route structure (עודכן 2026-07-25):** כל route module המשמש מסך עצמאי הוא `*.index.tsx`. **`__root.tsx` הוא ה-layout היחיד** (ה-`<Outlet />` היחיד בריפו); `routeTree.gen.ts` מכיל רק `RootRouteChildren`. ראה ADR-0025.

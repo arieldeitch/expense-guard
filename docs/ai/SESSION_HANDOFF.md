@@ -1,7 +1,33 @@
 # Session Handoff
 
-> ⚠️ **הסעיף העדכני ביותר הוא זה שמיד למטה (2026-07-26).** הסעיפים שאחריו נשמרים
-> כרשומה היסטורית; במקרה של סתירה — **הסעיף העליון גובר**.
+> ⚠️ **הסעיף העדכני ביותר הוא זה שמיד למטה.** הסעיפים שאחריו נשמרים כרשומה
+> היסטורית; במקרה של סתירה — **הסעיף העליון גובר**.
+
+## 🟢 עדכון 2026-07-26 (ב) — מסלול A נסגר לשימוש מקומי (branch `feat/home-plan-simple-flow`)
+
+**מה נסגר:**
+1. **Fake Supabase rehearsal** (`src/lib/migration/`) — ענן מדומה בזיכרון. **אין Supabase, SDK, SQL, רשת, env, secret או עלות.** מפת **27 ישויות** נגזרת מהמודל בפועל; **סדר הייבוא מחושב טופולוגית** ואינו רשימה ידנית. הוכח: הורה לפני ילד · ילד יתום נדחה יחד עם ילדיו · ייבוא חוזר = no-op מלא · קונפליקט מפורש ללא דריסה · מזהים, קשרים, סדר וחותמות זמן שורדים.
+2. **Ownership** — `authenticatedUserId` הוא מקור הסמכות היחיד. `owner_id`/`user_id` שבקובץ מוסרים מה-payload ונשמרים כ-`source_metadata` בלבד. taxonomy מערכתי מקבל `user_id: null`. שדות סוד לעולם אינם עוברים.
+3. **Readiness Gate** (`src/lib/readiness/`) — 16 בדיקות ושני gates, **נגזרים מריצות אמיתיות**. `buildReadinessReport` טהורה; `runReadinessAudit` מריץ יכולות בפועל (rollback אמיתי, שתילת גרסה עתידית, מחיקה ושחזור מלאים, rehearsal כפול). ראיה חסרה = `false`.
+
+**תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**.
+
+**Git:** `3c4393e` test(migration) · `6ef9cc2` feat(readiness) · docs. ללא amend/rebase/force. **אין merge ל-`main`. אין deploy.**
+
+**בדיקות: 365 עוברות** — `test:unit` 304/304 (21 קבצים) · `test:router` 61/61 (10 קבצים). typecheck exit 0 (גם אחרי build) · eslint 0 errors / 8 baseline · build ×2 · `routeTree.gen.ts` ללא diff.
+
+**Backward compatibility:** **אף קובץ קיים לא שונה** — שתי תיקיות חדשות בלבד. אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0, domain contracts או UI.
+
+**ADR חדשים:** ADR-0034 (rehearsal כתנאי מוקדם) · ADR-0035 (בעלות ב-Export אינה בעלות הרשאה) · ADR-0036 (Readiness Gate נגזר, לא מוצהר).
+
+**🔴 מה שנותר — ואינו חוסם שימוש יומיומי:**
+- **Import אמיתי מול Supabase עם Auth/RLS (R-23).** ה-rehearsal מוכיח את **המודל**, לא את **המנוע**: לא נבדקו RLS, FK constraints, טיפוסי עמודות, טרנזקציות ורשת. דורש Approval Brief.
+- **R-24 / P1 — `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id` עבור `home.entries`, אך השדה בפועל הוא `home_session_id`**, ולכן הכלל אינו יורה לעולם. ה-import pipeline תופס את המקרה בעצמו, ולכן זה אינו חוסם — **לכן לא תוקן** (ההוראה הייתה לא לגעת בשכבת האחסון שהושלמה). התיקון המדויק וההשלכה (גיבויים עם הפניות שבורות ייפסלו) מפורטים ב-`open-tasks.md`.
+- גיבוי עדיין תלוי במשמעת המשתמש — אין תזכורת ואין גיבוי אוטומטי.
+
+**הפעולה הבאה המומלצת:** מיזוג ה-feature branch ל-`main`, אימות מלא **על `main` עצמו**, ולאחר מכן **Export ידני ושמירת קובץ הגיבוי מחוץ לדפדפן לפני האימון**.
+
+---
 
 ## 🟢 עדכון 2026-07-26 — בטיחות אחסון מקומי הושלמה (branch `feat/home-plan-simple-flow`)
 

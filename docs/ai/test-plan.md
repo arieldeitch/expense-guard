@@ -2,11 +2,19 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
-> **עדכון 2026-07-26 (בטיחות אחסון מקומי)** — הבדיקות מחולקות לשתי משפחות:
-> - **`bun run test:unit`** → `vitest run src/lib` — **232 בדיקות, 17 קבצים**, סביבת `node` (קבצים בודדים מצהירים `jsdom` ברמת קובץ). יציב ומהיר.
+> **עדכון 2026-07-26 (סגירת מסלול A)** — נוספו `src/lib/migration/` ו-`src/lib/readiness/`:
+> - **`inMemoryCloudRepository.test.ts` (11)** — מפתח יציב ולא index · unchanged מול conflict · קונפליקט אינו משנה את הרשומה הקיימת · הורה חסר אינו נכתב · inspection ו-reset.
+> - **`importPipeline.test.ts` (32)** — אימות ושלמות (פורמט זר, checksum שגוי, מזהים כפולים) · **סדר תלויות טופולוגי** ואימות שכל הורה נכתב לפני ילדו · ילד יתום נדחה יחד עם ילדיו · שימור `sequence` ו-`set_number` · **ownership**: user מאומת בלבד, `user_id` זדוני בקובץ אינו משפיע, שני משתמשים אינם חולקים בעלות, taxonomy מערכתי ללא בעלות, שדות סוד אינם עוברים · **idempotency**: ייבוא שני ושלישי = no-op מלא · **conflicts**: מדווח עם entity+id, אינו נדרס, אינו מכפיל · דטרמיניזם של `operation_id` · unsupported entities.
+> - **`readinessReport.test.ts` (20)** — ללא ראיות כל 16 הבדיקות `false` · כל יכולת חסרה מפילה את ה-gate הנכון · rehearsal/ownership/dependency/idempotency/conflict כושלים מפילים את gate הענן בלבד · מבנה 16 הבדיקות.
+> - **`readinessAudit.test.ts` (9, jsdom)** — הרצה מקצה לקצה מול אחסון אמיתי מבודד: שני ה-gates נפתחים · הראיות אינן ריקות · האחסון חוזר למצבו · ההיררכיה משוחזרת בענן · ownership · שימור חותמות זמן וסטטוסים · דטרמיניזם · נתונים שבורים מפילים את gate הענן.
+>
+> **מה ה-rehearsal לא מכסה (ADR-0034, R-23):** RLS, Auth, FK constraints של מנוע אמיתי, טרנזקציות, טיפוסי עמודות, רשת. נדרש מבחן Import אמיתי מול Supabase.
+>
+> **הבדיקות מחולקות לשתי משפחות:**
+> - **`bun run test:unit`** → `vitest run src/lib` — **304 בדיקות, 21 קבצים**, סביבת `node` (קבצים בודדים מצהירים `jsdom` ברמת קובץ). יציב ומהיר.
 > - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **61 בדיקות, 10 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
 >   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11) · `workoutExecution` (4) · `workoutExecutionEditing` (3) · `workoutExecutionAddSet` (1) · `homePlanPicker` (2) · **`globalPersistenceWarning` (13)**.
-> - **`bun run test`** = `test:unit && test:router` → **293 בדיקות**, exit 0.
+> - **`bun run test`** = `test:unit && test:router` → **365 בדיקות**, exit 0.
 >
 > **בטיחות אחסון מקומי — היכן נבדק מה:**
 > - **`src/lib/storage/__tests__/safeStorage.test.ts` (11)** — סיווג כשלי כתיבה, registry, `getWorstStorageStatus`, התאוששות.
