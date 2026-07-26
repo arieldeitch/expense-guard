@@ -18,7 +18,7 @@
 
 **Backward compatibility:** **אף קובץ קיים לא שונה** — שתי תיקיות חדשות בלבד. אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0 או domain contracts.
 
-**בדיקות:** +72 (11 + 32 + 20 + 9) → **365 סה"כ**. typecheck exit 0 · `test:unit` 304/304 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
+**בדיקות:** +73 (11 + 33 + 20 + 9) → **366 סה"כ**. typecheck exit 0 · `test:unit` 305/305 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
 
 **תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**, שניהם נגזרים מריצה.
 

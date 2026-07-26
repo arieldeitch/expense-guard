@@ -11,8 +11,8 @@
 - **תוצאה:** `ready_for_single_device_use` = **true** · `ready_for_future_supabase_migration_contract` = **true**. שניהם נגזרו מריצה, לא הוצהרו.
 - **backward compatibility** · **אף קובץ קיים לא שונה.** שתי תיקיות חדשות בלבד (`src/lib/migration/`, `src/lib/readiness/`). אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0, domain contracts או UI. כל 293 הבדיקות הקודמות ממשיכות לעבור.
 - **docs** · ADR-0034 (rehearsal כתנאי מוקדם) · ADR-0035 (בעלות ב-Export אינה בעלות הרשאה) · ADR-0036 (Readiness Gate נגזר, לא מוצהר). R-23 ו-R-24 נפתחו.
-- **tests** · +72 (סה"כ **365**): `inMemoryCloudRepository` (11) · `importPipeline` (32) · `readinessReport` (20) · `readinessAudit` (9).
-- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 304/304 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
+- **tests** · +73 (סה"כ **366**): `inMemoryCloudRepository` (11) · `importPipeline` (33) · `readinessReport` (20) · `readinessAudit` (9).
+- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 305/305 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
 - **ממצא (P1, לא תוקן — R-24)** · `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id` עבור `home.entries`, אך השדה בפועל הוא `home_session_id` — הכלל אינו יורה לעולם. ה-import pipeline תופס את המקרה בעצמו ולכן זה **אינו חוסם** את ה-rehearsal; לא שיניתי את שכבת הגיבוי שהושלמה. יש בדיקה שמתעדת את הפער, והתיקון מפורט ב-`open-tasks.md`.
 - **לא בוצע:** חיבור Supabase · SDK · Auth/RLS · env/secret · deploy · dependency חדשה · שינוי UI · merge ל-`main`.
 

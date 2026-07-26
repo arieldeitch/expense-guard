@@ -14,7 +14,7 @@
 
 **Git:** `3c4393e` test(migration) · `6ef9cc2` feat(readiness) · docs. ללא amend/rebase/force. **אין merge ל-`main`. אין deploy.**
 
-**בדיקות: 365 עוברות** — `test:unit` 304/304 (21 קבצים) · `test:router` 61/61 (10 קבצים). typecheck exit 0 (גם אחרי build) · eslint 0 errors / 8 baseline · build ×2 · `routeTree.gen.ts` ללא diff.
+**בדיקות: 366 עוברות** — `test:unit` 305/305 (21 קבצים) · `test:router` 61/61 (10 קבצים). typecheck exit 0 (גם אחרי build) · eslint 0 errors / 8 baseline · build ×2 · `routeTree.gen.ts` ללא diff.
 
 **Backward compatibility:** **אף קובץ קיים לא שונה** — שתי תיקיות חדשות בלבד. אין שינוי ב-IDs, storage keys, schema 1.0.0, Export format 1.0.0, domain contracts או UI.
 
