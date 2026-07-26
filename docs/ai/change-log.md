@@ -3,8 +3,8 @@
 ## 2026-07-26 · סגירת מסלול A — Fake Supabase rehearsal + Readiness Gate (Claude Code)
 
 - **test(migration)** · `InMemoryCloudRepository` — ענן מדומה בזיכרון. **אין Supabase, SDK, SQL, רשת, env, secret או עלות.** טבלאות כמפות לפי primary key יציב (אף פעם לא index של מערך); אותו id + אותו תוכן = no-op · תוכן שונה = conflict **ללא דריסה** · הורה חסר = הרשומה אינה נכתבת.
-- **test(migration)** · `cloudSchema.ts` — מפת **27 ישויות ענן** נגזרת מהמודל בפועל: מפתח יציב, קשרי הורה, שדה סדר, סוג בעלות. **סדר הייבוא מחושב טופולוגית** מהקשרים ואינו רשימה ידנית; self-reference (`home_templates.parent_template_id`) מוחרג ואינו יוצר מעגל.
-- **test(migration)** · `importPipeline.ts` — parse → validate → integrity (checksum + total_records) → normalize → map → graph → topological sort → operations → execute → report. `operation_id` דטרמיניסטי (`table#id`). דוח מלא: total/inserted/unchanged/conflicts/rejected, per-entity, dependency failures, unsupported entities, ownership.
+- **test(migration)** · `cloudSchema.ts` — מפת **30 ישויות ענן** נגזרת מהמודל בפועל: מפתח יציב, קשרי הורה, שדה סדר, סוג בעלות. **סדר הייבוא מחושב טופולוגית** מהקשרים ואינו רשימה ידנית; self-reference (`home_templates.parent_template_id`) מוחרג ואינו יוצר מעגל.
+- **test(migration)** · `importPipeline.ts` — parse → validate → integrity (checksum + total_records) → normalize → map → graph → topological sort → operations → execute → report. `operation_id` דטרמיניסטי (`table#id`). דוח מלא: total/inserted/unchanged/conflicts/rejected, per-entity, dependency failures, unsupported entities, deferred entities, ownership.
 - **test(migration)** · ownership — `authenticatedUserId` הוא **מקור הסמכות היחיד**. `owner_id`/`user_id` שבקובץ מוסרים מגוף ה-payload ונשמרים כ-`source_metadata` בלבד. taxonomy מערכתי (`is_system`) מקבל `user_id: null`; תרגיל מותאם מקבל בעלות. שדות סוד (`token`/`secret`/`api_key`/`service_role`/...) לעולם אינם עוברים.
 - **feat(readiness)** · `buildReadinessReport` — **פונקציה טהורה** שגוזרת 16 בדיקות ושני gates. ראיה חסרה, ריצה שלא בוצעה או יכולת כושלת = `false`. אין קבוע `true` ואין הסקה מקיום קובץ.
 - **feat(readiness)** · `runReadinessAudit` — מייצר ראיות בכך שהוא **מריץ את היכולות בפועל**: כתיבה דרך כל 9 ה-writers · הסלמה והתאוששות ב-registry · מיגרציה + גרסת schema · אימות snapshot · **rollback אמיתי אחרי שינוי אמיתי** · שתילת גרסה עתידית ואימות חסימה · Export → מחיקה מלאה → Restore → Export והשוואת checksum · rehearsal כפול · בדיקת קונפליקט. בסיום מחזיר את תשעת המפתחות למצבם. ⚠️ מיועד לסביבת אימות מבודדת; **אף רכיב UI אינו קורא לו**.
@@ -14,6 +14,8 @@
 - **tests** · +73 (סה"כ **366**): `inMemoryCloudRepository` (11) · `importPipeline` (33) · `readinessReport` (20) · `readinessAudit` (9).
 - **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 305/305 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
 - **ממצא (P1, לא תוקן — R-24)** · `REFERENCE_RULES` ב-`backup/repo.ts` בודק `session_id` עבור `home.entries`, אך השדה בפועל הוא `home_session_id` — הכלל אינו יורה לעולם. ה-import pipeline תופס את המקרה בעצמו ולכן זה **אינו חוסם** את ה-rehearsal; לא שיניתי את שכבת הגיבוי שהושלמה. יש בדיקה שמתעדת את הפער, והתיקון מפורט ב-`open-tasks.md`.
+- **fix(migration) `dc4b57b`** · `preferences` קיים ב-Export ואמור להפוך לשורת `profiles`, אך הוא **singleton** ולא אוסף מערכים — וה-pipeline, שעובד ברמת אוספים, דילג עליו **בלי לדווח**. זה סתר את ההבטחה ש"ישות ללא mapping מדווחת ולא נבלעת". נוספו `DEFERRED_MODULES` ושדה `deferred_entities` בדוח, ובדיקה שמוודאת דיווח ושאין טבלת `profiles` בענן. השפעה ידועה: שדה אחד (`landingModule`).
+- **docs `3fefdcc`** · תיקון ספירת בדיקות אחרי התוספת (366 = 305 unit + 61 router; `importPipeline` 33).
 - **לא בוצע:** חיבור Supabase · SDK · Auth/RLS · env/secret · deploy · dependency חדשה · שינוי UI · merge ל-`main`.
 
 ## 2026-07-26 · בטיחות אחסון מקומי — התראה גלובלית + schema גרסאי (Claude Code)

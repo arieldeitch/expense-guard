@@ -13,7 +13,7 @@
 - [x] ✅ **migration registry** — `legacy -> 1.0.0`, idempotent, לא הרסנית, שומרת שדות לא מוכרים.
 - [x] ✅ **snapshot ו-rollback לפני migration** — עם checksum, אימות קריאה, ומפתח נפרד מ-snapshot ה-Restore.
 - [x] ✅ **חסימת future schema version** — גרסה גבוהה מ-1.0.0 אינה נוגעת בנתונים.
-- [x] ✅ **Fake Supabase rehearsal** — `src/lib/migration/`: ענן מדומה בזיכרון, מפת 27 ישויות, סדר ייבוא טופולוגי, ownership מה-session המאומת, idempotency וקונפליקטים. **ללא Supabase, SDK, רשת, env או עלות.** 43 בדיקות. ADR-0034/0035.
+- [x] ✅ **Fake Supabase rehearsal** — `src/lib/migration/`: ענן מדומה בזיכרון, מפת 30 ישויות, סדר ייבוא טופולוגי, ownership מה-session המאומת, idempotency וקונפליקטים. **ללא Supabase, SDK, רשת, env או עלות.** 44 בדיקות. ADR-0034/0035.
 - [x] ✅ **Readiness Gate** — `src/lib/readiness/`: 16 בדיקות ושני gates, **נגזרים מריצות אמיתיות** ולא מקבועים. שניהם `true`. 29 בדיקות. ADR-0036.
 - [ ] 🔴 **Import אמיתי מול Supabase עם Auth/RLS** — **הפער העיקרי שנותר.** ה-rehearsal מוכיח את המודל, לא את המנוע: לא נבדקו RLS, FK constraints, טיפוסי עמודות, טרנזקציות ורשת. דורש **Approval Brief** (CLAUDE.md) כי הוא יוצר פרויקט/עלות.
 - [ ] 🟠 **P1 — `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` בודק שדה שאינו קיים.** הכלל `home.entries → home.sessions` משתמש ב-`session_id`, אך השדה בפועל הוא **`home_session_id`**, ולכן הכלל אינו יורה לעולם. בנוסף, כל כלל מדלג כש-`parents.size === 0`, כך ש"כל ההורים נמחקו" אינו נתפס.

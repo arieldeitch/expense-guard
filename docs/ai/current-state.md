@@ -23,7 +23,7 @@
 | **migration registry** | ✅ `legacy -> 1.0.0` | `src/lib/storage/migrations.ts` — idempotent, לא הרסנית |
 | **snapshot לפני מיגרציה** | ✅ עם checksum ו-rollback | `fitlog:migration-snapshot` — נפרד מ-snapshot ה-Restore |
 | **future schema version** | ✅ נחסם | גרסה גבוהה מ-1.0.0 → `future_version_blocked`, אין נגיעה בנתונים |
-| **Fake Supabase rehearsal** | ✅ **עובר** | `src/lib/migration/` — ענן מדומה בזיכרון, 43 בדיקות (ADR-0034) |
+| **Fake Supabase rehearsal** | ✅ **עובר** | `src/lib/migration/` — ענן מדומה בזיכרון, 30 ישויות, 44 בדיקות (ADR-0034) |
 | **Readiness Gate** | ✅ **נגזר מיכולות** | `src/lib/readiness/` — 16 בדיקות, 2 gates, 29 בדיקות (ADR-0036) |
 | `ready_for_single_device_use` | ✅ **true** | נגזר מ-10 יכולות שהורצו בפועל |
 | `ready_for_future_supabase_migration_contract` | ✅ **true** | נגזר מהאמור לעיל + ids/idempotency/סדר/בעלות/קונפליקטים |
