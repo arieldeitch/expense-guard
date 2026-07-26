@@ -1,5 +1,21 @@
 # Change Log
 
+## 2026-07-26 · בטיחות אחסון מקומי — התראה גלובלית + schema גרסאי (Claude Code)
+
+- **fix(ui)** · `GlobalStorageBanner` ברמת `__root` — **כשל כתיבה מכל אחד מ-9 המודולים גלוי בכל מסך**, לא רק ב-Workout Execution. `memory_only` → `role="status"` + "חלק מהשינויים לא נשמרו בדפדפן ועלולים להיעלם לאחר רענון." · `failed` → `role="alert"` + "השמירה נכשלה. הורד גיבוי לפני רענון או סגירת הדפדפן." אייקון + כותרת מילולית (צבע אינו הסמן היחיד) + קישור ל-`/backup`. **banner מתמשך, לא toast בכל שינוי**; כתיבה מוצלחת אחרי כשל מסירה אותו אוטומטית.
+- **fix(ui)** · מסך האימון אינו מצהיר "נשמר במכשיר" כאשר `getWorstStorageStatus()` אינו `saved` — גם אם מודול ה-sessions עצמו נשמר.
+- **feat(storage)** · `fitlog:storage-meta` — `format` `workout-data-system-local`, `schema_version` **1.0.0**, `updated_at` ISO-8601 UTC, ורשימת תשעת מודולי האחסון. **תשעת המפתחות וה-IDs ללא שינוי.** metadata חסר/פגום = legacy · גרסה עתידית = **חסום** (`future_version_blocked`, אין נגיעה בנתונים).
+- **feat(storage)** · registry מפורש `legacy -> 1.0.0`. המיגרציה קוראת את כל תשעת המפתחות, מאמתת parse, וכותבת מחדש בסריאליזציה קנונית. **עובדת על מחרוזות גולמיות** ולא דרך ה-repositories — ולכן שדות לא מוכרים נשמרים במלואם. אין מחיקה, idempotent, הרצה חוזרת = no-op מלא.
+- **feat(storage)** · snapshot מאומת לפני כל שינוי — `snapshot_id`, `created_at`, `from_version`, `target_version`, `keys`, `checksum` (FNV-1a). נכתב ל-`fitlog:migration-snapshot` ו**נקרא בחזרה לאימות**; snapshot שלא ניתן לאמת עוצר את המיגרציה. **אינו דורס** את snapshot ה-Restore (`fitlog:backup-snapshot:*`).
+- **feat(storage)** · סדר קבוע: snapshot → חישוב בזיכרון → הגנת אי-מחיקה → כתיבה → **metadata אחרון**. כשל בחישוב או ב-snapshot → אף מפתח מקור לא נגע. כשל באמצע הכתיבה → `rollbackFromSnapshot` מלא. בכל כשל: `migration_failed`, ה-snapshot נשמר, metadata לא נכתב.
+- **feat(storage)** · `safeWriteRawStorage` / `safeRemoveStorage` / `isStorageAvailable` ב-`safeStorage`; `STORAGE_KEY` נחשף מ-9 מודולי האחסון כדי שמפת המפתחות לא תשוכפל ותסטה.
+- **refactor** · `checksumOf`/`stableStringify` אוחדו ל-`src/lib/storage/checksum.ts` — הגדרה אחת, משותפת עם מודול הגיבוי.
+- **docs** · ADR-0033 (schema מקומי גרסאי) · **ADR-0032 תועד רטרואקטיבית** — הוא הוזכר בקוד מאז `4b2b401` ולא נכתב מעולם ב-`decisions.md`. R-22 הוקטן מ-🔴 High ל-🟡 Medium.
+- **tests** · +36 (סה"כ **293**): `lib/storage/__tests__/localSchema.test.ts` (**23**) — legacy→1.0.0, metadata רק אחרי הצלחה, no-op חוזר, snapshot ו-checksum, rollback, כשל באמצע שאינו משנה מקור, שדות לא מוכרים, גרסה עתידית, אחסון לא זמין · `test/globalPersistenceWarning.test.tsx` (**13**) — כשל ב-catalog/home/templates/goals/runs/preferences, `saved` ללא banner, התאוששות, קישור גיבוי נגיש.
+- **verify** · typecheck exit 0 (גם אחרי build) · `test:unit` 232/232 · `test:router` 61/61 · `bun run test` exit 0 · eslint 0 errors / 8 baseline warnings · build ×2 exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` ריק.
+- **תיקון עובדתי:** הודעת ה-commit `feat(storage)` אומרת "27 בדיקות חדשות" ב-`localSchema.test.ts`. המספר בפועל הוא **23** (נמדד: `vitest run src/lib/storage/__tests__/localSchema.test.ts`). לא בוצע amend; הרישום כאן הוא הנכון.
+- **לא בוצע:** Fake Supabase rehearsal · Readiness Gate · חיבור Supabase · שינוי בממשק תוכניות הבית · dependency חדשה · merge ל-`main` · deploy.
+
 ## 2026-07-25 · גיבוי ושחזור מקומי (מסלול A, חלקי) (Claude Code)
 
 - **feat(backup)** · מעטפת קנונית versioned (`workout-data-system` / `schema_version` 1.0.0) עם `entity_counts` ו-checksum (FNV-1a, ללא dependency). כל 9 מודולי `fitlog:*` נכללים.

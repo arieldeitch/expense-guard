@@ -4,6 +4,28 @@
 
 ---
 
+## 2026-07-26 · בטיחות אחסון מקומי — סגירה ממוקדת (1 מתוך 2)
+
+**מטרה:** להשלים **רק** את בטיחות האחסון המקומי — התראת כשל כתיבה גלובלית, local schema version, migration registry, ו-snapshot/rollback לפני מיגרציה. במפורש מחוץ להיקף: Fake Supabase rehearsal, readinessReport, חיבור Supabase, שינוי בממשק תוכניות הבית, dependency חדשה, merge ל-`main`, deploy.
+
+**ממצא #1 — ADR-0032 לא היה קיים בתיעוד.** הקוד (`safeStorage.ts`, מאז `4b2b401`) הפנה ל-ADR-0032, אך `decisions.md` מעולם לא הכיל אותו. תועד רטרואקטיבית, מסומן ככזה.
+
+**ממצא #2 — מפת מפתחות האחסון הייתה מועמדת לשכפול.** תשעת מפתחות `fitlog:*` היו `const` פרטיים בתוך המודולים. במקום לשכפל אותם ב-`schema.ts` (drift מובטח), הם נחשפו כ-`export` ומיובאים משם. `preferences` קיבל שם מפורש (`PREFERENCES_STORAGE_KEY`) כי הוא ה-`index.ts` של המודול.
+
+**ממצא #3 — מיגרציה אינה יכולה לעבור דרך ה-repositories.** `readCatalogState()` וחבריו מבצעים coercion לטיפוסי המודול ומשמיטים שדות לא מוכרים. מיגרציה שהייתה עוברת דרכם הייתה **מוחקת נתונים בשקט** בדיוק בנקודה שבה היא אמורה לשמר אותם. לכן נוספו `safeWriteRawStorage` / `safeRemoveStorage`, וה-framework עובד על מחרוזות גולמיות בלבד.
+
+**ממצא #4 — הרצת המיגרציה בזמן render יוצרת hydration mismatch.** ב-SSR אין `localStorage`, ולכן `useState(initializer)` היה מחזיר תמיד "אחסון לא זמין" בשרת ו-banner שאינו קיים בלקוח. ההרצה הועברה ל-`useEffect`. המחיר: המיגרציה רצה אחרי ה-render הראשון. מכיוון ש-`legacy -> 1.0.0` **אינה משנה תוכן**, אין סיכון ל-cache מיושן — אך זו מגבלה שתועדה במפורש ב-ADR-0033 עבור מיגרציות עתידיות.
+
+**החלטת מבנה commits.** ההוראה נתנה `fix(ui)` לפני `feat(storage)`, אך ה-banner בגרסתו המלאה תלוי ב-framework. במקום להפוך את הסדר או ליצור commit שאינו מתקמפל, ה-banner נכנס ב-commit הראשון **ללא** מודעות למיגרציה, וה-commit השני הוסיף אותה. **commit 1 אומת בבידוד** (stash של השאר → typecheck exit 0 → 13/13 בדיקות).
+
+**בדיקות:** +36 (23 `localSchema` + 13 `globalPersistenceWarning`) → **293 סה"כ**. typecheck exit 0 · `test:unit` 232/232 · `test:router` 61/61 · eslint 0 errors / 8 baseline · build ×2 · routeTree ללא diff.
+
+**אי-דיוק שתוקן בתיעוד ולא ב-Git:** הודעת ה-commit `feat(storage)` אומרת "27 בדיקות" ב-`localSchema.test.ts`; בפועל **23**. לא בוצע amend (אסור); התיקון רשום ב-`change-log.md`.
+
+**נותר פתוח:** Fake Supabase rehearsal · Readiness Gate. **מסלול A אינו סגור.**
+
+---
+
 ## 2026-07-25 · סנכרון `main` לקראת Visual QA
 
 **מטרה:** להפוך את `origin/main` למקור האמת לגרסה שעליה יבוצע Visual QA.

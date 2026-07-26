@@ -4,25 +4,30 @@
 
 ---
 
-## 🗄️ מוכנות נתונים (עודכן 2026-07-25) — **local בלבד, לא בסיס נתונים ענני**
+## 🗄️ מוכנות נתונים (עודכן 2026-07-26) — **local בלבד, לא בסיס נתונים ענני**
 
 | רכיב | מצב | ראיה |
 |---|---|---|
 | Supabase client | ❌ אין | אין import; אזכורים בקוד הם הערות בלבד |
 | env contract | ❌ אין | אין `.env`; אין `import.meta.env`/`process.env` בקוד |
-| Migrations | ❌ אין | אין `supabase/` ואין `migrations/` |
+| Migrations (ענן) | ❌ אין | אין `supabase/` ואין `migrations/` |
 | Auth / RLS | ❌ אין | אין מסך auth, אין policies |
 | Active repository | `mock` | `activeRepoKind === "mock"` |
 | Persistence | localStorage · 9 מפתחות `fitlog:*` | `catalog, exercises, goals, home, preferences, runs, sessions, suunto, templates` |
 | שורד refresh | ✅ כן, במכשיר ובדפדפן הזה בלבד | — |
-| Export | ❌ אין | — |
-| Import / Restore | ❌ אין | — |
-| זיהוי כשל כתיבה | 🟡 חלקי — `sessions` בלבד | `PersistenceStatus` (ADR-0028); 7 מודולים אחרים בולעים `catch {}` |
-| schema version + migration | ❌ אין framework | — |
-| גיבוי לפני שינוי schema | ❌ אין | — |
-| העברה למכשיר אחר | ❌ לא אפשרי | — |
+| Export | ✅ קיים | `/backup` · מעטפת `workout-data-system` 1.0.0 (ADR-0031) |
+| Import / Restore | ✅ קיים | preview + snapshot לפני כתיבה + מדיניות קונפליקטים מפורשת |
+| זיהוי כשל כתיבה | ✅ כל 9 המודולים | `safeStorage` + `reportWrite` (ADR-0032) |
+| **תצוגת כשל כתיבה למשתמש** | ✅ **גלובלי, בכל מסך** | `GlobalStorageBanner` ב-`__root` — `memory_only`→`role="status"`, `failed`→`role="alert"` |
+| **local schema version** | ✅ **1.0.0** | `fitlog:storage-meta` (ADR-0033) |
+| **migration registry** | ✅ `legacy -> 1.0.0` | `src/lib/storage/migrations.ts` — idempotent, לא הרסנית |
+| **snapshot לפני מיגרציה** | ✅ עם checksum ו-rollback | `fitlog:migration-snapshot` — נפרד מ-snapshot ה-Restore |
+| **future schema version** | ✅ נחסם | גרסה גבוהה מ-1.0.0 → `future_version_blocked`, אין נגיעה בנתונים |
+| Fake Supabase rehearsal | ❌ טרם | פתוח — ראה `open-tasks.md` |
+| Readiness Gate | ❌ טרם | פתוח |
+| העברה למכשיר אחר | 🟡 ידני בלבד | דרך קובץ Export/Import; אין sync |
 
-**מסקנה:** שימוש אמיתי בטוח **על מכשיר אחד בלבד**. ניקוי דפדפן / מצב פרטי / מכסה מלאה = אובדן. ראה R-22 ו-ADR-0030.
+**מסקנה:** שכבת האחסון המקומית **גרסאית, ניתנת לשחזור, וכשלי כתיבה גלויים**. עדיין אין בסיס נתונים ענני ואין sync אוטומטי — העברה בין מכשירים היא ייצוא/ייבוא ידני. ראה R-22, ADR-0030, ADR-0032, ADR-0033.
 
 ## ⚠️ Reconciliation — Product Alignment Audit (2026-07-24)
 
@@ -32,7 +37,7 @@
 - **53 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals חדשים מ-Phase 1.)
 - **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
 - **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
-- **בדיקות (עודכן 2026-07-25): 216 עוברות** — `test:unit` **170/170** (13 קבצים, `src/lib`, סביבת node) + `test:router` **46/46** (8 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026).
+- **בדיקות (עודכן 2026-07-26): 293 עוברות** — `test:unit` **232/232** (17 קבצים, `src/lib`, סביבת node) + `test:router` **61/61** (10 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026).
 - **Workout Execution (`/sessions/$id`) — פעיל ושמיש.** ביצוע אימון כוח: סטים בפועל (משקל/חזרות/זמן/**RPE**) בעריכה inline, השלמה/ביטול, הוספה/שכפול/דילוג סט, **דילוג על תרגיל שלם**, החלפת תרגיל, סופרסטים, rest timer, pause/resume, **סיום מלא או חלקי**, ו**סטטוס שמירה אמיתי** (`נשמר במכשיר` רק אחרי אישור ה-repository; אזהרה כשהנתונים בזיכרון בלבד). autosave מלא — האימון שורד refresh. ADR-0027/0028.
 - **תיקון חוזה בתיעוד:** `WorkoutSessionSnapshot` **אינו קיים**. החוזה בפועל: `StrengthSession` → `StrengthSessionExercise` (+ `StrengthSessionExerciseSnapshot`) → `StrengthSet`. typecheck (`bun run typecheck`) נקי. build עובר. routeTree.gen.ts דטרמיניסטי. cross-domain isolation נאכף ע"י `goalMatchesDomain` (GoalForm edit + GoalDetailView) ובדוק **גם ברמת render דרך routes אמיתיים**.
 - **route structure (עודכן 2026-07-25):** כל route module המשמש מסך עצמאי הוא `*.index.tsx`. **`__root.tsx` הוא ה-layout היחיד** (ה-`<Outlet />` היחיד בריפו); `routeTree.gen.ts` מכיל רק `RootRouteChildren`. ראה ADR-0025.

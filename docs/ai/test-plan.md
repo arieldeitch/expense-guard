@@ -2,11 +2,18 @@
 
 ## סטטוס בפועל (מאומת 2026-07-24)
 
-> **עדכון 2026-07-25 (Workout Execution)** — הבדיקות מחולקות לשתי משפחות:
-> - **`bun run test:unit`** → `vitest run src/lib` — **170 בדיקות, 13 קבצים**, סביבת `node`. יציב ומהיר.
-> - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **46 בדיקות, 8 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
->   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11) · `workoutExecution` (4) · `workoutExecutionEditing` (3) · `workoutExecutionAddSet` (1).
-> - **`bun run test`** = `test:unit && test:router` → **232 בדיקות**, exit 0 (עודכן 2026-07-25: `test:unit` 184 · `test:router` 48, כולל `homePlanPicker` (2)).
+> **עדכון 2026-07-26 (בטיחות אחסון מקומי)** — הבדיקות מחולקות לשתי משפחות:
+> - **`bun run test:unit`** → `vitest run src/lib` — **232 בדיקות, 17 קבצים**, סביבת `node` (קבצים בודדים מצהירים `jsdom` ברמת קובץ). יציב ומהיר.
+> - **`bun run test:router`** → **רצף `&&` מפורש, קובץ אחד לכל תהליך Vitest** — **61 בדיקות, 10 קבצים**, סביבת `jsdom` (`// @vitest-environment jsdom` ברמת קובץ):
+>   `systemScreens` (2) · `runningRouteLoaders` (4) · `catalogRouteLoaders` (2) · `domainGoalRoutes` (19) · `compatRoutes` (11) · `workoutExecution` (4) · `workoutExecutionEditing` (3) · `workoutExecutionAddSet` (1) · `homePlanPicker` (2) · **`globalPersistenceWarning` (13)**.
+> - **`bun run test`** = `test:unit && test:router` → **293 בדיקות**, exit 0.
+>
+> **בטיחות אחסון מקומי — היכן נבדק מה:**
+> - **`src/lib/storage/__tests__/safeStorage.test.ts` (11)** — סיווג כשלי כתיבה, registry, `getWorstStorageStatus`, התאוששות.
+> - **`src/lib/storage/__tests__/localSchema.test.ts` (23)** — metadata (legacy / פגום / מבנה / השוואת גרסאות) · registry `legacy -> 1.0.0` (קריאת כל 9 המפתחות, parse, idempotency) · הרצה מלאה (metadata **רק** אחרי הצלחה, שדות לא מוכרים נשמרים, אין מחיקה, מכשיר ריק, no-op חוזר) · snapshot (שדות, checksum תקין, אינו דורס את snapshot ה-Restore, כשל ביצירה עוצר לפני שינוי) · rollback (החזרה מדויקת, כשל באמצע אינו משנה מקור ואינו כותב metadata) · חסימות (גרסה עתידית, אחסון לא זמין, payload שבור).
+> - **`src/test/globalPersistenceWarning.test.tsx` (13)** — render אמיתי מול route tree: כשל ב-catalog/home/templates/goals/runs/preferences מוצג · `saved` אינו מציג banner · `memory_only` = `role="status"` · `failed` = `role="alert"` · התאוששות מסירה את ההתראה · קישור `/backup` נגיש · כותרת מילולית (צבע אינו הסמן היחיד) · ההתראה מוצגת גם במסך שאינו מסך האימון.
+>
+> **פער ידוע:** המיגרציה רצה ב-`useEffect` ולכן אינה נבדקת "לפני ה-render הראשון". זו מגבלה מכוונת ומתועדת ב-ADR-0033 (hydration), ולא פער כיסוי — ההרצה עצמה מכוסה במלואה ברמת היחידה.
 >
 > **Workout Execution — היכן נבדק מה:** שימור נתונים בדילוג/סיום חלקי/החלפת תרגיל, וסטטוס ההתמדה — ברמת **repository** (`src/lib/sessions/__tests__/workout-execution.test.ts`). טעינה, שרידות ב-localStorage, סטטוס שמירה, מצב התאוששות, ועריכת סט (משקל/RPE/השלמה/הוספה) — ברמת **render**. **פער ידוע:** בדיקת render שפותחת Radix Sheet נתקעת (R-21), ולכן הלחיצה בתוך גיליון הסיום החלקי אינה מכוסה ב-render — רק ההתנהגות ברמת repository.
 >

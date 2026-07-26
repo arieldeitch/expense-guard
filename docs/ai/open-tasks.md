@@ -4,6 +4,23 @@
 
 ---
 
+## 🗄️ מסלול A — בטיחות נתונים מקומית (עודכן 2026-07-26)
+
+- [x] ✅ **Export / Import / Restore מקומי** — `/backup`, מעטפת versioned, אימות, preview, snapshot לפני כתיבה. ADR-0031.
+- [x] ✅ **כל 9 מודולי האחסון עוברים דרך `safeStorage`** ומדווחים כשל כתיבה. ADR-0032.
+- [x] ✅ **התראת כשל כתיבה גלובלית** — `GlobalStorageBanner` ברמת `__root`; כשל בכל מודול גלוי בכל מסך, `memory_only`=`status`, `failed`=`alert`, קישור ל-`/backup`, התאוששות מסירה. 13 בדיקות render. ADR-0033.
+- [x] ✅ **local schema version** — `fitlog:storage-meta`, `schema_version` 1.0.0. ADR-0033.
+- [x] ✅ **migration registry** — `legacy -> 1.0.0`, idempotent, לא הרסנית, שומרת שדות לא מוכרים.
+- [x] ✅ **snapshot ו-rollback לפני migration** — עם checksum, אימות קריאה, ומפתח נפרד מ-snapshot ה-Restore.
+- [x] ✅ **חסימת future schema version** — גרסה גבוהה מ-1.0.0 אינה נוגעת בנתונים.
+- [ ] 🔴 **Fake Supabase rehearsal** — **המשימה הפתוחה הבאה.** `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md` נכתב אך **מעולם לא הורץ**: לא הוכח שקובץ ה-Export ניתן לתרגום לסכמה יחסית לפי סדר התלויות שבחוזה, ולא נבדק מה קורה ב-upsert חוזר. **אין ליצור פרויקט Supabase לצורך זה** — התרגיל הוא יבש, מול סכמה מדומה בזיכרון. דורש הגדרת היקף לפני התחלה.
+- [ ] 🔴 **Readiness Gate** — קריטריוני קבלה מפורשים שקובעים מתי מסלול A נסגר ומותר לשקול Supabase. טרם הוגדרו.
+- [ ] 🟡 **גיבוי תלוי משמעת משתמש** — אין תזכורת ואין אימות שהקובץ נשמר מחוץ למכשיר. ראה R-22.
+
+**מסלול A אינו סגור** עד להשלמת שתי המשימות האדומות לעיל.
+
+---
+
 ## 🧑‍⚖️ Human Decisions Required (מ-Product Alignment Audit, 2026-07-24)
 
 החלטות אלו **דורשות את המשתמש** — יש להן השפעה מוצרית/בלתי הפיכה. אין ליישם עד תשובה. (נושאים טכניים — שמות/מבנה/refactor — אינם כאן; מוכרעים אוטונומית.)

@@ -95,8 +95,18 @@
 **סיבה:** ה-generator המקומי מקליד loader data כ-`| undefined` (מחמיר יותר מהעץ המחויב הישן).
 **נפתר (ADR-0022):** 4 ה-routes עברו ל-`Route.useParams()` (ערכים זהים, loaders+notFound נשמרו). כעת generation **דטרמיניסטי** (build×2 ללא diff) ו-typecheck ירוק על העץ הקנוני. אין צורך ב-`git checkout` של הקובץ. עדיין: `routeTree.gen.ts` auto-generated — לא לערוך ידנית.
 
-## R-22 · אין גיבוי, ייצוא או העברה בין מכשירים — 🔴 High (הוסף 2026-07-25)
-**תרחיש:** כל הנתונים ב-localStorage של דפדפן אחד. ניקוי היסטוריה/אתר, מצב פרטי, מכסה מלאה או מעבר מכשיר → **אובדן מלא ובלתי הפיך**. אין export, אין import/restore, אין sync.
-**ראיה:** `grep` על export/import/Blob ב-`src` → אין. 9 מפתחות `fitlog:*` ב-localStorage. `activeRepoKind === "mock"`.
-**מיטיגציה חלקית קיימת:** `sessions` בלבד חושף `PersistenceStatus` ומזהיר כשהכתיבה נכשלה (ADR-0028). **7 מודולי storage אחרים עדיין בולעים כשל כתיבה בשקט** (`catch {}`).
-**פעולה נדרשת לפני הסתמכות ארוכת-טווח:** export/import JSON מקומי, או מעבר ל-Supabase. ראה "החלטה נדרשת" ב-`SESSION_HANDOFF.md`.
+## R-22 · אין גיבוי, ייצוא או העברה בין מכשירים — 🟡 Medium · **הוקטן 2026-07-26** (הוסף 2026-07-25)
+**תרחיש מקורי:** כל הנתונים ב-localStorage של דפדפן אחד. ניקוי היסטוריה/אתר, מצב פרטי, מכסה מלאה או מעבר מכשיר → **אובדן מלא ובלתי הפיך**. אין export, אין import/restore, אין sync.
+
+**מה נסגר:**
+- Export/Import/Restore מקומי עם אימות, preview ו-snapshot לפני כתיבה (ADR-0031, `/backup`).
+- כל 9 מודולי האחסון עוברים דרך `safeStorage` ומדווחים כשל (ADR-0032).
+- **כשל כתיבה מכל מודול גלוי למשתמש בכל מסך** — `GlobalStorageBanner` ברמת `__root`, עם קישור למסך הגיבוי (ADR-0033).
+- **schema מקומי גרסאי** (`fitlog:storage-meta` 1.0.0) + registry מיגרציות + snapshot ו-rollback + חסימת גרסה עתידית (ADR-0033).
+
+**מה עדיין פתוח:**
+- **אין sync ואין ענן.** העברה בין מכשירים היא ייצוא/ייבוא **ידני** של קובץ. מכשיר שאבד לפני שהמשתמש ייצא — הנתונים שבו אבדו.
+- **הגיבוי תלוי במשמעת המשתמש.** אין תזכורת, אין גיבוי אוטומטי, ואין אימות שהקובץ אכן נשמר מחוץ למכשיר.
+- **Fake Supabase rehearsal ו-Readiness Gate טרם בוצעו** — החוזה `LOCAL_TO_SUPABASE_MIGRATION_CONTRACT.md` נכתב אך **מעולם לא הורץ** מול סכמה כלשהי.
+
+**פעולה נדרשת לפני הסתמכות ארוכת-טווח:** להריץ Fake Supabase rehearsal ואז לקבל החלטת Supabase (דורשת Approval Brief). ראה `open-tasks.md`.
