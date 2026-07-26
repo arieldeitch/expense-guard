@@ -54,6 +54,8 @@ import {
   useSessionVolume,
   type PersistenceStatus,
 } from "@/lib/sessions";
+import { useWorstStorageStatus } from "@/lib/storage/hooks";
+import type { StorageWriteStatus } from "@/lib/storage/safeStorage";
 
 export const Route = createFileRoute("/sessions/$id/")({
   head: () => ({
@@ -84,6 +86,7 @@ function SessionPage() {
   const [notesFor, setNotesFor] = useState<string | null>(null);
   const [confirmTrash, setConfirmTrash] = useState(false);
   const persistence = usePersistenceStatus();
+  const worstStorage = useWorstStorageStatus();
 
   const activeLocation = useMemo(
     () => locations.find((l) => l.id === session?.location_id) ?? null,
@@ -185,7 +188,7 @@ function SessionPage() {
                 {isActive ? <Chip tone="success">בהתקדמות</Chip> : null}
                 {isPaused ? <Chip tone="warning">מושהה</Chip> : null}
                 {isFinished ? <Chip tone="info">הסתיים</Chip> : null}
-                <SaveStatus status={persistence} />
+                <SaveStatus status={persistence} worstStatus={worstStorage.status} />
               </div>
               <div className="mt-1 text-lg font-black leading-tight">{session.name}</div>
               <div className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
@@ -528,9 +531,18 @@ function SessionPage() {
 
 /**
  * סטטוס שמירה — טקסט **ואייקון**, לא צבע בלבד (a11y).
- * מציג "נשמר" רק אחרי שה-repository אישר כתיבה מוצלחת ל-localStorage.
+ *
+ * מציג "נשמר" רק אחרי שה-repository אישר כתיבה מוצלחת ל-localStorage, **וגם** רק
+ * כאשר אף מודול אחר לא נכשל בכתיבה (`worstStatus`): אסור להצהיר "נשמר" בזמן
+ * שההתראה הגלובלית מדווחת על כשל.
  */
-function SaveStatus({ status }: { status: PersistenceStatus }) {
+function SaveStatus({
+  status,
+  worstStatus,
+}: {
+  status: PersistenceStatus;
+  worstStatus: StorageWriteStatus;
+}) {
   if (status === "memory") {
     return (
       <span
@@ -541,13 +553,14 @@ function SaveStatus({ status }: { status: PersistenceStatus }) {
       </span>
     );
   }
-  if (status === "saved") {
+  if (status === "saved" && worstStatus === "saved") {
     return (
       <span role="status" className="inline-flex items-center gap-1 text-xs text-muted-foreground">
         <Save aria-hidden className="size-3" /> נשמר במכשיר
       </span>
     );
   }
+  // מודול אחר נכשל בכתיבה, או שטרם בוצעה כתיבה — לא מצהירים "נשמר".
   return (
     <span role="status" className="inline-flex items-center gap-1 text-xs text-muted-foreground">
       <Save aria-hidden className="size-3" /> שמירה אוטומטית
