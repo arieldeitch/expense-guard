@@ -3,6 +3,40 @@
 > ⚠️ **הסעיף העדכני ביותר הוא זה שמיד למטה.** הסעיפים שאחריו נשמרים כרשומה
 > היסטורית; במקרה של סתירה — **הסעיף העליון גובר**.
 
+## ✅ עדכון 2026-07-30 — Recovery Audit אחרי הפסקה: התיעוד אומת מול הריפו
+
+**סוג הסשן:** audit בלבד. **לא פותח פיצ'ר, לא בוצע refactor, לא נוצר branch, לא בוצע merge/deploy/push של קוד.** השינוי היחיד הוא עדכוני `docs/ai/`.
+
+**מצב Git (מאומת):** branch `main` · **HEAD `daba93c`** · `main` = `origin/main`, **ahead 0 / behind 0** · working tree **נקי** בתחילת הסשן ואחרי כל הבדיקות · **אין stashes, אין tags, אין merge/rebase/cherry-pick/bisect פעיל, אין commits מקומיים שלא נדחפו** (`git log --branches --not --remotes` ריק). שני ה-feature branches (`feat/domain-alignment-and-restore`, `feat/home-plan-simple-flow`) **מוזגו ל-`main`** ומסונכרנים 0/0 — לא נמחקו.
+
+**אימות מלא הורץ מחדש על `main` (2026-07-30) — כל התוצאות זהות לתיעוד מ-2026-07-26:**
+
+| בדיקה | Exit | תוצאה |
+|---|---|---|
+| `bun run typecheck` | 0 | PASS |
+| `bun run test:unit` | 0 | **305/305** (21 קבצים) |
+| `bun run test:router` | 0 | **61/61** (10 קבצים) |
+| `bunx eslint . --rule '{"prettier/prettier":"off"}'` | 0 | **0 errors / 8 baseline warnings** |
+| `bun run build` | 0 | PASS · `routeTree.gen.ts` hash ללא שינוי · working tree נשאר נקי |
+| `bun run typecheck` אחרי build | 0 | PASS |
+| migration · readiness · backup · storage | 0 | 44 · 29 · 14 · 34 |
+
+**נבדק פרטנית ואומת בקוד:** `activeRepoKind === "mock"` · `CLOUD_ENTITIES` = **30 ישויות** · `DEFERRED_MODULES = ["preferences"]` · שני ה-gates נטענים `true` בבדיקות · **אין `@supabase` ב-`package.json` או ב-`src`** · **אין `import.meta.env`/`process.env` בקוד** · אין `createClient` · 47 האזכורים של "Supabase" ב-`src` הם **הערות בלבד** · **אין קובץ `.env`/secret/credential ב-tracking** · אין `supabase/`, אין `migrations/`, **אין CI (`.github` לא קיים)** · `.lovable/project.json` מכיל template/revision בלבד, ללא secrets · **0 TODO/FIXME, 0 בדיקות מדולגות**.
+
+**R-24 אומת כקיים:** `src/lib/backup/repo.ts:256` עדיין `field: "session_id"` בעוד השדה בפועל הוא `home_session_id` (`src/lib/home/types.ts:105`), ו-`repo.ts:300` עדיין מכיל `if (parents.size === 0) continue;`. התיעוד מדויק.
+
+**R-17 אומת כפעיל:** `bun run lint` נכשל (exit 1) עם **30,668 errors / 8 warnings** — כולם `Delete ␍` (CRLF). הפקודה האמיתית לבדיקת קוד היא זו שעם `--rule '{"prettier/prettier":"off"}'`.
+
+**שני פערי תיעוד שתוקנו בסשן זה (בלבד):**
+1. **ספירת routes** — `current-state.md` טען **53 route modules**; בפועל **54** (נוסף `backup.index.tsx` במסלול A ולא עודכן). `routeTree.gen.ts` מאשר 54. תוקן.
+2. **`open-tasks.md`** — הסעיפים ההיסטוריים בתחתית המסמך סתרו את הסעיף העליון (טענו שכשל כתיבה ב-7 מודולים, ה-rehearsal ו-migration framework עדיין פתוחים, בעוד הם ✅ למעלה). סומנו **Superseded** ולא נמחקו.
+
+**🔴 החסם היחיד — פעולה ידנית של המשתמש, לא של סוכן:** **טרם נוצר קובץ גיבוי בפועל.** יש לפתוח `/backup` בגרסת `main` המאומתת, לייצא, ולשמור את הקובץ **מחוץ לאחסון הדפדפן**. עד אז R-22 פתוח בפועל — *יכולת גיבוי אינה גיבוי*.
+
+**הפעולה הבאה היחידה המומלצת לפיתוח (רק אחרי הגיבוי):** **תיקון R-24 בענף נפרד** — הוא מוגדר, קטן, בעל ראיה, ואינו דורש החלטת מוצר או עלות. פירוט Scope/Acceptance/Rollback ב-`open-tasks.md`. **אין להתחיל את מסלול B (Supabase) ללא Approval Brief.**
+
+---
+
 ## ✅ עדכון 2026-07-26 (ג) — מסלול A מוזג ל-`main` ואומת עליו
 
 **`main` = `origin/main` = `0e51653`** (merge commit). `feat/home-plan-simple-flow` (`8470c4f`) מוזג ב-`--no-ff`; **היסטוריית ה-feature נשמרה במלואה** — ללא squash/rebase/amend/force. ה-feature branch **לא נמחק**.

@@ -1,6 +1,20 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: 2026-08-XX (שלב מודול כוח בבית)
+תאריך עדכון: **2026-07-30** (Recovery Audit — התיעוד אומת מול הריפו)
+
+---
+
+## ✅ אימות מצב 2026-07-30 (Recovery Audit)
+
+**Git:** `main` · HEAD **`daba93c`** · `main` = `origin/main` (0/0) · working tree נקי · אין stashes/tags/commits לא-דחופים · שני ה-feature branches מוזגו ומסונכרנים.
+
+**כל הבדיקות הורצו מחדש על `main` והתוצאות זהות לתיעוד מ-2026-07-26:** typecheck exit 0 (גם אחרי build) · `test:unit` **305/305** (21 קבצים) · `test:router` **61/61** (10 קבצים) · migration 44 · readiness 29 · backup 14 · storage 34 · eslint **0 errors / 8 baseline warnings** · build exit 0 עם `routeTree.gen.ts` ללא שינוי.
+
+**אומת בקוד:** `activeRepoKind === "mock"` · `CLOUD_ENTITIES` = 30 · `DEFERRED_MODULES = ["preferences"]` · **אין `@supabase`, אין `createClient`, אין `import.meta.env`/`process.env`, אין `.env`/secret ב-tracking, אין `supabase/`, אין CI** · 47 אזכורי "Supabase" ב-`src` הם הערות בלבד · 0 TODO/FIXME · 0 בדיקות מדולגות.
+
+**תוקן בסשן זה:** ספירת ה-routes — היה כתוב **53**, בפועל **54 route modules** + `__root.tsx` (נוסף `backup.index.tsx` במסלול A ולא עודכן). מאושר מול `src/routes/` ומול `RootRouteChildren` ב-`routeTree.gen.ts`.
+
+**החסם היחיד:** R-22 — **טרם נוצר קובץ גיבוי בפועל מחוץ לדפדפן.** פעולה ידנית של המשתמש.
 
 ---
 
@@ -37,7 +51,7 @@
 > החלקים הישנים במסמך זה ("מה קיים בפועל" ואילך) **מיושנים** — הם מתארים מצב מוקדם של 5 routes ו"אין קוד לוגי". המצב האמיתי מתקדם בהרבה. להלן התמונה המאומתת. פירוט מלא: `route-inventory.md`, `entity-inventory.md`, `design-system-audit.md`, `product-alignment-audit.md`.
 
 **מצב אמיתי (מאומת ע"י audit):**
-- **53 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals חדשים מ-Phase 1.)
+- **54 route modules** + `__root.tsx` (`src/routes/`), 5 טאבים בניווט (`/`, `/running`, `/gym`, `/home`, `/more`), השאר deep-link. (41 מקוריים + 12 domain-goals מ-Phase 1 + `backup.index.tsx` ממסלול A.) **מאומת 2026-07-30** מול `src/routes/` ומול `RootRouteChildren`.
 - **שכבת נתונים מלאה** תחת `src/lib/<domain>/` (לא `domain/data/application/features`): `runs`, `suunto`, `catalog`, `exercises`, `templates`, `sessions`, `home`, `goals`, `preferences`, `analytics`, `repo`, `hooks`, `selectors`.
 - **Persistence = localStorage** (`fitlog:<domain>:v<n>`), **שורד refresh**. אין backend, אין Supabase, אין auth (במכוון). `activeRepoKind === "mock"`.
 - **בדיקות (עודכן 2026-07-26): 366 עוברות** — `test:unit` **305/305** (21 קבצים, `src/lib`, סביבת node) + `test:router` **61/61** (10 קבצים, `src/test`, jsdom, כל קובץ בתהליך Vitest נפרד — ADR-0026).

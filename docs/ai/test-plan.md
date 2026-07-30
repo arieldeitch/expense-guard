@@ -1,5 +1,31 @@
 # Test Plan
 
+## ✅ ראיות אימות — Recovery Audit 2026-07-30 (HEAD `daba93c`, branch `main`)
+
+כל הפקודות הורצו **על `main` עצמו**, working tree נקי לפני ואחרי.
+
+| פקודה | Exit | מספר בדיקות | תוצאה | שינויים שנוצרו |
+|---|---|---|---|---|
+| `bun run typecheck` | **0** | — | PASS | אין |
+| `bun run test:unit` | **0** | **305/305** (21 קבצים) | PASS | אין |
+| `bun run test:router` | **0** | **61/61** (10 קבצים) | PASS | אין |
+| `bunx vitest run src/lib/migration` | **0** | 44/44 (2 קבצים) | PASS | אין |
+| `bunx vitest run src/lib/readiness` | **0** | 29/29 (2 קבצים) | PASS | אין |
+| `bunx vitest run src/lib/backup` | **0** | 14/14 (1 קובץ) | PASS | אין |
+| `bunx vitest run src/lib/storage` | **0** | 34/34 (2 קבצים) | PASS | אין |
+| `bunx eslint . --rule '{"prettier/prettier":"off"}'` | **0** | — | **0 errors / 8 warnings** (react-refresh, shadcn) | אין |
+| `bun run lint` (כפי שהוא) | **1** | — | ⚠️ **FAIL — 30,668 errors `Delete ␍`** (CRLF, R-17). לא בעיית קוד. | אין |
+| `bun run build` | **0** | — | PASS | `.output/`, `.wrangler/` (gitignored). **`routeTree.gen.ts` — hash זהה לפני ואחרי** |
+| `bun run typecheck` אחרי build | **0** | — | PASS | אין |
+
+**פירוט 61 בדיקות ה-router (נספר מהפלט):** `systemScreens` 2 · `runningRouteLoaders` 4 · `catalogRouteLoaders` 2 · `domainGoalRoutes` 19 · `compatRoutes` 11 · `workoutExecution` 4 · `workoutExecutionEditing` 3 · `workoutExecutionAddSet` 1 · `homePlanPicker` 2 · `globalPersistenceWarning` 13. **סה"כ `bun run test` = 366.**
+
+**בדיקות שלא הורצו:** אין בדיקות DB/RLS/migration בענן — **לא קיימות בריפו** (אין `supabase/`). אין E2E/Playwright — נדחה במפורש. אין CI — `.github` לא קיים. **אין בדיקה שלא הורצה מסיבה של חסם או timeout.**
+
+**חוב אימות שנותר `לא אומת`:** Visual QA ב-360px (דורש דפדפן אמיתי; jsdom אינו מחשב layout) · Import אמיתי מול Supabase (R-23) · לחיצה בתוך Radix Sheet ב-render (R-21).
+
+---
+
 ## סטטוס בפועל (מאומת 2026-07-24)
 
 > **עדכון 2026-07-26 (סגירת מסלול A)** — נוספו `src/lib/migration/` ו-`src/lib/readiness/`:

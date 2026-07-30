@@ -1,5 +1,18 @@
 # Change Log
 
+## 2026-07-30 · Recovery Audit — אימות התיעוד מול הריפו (Claude Code)
+
+- **סוג:** audit + **docs בלבד**. אין שינוי קוד, אין branch חדש, אין merge, אין push של קוד, אין deploy, אין dependency, אין Supabase/env/secret.
+- **Git במצב פתיחה וסגירה** · `main` · HEAD `daba93c` · `main` = `origin/main` (ahead 0 / behind 0) · working tree **נקי** · אין stashes/tags · אין merge/rebase/cherry-pick/bisect פעיל · `git log --branches --not --remotes` **ריק** (אין commits לא-דחופים) · שני ה-feature branches מוזגו ל-`main` ומסונכרנים 0/0, לא נמחקו.
+- **אימות מלא הורץ מחדש על `main`; כל התוצאות זהות לתיעוד מ-2026-07-26** · typecheck exit 0 · `test:unit` **305/305** (21 קבצים) · `test:router` **61/61** (10 קבצים: 2·4·2·19·11·4·3·1·2·13) · migration 44/44 · readiness 29/29 · backup 14/14 · storage 34/34 · eslint `--rule '{"prettier/prettier":"off"}'` **0 errors / 8 warnings** · `bun run build` exit 0 · `git hash-object src/routeTree.gen.ts` **זהה לפני ואחרי ה-build** · typecheck אחרי build exit 0 · working tree נשאר נקי (הפלט ל-`.output/`/`.wrangler/` gitignored).
+- **אימות scope ואבטחה** · אין `@supabase` ב-`package.json` ולא ב-`src` · אין `createClient` · אין `import.meta.env`/`process.env` · 47 אזכורי "Supabase" ב-`src` הם **הערות בלבד** · אין `.env`/secret/credential/`.pem`/`.key` ב-tracking · אין `supabase/`, אין `migrations/` · **אין CI** (`.github` לא קיים) · `.lovable/project.json` = schemaVersion/template/revision בלבד · **0 TODO/FIXME** · **0 בדיקות מדולגות** (`.skip`/`.only`/`.todo`) · `activeRepoKind === "mock"` · `CLOUD_ENTITIES` = 30 · `DEFERRED_MODULES = ["preferences"]`.
+- **תיקון תיעוד #1 — ספירת routes** · `current-state.md` טען **53 route modules**; בפועל **54** + `__root.tsx`. הפער נוצר כשנוסף `backup.index.tsx` במסלול A והספירה לא עודכנה. מאושר מול `src/routes/` ומול `RootRouteChildren` ב-`routeTree.gen.ts` (54 ילדים). תוקן.
+- **תיקון תיעוד #2 — סתירה פנימית ב-`open-tasks.md`** · הסעיפים ההיסטוריים בתחתית טענו שכשל כתיבה ב-7 מודולים, migration framework, Fake Supabase rehearsal ובדיקות UI ל-Export/Restore **עדיין פתוחים**, בעוד הסעיף העליון מסמן אותם ✅. סומנו **Superseded** עם ראיה, **ולא נמחקו**. נוסף באנר "הסעיפים העליונים גוברים" בראש המסמך.
+- **תיקון תיעוד #3 — R-17** · המספר המתועד (~39,760) עודכן למדידה בפועל: `bun run lint` → exit 1, **30,668 errors / 8 warnings**, כולם `Delete ␍`. נוספה העובדה ש**אין CI**, ולכן ההמלצה הישנה "להסתמך על CI" אינה ישימה.
+- **אומת כקיים ולא תוקן — R-24** · `src/lib/backup/repo.ts:256` עדיין `field: "session_id"` בעוד השדה בפועל הוא `home_session_id` (`src/lib/home/types.ts:105`); `repo.ts:300` עדיין `if (parents.size === 0) continue;`. התיעוד היה **מדויק**. התיקון נשאר משימת המשך בענף נפרד — **דורש אישור** כי ישנה התנהגות אימות.
+- **החסם היחיד שנותר — R-22** · אין ראיה בריפו שנוצר קובץ גיבוי בפועל מחוץ לדפדפן. דורג כפריט 0 ב-`open-tasks.md`.
+- **מסמכים שעודכנו:** `SESSION_HANDOFF.md` · `current-state.md` · `open-tasks.md` · `risks.md` · `change-log.md` · `test-plan.md` · `claude-session-log.md` · `prompts.md`. **`decisions.md` לא עודכן — לא התקבלה ולא התגלתה החלטה חדשה** (אין להמציא ADR).
+
 ## 2026-07-26 · מיזוג מסלול A ל-`main` (Claude Code)
 
 - **merge** · `feat/home-plan-simple-flow` (`8470c4f`) מוזג ל-`main` (`de4c996`) ב-**merge commit `0e51653`** עם `--no-ff`. **היסטוריית ה-feature נשמרה במלואה** — ללא squash, ללא rebase, ללא amend, ללא force. `origin/main` לא התקדם בינתיים ולכן לא היו קונפליקטים.

@@ -69,7 +69,8 @@
 ## R-17 · CRLF / line-endings שובר lint מקומית ב-Windows — 🟡 Medium (הוסף 2026-07-24)
 **תרחיש:** `core.autocrlf=true` **ללא `.gitattributes`** → checkout ב-Windows מייצר CRLF, אך prettier/ESLint מצפים ל-LF. תוצאה: `bun run lint` מדווח ~39,760 שגיאות `Delete ␍` מקומית, בעוד על CI/Lovable (LF) הבעיה אינה קיימת.
 **עובדות baseline (2026-07-24):** על LF הבדיקה מציגה **13 בעיות** בלבד: 8 warnings (`react-refresh/only-export-components` בקבצי shadcn ui) + 1 error `react-hooks/rules-of-hooks` (false-positive של TanStack ב-`goals.new.tsx` — `Route.useSearch` בפונקציה בשם `component`). (4 שגיאות `prefer-const` תוקנו ב-audit.)
-**מיטיגציה מומלצת (לא בוצעה — דורשת renormalize מכוון):** להוסיף `.gitattributes` עם `* text=auto eol=lf` ואז `git add --renormalize .`. **אזהרה:** renormalize נוגע בכל קובץ (diff ענק) ועלול להשפיע על Lovable sync — לבצע רק בהחלטה מכוונת, לא כתיקון אגבי. עד אז: להריץ lint עם `--rule '{"prettier/prettier":"off"}'` לבדיקת בעיות אמיתיות בלבד, או להסתמך על CI.
+**מיטיגציה מומלצת (לא בוצעה — דורשת renormalize מכוון):** `.gitattributes` עם `* text=auto eol=lf` **נוסף** (2026-07-25), אך `git add --renormalize .` **טרם הורץ** במכוון. **אזהרה:** renormalize נוגע בכל קובץ (diff ענק) ועלול להשפיע על Lovable sync — לבצע רק בהחלטה מכוונת, לא כתיקון אגבי. עד אז: להריץ lint עם `--rule '{"prettier/prettier":"off"}'` לבדיקת בעיות אמיתיות בלבד.
+**סטטוס מאומת 2026-07-30:** `bun run lint` → **exit 1, 30,676 problems (30,668 errors / 8 warnings)**, כולם `Delete ␍`. הפקודה עם `prettier/prettier:off` → **exit 0, 0 errors / 8 warnings**. הסיכון **פעיל וללא שינוי באופיו**; המספר המדויק משתנה עם גודל הריפו (היה ~39,760 ב-2026-07-24) ואינו אינדיקטור לבריאות הקוד. **אין CI בריפו** (`.github` לא קיים), ולכן אי-אפשר "להסתמך על CI".
 
 ## R-20 · Vitest/jsdom — hang מצטבר בקובץ router-test גדול — 🟡 Medium · **P2, לא חוסם** (הוסף 2026-07-25)
 **תרחיש:** קובץ router-test אחד שמצטברות בו הרבה בדיקות render (memory router + route tree מלא) עלול לא לסיים: hang + `Worker exited unexpectedly`. נצפה ב-`systemErrors.test.tsx` (8 בדיקות) — עקבי, גם בהרצה של הקובץ לבדו.
@@ -111,6 +112,7 @@
 - **הגיבוי תלוי במשמעת המשתמש.** אין תזכורת, אין גיבוי אוטומטי, ואין אימות שהקובץ אכן נשמר מחוץ למכשיר.
 
 - **🔴 טרם בוצע Export ידני מגרסת `main` המאומתת.** היכולת קיימת ואומתה, אך **קובץ גיבוי בפועל מחוץ למכשיר עדיין לא נוצר**. עד שזה יקרה, הסיכון המעשי לא ירד — יכולת אינה גיבוי.
+- **אומת מחדש 2026-07-30 (Recovery Audit):** היכולת עדיין תקינה על `main` (`daba93c`) — backup 14/14, storage 34/34, שני ה-gates `true`. **אין ראיה בריפו שהמשתמש ייצא קובץ**, ומטבע הדברים לא ניתן לאמת זאת מהריפו. **R-22 נשאר החסם היחיד בפועל** ודורג כפריט 0 ב-`open-tasks.md`. חלפו ~4 ימים של שימוש אפשרי ללא גיבוי מאומת.
 
 **פעולה נדרשת לפני הסתמכות ארוכת-טווח:** ייצוא ידני מגרסת `main` (merge `0e51653`) דרך `/backup`, ושמירת הקובץ מחוץ לאחסון הדפדפן — רצוי במכשיר נפרד או בתיקייה מגובה. מעבר לענן דורש Approval Brief. ראה `open-tasks.md`.
 
