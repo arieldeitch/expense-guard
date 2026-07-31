@@ -16,6 +16,7 @@ import {
   useSessionExercises,
   useSessionVolume,
 } from "@/lib/sessions";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { computeWorkoutQuality, detectSessionRecords, labelForRecord } from "@/lib/analytics";
 import { QualityBreakdown } from "@/components/analytics/QualityBreakdown";
 
@@ -38,6 +39,11 @@ function SessionSummary() {
   const exercises = useSessionExercises(id);
   const volume = useSessionVolume(id);
   const location = useLocation(session?.location_id ?? undefined);
+  const hydrated = useHydrated();
+  // לשרת אין `localStorage`, ולכן `session` תמיד null שם. זריקת `notFound()`
+  // ב-render של השרת מפילה את גבול ה-Suspense (React #419) ומאלצת client
+  // rendering של כל תת-העץ. נמנעים מכך עד שה-hydration הסתיים. ראה ADR-0039.
+  if (!hydrated) return null;
   if (!session) throw notFound();
 
   const records = detectSessionRecords(id);

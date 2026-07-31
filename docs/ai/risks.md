@@ -137,11 +137,13 @@
 **מיטיגציה בפועל:** `previewImport` כבר מחזיר את דוח האימות המלא כולל `scope` ו-`ids` של כל הפניה שבורה, כך שהמידע לשחזור ידני קיים ואינו אבוד.
 **פעולה נדרשת:** החלטת מוצר האם להוסיף `merge_skip_broken` כמצב ייבוא מפורש (opt-in, לעולם לא ברירת מחדל) עם דוח מפורש של מה נשמט.
 
-## R-26 · `/sessions/$id/summary` — ה-loader זורק `notFound()` ב-SSR — 🟢 Low (הוסף 2026-07-31)
-**תרחיש:** ה-loader של המסלול קורא את ה-repository. בשרת אין `localStorage`, ולכן הוא זורק `notFound()`, ו-TanStack נופל ל-client rendering עם הודעה: `Switched to client rendering because the server rendering errored: {isNotFound: true}`.
-**השפעה בפועל:** **המסך נטען ועובד במלואו** בלקוח. זו התנהגות fallback מתוכננת של TanStack, לא קריסה. העלות: שגיאה ביומן השרת ורינדור שרת מבוזבז.
-**למה לא תוקן:** התיקון הוא כיבוי SSR למסלול או הסרת ה-`notFound()` מה-loader — שינוי סמנטיקת ניתוב שדורש החלטה מפורשת. ראה ADR-0039 (חלופה שנדחתה).
-**אומת 2026-07-31** בדפדפן אמיתי: המסך מרונדר נכון, אין שגיאת hydration.
+## R-26 · `notFound()` נזרק ב-render של השרת — ✅ **נסגר (2026-07-31 ג)** (הוסף 2026-07-31)
+**היה:** **שבעה** מסלולים זרקו `notFound()` **מתוך הרכיב**. בשרת אין `localStorage`, ולכן הישות תמיד חסרה שם והזריקה קרתה בכל טעינה. ב-dev זה הופיע כ-`Switched to client rendering because the server rendering errored: {isNotFound: true}`, וב-**build לפרודקשן** כ-**`Minified React error #419`** — כלומר גבול ה-Suspense נפל ו-React רינדר את כל תת-העץ מחדש בלקוח.
+**המסלולים:** `sessions.$id.summary` · `gym.history.$id` · `exercises.$id.history` · `locations.$id` · `templates.$id.index` · `templates.$id.edit` · `templates.$id.history`.
+**התיקון (ADR-0039):** `if (!hydrated) return null;` **לפני** הזריקה — שכבת render בלבד, ללא שינוי בניתוב, ב-persistence או ב-API.
+**מה נשמר:** ה-404 האמיתי עובד כרגיל — כתובת עם מזהה שאינו קיים מציגה "העמוד לא נמצא".
+**ראיה:** סריקת 24 מסכים על ה-build לפרודקשן → **0 שגיאות hydration ו-0 חריגות**; `#419` נעלם מ-`/sessions/$id/summary`. `bun run test` 375/375.
+**נגזרת שתועדה:** אזהרת console אחת שנותרת על **כתובת שגויה בלבד** (`The above error occurred in the <X> component… CatchBoundaryImpl`) — **אומת כקיים גם לפני השינוי** (הושווה מול הקוד המקורי), ולכן **אינו רגרסיה**. נובע מכך ש-`notFound()` נזרק מתוך render; ה-error boundary מטפל וה-404 מוצג.
 
 ## R-27 · `exercises`/`catalog` אינם מגודרים ב-hydration — 🟢 Low (הוסף 2026-07-31)
 **תרחיש:** בשרת `readExercisesState()` מחזיר קטלוג **מזורע** ולא ריק, ולכן גידור ל-`[]` היה יוצר אי-התאמה חדשה במקרה הנפוץ (ADR-0039). התוצאה: אחרי שהמשתמש **מתאים אישית** את הקטלוג — סימון מועדף, תרגיל מותאם, מחיקה — ייתכן הבדל בין הפלט של השרת ללקוח, שיחזיר שגיאת hydration למסכי הקטלוג.

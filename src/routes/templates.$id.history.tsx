@@ -3,6 +3,7 @@
  * מציג רשימה של snapshots שנשמרו + סיכום בסיסי לכל אחד.
  */
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { History } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -28,6 +29,9 @@ function TemplateHistoryPage() {
   const template = useTemplate(id);
   const versions = useTemplateVersions(id);
 
+  const hydrated = useHydrated();
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
   if (!template) throw notFound();
 
   return (

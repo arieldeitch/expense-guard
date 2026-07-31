@@ -3,6 +3,7 @@
  * מציג מטא־דאטה, סיכום, בלוקים ותרגילים בקומפקטי, וכפתור "התחלת אימון".
  */
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { Edit2, History, Layers, Play } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -40,6 +41,9 @@ function TemplateDetailPage() {
   const location = useLocation(template?.location_id ?? undefined);
   const navigate = useNavigate();
 
+  const hydrated = useHydrated();
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
   if (!template) throw notFound();
 
   const canStart = template.status === "active" && blocks.length > 0;

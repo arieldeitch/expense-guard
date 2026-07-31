@@ -5,6 +5,7 @@
  * ערכי תכנון מול ביצוע, RPE/RIR, הערות, שיאים, מדד איכות, השוואה לאימון דומה.
  */
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { useState } from "react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -48,6 +49,9 @@ function GymHistoryDetail() {
   const exercises = useSessionExercises(id);
   const volume = useSessionVolume(id);
   const location = useLocation(session?.location_id ?? undefined);
+  const hydrated = useHydrated();
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
   if (!session) throw notFound();
   const tile = buildSessionHistoryTile(session);
   const quality = session.status === "completed" ? computeWorkoutQuality(id) : null;

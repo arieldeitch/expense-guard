@@ -1,5 +1,22 @@
 # Change Log
 
+## 2026-07-31 (ג) · אימות ה-build לפרודקשן + הכנה למסירה ל-Lovable (Claude Code)
+
+- **סוג:** אימות של **פלט ה-build עצמו** (`.output`), לא של שרת ה-dev, + תיקון מה שהתגלה. **לא נוספה dependency, לא הוסף Supabase/auth/sync, לא שונו מפתחות/schema/IDs/routes.**
+- **איך הוגש ה-build:** ה-preset הוא `cloudflare-module`, ולכן `.output/server/index.mjs` הוא Worker עם `{ fetch(request, env, ctx) }` וקבצים סטטיים מגיעים דרך binding בשם `ASSETS`. נכתב **adapter קטן ב-Bun** (בתיקייה זמנית, **לא בריפו**) שמשחזר בדיוק את החוזה הזה: סטטי מ-`.output/public`, השאר ל-worker. **ללא wrangler וללא dependency חדשה.**
+- **✅ ניווט ישיר ו-refresh עובדים בפרודקשן:** 13 מסלולים עמוקים נבדקו ב-HTTP ישיר — כולם **200 עם HTML של SSR** (`/`, `/home`, `/gym`, `/running`, `/more`, `/backup`, `/trash`, `/home/quick`, `/gym/history`, `/running/history`, `/home/templates`, `/exercises`, `/gym/goals`). כתובת שאינה קיימת מחזירה **404 אמיתי** (ולא 200 של SPA fallback). קבצים סטטיים מוגשים עם content-type נכון.
+- **🔴 מה שהתגלה ותוקן — `notFound()` נזרק ב-render של השרת.** שבעה מסלולים זרקו `notFound()` **מתוך הרכיב**, ובשרת אין `localStorage` ולכן הישות תמיד חסרה שם. ב-build לפרודקשן זה הפיל את גבול ה-Suspense: **`Minified React error #419`** ואילץ client rendering של כל תת-העץ.
+  - **המסלולים:** `sessions.$id.summary` · `gym.history.$id` · `exercises.$id.history` · `locations.$id` · `templates.$id.index` · `templates.$id.edit` · `templates.$id.history`.
+  - **התיקון:** `if (!hydrated) return null;` לפני הזריקה — עקבי עם ADR-0039, **שכבת render בלבד**. ה-404 האמיתי ממשיך לעבוד: כתובת עם מזהה שאינו קיים מציגה "העמוד לא נמצא" כרגיל.
+  - **תוצאה מאומתת:** `#419` **נעלם**; סריקת 24 מסכים על ה-build לפרודקשן → **0 שגיאות hydration, 0 חריגות**.
+- **🟠 סכנת סדר-hooks סמויה שנחשפה ותוקנה** — ב-`locations.$id.tsx` היה `useMemo` **אחרי** יציאה מוקדמת. הזריקה הישנה (`throw`) הסתירה זאת מ-ESLint; ה-`return` המפורש חשף `react-hooks/rules-of-hooks`. ה-`useMemo` הועבר לפני הגארד. **באג אמיתי שהיה שם קודם** — סדר hooks לא יציב בין renders.
+- **זרימות שאומתו מול ה-build לפרודקשן (לא dev):** דיווח תרגיל בית (12 חזרות → שרד refresh) · אימון כוח (2 סטים 60×8 ו-62.5×6 → נפח 855ק״ג → שרד refresh → סיום חלקי עם 2 סטים שדולגו) · ריצה ידנית (6.2 ק״מ / 32:10 → קצב 5:11) · היסטוריה · **ייצוא גיבוי אמיתי** (`fitlog-backup-20260731-1305.json`, 95,118 בייט) שאומת מול `validateBackup`: **ok, 74 רשומות, checksum `253f4906` חושב מחדש והתאים, 0 errors / 0 warnings** · **360px: 9 מסכים, אפס גלישה אופקית**.
+- **התנהגות האחסון לא השתנתה:** אותם 6 מפתחות `fitlog:*`, `storage-meta` schema **1.0.0**, אותם IDs, אותו פורמט Export. הגידור נוגע ב-render בלבד.
+- **מוכנות ל-Lovable אומתה:** `.lovable/project.json` תקין (`tanstack_start_ts_current`) והוא **הקובץ היחיד שנמצא במעקב** מתוך תיקיות הנקודה · `.output/`, `.wrangler/`, `.tanstack/`, `node_modules` **ב-gitignore** ולא נדחפים · `vite.config.ts` נשען על `@lovable.dev/vite-tanstack-config` ללא plugins כפולים · `src/server.ts` (עוטף שגיאות SSR) נשמר כ-entry · אין `.env` ואין secrets ב-tracking · העץ נקי ומסונכרן מול `origin/main`.
+- **אימות:** typecheck exit 0 (גם אחרי build) · `bun run test` exit 0 — **314/314 unit + 61/61 router** · eslint **0 errors / 8 baseline warnings** (אחרי תיקון ה-hooks; לפניו היה error אחד) · `bun run build` exit 0 · `routeTree.gen.ts` ללא drift.
+- **R-26 נסגר.** נותרו פתוחים R-27, R-28 ללא שינוי.
+- **המלצה ארכיטקטונית שנרשמה ולא בוצעה:** ייתכן ש-**SSR מיותר** ל-MVP הנוכחי (localStorage בלבד, משתמש יחיד) — השרת מרנדר קליפה ריקה בכל מסך נתונים. לבחון בנפרד; **לא שונה בסשן זה.**
+
 ## 2026-07-31 (ב) · אימות End-to-End בדפדפן אמיתי + תיקון hydration (Claude Code)
 
 - **סוג:** אימות מלא של האפליקציה **בריצה**, לא רק של חבילת הבדיקות. הורץ מול `bun run dev` (`localhost:8080`) ב-**Chrome 150 headless שנשלט דרך CDP** — ללא הוספת dependency (אין Playwright/Puppeteer), פרופיל מבודד בתיקייה זמנית.

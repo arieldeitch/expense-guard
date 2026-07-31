@@ -1,5 +1,43 @@
 # Test Plan
 
+## ✅ ראיות אימות — ה-build לפרודקשן, 2026-07-31 (ג)
+
+**סביבה:** `bun run build` → `.output` (nitro preset **`cloudflare-module`**) שהוגש ב-`http://localhost:4173` דרך **adapter של Bun בתיקייה זמנית** המשחזר את חוזה ה-Worker (`fetch(request, env, ctx)` + binding `ASSETS` מ-`.output/public`). **ללא wrangler, ללא dependency חדשה, ה-adapter אינו בריפו.** Chrome 150 headless דרך CDP · Windows 11 · branch `main`.
+
+> ℹ️ `npx vite preview` **אינו** מגיש את ה-build הזה — נבדק ונמצא לא מתאים ל-preset של Worker.
+
+### שערי אימות
+| בדיקה | Exit | תוצאה |
+|---|---|---|
+| `bun run typecheck` (גם אחרי build) | **0** | PASS |
+| `bun run test` | **0** | **314/314 unit + 61/61 router** = 375 |
+| `bunx eslint . --rule '{"prettier/prettier":"off"}'` | **0** | **0 errors / 8 baseline warnings** |
+| `bun run build` | **0** | PASS |
+| `git diff --exit-code -- src/routeTree.gen.ts` | **0** | אין drift |
+
+> ⚠️ ריצת eslint ראשונה החזירה **error אחד** — `react-hooks/rules-of-hooks` ב-`locations.$id.tsx`: `useMemo` היה **אחרי** יציאה מוקדמת. הגארד החדש חשף סכנה שהייתה קיימת קודם (ה-`throw` הישן הסתיר אותה מהכלל). ה-`useMemo` הועבר לפני הגארד → חזרה ל-baseline. **נרשם ולא הושתק.**
+
+### מה נמדד על ה-build לפרודקשן
+| בדיקה | תוצאה |
+|---|---|
+| ניווט ישיר + refresh | 13 מסלולים עמוקים → **200 עם SSR HTML** |
+| כתובת לא קיימת | **404 אמיתי** (לא SPA fallback) |
+| קבצים סטטיים | `/favicon.ico` (`image/x-icon`), `/assets/*.js` (`text/javascript`) — מוגשים לפני ה-worker |
+| שגיאות | **0 hydration, 0 חריגות** ב-24 מסכים · **`#419` נעלם** |
+| בית | 12 חזרות → `סטים: 1/1` → `{sets:1,reps:12,done:true}` → שרד refresh |
+| כוח | 2 סטים (60×8, 62.5×6) → **855ק״ג** → שרד refresh → סיום חלקי (`completed` + 2 `skipped`) |
+| ריצה | 6.2 ק״מ / 32:10 → קצב **5:11** → בהיסטוריה |
+| ייצוא גיבוי | `fitlog-backup-20260731-1305.json` · **95,118 בייט** |
+| אימות הגיבוי | `validateBackup` **ok** · 74 רשומות · checksum `253f4906` **חושב מחדש והתאים** · 0 errors / 0 warnings |
+| 360px | 9 מסכים · `scrollWidth === clientWidth === 360` |
+| SSR של 7 המסלולים המגודרים | כולם **200 ללא דף שגיאת שרת** |
+
+**מגבלת כלי (לא מצב האפליקציה):** לקראת סוף הסשן ה-CDP הפסיק לייצר page target וניסיונות אתחול חוזרים לא עזרו. **זו תקלה בכלי האימות הזמני** — באותו זמן ה-build המשיך להחזיר 200 בכל בדיקת HTTP. **`/locations/$id`** נותר ללא אימות דרך דפדפן ומכוסה ע"י: תגובת SSR תקינה ב-HTTP · גארד **זהה בייט-לבייט** שאומת ב-6 המסלולים האחרים · בדיקות ה-router (`catalogRouteLoaders`) · typecheck/tests/build ירוקים.
+
+**נותר `לא אומת`:** הרצה על Cloudflare אמיתי (wrangler/deploy) · מכשיר מגע אמיתי · דפדפנים שאינם Chromium.
+
+---
+
 ## ✅ ראיות אימות — End-to-End בדפדפן אמיתי, 2026-07-31 (ב)
 
 **סביבה:** `bun run dev` → `http://localhost:8080` (SSR פעיל) · **Chrome 150.0.7871.188 headless, נשלט דרך CDP** · פרופיל מבודד · Windows 11 · branch `main`. **לא נוספה dependency** — נעשה שימוש בדפדפן המותקן דרך `--remote-debugging-port`.

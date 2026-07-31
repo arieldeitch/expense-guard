@@ -5,6 +5,7 @@
  */
 import { useState } from "react";
 import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { CheckCircle2, History, Plus, Save } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -59,6 +60,9 @@ function EditTemplatePage() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerTargetBlockId, setPickerTargetBlockId] = useState<string | null>(null);
 
+  const hydrated = useHydrated();
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
   if (!template) throw notFound();
 
   function openPicker(blockId: string | null) {

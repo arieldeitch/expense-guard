@@ -2,6 +2,7 @@
  * /exercises/$id/history — היסטוריית תרגיל בודד + גרפים + מגמה.
  */
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { ExerciseHistoryPanel } from "@/components/analytics/ExerciseHistoryPanel";
@@ -20,6 +21,9 @@ export const Route = createFileRoute("/exercises/$id/history")({
 function ExerciseHistoryRoute() {
   const { id } = Route.useParams();
   const exercise = useExercise(id);
+  const hydrated = useHydrated();
+  // ראה ADR-0039 — תרגיל מותאם אישית קיים רק ב-localStorage ולכן חסר בשרת.
+  if (!hydrated) return null;
   if (!exercise) throw notFound();
   return (
     <AppShell topBar={{ title: exercise.name_he, back: { to: `/exercises/${id}` } }}>

@@ -4,6 +4,7 @@
  */
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { Dumbbell, Filter, Gauge, Plus } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -85,10 +86,10 @@ function LocationDetailPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [equipQuery, setEquipQuery] = useState("");
 
-  if (!location) throw notFound();
+  const hydrated = useHydrated();
 
-  const country = findCountry(location.country_code);
-
+  // `useMemo` חייב לרוץ **לפני** כל יציאה מוקדמת, אחרת סדר ה-hooks משתנה בין
+  // renders (react-hooks/rules-of-hooks). הוא אינו תלוי ב-`location`.
   const filteredEquip = useMemo(() => {
     const q = equipQuery.trim().toLowerCase();
     return equipment
@@ -113,6 +114,12 @@ function LocationDetailPage() {
           : [e.name, e.manufacturer, e.model].some((s) => s && s.toLowerCase().includes(q)),
       );
   }, [equipment, equipQuery, filters]);
+
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
+  if (!location) throw notFound();
+
+  const country = findCountry(location.country_code);
 
   const visibleTreads = treadmills.filter((t) => t.deleted_at === null);
   const activeFilters = filtersActiveCount(filters);
