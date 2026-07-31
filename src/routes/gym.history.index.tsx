@@ -16,6 +16,7 @@ import type {
   TimeRangeId,
 } from "@/lib/analytics";
 import { useAllSessions } from "@/lib/sessions";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/gym/history/")({
@@ -35,13 +36,17 @@ export const Route = createFileRoute("/gym/history/")({
 
 function GymHistoryPage() {
   useAllSessions();
+  // `listSessionHistory` קורא את ה-repository ישירות. ב-SSR האחסון ריק, ולכן
+  // בלי השהיה עד ה-hydration נוצרת אי-התאמה ב-hydration (ADR-0039).
+  const hydrated = useHydrated();
   const [range, setRange] = useState<TimeRangeId>("all");
   const [sort, setSort] = useState<SessionHistorySort>("date_desc");
   const [filters, setFilters] = useState<SessionHistoryFilters>({});
   const tiles = useMemo(() => {
+    if (!hydrated) return [];
     const rr = resolveRange(range);
     return listSessionHistory({ ...filters, from: rr.from, to: rr.to }, sort);
-  }, [range, sort, filters]);
+  }, [range, sort, filters, hydrated]);
 
   return (
     <AppShell topBar={{ title: "היסטוריית כוח", back: { to: "/gym" } }}>

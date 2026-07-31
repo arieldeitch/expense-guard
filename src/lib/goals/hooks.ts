@@ -6,6 +6,7 @@
  */
 import { useSyncExternalStore, useMemo } from "react";
 import { readGoalsState, readGoalsServerSnapshot, subscribeGoals } from "./storage";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import {
   listGoals,
   listGoalsByDomain,
@@ -26,29 +27,35 @@ function useGoalsState() {
 
 export function useAllGoals(includeTrash = false): Goal[] {
   useGoalsState();
-  return listGoals(includeTrash);
+  const hydrated = useHydrated();
+  return hydrated ? listGoals(includeTrash) : [];
 }
 
 /** יעדים שנשלחו לסל — לשחזור מ-/trash. */
 export function useTrashedGoals(): Goal[] {
   useGoalsState();
+  const hydrated = useHydrated();
+  if (!hydrated) return [];
   return listGoals(true).filter((g) => g.status === "trashed");
 }
 
 export function useGoalsByDomain(domain: GoalDomain, includeTrash = false): Goal[] {
   useGoalsState();
-  return listGoalsByDomain(domain, includeTrash);
+  const hydrated = useHydrated();
+  return hydrated ? listGoalsByDomain(domain, includeTrash) : [];
 }
 
 export function useGoal(id: string | undefined): Goal | null {
   useGoalsState();
-  if (!id) return null;
+  const hydrated = useHydrated();
+  if (!hydrated || !id) return null;
   return getGoal(id);
 }
 
 export function usePrimaryGoal(domain: GoalDomain): Goal | null {
   useGoalsState();
-  return getPrimaryGoal(domain);
+  const hydrated = useHydrated();
+  return hydrated ? getPrimaryGoal(domain) : null;
 }
 
 /** מרכיב CalcContext ריאלי מכל ה־repositories. */
@@ -75,27 +82,32 @@ function buildCalcContext(domain: GoalDomain): CalcContext {
 
 export function useGoalProgress(goal: Goal | null | undefined): GoalProgress | null {
   useGoalsState();
+  const hydrated = useHydrated();
   // תלוי גם בקריאה של repositories אחרים — בעתיד ניתן להאזין ל־subscribe שלהם.
   return useMemo(() => {
-    if (!goal) return null;
+    if (!hydrated || !goal) return null;
     const ctx = buildCalcContext(goal.domain);
     ctx.manualCurrent = goal.current_value;
     return calcGoalProgress(goal, ctx);
-  }, [goal]);
+  }, [goal, hydrated]);
 }
 
 export function useGoalSnapshots(goalId: string | undefined) {
   useGoalsState();
-  return goalId ? listSnapshots(goalId) : [];
+  const hydrated = useHydrated();
+  return hydrated && goalId ? listSnapshots(goalId) : [];
 }
 
 export function useGoalVersions(goalId: string | undefined) {
   useGoalsState();
-  return goalId ? listVersions(goalId) : [];
+  const hydrated = useHydrated();
+  return hydrated && goalId ? listVersions(goalId) : [];
 }
 
 /** סופר יעדים פעילים לפי domain — לתצוגה של "עוד N יעדים". */
 export function useActiveGoalsCount(domain: GoalDomain): number {
   useGoalsState();
+  const hydrated = useHydrated();
+  if (!hydrated) return 0;
   return listGoalsByDomain(domain).filter((g) => g.status === "active").length;
 }

@@ -7,6 +7,7 @@
  */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { AlertTriangle, Download, Upload } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -82,8 +83,15 @@ function BackupPage() {
     }
   }
 
-  const envelope = buildBackup(BACKUP_SCHEMA_VERSION);
-  const counts = envelope.metadata.entity_counts;
+  // `buildBackup()` קורא את כל האחסון המקומי. ב-SSR האחסון ריק, ולכן קריאה
+  // ישירה ב-render יוצרת אי-התאמה ב-hydration (ADR-0039). הספירות מוצגות רק
+  // אחרי ה-hydration; הייצוא עצמו (handleExport) קורא תמיד נתונים אמיתיים.
+  const hydrated = useHydrated();
+  // נבנה בכל render (כמו קודם) כדי שהספירות יתעדכנו אחרי ייבוא/ייצוא, אך רק
+  // אחרי hydration — ב-SSR האחסון ריק וקריאה כאן שברה את ה-hydration (ADR-0039).
+  const envelope = hydrated ? buildBackup(BACKUP_SCHEMA_VERSION) : null;
+  const counts: Record<string, number> = envelope?.metadata.entity_counts ?? {};
+  const totalRecords = envelope?.metadata.integrity.total_records ?? 0;
 
   return (
     <AppShell topBar={{ title: "גיבוי ושחזור", back: { to: "/more" } }}>
@@ -105,7 +113,7 @@ function BackupPage() {
             <Stat label="תבניות" value={counts.templates ?? 0} />
           </div>
           <TileFootnote>
-            סה״כ {envelope.metadata.integrity.total_records} רשומות · גרסת schema{" "}
+            סה״כ {totalRecords} רשומות · גרסת schema{" "}
             {BACKUP_SCHEMA_VERSION}
           </TileFootnote>
         </Tile>

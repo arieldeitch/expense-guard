@@ -348,3 +348,30 @@
 **מה זה אינו מבטל:** כללי `CLAUDE.md` הגלובליים ו-`AGENTS.md` נשארים בתוקף במלואם. עצירה נדרשת רק עבור: credentials או גישה חיצונית חסרים · עלות חדשה · פעולה בלתי הפיכה בפרודקשן · אובדן נתונים הרסני · חשיפה או החלפה של secret · **החלטת היקף מוצרית מהותית**. Approval Brief עדיין נדרש לשינויי Supabase/auth/RLS/schema/migrations/env/deploy.
 
 **שפת התיעוד לא השתנתה:** `docs/ai/` נשאר בעברית. ההחלטה נוגעת לשפת הפרומפט בלבד.
+
+## ADR-0039 · 2026-07-31 · קריאת אחסון מקומי ב-render נדחית עד אחרי ה-hydration
+
+**הקשר:** האפליקציה מוגשת ב-SSR (TanStack Start + nitro). בשרת **אין `localStorage`**, ולכן כל מסך מבוסס-נתונים מרונדר בשרת כ**ריק**. ה-hooks של המודולים משתמשים ב-`useSyncExternalStore` עם `getServerSnapshot` תקין — אבל **מתעלמים מערך ההחזרה** ומשתמשים בו רק כמנגנון מנוי:
+
+```ts
+export function useHomeSessions() {
+  useHome((s) => s.sessions);   // ערך ההחזרה נזרק
+  return listHomeSessions();    // קורא localStorage ישירות
+}
+```
+
+בזמן ה-hydration React משתמש ב-`getServerSnapshot` (ריק), אך `listHomeSessions()` קורא את `localStorage` ומחזיר נתונים אמיתיים. התוצאה: **`Hydration failed because the server rendered text didn't match the client`** בכל מסך שיש בו נתונים, ו-React מרנדר את כל תת-העץ מחדש.
+
+**נמדד בדפדפן אמיתי (Chrome 150, headless, CDP) לפני התיקון:** שגיאת hydration ב-`/home`, `/home/history`, `/home/sessions/$id`, `/backup`, `/gym/history`, `/gym/compare`, `/home/quick`. עם אחסון ריק אין שגיאה — ולכן היא **לא התגלתה** בבדיקות (שרצות ב-jsdom ללא SSR) ולא ב-audit קודם.
+
+**ההחלטה:** `useHydrated()` (`src/lib/storage/useHydrated.ts`) — `useSyncExternalStore` שמחזיר `false` ב-SSR **וב-render ה-hydration**, ו-`true` רק אחרי ה-mount. כל hook או רכיב שקורא את ה-repository ב-render מחזיר ערך ריק עד שה-hydration הסתיים, ואז React מבצע עדכון רגיל עם הנתונים האמיתיים.
+
+**שכבת render בלבד.** `readXState()`, `commit()` וכל פונקציות ה-repository ממשיכות לקרוא ולכתוב נתונים אמיתיים תמיד — מטפלי אירועים, mutations ו-loaders **אינם מושפעים**. אין שינוי ב-persistence, ב-schema, במפתחות או ב-IDs.
+
+**איפה הוחל:** `home`, `sessions`, `runs`, `goals`, `templates`, `suunto` (hooks) + `home.index.tsx`, `home.quick.index.tsx`, `gym.history.index.tsx`, `gym.compare.tsx`, `backup.index.tsx` (קריאות ישירות ל-repository/analytics ב-render).
+
+**איפה **לא** הוחל, במכוון — `exercises` ו-`catalog`:** בשרת `readExercisesState()` מחזיר קטלוג **מזורע** (seed), ולא ריק. גידור ל-`[]` היה **יוצר** אי-התאמה חדשה במקרה הנפוץ. הפער הנותר צר: רק אחרי שהמשתמש **מתאים אישית** את הקטלוג (מועדפים, תרגיל מותאם, מחיקה) ייתכן הבדל בין השרת ללקוח. מתועד כ-R-27.
+
+**חלופה שנדחתה — לכבות SSR למסלולים האלה.** היא פותרת את הבעיה מהשורש (לשרת אין ולא יהיו נתונים), אך זו החלטה ארכיטקטונית שמשנה את התנהגות ה-deploy, ולכן דורשת החלטה מפורשת. נרשמה כאפשרות ב-`open-tasks.md`.
+
+**חלופה שנדחתה — גידור גלובלי בתוך `readXState()`.** היה פותר הכול בעריכה אחת למודול, אבל היה משקר גם ל-**route loaders** (שרצים לפני ה-render) ועלול לגרום ל-`notFound()` שגוי ולכתיבת state ריק. שכבת ה-hook בטוחה יותר.

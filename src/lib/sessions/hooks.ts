@@ -11,6 +11,7 @@ import {
   subscribeSessions,
   type PersistenceStatus,
 } from "./storage";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import * as repo from "./repo";
 import {
   computeDataCompleteness,
@@ -31,56 +32,75 @@ function useSessionsStore() {
   return useSyncExternalStore(subscribeSessions, readSessionsState, readSessionsServerSnapshot);
 }
 
+/**
+ * מזהה שלעולם אינו קיים. פונקציות החישוב נגזרות מרשימות לפי מזהה, ולכן קריאה
+ * עם מזהה זה מחזירה **בדיוק** את מה שהשרת חישב מעל state ריק — בלי לשכפל את
+ * לוגיקת החישוב ובלי לגעת ב-state עצמו. ראה ADR-0039.
+ */
+const NO_ID = "";
+
 export function useAllSessions(): StrengthSession[] {
   useSessionsStore();
-  return repo.listSessions();
+  const hydrated = useHydrated();
+  return hydrated ? repo.listSessions() : [];
 }
 
 export function useTrashedSessions(): StrengthSession[] {
   useSessionsStore();
-  return repo.listTrashedSessions();
+  const hydrated = useHydrated();
+  return hydrated ? repo.listTrashedSessions() : [];
 }
 export function useSession(id: string | undefined): StrengthSession | null {
   useSessionsStore();
-  if (!id) return null;
+  const hydrated = useHydrated();
+  if (!hydrated || !id) return null;
   return repo.getSession(id);
 }
 export function useActiveSession(): StrengthSession | null {
   useSessionsStore();
-  return repo.getActiveSession();
+  const hydrated = useHydrated();
+  return hydrated ? repo.getActiveSession() : null;
 }
 export function useSessionBlocks(sessionId: string): StrengthSessionBlock[] {
   useSessionsStore();
-  return repo.listSessionBlocks(sessionId);
+  const hydrated = useHydrated();
+  return hydrated ? repo.listSessionBlocks(sessionId) : [];
 }
 export function useSessionExercises(sessionId: string): StrengthSessionExercise[] {
   useSessionsStore();
-  return repo.listSessionExercises(sessionId);
+  const hydrated = useHydrated();
+  return hydrated ? repo.listSessionExercises(sessionId) : [];
 }
 export function useBlockExercises(blockId: string): StrengthSessionExercise[] {
   useSessionsStore();
-  return repo.listBlockExercises(blockId);
+  const hydrated = useHydrated();
+  return hydrated ? repo.listBlockExercises(blockId) : [];
 }
 export function useExerciseSets(sessionExerciseId: string): StrengthSet[] {
   useSessionsStore();
-  return repo.listExerciseSets(sessionExerciseId);
+  const hydrated = useHydrated();
+  return hydrated ? repo.listExerciseSets(sessionExerciseId) : [];
 }
 
 export function useSessionVolume(sessionId: string) {
   useSessionsStore();
-  return computeSessionVolume(sessionId);
+  const hydrated = useHydrated();
+  return computeSessionVolume(hydrated ? sessionId : NO_ID);
 }
 export function useDataCompleteness(sessionId: string) {
   useSessionsStore();
-  return computeDataCompleteness(sessionId);
+  const hydrated = useHydrated();
+  return computeDataCompleteness(hydrated ? sessionId : NO_ID);
 }
 export function usePreviousPerformance(sessionId: string, exerciseId: string) {
   useSessionsStore();
-  return findPreviousPerformance(sessionId, exerciseId);
+  const hydrated = useHydrated();
+  return findPreviousPerformance(hydrated ? sessionId : NO_ID, hydrated ? exerciseId : NO_ID);
 }
 export function usePersonalRecords(sessionId: string, exerciseId: string) {
   useSessionsStore();
-  return detectPersonalRecords(sessionId, exerciseId);
+  const hydrated = useHydrated();
+  return detectPersonalRecords(hydrated ? sessionId : NO_ID, hydrated ? exerciseId : NO_ID);
 }
 /**
  * מצב ההתמדה של ה-store. משמש להצגת סטטוס שמירה אמיתי — ה-UI לא מכריז
@@ -96,19 +116,21 @@ export function usePersistenceStatus(): PersistenceStatus {
 
 export function useSessionPrefs() {
   useSessionsStore();
-  return repo.getPrefs();
+  const hydrated = useHydrated();
+  return hydrated ? repo.getPrefs() : readSessionsServerSnapshot().prefs;
 }
 
 /** משך אימון פעיל — מרענן פעם בשנייה. */
 export function useLiveSessionDuration(sessionId: string): number {
   const [tick, setTick] = useState(0);
   useSessionsStore();
+  const hydrated = useHydrated();
   useEffect(() => {
     const id = setInterval(() => setTick((n) => n + 1), 1000);
     return () => clearInterval(id);
   }, []);
   void tick;
-  return computeSessionDurationSeconds(sessionId);
+  return computeSessionDurationSeconds(hydrated ? sessionId : NO_ID);
 }
 
 export interface RestTimerHookState {

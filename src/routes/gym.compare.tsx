@@ -8,6 +8,7 @@ import { Tile, TileLabel, TileFootnote } from "@/components/tile/Tile";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { GitCompare } from "lucide-react";
 import { useAllSessions } from "@/lib/sessions";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { compareSessions, listSessionHistory } from "@/lib/analytics";
 
 interface Search {
@@ -31,10 +32,12 @@ export const Route = createFileRoute("/gym/compare")({
 
 function CompareRoute() {
   useAllSessions();
+  // ראה ADR-0039 — קריאה ישירה ל-repository נדחית עד אחרי ה-hydration.
+  const hydrated = useHydrated();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
-  const history = listSessionHistory({}, "date_desc");
-  const cmp = search.a && search.b ? compareSessions(search.a, search.b) : null;
+  const history = hydrated ? listSessionHistory({}, "date_desc") : [];
+  const cmp = hydrated && search.a && search.b ? compareSessions(search.a, search.b) : null;
 
   return (
     <AppShell topBar={{ title: "השוואת אימונים", back: { to: "/gym/history" } }}>

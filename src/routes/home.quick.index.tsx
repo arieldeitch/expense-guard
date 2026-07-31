@@ -12,7 +12,7 @@ import { Tile } from "@/components/tile/Tile";
 import { Input } from "@/components/ui/input";
 import { useAllExercises } from "@/lib/exercises";
 import type { Exercise } from "@/lib/exercises";
-import { recentExerciseIds, startQuickEntry } from "@/lib/home";
+import { startQuickEntry, useRecentHomeExerciseIds } from "@/lib/home";
 
 export const Route = createFileRoute("/home/quick/")({
   head: () => ({
@@ -41,7 +41,8 @@ function QuickPickPage() {
     [all],
   );
   const favorites = homeCandidates.filter((e) => e.is_favorite).slice(0, 8);
-  const recentIds = recentExerciseIds(8);
+  // ה-hook (ולא `recentExerciseIds()` הישיר) נגזר מה-store ולכן עקבי ב-hydration.
+  const recentIds = useRecentHomeExerciseIds(8);
   const recent = recentIds
     .map((id) => homeCandidates.find((e) => e.id === id))
     .filter((e): e is Exercise => !!e);

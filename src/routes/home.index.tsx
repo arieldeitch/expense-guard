@@ -17,10 +17,10 @@ import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
 import {
-  recentExerciseIds,
   useActiveHomeDrafts,
   useHomeSessions,
   useHomeTemplates,
+  useRecentHomeExerciseIds,
 } from "@/lib/home";
 import { useAllExercises } from "@/lib/exercises";
 import { daysSince, frequencyPerWeek } from "@/lib/home";
@@ -51,7 +51,8 @@ function HomePage() {
     .sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime())[0];
   const dsl = daysSince(lastCompleted?.started_at ?? null);
   const freq = frequencyPerWeek(completed.map((s) => s.started_at));
-  const recentIds = recentExerciseIds(4);
+  // ה-hook (ולא `recentExerciseIds()` הישיר) נגזר מה-store ולכן עקבי ב-hydration.
+  const recentIds = useRecentHomeExerciseIds(4);
   const recentExercises = recentIds
     .map((id) => exercises.find((e) => e.id === id))
     .filter(Boolean);

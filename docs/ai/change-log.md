@@ -1,5 +1,21 @@
 # Change Log
 
+## 2026-07-31 (ב) · אימות End-to-End בדפדפן אמיתי + תיקון hydration (Claude Code)
+
+- **סוג:** אימות מלא של האפליקציה **בריצה**, לא רק של חבילת הבדיקות. הורץ מול `bun run dev` (`localhost:8080`) ב-**Chrome 150 headless שנשלט דרך CDP** — ללא הוספת dependency (אין Playwright/Puppeteer), פרופיל מבודד בתיקייה זמנית.
+- **🔴 הבאג המרכזי שהתגלה — אי-התאמת hydration בכל מסך מבוסס-נתונים.** ה-hooks השתמשו ב-`useSyncExternalStore` **רק כמנגנון מנוי** וקראו את ה-repository ישירות, ולכן `getServerSnapshot` (ריק) נעקף ובזמן ה-hydration הוחזרו נתונים אמיתיים מ-`localStorage`. תוצאה: `Hydration failed because the server rendered text didn't match the client` ו-regeneration של תת-העץ. **נמדד ב-7 מסכים.** ADR-0039.
+  - **למה זה לא נתפס עד היום:** הבדיקות רצות ב-jsdom **ללא SSR**, ועם אחסון ריק אין אי-התאמה. הבאג מופיע רק כשיש נתונים אמיתיים בדפדפן אמיתי.
+  - **התיקון:** `src/lib/storage/useHydrated.ts` — גידור ברמת ה-render בלבד. הוחל ב-6 קובצי hooks (`home`, `sessions`, `runs`, `goals`, `templates`, `suunto`) וב-5 מסלולים שקראו ל-repository/analytics ישירות ב-render (`home.index`, `home.quick.index`, `gym.history.index`, `gym.compare`, `backup.index`).
+  - **תוצאה מאומתת:** **0 שגיאות hydration ב-24 מסכים** (היה 7). `persistence`, schema, מפתחות ו-IDs — ללא שינוי.
+- **זרימות שאומתו מקצה לקצה בדפדפן:** דיווח תרגיל בית (12 חזרות → נשמר → שרד refresh → הופיע בהיסטוריה) · אימון כוח (פתיחה → הוספת תרגיל דרך ה-Sheet → עריכת 2 סטים 60×8 ו-62.5×6 → נפח 855ק״ג מחושב → שרד refresh → **סיום חלקי** שסימן 2 סטים כדולגו) · ריצה ידנית (6.2 ק״מ / 32:10 → קצב 5:11 מחושב → נראית בהיסטוריה) · **ייצוא גיבוי אמיתי** (`fitlog-backup-20260731-0841.json`, 96,429 בייט).
+- **הגיבוי המיוצא אומת בנפרד** מול `validateBackup` של האפליקציה: `format=workout-data-system`, `schema_version=1.0.0`, 75 רשומות, **checksum חושב מחדש עצמאית והתאים** (`75adbe56`), **0 errors, 0 warnings**.
+- **✅ חוב אימות 360px נסגר.** נמדד `documentElement.scrollWidth` מול `clientWidth` ב-**דפדפן אמיתי** ב-9 מסכים ברוחב 360px — **אין גלישה אופקית באף אחד**. זה היה הקריטריון היחיד שנשאר "לא אומת" מאז 2026-07-25.
+- **R-21 הצטמצם:** ה-Radix Sheet של בחירת התרגילים **נפתח ופועל כרגיל בדפדפן אמיתי** — הבעיה הייתה מגבלת jsdom בלבד, לא באג מוצר.
+- **אומת שאין תשתית ענן** (בהתאם ל-ADR-0012/0030): אין `.env`, אין `supabase/`, אין `@supabase` ב-`package.json`, אין CI. **תעבורת הרשת היחידה** במהלך שימוש מלא: `localhost:8080` + `fonts.googleapis.com`/`fonts.gstatic.com`. **אפס קריאות XHR/fetch לנתונים.**
+- **בדיקות אחרי התיקון:** typecheck exit 0 · `test:unit` **314/314** (3 ריצות עוקבות) · `test:router` **61/61** · eslint **0 errors / 8 baseline warnings** · build exit 0 · `routeTree.gen.ts` ללא diff.
+- **סיכונים חדשים שנרשמו ולא נסגרו:** **R-26** (`/sessions/$id/summary` — ה-loader זורק `notFound()` ב-SSR, TanStack נופל ל-client rendering; עובד, אך מדפיס שגיאת שרת) · **R-27** (`exercises`/`catalog` לא מגודרים במכוון — פער צר אחרי התאמה אישית של הקטלוג) · **R-28** (כניסה ל-`/running/new/outdoor` יוצרת טיוטת ריצה מיד; נטישה משאירה טיוטות יתומות — נצפו 2 בפועל).
+- **לא בוצע:** deploy · Supabase · dependency חדשה · שינוי schema/מפתחות/IDs · המרת CRLF · force-push.
+
 ## 2026-07-31 · התאוששות מריסטרט + סגירת R-24 (Claude Code)
 
 - **מצב שנמצא בפתיחה** · branch `main` · HEAD `16be950` · working tree **נקי** · **אין stashes, אין קבצים untracked, אין merge/rebase/cherry-pick/bisect פעיל**. הריסטרט **לא** השאיר עבודה חלקית בקבצים.
