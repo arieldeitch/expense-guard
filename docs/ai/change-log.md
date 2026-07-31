@@ -1,5 +1,21 @@
 # Change Log
 
+## 2026-07-31 (ד) · סגירת סשן — פרסום, נעיצת build tooling, ותיעוד מצב (Claude Code)
+
+- **סוג:** **docs בלבד** + אימות מחדש. **אין שינוי קוד מוצר, אין dependency חדשה, אין Supabase/auth/sync, אין שינוי SSR/routes/schema/מפתחות/פורמט גיבוי.**
+- **🚀 Fit Log פורסם:** **https://fitlog-workout.lovable.app** — אומת חי: `/`, `/home`, `/backup` מחזירים **200 עם SSR HTML** ותוכן האפליקציה. **ניווט ישיר עובד גם באירוח של Lovable.**
+- **Git — שני commits של Lovable נמשכו ל-`main` (fast-forward, ללא force):**
+  - **`7542ad8`** *"Work in progress"* — **build tooling בלבד**: `@lovable.dev/vite-tanstack-config` מ-`^2.7.7` ל-**`2.8.3`** (נעיצה מדויקת) + `bun.lock` תואם. **אומת בקוד** ע"י diff ישיר: `package.json` שורה אחת + lockfile. **אין שינוי מוצר או runtime.**
+  - **`904d50f`** *"Checked GitHub branch status"* — **`git diff 7542ad8 904d50f` ריק לחלוטין**. commit ללא תוכן; זהו כעת `origin/main`.
+  - **הבהרה לתיעוד:** הוגדר ש"ה-HEAD של Lovable הוא `7542ad8`". בפועל `origin/main` הוא **`904d50f`**, שהוא **זהה-תוכן** ל-`7542ad8`. שתי הטענות עקביות מבחינת התוכן; ה-HEAD המדויק הוא `904d50f`.
+- **`fc9089b` הוא בסיס המוכנות לפרודקשן** — כל האימות המקיף של היום בוצע עליו.
+- **אימות מחדש על `904d50f` עם 2.8.3 מותקן בפועל** (`bun install --frozen-lockfile` → 2.8.3 הוחלף מ-2.7.7): typecheck exit 0 (גם אחרי build) · `bun run test` exit 0 — **375 בדיקות** (314 unit + 61 router) · eslint **0 errors / 8 baseline warnings** · `bun run build` exit 0 · `routeTree.gen.ts` **ללא drift** · working tree נקי. **הנעיצה אושרה כניטרלית התנהגותית — לא הונח, נבדק.**
+- **מצב מוצר שנרשם:** משתמש יחיד · localStorage בלבד · **אין** Supabase/auth/RLS/migrations/cloud sync/CI · הנתונים שייכים **לדפדפן ולמכשיר הנוכחיים בלבד**.
+- **החלטה תפעולית:** המשתמש ישתמש באפליקציה **מספר ימים** לפני תחילת סנכרון Supabase. **אין להתחיל עבודת Supabase כעת.**
+- **הנחיה חדשה ב-`AGENTS.md`:** המשתמש עובד **אך ורק דרך Claude Code או Lovable**; **אין להפנות אותו לכלים אחרים** (wrangler / gh / psql / Supabase CLI / IDE אחר). משימה שדורשת כלי אחר = **עצירה**.
+- **ADR-0038 אושרר מחדש:** פרומפטים באנגלית + אוטונומיה מרבית.
+- **פישוט SSR נשאר החלטה עתידית שלא אושרה** — לא בוצע, לא להתחיל ללא אישור.
+
 ## 2026-07-31 (ג) · אימות ה-build לפרודקשן + הכנה למסירה ל-Lovable (Claude Code)
 
 - **סוג:** אימות של **פלט ה-build עצמו** (`.output`), לא של שרת ה-dev, + תיקון מה שהתגלה. **לא נוספה dependency, לא הוסף Supabase/auth/sync, לא שונו מפתחות/schema/IDs/routes.**
