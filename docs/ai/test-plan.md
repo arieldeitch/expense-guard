@@ -1,5 +1,36 @@
 # Test Plan
 
+## ✅ ראיות אימות — התאוששות + סגירת R-24, 2026-07-31 (branch `main`)
+
+כל הפקודות הורצו **על `main` עצמו**. working tree נקי לפני העבודה, ומכיל רק את 6 הקבצים שנערכו אחריה.
+
+| פקודה | Exit | מספר בדיקות | תוצאה |
+|---|---|---|---|
+| `bun run typecheck` | **0** | — | PASS |
+| `bun run test:unit` | **0** | **314/314** (21 קבצים) | PASS — היה 305 |
+| `bun run test:router` | **0** | **61/61** (10 קבצים) | PASS — ללא שינוי |
+| `bunx vitest run src/lib/backup` | **0** | **21/21** | PASS — היה 14 (+7) |
+| `bunx vitest run src/lib/readiness` | **0** | **31/31** | PASS — היה 29 (+2) |
+| `bunx vitest run src/lib/migration` | **0** | **44/44** | PASS — אותו מספר, 2 בדיקות נכתבו מחדש |
+| `bunx vitest run src/lib/storage` | **0** | **34/34** | PASS — ללא שינוי |
+| `bunx eslint . --rule '{"prettier/prettier":"off"}'` | **0** | — | **0 errors / 8 baseline warnings** |
+| `bun run build` | **0** | — | PASS |
+| `git diff --exit-code -- src/routeTree.gen.ts` | **0** | — | PASS — אין drift |
+| `bun run typecheck` אחרי build | **0** | — | PASS |
+
+**סה"כ `bun run test` = 375** (היה 366).
+
+**prettier — נבדק ולא רגרסיה:** `bunx prettier --check` מסמן 5 מהקבצים שנערכו. אומת ש**אותם 5 קבצים בדיוק נכשלים גם בגרסת `HEAD` שלפני השינוי** (הוצאו עם `git show HEAD:<path>` ונבדקו בנפרד), וכן ש-2 קבצים שלא נגעתי בהם נכשלים גם הם. זהו baseline R-17/CRLF ולא פורמט שנוצר בסשן זה. `git diff --stat` = 223 הוספות / 34 מחיקות — **אין שכתוב שורות מלא**, כלומר סופי השורות נשמרו.
+
+**שלוש בדיקות שנשברו במהלך העבודה ומה נעשה בהן — לא הושתקו:**
+1. `importPipeline` › "ילד עם הורה חסר נדחה" — נשבר כי האימות תופס כעת את המקרה ולכן ה-pipeline נעצר לפניו ו-`rejected` נשאר 0. **נכתבה מחדש עם `exercise_id`** — קשר שהאימות אינו מכסה — כך ששכבת ההגנה השנייה נבדקת בפועל.
+2. `importPipeline` › "פער מוכח" — תיעדה במפורש את הבאג. **נכתבה מחדש** כדי לאמת שהאימות תופס והקובץ נדחה לפני שנכתבת שורה.
+3. `readinessAudit` › "נתונים שבורים → cloud gate false" — חשפה **באג אמיתי** (`dependency_order` = true מאפס פעולות). הקוד תוקן, הבדיקה עודכנה, **ונוספה בדיקה שנייה** שממשיכה לכסות את מסלול `dependency_failures` האמיתי.
+
+**בדיקות שלא הורצו:** אין בדיקות DB/RLS/migration בענן — לא קיימות בריפו. אין E2E/Playwright — נדחה במפורש. אין CI. **אין בדיקה שלא הורצה מסיבה של חסם או timeout.**
+
+---
+
 ## ✅ ראיות אימות — Recovery Audit 2026-07-30 (HEAD `daba93c`, branch `main`)
 
 כל הפקודות הורצו **על `main` עצמו**, working tree נקי לפני ואחרי.

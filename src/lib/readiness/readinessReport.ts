@@ -119,6 +119,9 @@ function deriveDependencyOrder(rehearsal: RehearsalEvidence | null): boolean {
   if (!rehearsal) return false;
   const { first } = rehearsal;
   if (first.dependency_order.length === 0) return false;
+  // קובץ שנדחה באימות אינו מבצע פעולה כלל, ואז `dependency_order_respected`
+  // אמיתי **באופן ריק**. ראיה ריקה אינה ראיה — נדרשות פעולות שבוצעו בפועל.
+  if (first.total_operations === 0) return false;
   return first.dependency_order_respected && first.dependency_failures.length === 0;
 }
 

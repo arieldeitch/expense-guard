@@ -1,6 +1,24 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: **2026-07-30** (Recovery Audit — התיעוד אומת מול הריפו)
+תאריך עדכון: **2026-07-31** (התאוששות מריסטרט + סגירת R-24)
+
+---
+
+## ✅ מצב 2026-07-31 — התאוששות הושלמה, R-24 נסגר
+
+**Git:** branch `main` · working tree נקי · **אין stashes, אין untracked, אין פעולה פעילה**. הריסטרט לא השאיר קבצים חלקיים. מה שהופסק היה **push בלבד**: ה-commit `16be950` נוצר ב-2026-07-30 ולא נדחף. נוצרו tag `recovery-checkpoint-2026-07-31` ו-branch `backup/pre-recovery-2026-07-31` לפני כל פעולה.
+
+**מה נסגר:** **R-24** — `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` תוקן ל-`home_session_id`, נוסף כלל `home.sets → home.entries`, ודילוג ה-`parents.size === 0` הוסר. ADR-0037.
+
+**באג שהתגלה תוך כדי אימות ותוקן:** `deriveDependencyOrder` ב-`src/lib/readiness/readinessReport.ts` הסיק `dependency_order: true` מקובץ שנדחה באימות ולכן ביצע **אפס פעולות** — ראיה חיובית מאמת ריקה, בניגוד לעקרון ADR-0036. הבאג היה קיים קודם והוסתר ע"י R-24.
+
+**בדיקות: 375 עוברות** — `test:unit` **314/314** (21 קבצים) · `test:router` **61/61** (10 קבצים) · backup **21** · readiness **31** · migration **44** · storage **34**. typecheck exit 0 (גם אחרי build) · eslint 0 errors / 8 baseline warnings · build exit 0 · `routeTree.gen.ts` ללא diff.
+
+**תאימות לאחור נשמרה:** פורמט Export, `schema_version` 1.0.0, מפתחות אחסון, IDs, חתימות API וקודי issue — ללא שינוי. **לא נגעו ב-UI, לא נוספה dependency, לא בוצע deploy.**
+
+**סיכון חדש שנפתח ולא נסגר:** **R-25** — גיבוי עם הפניה שבורה נדחה כולו, ואין מסלול "ייבא בכל זאת ודלג על השבורים". דורש UI והחלטת מוצר.
+
+**החסם היחיד נותר R-22:** טרם נוצר קובץ גיבוי בפועל מחוץ לדפדפן — פעולה ידנית של המשתמש.
 
 ---
 

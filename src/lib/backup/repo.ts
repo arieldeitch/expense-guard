@@ -250,12 +250,21 @@ const REFERENCE_RULES: RefRule[] = [
     parentCollection: "templates",
   },
   {
+    // ⚠️ שדה ההורה הוא `home_session_id` ולא `session_id` (`HomeExerciseEntry`).
     scope: "home.entries → home.sessions",
     childModule: "home",
     childCollection: "entries",
-    field: "session_id",
+    field: "home_session_id",
     parentModule: "home",
     parentCollection: "sessions",
+  },
+  {
+    scope: "home.sets → home.entries",
+    childModule: "home",
+    childCollection: "sets",
+    field: "entry_id",
+    parentModule: "home",
+    parentCollection: "entries",
   },
   {
     scope: "sessions.exercises → sessions.sessions",
@@ -285,21 +294,29 @@ const REFERENCE_RULES: RefRule[] = [
 
 function checkReferences(entities: Record<string, unknown>): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
-  const listOf = (mod: string, coll: string): Array<Record<string, unknown>> => {
-    const state = entities[mod];
-    const found = collectionsOf(state).find(([k]) => k === coll);
-    return found ? found[1] : [];
+  /**
+   * מחזיר את האוסף, או **`null` אם המפתח כלל אינו קיים** במעטפת.
+   * ההבחנה מהותית: אוסף חסר = אין ראיה (מעטפת ישנה/חלקית), ואילו אוסף **ריק**
+   * הוא ראיה חיובית לכך שכל ההורים נעלמו — וזה בדיוק המקרה שנבלע בשקט עד היום.
+   */
+  const collectionOf = (mod: string, coll: string): Array<Record<string, unknown>> | null => {
+    const found = collectionsOf(entities[mod]).find(([k]) => k === coll);
+    return found ? found[1] : null;
   };
 
   for (const rule of REFERENCE_RULES) {
-    const parents = new Set(
-      listOf(rule.parentModule, rule.parentCollection)
-        .map((r) => r.id)
-        .filter((id): id is string => typeof id === "string"),
-    );
-    if (parents.size === 0) continue;
+    const children = collectionOf(rule.childModule, rule.childCollection);
+    if (!children || children.length === 0) continue;
 
-    const dangling = listOf(rule.childModule, rule.childCollection)
+    const parentRows = collectionOf(rule.parentModule, rule.parentCollection);
+    // תאימות לאחור: מעטפת שאינה נושאת את אוסף ההורים כלל אינה מוכיחה שבירה.
+    if (parentRows === null) continue;
+
+    const parents = new Set(
+      parentRows.map((r) => r.id).filter((id): id is string => typeof id === "string"),
+    );
+
+    const dangling = children
       .filter((row) => {
         const ref = row[rule.field];
         return typeof ref === "string" && ref.length > 0 && !parents.has(ref);

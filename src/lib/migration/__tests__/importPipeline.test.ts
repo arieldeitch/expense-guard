@@ -123,10 +123,15 @@ describe("סדר תלויות", () => {
   it("ילד עם הורה חסר נדחה, מדווח, ואינו נכתב", () => {
     const entities = buildRehearsalEntities();
     const home = entities.home as Record<string, unknown>;
-    // מוחקים את ה-session, ומשאירים את ה-entries שמצביעים אליו.
-    home.sessions = [];
+    // ההורה החסר הוא `exercise_id` — קשר ש-`REFERENCE_RULES` של הגיבוי **אינו**
+    // מכסה, ולכן האימות הקנוני עובר וה-pipeline הוא זה שנבחן כאן. זו בדיוק
+    // ההגנה השנייה: גרף התלויות עומד בפני עצמו ואינו נשען על האימות.
+    for (const entry of home.entries as Array<Record<string, unknown>>) {
+      entry.exercise_id = "ex_does_not_exist";
+    }
     const report = run(reseal(buildRehearsalEnvelope(entities)));
 
+    expect(report.validation.ok).toBe(true);
     expect(report.ok).toBe(false);
     expect(report.rejected).toBeGreaterThan(0);
     expect(report.dependency_failures.some((f) => f.table === "home_session_entries")).toBe(true);
@@ -171,20 +176,17 @@ describe("סדר תלויות", () => {
   });
 });
 
-// ---------- פער מוכח ב-validateBackup ----------
+// ---------- הגנה כפולה: validateBackup + pipeline ----------
 
-describe("פער מוכח: validateBackup אינו תופס הפניות שבורות ב-home.entries", () => {
+describe("הפניה שבורה ב-home.entries נתפסת בשתי השכבות", () => {
   /**
-   * `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` בודק את השדה `session_id` עבור
-   * `home.entries`, אך השדה בפועל הוא **`home_session_id`** (`HomeExerciseEntry`).
-   * לכן הכלל אף פעם לא יורה. בנוסף, הכלל מדלג כשאין אף רשומת הורה
-   * (`if (parents.size === 0) continue`).
-   *
-   * הבדיקה מתעדת את המצב הקיים **ומוכיחה שה-pipeline חוסם בכל זאת**. התיקון
-   * עצמו פתוח כ-P1 ב-`open-tasks.md` — לא בוצע כאן כדי לא לשנות את שכבת
-   * הגיבוי שהושלמה, ומכיוון שהוא אינו חוסם את ה-rehearsal.
+   * היה כאן **פער מוכח (R-24)**: `REFERENCE_RULES` ב-`src/lib/backup/repo.ts` בדק
+   * את השדה `session_id` עבור `home.entries`, בעוד השדה בפועל הוא
+   * **`home_session_id`** (`HomeExerciseEntry`), ולכן הכלל לא ירה מעולם.
+   * הפער **תוקן** (ADR-0037): האימות הקנוני מדווח כעת `dangling_reference`,
+   * וה-pipeline ממשיך לחסום באופן עצמאי — הגנה כפולה, לא תלות בשכבה אחת.
    */
-  it("האימות עובר, אך ה-pipeline דוחה את הילד היתום ואינו כותב אותו", () => {
+  it("האימות תופס את ההפניה, והקובץ נדחה כולו לפני שנכתבת שורה אחת", () => {
     const entities = buildRehearsalEntities();
     const home = entities.home as Record<string, unknown>;
     const entries = home.entries as Array<Record<string, unknown>>;
@@ -192,18 +194,16 @@ describe("פער מוכח: validateBackup אינו תופס הפניות שבו�
 
     const report = run(reseal(buildRehearsalEnvelope(entities)));
 
-    // מצב קיים: האימות הקנוני אינו מדווח על ההפניה השבורה.
-    expect(report.validation.issues.some((i) => i.code === "dangling_reference")).toBe(false);
+    // שכבה 1 — האימות הקנוני תופס כעת את ההפניה השבורה (R-24 תוקן).
+    expect(report.validation.ok).toBe(false);
+    const issue = report.validation.issues.find((i) => i.code === "dangling_reference");
+    expect(issue?.scope).toBe("home.entries → home.sessions");
+    expect(issue?.ids).toContain("he_1");
 
-    // מה שחשוב: ה-pipeline כן חוסם.
+    // הקובץ נדחה כולו — שום שורה אינה נכתבת, גם לא רשומות תקינות.
     expect(report.ok).toBe(false);
-    expect(
-      report.dependency_failures.some(
-        (f) => f.field === "home_session_id" && f.missing_id === "hs_does_not_exist",
-      ),
-    ).toBe(true);
+    expect(repo.totalRows()).toBe(0);
     expect(repo.has("home_session_entries", "he_1")).toBe(false);
-    // והסטים של אותו entry נופלים אחריו — אין רשומות יתומות בענן.
     expect(repo.has("home_session_sets", "hset_1")).toBe(false);
   });
 });

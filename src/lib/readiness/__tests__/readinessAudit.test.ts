@@ -167,7 +167,7 @@ describe("Readiness audit — הרצה אמיתית", () => {
 });
 
 describe("Readiness audit — כשל אמיתי מפיל את ה-gate", () => {
-  it("נתונים שבורים (הורה חסר) → cloud gate false", () => {
+  it("נתונים שבורים (הורה חסר) → האימות תופס, ו-cloud gate false", () => {
     // מוחקים את ה-session אך משאירים את ה-entries — ילדים יתומים.
     const entities = buildRehearsalEntities();
     (entities.home as Record<string, unknown>).sessions = [];
@@ -176,7 +176,36 @@ describe("Readiness audit — כשל אמיתי מפיל את ה-gate", () => {
 
     const { report, evidence } = runReadinessAudit({ authenticatedUserId: USER });
 
-    expect(evidence.rehearsal!.first.dependency_failures.length).toBeGreaterThan(0);
+    // אחרי תיקון R-24 האימות עצמו תופס את ההפניה השבורה, ולכן הקובץ נדחה
+    // לפני שמבוצעת פעולה כלשהי — ראיה חזקה יותר, לא חלשה יותר.
+    const first = evidence.rehearsal!.first;
+    expect(first.validation.ok).toBe(false);
+    expect(first.validation.issues.some((i) => i.code === "dangling_reference")).toBe(true);
+    expect(first.total_operations).toBe(0);
+
+    // ראיה ריקה אינה ראיה: אף check אינו מדווח הצלחה על סמך אפס פעולות.
+    expect(report.checks.dependency_order).toBe(false);
+    expect(report.checks.fake_supabase_rehearsal).toBe(false);
+    expect(report.ready_for_future_supabase_migration_contract).toBe(false);
+  });
+
+  it("הורה חסר שהאימות אינו מכסה → dependency_failures אמיתיים ו-gate false", () => {
+    // `exercise_id` אינו מכוסה ב-`REFERENCE_RULES`, ולכן הקובץ עובר אימות
+    // וה-pipeline הוא שחוסם — כך נשמרת הראיה לשכבת ההגנה השנייה.
+    const entities = buildRehearsalEntities();
+    for (const entry of (entities.home as Record<string, unknown>).entries as Array<
+      Record<string, unknown>
+    >) {
+      entry.exercise_id = "ex_does_not_exist";
+    }
+    resetAllCaches();
+    seedRealStorage(entities);
+
+    const { report, evidence } = runReadinessAudit({ authenticatedUserId: USER });
+    const first = evidence.rehearsal!.first;
+
+    expect(first.validation.ok).toBe(true);
+    expect(first.dependency_failures.length).toBeGreaterThan(0);
     expect(report.checks.dependency_order).toBe(false);
     expect(report.checks.fake_supabase_rehearsal).toBe(false);
     expect(report.ready_for_future_supabase_migration_contract).toBe(false);

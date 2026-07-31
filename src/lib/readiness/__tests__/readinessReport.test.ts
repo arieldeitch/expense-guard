@@ -191,6 +191,21 @@ describe("ה-gate של הענן", () => {
     expect(report.ready_for_future_supabase_migration_contract).toBe(false);
   });
 
+  it("אפס פעולות → dependency_order false (אמת ריקה אינה ראיה)", () => {
+    const evidence = passingEvidence();
+    // כך בדיוק נראה דוח של קובץ שנדחה באימות: אין פעולות, אין כשלים,
+    // ו-`dependency_order_respected` אמיתי באופן ריק.
+    evidence.rehearsal!.first = {
+      ...evidence.rehearsal!.first,
+      total_operations: 0,
+      dependency_order_respected: true,
+      dependency_failures: [],
+    };
+    const report = buildReadinessReport(evidence);
+    expect(report.checks.dependency_order).toBe(false);
+    expect(report.ready_for_future_supabase_migration_contract).toBe(false);
+  });
+
   it("ייבוא שני שיוצר רשומות → idempotent false", () => {
     const evidence = passingEvidence();
     evidence.rehearsal!.second = { ...evidence.rehearsal!.second, inserted: 3 };

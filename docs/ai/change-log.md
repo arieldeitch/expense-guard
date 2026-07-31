@@ -1,5 +1,20 @@
 # Change Log
 
+## 2026-07-31 · התאוששות מריסטרט + סגירת R-24 (Claude Code)
+
+- **מצב שנמצא בפתיחה** · branch `main` · HEAD `16be950` · working tree **נקי** · **אין stashes, אין קבצים untracked, אין merge/rebase/cherry-pick/bisect פעיל**. הריסטרט **לא** השאיר עבודה חלקית בקבצים.
+- **מה הופסק בפועל** · ה-commit של ה-Recovery Audit מ-2026-07-30 (`16be950`) **נוצר ונשמר**, אך **לא נדחף** — `main` היה `ahead 1` מול `origin/main`. ה-reflog מראה `f70bfc9` ואחריו `commit (amend)` ל-`16be950`; ה-diff בין השניים **ריק** — התיקון היה בהודעת ה-commit בלבד (הוסרו תווי `@` תועים). לא אבד תוכן.
+- **נקודת שחזור לפני כל פעולה** · tag `recovery-checkpoint-2026-07-31` + branch `backup/pre-recovery-2026-07-31`, שניהם ב-`16be950`. **לא בוצע reset/clean/checkout הרסני, ולא נמחק דבר.**
+- **fix(backup) — R-24 נסגר** · `REFERENCE_RULES` תוקן ל-`home_session_id`; נוסף כלל `home.sets -> home.entries` על `entry_id`; דילוג ה-`parents.size === 0` הוסר והוחלף בהבחנה בין אוסף הורים **חסר** (לא נבדק) לאוסף **ריק** (כן נבדק). ADR-0037.
+- **fix(readiness) — באג שהתגלה במהלך האימות** · קובץ שנדחה באימות אינו מבצע פעולה, ולכן `dependency_order_respected` שלו אמיתי **באופן ריק**; `deriveDependencyOrder` הסיק מכך `dependency_order: true` — ראיה חיובית מאפס פעולות, בניגוד לעקרון ADR-0036. נוסף תנאי `total_operations === 0 -> false`. **הבאג היה קיים לפני התיקון של R-24 ורק הוסתר על ידו.**
+- **הגנה כפולה נשמרה** · הבדיקה שמוכיחה שה-import pipeline חוסם בכוחות עצמו עברה להשתמש ב-`exercise_id` — קשר שהאימות אינו מכסה — כדי שהשכבה השנייה תמשיך להיבדק ולא תוסתר ע"י הראשונה.
+- **תאימות לאחור** · פורמט Export, `schema_version` 1.0.0, מפתחות אחסון, IDs, חתימות API וקודי issue — **ללא שינוי**. נוספה בדיקת רגרסיה מפורשת שגיבוי בית תקין (session -> entries -> sets) עובר אימות **ומייבא במלואו**.
+- **בדיקות** · `test:unit` **314/314** (21 קבצים, היה 305) · `test:router` **61/61** (10 קבצים, ללא שינוי) · backup **21** (היה 14) · readiness **31** (היה 29) · migration **44** (ללא שינוי במספר; 2 בדיקות נכתבו מחדש) · storage **34**. **סה"כ 375.**
+- **אימות** · typecheck exit 0 (גם אחרי build) · `bunx eslint . --rule '{"prettier/prettier":"off"}'` **0 errors / 8 baseline warnings** · `bun run build` exit 0 · `git diff --exit-code -- src/routeTree.gen.ts` exit 0 · prettier flag על 5 קבצים אומת כ-**baseline קיים** (אותם קבצים בדיוק נכשלים גם ב-`HEAD` לפני השינוי — R-17/CRLF, לא רגרסיה).
+- **decisions** · ADR-0037 (אימות הפניות + אמת ריקה) · ADR-0038 (הסכם עבודה: פרומפטים באנגלית, אוטונומיה מרבית).
+- **סיכונים** · R-24 **נסגר**. נפתח **R-25** — אין מסלול "ייבא בכל זאת ודלג על השבורים"; משתמש עם גיבוי שבור אינו יכול לשחזר ממנו כלום. דורש UI והחלטת מוצר, **לא בוצע**.
+- **לא בוצע:** deploy · Supabase/SDK/Auth/RLS · migrations בענן · env/secret/credentials · dependency חדשה · force-push · שינוי היסטוריה · שינוי UI · המרת CRLF גורפת.
+
 ## 2026-07-30 · Recovery Audit — אימות התיעוד מול הריפו (Claude Code)
 
 - **סוג:** audit + **docs בלבד**. אין שינוי קוד, אין branch חדש, אין merge, אין push של קוד, אין deploy, אין dependency, אין Supabase/env/secret.
