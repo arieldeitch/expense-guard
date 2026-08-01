@@ -6,7 +6,26 @@
 
 ---
 
-## ⛔ חוסם פתוח (2026-08-01) — מעבר ל-Supabase הסמכותי
+## ✅ T-01 — **הושלם בריפו** (2026-08-01)
+
+מעבר הקונפיגורציה ל-`nhnuuooyxamkkqqpcgmk` בוצע ואומת. commit **`67438e7`**, ענף `chore/supabase-authoritative-switch`. שני קבצים, חמישה ערכים, **אפס שינוי קוד**. אימות מלא ב-`current-state.md`.
+
+## ⛔ T-02 · לאמת את הפריסה של Lovable — **החוסם היחיד שנותר**
+
+**מה לא ידוע:** האם Lovable מזריק `SUPABASE_*` בזמן build ודורס את ה-`.env` שב-commit.
+
+**למה זה עדיין פתוח:** האפליקציה החיה **אינה מכילה קוד Supabase כלל** — נסרקו כל 21 ה-chunks וה-HTML של `fitlog-workout.lovable.app`: 0 מופעים של `supabase`, 0 של שני ה-refs. Lovable לא בנה מחדש מאז שה-backend נוסף, ולכן **אין מה למדוד עדיין**. זו אינה כשלה — זו שאלה שטרם ניתנת לצפייה.
+
+**הצעד:** לתת ל-Lovable לבנות מחדש (push של הענף / merge ל-`main`), ואז לסרוק שוב את ה-bundle החי:
+- אם מופיע `nhnuuooyxamkkqqpcgmk` → **אין דריסה**, R-31 נסגר, אין פעולה נוספת.
+- אם מופיע `fusrapommtdqwfglkmks` → **יש דריסה**, ואז נדרשת פעולה אחת בצד Lovable: לעדכן שם את ה-URL/ref/publishable key הציבוריים. **לא ליצור backend חדש, לא למחוק את הריק, לא להפעיל שירות בתשלום.**
+
+**עד אז:** אין ליצור schema, טבלאות, מיגרציות, RLS, Auth או Storage (R-31).
+
+## 🟡 T-03 · CRLF שובר את `lint` — קיים מראש (R-33, R-17)
+`bun run lint` מחזיר 29,784 שגיאות CRLF ב-245 קבצים, **גם בלי השינויים שלנו** (הוכח על `681d40c` נקי). דורש `git add --renormalize .` ב-**commit ייעודי נפרד**. אין לערבב עם עבודת Supabase.
+
+<details><summary>הנוסח המקורי של T-01 (לפני הביצוע)</summary>
 
 **T-01 · להשלים את מעבר הקונפיגורציה מ-`fusrapommtdqwfglkmks` ל-`nhnuuooyxamkkqqpcgmk`.**
 
@@ -16,6 +35,8 @@
 - **סדר העבודה אחרי שהמפתח יתקבל:** להחליף 5 ערכים → `bun install --frozen-lockfile` → typecheck + `bun run test` + build → לאמת ש-`fusrapommtdqwfglkmks` נעלם מהריפו → לוודא ש-`fitlog:*` ב-`localStorage` לא נגעו → רק אז push.
 - **חובה לפני schema/Auth/RLS:** ראה **R-31**. אין ליצור טבלאות לפני שהמעבר הושלם.
 - **פתוח לבירור:** האם Lovable מזריק את משתני הסביבה בזמן build/deploy ודורס את `.env`. אם כן — הריפו לבדו אינו מספיק לפרודקשן, ותידרש פעולה נוספת בצד Lovable.
+
+</details>
 
 ---
 

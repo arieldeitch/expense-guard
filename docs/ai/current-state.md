@@ -1,6 +1,56 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: **2026-08-01** (ביקורת — Lovable Cloud הופעל בטעות ב-`origin/main`)
+תאריך עדכון: **2026-08-01** (המעבר לפרויקט הסמכותי בוצע ואומת בריפו)
+
+---
+
+## ✅ מצב 2026-08-01 (ב) — הריפו מחובר לפרויקט הסמכותי
+
+> **הסעיף הזה גובר על סעיף הביקורת שמתחתיו.** הביקורת תיארה את הבעיה; כאן היא נפתרה **בריפו**.
+
+### ההחלטה
+**`nhnuuooyxamkkqqpcgmk` הוא פרויקט ה-Supabase הסמכותי של Fit Log.** הפרויקט של Lovable Cloud, `fusrapommtdqwfglkmks`, אינו בשימוש — הוא **לא נמחק ולא נותק**, בהתאם להוראה.
+
+### מה שונה — שני קבצים, חמישה ערכים
+| קובץ | שינוי |
+|---|---|
+| `.env` | `SUPABASE_PROJECT_ID` · `SUPABASE_URL` · `SUPABASE_PUBLISHABLE_KEY` + שלוש המראות `VITE_*` |
+| `supabase/config.toml` | `project_id = "nhnuuooyxamkkqqpcgmk"` |
+
+**אפס שינוי בקוד האפליקציה.** לא נדרש תיקון תאימות: כל ה-integration מונע-env, ולכן החלפת הערכים הספיקה. commit: **`67438e7`**.
+
+### אימות המפתח — לפני שנכתב לאנשהו
+`/auth/v1/health` → **200**, ו-`/auth/v1/settings` החזיר קונפיגורציה אמיתית (`email: true`). ה-**401 על `/rest/v1/` אינו תקלה** — המפתח של הפרויקט הישן מחזיר בדיוק את אותה תשובה (`Secret API key required`), כי כך מתנהג פורמט המפתח האטום החדש באותו endpoint.
+
+### ראיות אימות
+| בדיקה | תוצאה |
+|---|---|
+| `bun install --frozen-lockfile` | ✅ `@supabase/supabase-js` 2.111.0 · `@lovable.dev/vite-tanstack-config` **2.8.4** |
+| `typecheck` | ✅ exit 0 — וגם שוב אחרי build |
+| `bun run test` | ✅ exit 0 — **375 בדיקות** (314 unit ב-21 קבצים + 61 router) |
+| backup + storage + migration | ✅ **99 בדיקות ב-5 קבצים** — ה-round-trip של הגיבוי עובר |
+| `build` | ✅ exit 0 |
+| הרצת ה-build לפרודקשן | ✅ `/`, `/home`, `/backup`, `/gym`, `/running`, `/more` → **200 עם SSR HTML** (adapter של Bun **מחוץ לריפו**, ללא wrangler) |
+| ה-bundle שהוגש לדפדפן | ✅ מכיל **רק** `https://nhnuuooyxamkkqqpcgmk.supabase.co` והמפתח החדש · **0 מופעים** של ה-ref הישן |
+| סריקת סודות | ✅ אין `sb_secret_*` / `sbp_*` / service-role בשום קובץ tracked או ב-`.output`. כל מופע של `sb_secret_` הוא **הליטרל של הבדיקה** ב-`isNewSupabaseApiKey()` |
+| נתונים מקומיים | ✅ `fitlog:*` **לא נקרא, לא נכתב, לא הועבר** |
+| DB | ✅ **אפס כתיבות.** רק שתי קריאות GET ל-endpoints ציבוריים |
+
+### שני מצבים קיימים שנמדדו ובמכוון לא תוקנו
+1. **`lint` נכשל — קיים מראש, לא נגרם מהמעבר.** 29,784 שגיאות `prettier/prettier "Delete ␍"` ב-245 קבצים. **הוכח:** הוצאת שני קובצי הקונפיג ל-stash והרצת lint על `681d40c` נקי נתנה **תוצאה זהה בייט-לבייט** — 29792 problems / 29784 errors / 8 warnings. זהו **R-17** (renormalize מעולם לא הורץ במכוון). `.env` ו-`config.toml` אינם עוברים lint בכלל.
+2. **drift ב-`routeTree.gen.ts`.** build מקומי מחזיר את בלוק ה-`Register` בן 10 השורות ש-`681d40c` של Lovable הסיר — **בדיוק מה ש-R-30 חזה** לנעיצה 2.8.3→2.8.4. הוחזר לקדמותו כדי שה-commit יישאר מצומצם לשני קבצי הקונפיג; typecheck עובר בשתי הצורות.
+
+### 🔎 ממצא פריסה — ה-backend השגוי **מעולם לא הגיע לפרודקשן**
+האפליקציה החיה ב-**https://fitlog-workout.lovable.app** **אינה מכילה קוד Supabase כלל.** נסרקו **כל 21 ה-chunks** וה-HTML: **0 מופעים** של `supabase`, **0** של `fusrapommtdqwfglkmks`, **0** של `nhnuuooyxamkkqqpcgmk`. גודל ה-bundle החי 391KB מול 601KB בבנייה המקומית. **Lovable לא בנה מחדש מאז `bdcfdae`.**
+
+**לכן:** האם Lovable דורס את `.env` בהזרקת env בזמן build — **עדיין לא ניתן לקבוע**. השאלה תיהפך לניתנת-לצפייה רק אחרי הבנייה הבאה של Lovable. **אין להניח תשובה לכאן או לכאן.**
+
+### מה עדיין **לא** קיים — ללא שינוי
+**אין schema · אין טבלאות · אין מיגרציות · אין RLS · אין Auth ואין Auth UI · אין Storage · אין Edge Functions · אין sync.** `types.ts` עדיין ריק. `supabase`/`supabaseAdmin` הם **Proxy עצל** שלא נקרא באף מסלול. **הנתונים ב-`localStorage` בלבד.**
+
+### סטטוס סיכונים
+- **R-31 — מופחת, לא סגור.** הריפו כבר לא מצביע על ה-backend השגוי. נשאר פתוח עד שהפריסה של Lovable תאומת.
+- **R-32 — נשאר פתוח.** `.env` עדיין tracked. כרגע מכיל **רק** מפתחות ציבוריים.
 
 ---
 
