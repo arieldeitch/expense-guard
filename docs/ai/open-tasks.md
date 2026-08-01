@@ -6,19 +6,16 @@
 
 ---
 
-## ✅ T-01 — **הושלם בריפו** (2026-08-01)
+## 🔁 T-01 — **Superseded** (2026-08-01, ADR-0040)
 
-מעבר הקונפיגורציה ל-`nhnuuooyxamkkqqpcgmk` בוצע ואומת. commit **`67438e7`**, ענף `chore/supabase-authoritative-switch`. שני קבצים, חמישה ערכים, **אפס שינוי קוד**. אימות מלא ב-`current-state.md`.
+המעבר ל-`nhnuuooyxamkkqqpcgmk` בוטל. **`fusrapommtdqwfglkmks` הוא ה-backend הסמכותי.** `supabase/config.toml` יושר אליו. `.env` מנוהל ע"י הפלטפורמה ואינו נערך ידנית. `nhnuuooyxamkkqqpcgmk` לא נמחק ולא נותק.
 
-## ⛔ T-04 · להחיל את מיגרציית Phase 1 — **החוסם המרכזי**
+## ✅ T-04 · מיגרציית Phase 1 — **הוחלה** (2026-08-01)
 
-הקובץ מוכן: `supabase/migrations/20260801090000_phase1_profiles_and_goals.sql`. **לא הוחל על אף DB.**
+הוחלה כלשונה על `fusrapommtdqwfglkmks`. אומת מול ה-DB: `profiles` + `goals` בלבד, `rowsecurity = true` על שתיהן, 6 policies (select/insert/update לכל טבלה) כולן ב-`auth.uid()`, **אין policy של delete**, אין trigger על `auth.users`. `src/integrations/supabase/types.ts` נוצר מחדש ע"י Lovable.
 
-**החסם:** אין גישה מורשית. Supabase CLI מחזיר **403** על `nhnuuooyxamkkqqpcgmk` (מחובר לארגון `jauaspogygzagvdgwzwi` בלבד), ותוסף ה-Chrome אינו מחובר. **המפתח הציבורי אינו מספיק** — החלת DDL דורשת הרשאה מורשית.
+**נותר:** למחוק את `src/lib/supabase/tables.ts` ולהחליף את הייבוא לטיפוסים המיוצרים (R-35) — עבודת ניקיון, לא חוסם. ואז בדיקת התחברות והעלאה מקצה לקצה.
 
-**אחרי ההחלה:** לתת ל-Lovable לייצר מחדש את `src/integrations/supabase/types.ts`, למחוק את `src/lib/supabase/tables.ts` ולהחליף את הייבוא (R-35). ואז לבדוק התחברות והעלאה מקצה לקצה.
-
-**עד אז:** R-34 בתוקף — אין להבטיח שהתחברות עובדת.
 
 ## ⛔ T-02 · לאמת את הפריסה של Lovable — **פתוח, עם ממצא חדש**
 
