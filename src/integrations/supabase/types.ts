@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      goals: {
+        Row: {
+          client_created_at: string | null
+          client_updated_at: string | null
+          content_checksum: string | null
+          created_at: string
+          current_value: number | null
+          domain: string
+          goal_type: string
+          id: string
+          is_primary: boolean
+          name: string
+          op_id: string | null
+          payload: Json
+          priority: number
+          source_metadata: Json
+          status: string
+          target_unit: string | null
+          target_value: number | null
+          updated_at: string
+          user_id: string
+          version: number
+        }
+        Insert: {
+          client_created_at?: string | null
+          client_updated_at?: string | null
+          content_checksum?: string | null
+          created_at?: string
+          current_value?: number | null
+          domain: string
+          goal_type: string
+          id: string
+          is_primary?: boolean
+          name: string
+          op_id?: string | null
+          payload?: Json
+          priority?: number
+          source_metadata?: Json
+          status: string
+          target_unit?: string | null
+          target_value?: number | null
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Update: {
+          client_created_at?: string | null
+          client_updated_at?: string | null
+          content_checksum?: string | null
+          created_at?: string
+          current_value?: number | null
+          domain?: string
+          goal_type?: string
+          id?: string
+          is_primary?: boolean
+          name?: string
+          op_id?: string | null
+          payload?: Json
+          priority?: number
+          source_metadata?: Json
+          status?: string
+          target_unit?: string | null
+          target_value?: number | null
+          updated_at?: string
+          user_id?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
