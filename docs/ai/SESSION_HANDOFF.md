@@ -1,7 +1,253 @@
 # Session Handoff
 
-> ⚠️ **הסעיף העדכני ביותר הוא זה שמיד למטה.** הסעיפים שאחריו נשמרים כרשומה
-> היסטורית; במקרה של סתירה — **הסעיף העליון גובר**.
+> ⚠️ **The section immediately below is the current one and supersedes everything after it.**
+> Older sections are kept as historical record. On any conflict, **this top section wins**.
+
+---
+
+# 🏁 CURRENT HANDOFF — 2026-08-01 19:02 Asia/Jerusalem
+
+**This section is self-contained. A fresh session can resume from it without any chat history.**
+
+## 1. Exact stopping point
+
+Phase 1 is implemented, migrated, published, and **partially** verified. Anonymous RLS was verified against
+the live database. **Authenticated verification never ran**, because email confirmation is required and
+Claude had no mailbox access. Work stopped precisely at "obtain an authenticated session".
+
+The last working session was documentation-only: it refreshed this handoff and the persistent knowledge
+files. **No application code changed.**
+
+## 2. Verified repository state
+
+Inspected directly at `36b0453` — not carried from chat history.
+
+| Item | Value |
+|---|---|
+| Migration applied | `supabase/migrations/20260801061825_486870dc-0260-4071-96de-b93bc78f7927.sql` (the only migration) |
+| Tables | `public.profiles`, `public.goals` |
+| RLS | 2 × `enable row level security`, **6 policies**, all `auth.uid()`-scoped |
+| DELETE policies | **0** — by design |
+| `auth.users` triggers | **0** — by design |
+| Auth module | `src/lib/supabase/session.ts` |
+| Repository adapter | `src/lib/repo/supabase.ts`, chosen by `resolveRepository()` in `src/lib/repo/index.ts` |
+| Sync | `src/lib/sync/{state,goalsUpload,index}.ts` + 3 test files |
+| Sync-state key | `fitlog:sync-state:v1` (not a `StorageModule`) |
+| Unit test files | 24 · Router test files | 10 |
+| ADRs | 40 (highest **ADR-0040**) |
+
+## 3. Current Git state
+
+| | |
+|---|---|
+| Branch | `main` |
+| HEAD | **`36b0453`** |
+| `origin/main` | **`36b0453`** |
+| Ahead / behind | `0 / 0` |
+| Working tree | clean, no untracked files |
+| HEAD subject | `fix(supabase): close R-35 on the generated types, and drop a duplicate migration that would break db reset` |
+| Previous commit | `d479acd` — `Realigned to fusrapommtdqwfglkmks` |
+
+> This handoff is written *before* the documentation commit that publishes it; that commit will sit directly
+> on top of `36b0453`. See `CHANGELOG.md` for its hash.
+
+## 4. Live application state
+
+- **https://fitlog-workout.lovable.app** — published, Phase 1 code is live.
+- All checked routes return HTTP 200; locally served production routes return 200 with SSR HTML.
+- The live runtime targets the authoritative backend; the superseded ref is absent from the live HTML and all chunks.
+- The app is currently used **signed out**, entirely on `localStorage`.
+
+## 5. Authoritative backend
+
+**`fusrapommtdqwfglkmks`** — Lovable-managed Supabase, region `eu-north-1`. Decision: **ADR-0040**.
+`supabase/config.toml` matches. `.env` is **platform-managed** and must not be hand-edited.
+
+## 6. ⚠️ Superseded backend warning
+
+**`nhnuuooyxamkkqqpcgmk` is superseded and must remain UNTOUCHED** — not deleted, not disconnected, not
+modified, not reconnected. It appears in **no** source file, config, or migration (verified at `36b0453`);
+only in `docs/ai/*.md` as history. Older documentation naming it authoritative is historical record.
+Lovable injects runtime env that **overrides** repository `.env`, so repointing `.env` would not work anyway.
+See **R-42**.
+
+## 7. Implemented Phase 1 scope
+
+Email/password Auth (session inspection, sign-up, sign-in, sign-out, idempotent `ensureProfile()`) ·
+`profiles` and `goals` tables with RLS for SELECT/INSERT/UPDATE · Supabase repository adapter behind the
+existing `Repository` contract · **local repository fallback remains active** · signed-out local-only usage
+fully supported · **explicit** goal upload (never automatic) · stable local goal IDs preserved as cloud
+primary keys · sync state stored separately in `fitlog:sync-state:v1` · backup compatibility preserved ·
+generated Supabase types are the single source of truth (R-35 closed).
+
+**Existing local data has not been automatically uploaded, deleted, cleared, or rewritten.**
+
+## 8. Out of scope — Phase 2, not started
+
+Run sync · strength workout sync · home exercise sync · template sync · exercise catalog sync ·
+location/equipment sync · dashboard cloud state · realtime · Storage buckets · Edge Functions · social Auth ·
+magic links / OTP · full conflict-resolution UI · full multi-device sync · Phase 2 schema · migration of the
+user's real local data.
+
+## 9. Schema and RLS state
+
+`profiles.id` → `auth.users(id)` cascade. `goals.id text primary key` is the stable localStorage id, never
+regenerated. `goals.user_id uuid not null default auth.uid()` so a client cannot forge ownership. Full local
+record preserved losslessly in `goals.payload jsonb`; `source_metadata` holds the local owner as
+documentation only, never authorisation. Sync columns: `updated_at`, `client_updated_at`,
+`content_checksum`, `op_id`. `numeric` throughout. `GRANT` is `select, insert, update` only (see **R-37**).
+
+## 10. Auth state
+
+Email/password signup **enabled**. Email confirmation **currently required** (`mailer_autoconfirm: false`).
+No social providers, no magic links, no OTP, no admin UI. Auth surface is one tile inside `/more` — there is
+no dedicated auth route and no route guard.
+
+## 11. Exact blocker
+
+**Email confirmation is required, so signup returns no session.** A real signup created the user but returned
+no `access_token`, with `email_confirmed_at` null. A disposable, clearly labelled unconfirmed test user
+(`fitlog-e2e-*@fitlog-e2e.invalid`) exists. Claude had no mailbox access and **correctly did not invent
+confirmation**.
+
+**This setting has NOT been changed. Do not claim or assume that it has.**
+
+## 12. Next Lovable action — copy-ready
+
+> Temporarily disable email confirmation for **Fit Log** on the authoritative Lovable-managed backend
+> `fusrapommtdqwfglkmks`.
+>
+> The change must affect **only** the setting that requires newly created email/password users to confirm
+> their email address before receiving a valid session.
+>
+> It must **not** change:
+> - enabled Auth providers
+> - password requirements
+> - redirect URLs
+> - database schema
+> - RLS policies
+> - application code
+> - routes
+> - localStorage behaviour
+> - deployment configuration
+> - subscription plan
+>
+> It must **not** create users or test data.
+>
+> Report back with:
+> - EMAIL CONFIRMATION REQUIRED: YES or NO
+> - EMAIL/PASSWORD SIGNUP ENABLED: YES or NO
+> - OTHER AUTH SETTINGS CHANGED: YES or NO
+> - DATABASE CHANGED: YES or NO
+> - APPLICATION CODE CHANGED: YES or NO
+> - NEW COST: YES or NO
+> - BLOCKERS
+
+## 13. Next Claude action — after Lovable confirms
+
+Autonomously, without incremental approval:
+
+1. Verify the repository and deployment are still aligned.
+2. Create **two** clearly labelled disposable authenticated users.
+3. Create only **minimal** disposable test records.
+4. Verify profile creation.
+5. Verify authenticated goal upload.
+6. Verify idempotency and duplicate prevention.
+7. Verify per-user uploaded-ID tracking.
+8. Verify **User A cannot read or update User B's** profile or goals.
+9. Verify **User B cannot read or update User A's** profile or goals.
+10. Verify anonymous access remains blocked.
+11. Verify sign-out returns the app to the local fallback.
+12. Verify **no existing local data is cleared, rewritten, or silently uploaded**.
+13. Verify backup compatibility remains intact.
+14. Remove disposable test records and users **only through safe supported means**.
+15. **Never weaken RLS or add DELETE policies merely to simplify cleanup.**
+16. Update documentation with evidence.
+17. Commit and push approved code or documentation fixes.
+18. **Stop before Phase 2.**
+
+## 14. Verification acceptance criteria
+
+Verification passes only when **all** hold, each with recorded evidence:
+
+- Exactly **one** `profiles` row exists per authenticated user after `ensureProfile()`.
+- An uploaded goal keeps its **stable local id** as the cloud primary key, with the full payload intact.
+- `user_id` on every uploaded row equals the **authenticated session's** user id, never a value from the file.
+- A second upload of the same data writes **nothing**: no duplicate row, no overwrite of an existing row.
+- `fitlog:sync-state:v1` records uploaded ids **per user**, and one user's ids never leak to another.
+- **Cross-user isolation holds in both directions** for both `profiles` and `goals`, for read and update.
+- Anonymous access remains blocked (select returns empty, insert is refused).
+- After sign-out the app still renders and functions through the local repository fallback.
+- **No `fitlog:*` domain key is cleared, rewritten, or uploaded** during the whole run.
+- Backup export and validation still round-trip.
+
+Anything unproven must be reported as unproven. **Do not close R-38 without this evidence.**
+
+## 15. Cleanup expectations
+
+Disposable users must be clearly labelled and removed afterwards through safe supported means, along with
+their test records. The pre-existing unconfirmed `fitlog-e2e-*@fitlog-e2e.invalid` user should be removed too
+(**R-40**). **Never add a DELETE policy or relax RLS to make cleanup easier** — cleanup convenience is not a
+reason to weaken a security boundary.
+
+## 16. Test and build baseline
+
+> **Not re-run during the documentation session.** Measured at commit `36b0453` — the commit currently
+> checked out — during the session of 2026-08-01. No code changed since, so the baseline still applies.
+
+`bun install --frozen-lockfile` passed · `bun run typecheck` passed (also after build) · **355 unit tests
+across 24 files** · **61 router tests across 10 files** · **416 total** · focused Auth / generated-types /
+repository / RLS / import / deduplication / sync-state / fallback tests passing (41) · backup, storage and
+migration **99 passing** · selector and repository-contract **12 passing** · `bun run build` passed · secret
+scan clean · live routes HTTP 200 · locally served production routes HTTP 200 with SSR HTML · superseded ref
+absent from live HTML and chunks · authoritative ref present in the live runtime · signed-out local fallback
+works · backup round-trip passes.
+
+## 17. Known risks and baseline issues
+
+**R-36** auth blocked by email confirmation · **R-38** cross-user RLS unverified · **R-39** temporary
+confirmation-off configuration risk · **R-40** stale disposable user · **R-37** DELETE privilege not
+explicitly revoked (harmless while RLS is on) · **R-33/R-17** CRLF lint baseline · **R-30** route-tree
+ordering drift · **R-29** local-only device-specific data · **R-41** accidental Phase 2 expansion ·
+**R-42** accidental reconnection to the superseded project · **R-43** accidental silent upload or mutation.
+Full detail in [`risks.md`](./risks.md).
+
+## 18. Prohibited actions
+
+- Do **not** start Phase 2 before authenticated Phase 1 verification succeeds.
+- Do **not** weaken RLS or add a DELETE policy — including for test cleanup.
+- Do **not** modify `auth.users`.
+- Do **not** touch, reconnect to, or delete `nhnuuooyxamkkqqpcgmk`.
+- Do **not** hand-edit `.env` (platform-managed, overridden at build time) or the generated
+  `src/integrations/supabase/types.ts`.
+- Do **not** upload the user's real local data without explicit confirmation.
+- Do **not** clear, rewrite, or silently mutate any `fitlog:*` key.
+- Do **not** normalize CRLF or run repository-wide formatting (**R-33/R-17**).
+- Do **not** commit route-tree ordering-only churn (**R-30**).
+- Do **not** force-push, reset, or rewrite history.
+- Do **not** introduce a new cost, subscription, dependency, or plan upgrade.
+- Do **not** expose or request a service-role key or any private secret.
+- Do **not** create an uppercase `DECISIONS.md` or `RISKS.md` — `core.ignorecase = true` means they resolve
+  to the existing `decisions.md` / `risks.md` and would **overwrite 40 ADRs and the risk history**.
+
+## 19. Documentation files updated in this closeout
+
+`PROJECT_STATUS.md` (new) · `OPEN_TASKS.md` (new) · `CHANGELOG.md` (new) · `PROMPT_HISTORY.md` (new) ·
+`SESSION_HANDOFF.md` (replaced — its previous top section was four sessions stale) · `decisions.md` (English
+index added; all 40 ADRs preserved) · `risks.md` (structured English register added; history preserved) ·
+`AGENTS.md` (reading order updated to point here first).
+
+## 20. One recommended next action
+
+> **Temporarily disable email confirmation in Lovable, then run authenticated end-to-end Phase 1
+> verification with disposable users.**
+
+Nothing else should start before that.
+
+---
+---
+
+# 📜 Historical sections below — superseded, kept for record
 
 ## 🏁 סגירת סשן 2026-07-31 (ד) — Fit Log פורסם ונכנס לשימוש
 

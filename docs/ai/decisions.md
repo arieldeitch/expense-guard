@@ -1,5 +1,38 @@
 # Architecture Decisions Record (ADR)
 
+> ⚠️ **Filename note.** On this repository (`core.ignorecase = true`, Windows) `DECISIONS.md` and
+> `decisions.md` are the **same file**. Do not create an uppercase `DECISIONS.md` — it would overwrite these
+> 40 ADRs. This file *is* the decisions record.
+>
+> English index below; the full chronological Hebrew log follows and remains authoritative. Nothing is
+> deleted — replaced decisions are marked **Superseded** and linked forward.
+
+---
+
+## English index — decisions governing the current backend and Phase 1
+
+*Verified 2026-08-01 19:02 Asia/Jerusalem at commit `36b0453`.*
+
+| # | Decision | Status | ADR |
+|---|---|---|---|
+| D1 | **`fusrapommtdqwfglkmks`** (Lovable-managed, `eu-north-1`) is the authoritative backend | Accepted | **ADR-0040** |
+| D2 | External **`nhnuuooyxamkkqqpcgmk`** is **Superseded**, and must remain **untouched** — not deleted, not disconnected, not modified | Superseded → D1 | ADR-0040 |
+| D3 | Lovable publishes the live app; **a GitHub push alone does not rebuild** (measured, not assumed) | Accepted | ADR-0040 |
+| D4 | Lovable **injects runtime env at build time, overriding repository `.env`**; `.env` is platform-managed and not hand-edited | Accepted | ADR-0040 |
+| D5 | **Local-first preserved** — localStorage is primary, app fully usable signed out, `resolveRepository()` falls back, local data never silently deleted/cleared/rewritten/uploaded, backup compatibility kept | Accepted | ADR-0030/0032 |
+| D6 | **Phase 1 scope is goals-only** (+ `profiles` for identity). Upload is **explicit**. Stable local goal IDs are cloud primary keys. Sync state separate in `fitlog:sync-state:v1` | Accepted | ADR-0040 |
+| D7 | **No Auth trigger on `auth.users`** — modifying `auth.users` is prohibited | Accepted | ADR-0040 |
+| D8 | Profile rows created by **idempotent client-side `ensureProfile()`** upserting `id = auth.uid()` | Accepted | ADR-0040 |
+| D9 | **No DELETE policy in Phase 1** — 6 policies (SELECT/INSERT/UPDATE × 2 tables), all `auth.uid()`-scoped; removal is soft delete. Do not add one, even for test cleanup | Accepted | ADR-0040 |
+| D10 | **No Phase 2 before authenticated Phase 1 verification succeeds**, including two-user cross-account RLS | Accepted | — |
+| D11 | **Generated Supabase types are the single source of truth**; hand-written shim deleted; no `any`, no query casts, no duplicated row definitions, generated file never hand-edited | Accepted (closes R-35) | — |
+
+**Related standing decisions:** ADR-0038 (English prompts, maximum autonomy — full stop-list unchanged) ·
+ADR-0039 (no localStorage reads during render) · ADR-0033 (local schema versioning + snapshots) ·
+ADR-0031 (backup envelope format) · ADR-0034/0035/0036 (fake-cloud rehearsal, ownership, readiness gate).
+
+---
+
 רשומה כרונולוגית של החלטות שנקבעו. כל החלטה: הקשר → החלטה → נימוק → השלכה.
 
 ---

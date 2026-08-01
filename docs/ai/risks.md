@@ -1,5 +1,111 @@
 # Risks
 
+> ⚠️ **Filename note.** `RISKS.md` and `risks.md` are the **same file** here (`core.ignorecase = true`).
+> Do not create an uppercase `RISKS.md` — it would overwrite this register.
+>
+> Structured English register below (active risks, verified 2026-08-01 19:02 Asia/Jerusalem at `36b0453`).
+> The full Hebrew history follows and is retained. **No risk is closed without evidence.**
+
+---
+
+## Active risk register
+
+### R-36 · Authenticated verification blocked by email confirmation
+- **Status:** OPEN · **Probability:** Certain (measured) · **Impact:** Medium
+- **Evidence:** `GET /auth/v1/settings` returns `mailer_autoconfirm: false`. A real signup created the user but returned **no `access_token`**; `email_confirmed_at` was `null`.
+- **Mitigation:** The app does not depend on the cloud — `resolveRepository()` falls back to local and all data stays in `localStorage`. No regression.
+- **Response:** Disable email confirmation in Lovable (OPEN_TASKS **B1**), then run authenticated verification (**B2**).
+- **Owner:** user (Lovable), then Claude
+- **Next review:** when B1 is confirmed done.
+
+### R-38 · Cross-user authenticated RLS verification incomplete
+- **Status:** OPEN · **Probability:** N/A (verification gap, not a known defect) · **Impact:** High if RLS were wrong
+- **Evidence:** Anonymous RLS verified live — SELECT returned `[]`, INSERT returned 401 RLS violation, DELETE affected 0 rows. **User A to User B isolation is untested** because no session can be obtained (R-36). The migration asserts 6 `auth.uid()`-scoped policies and 0 DELETE policies.
+- **Mitigation:** Static assertions in `src/lib/sync/__tests__/phase1Security.test.ts` scan every migration file.
+- **Response:** Two-user verification in **B2**. **Do not claim RLS isolation is proven until then.**
+- **Owner:** Claude
+- **Next review:** immediately after B1.
+
+### R-39 · Temporary email-confirmation configuration risk
+- **Status:** OPEN (anticipatory) · **Probability:** Medium · **Impact:** Medium
+- **Trigger:** B1 temporarily weakens signup by removing confirmation. If left off, unverified addresses can create accounts on a live application.
+- **Mitigation:** Change only the confirmation setting — not providers, password rules, redirect URLs, schema, RLS, code, routes, or plan.
+- **Response:** Restore the intended setting after verification (**B3**) and record the final intended state explicitly.
+- **Owner:** user (Lovable)
+- **Next review:** immediately after B2 completes.
+
+### R-40 · Stale unconfirmed disposable test user
+- **Status:** OPEN · **Probability:** Certain · **Impact:** Low
+- **Evidence:** One clearly labelled unconfirmed user matching `fitlog-e2e-*@fitlog-e2e.invalid` exists in `fusrapommtdqwfglkmks`. Its password was never written to the repository, a log, or a commit.
+- **Mitigation:** Clearly labelled and unconfirmed, so it holds no session and owns no rows.
+- **Response:** Delete through safe supported means during cleanup (**B5**). **Never add a DELETE policy to make cleanup easier.**
+- **Owner:** user / Claude
+- **Next review:** during B5.
+
+### R-37 · DELETE privilege not explicitly revoked
+- **Status:** OPEN (observation) · **Probability:** Low · **Impact:** Low while RLS is enabled
+- **Evidence:** The migration grants `select, insert, update` but never runs `revoke delete`; Supabase default grants include DELETE. **Live probe: anonymous DELETE affected zero rows** (`return=representation` returned `[]`), because RLS admits none.
+- **Mitigation:** RLS enabled with no DELETE policy — the documented correct pattern.
+- **Response:** Consider an explicit `revoke delete` in a future hardening pass. **Do not weaken RLS. Do not add a DELETE policy.**
+- **Owner:** Claude
+- **Next review:** at the next schema change.
+
+### R-33 / R-17 · CRLF and Prettier lint baseline
+- **Status:** OPEN (pre-existing) · **Probability:** Certain · **Impact:** Low
+- **Evidence:** `bun run lint` fails with roughly 29,784 `prettier/prettier` carriage-return errors across 245 files. Proven identical on a pristine pre-Supabase tree, so **not a regression**. Root cause: `git add --renormalize` deliberately never run (R-17).
+- **Mitigation:** `typecheck`, `test` and `build` are the effective quality gate and are green.
+- **Response:** A dedicated renormalization commit, on its own. **Do not normalize opportunistically and do not mix it into feature work.**
+- **Owner:** unassigned
+- **Next review:** when a dedicated cleanup session is scheduled.
+
+### R-30 · Generated route-tree ordering drift
+- **Status:** OPEN (benign) · **Probability:** Certain · **Impact:** Low
+- **Evidence:** A local build reorders imports relative to Lovable's generator and re-adds a 10-line `Register` block. **Route set verified identical: 55 modules, 79 paths, diff empty in both directions.**
+- **Mitigation:** Compare route sets rather than raw diffs.
+- **Response:** **Do not commit ordering-only churn.** Revert `src/routeTree.gen.ts` after local builds.
+- **Owner:** Claude
+- **Next review:** any Lovable commit touching `package.json` or `bun.lock`.
+
+### R-29 · Local-only, device-specific data
+- **Status:** OPEN · **Probability:** Certain · **Impact:** High
+- **Evidence:** Real workout data lives only in this browser's `localStorage`. Phase 1 syncs goals only, and no upload has been run.
+- **Mitigation:** Manual export from `/backup`; backup round-trip verified by 99 tests.
+- **Response:** Export regularly until sync covers more domains. **Do not rely on the cloud for recovery yet.**
+- **Owner:** user
+- **Next review:** after Phase 1 verification.
+
+### R-41 · Accidental Phase 2 scope expansion
+- **Status:** OPEN · **Probability:** Medium · **Impact:** Medium
+- **Trigger:** An agent reads `CLOUD_ENTITIES` (30 entities) and assumes it is the target for this phase.
+- **Mitigation:** Scope is documented as goals-only in decision D6 and `PROJECT_STATUS.md` section 9.
+- **Response:** **No Phase 2 work before authenticated Phase 1 verification succeeds (D10).**
+- **Owner:** Claude
+- **Next review:** at the N1 decision point.
+
+### R-42 · Accidental reconnection to the superseded Supabase project
+- **Status:** OPEN · **Probability:** Low · **Impact:** High
+- **Trigger:** Older documentation still names `nhnuuooyxamkkqqpcgmk` as authoritative, and an agent "fixes" configuration to match it.
+- **Evidence:** Verified at `36b0453` — the superseded ref appears in **no** source file, config, or migration; only in `docs/ai/*.md` as history.
+- **Mitigation:** ADR-0040 marks it Superseded; `PROJECT_STATUS.md` carries an explicit warning.
+- **Response:** **Leave `nhnuuooyxamkkqqpcgmk` untouched.** Never edit `.env` to repoint — it is platform-managed and overridden at build time (D4).
+- **Owner:** Claude
+- **Next review:** at any backend or configuration change.
+
+### R-43 · Accidental silent upload or mutation of local data
+- **Status:** OPEN · **Probability:** Low · **Impact:** High
+- **Trigger:** A future change makes upload automatic, or a sync path writes to a `fitlog:*` domain key.
+- **Evidence:** Upload is explicit today; sync state is isolated in `fitlog:sync-state:v1`, which is not a `StorageModule` and is therefore invisible to backup, schema version, snapshots and rollback. No real user data has been uploaded.
+- **Mitigation:** Tests assert domain keys are byte-identical across a recorded upload.
+- **Response:** **Never upload the user's real data without explicit confirmation. Never clear or rewrite `fitlog:*`.**
+- **Owner:** Claude
+- **Next review:** at any change under `src/lib/sync/`.
+
+### R-35 · Hand-written Supabase types — CLOSED (2026-08-01)
+- **Status:** CLOSED with evidence
+- **Evidence:** `src/lib/supabase/tables.ts` deleted; all shapes derive from the generated `types.ts`; regression test `generatedTypes.test.ts` added and passing.
+
+---
+
 מפת סיכונים אקטיבית. עדכון בכל החלטה שמפחיתה או מוסיפה סיכון.
 
 ## R-35 · טיפוסי Supabase ידניים — ✅ **סגור** (2026-08-01 ד)

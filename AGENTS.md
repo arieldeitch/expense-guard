@@ -64,6 +64,15 @@
 
 ## נוהל סקירת סוכן חדש
 
+**קרא קודם כול את שני אלה — הם מצב אמת עדכני, באנגלית:**
+0a. `docs/ai/PROJECT_STATUS.md` — מה נכון **עכשיו** (Git, backend, Phase 1, בסיס הבדיקות, החסם).
+0b. `docs/ai/SESSION_HANDOFF.md` — **הסעיף העליון** הוא ה-handoff הפעיל; ממנו מתחילים.
+
+לאחר מכן `docs/ai/OPEN_TASKS.md` (משימות פעילות לפי סדר) ו-`docs/ai/CHANGELOG.md`.
+
+> ⚠️ `decisions.md` ו-`risks.md` הם גם `DECISIONS.md` ו-`RISKS.md` — המערכת אינה רגישה לרישיות
+> (`core.ignorecase = true`). **אין ליצור גרסאות באותיות גדולות** — הדבר ידרוס 40 ADR ואת מרשם הסיכונים.
+
 לפני הפעולה הראשונה, קרא לפי הסדר:
 1. `docs/ai/product-overview.md` — מה בונים.
 2. `docs/ai/product-requirements.md` — הכללים.
