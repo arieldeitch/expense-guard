@@ -1,15 +1,24 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: **2026-08-01** (Phase 1 מומש בריפו; המיגרציה טרם הוחלה)
+תאריך עדכון: **2026-08-01** (Phase 1 הוחל על ה-DB הסמכותי)
 
 ---
 
-## 🟡 מצב 2026-08-01 (ג) — Phase 1 מומש במלואו בריפו, לא הוחל על ה-DB
+## 🟢 מצב 2026-08-01 (ג, מאוחר) — `fusrapommtdqwfglkmks` הוא ה-backend הסמכותי; Phase 1 **הוחל**
 
-> **הסעיף הזה גובר על הסעיפים שמתחתיו.**
+> **הסעיף הזה גובר על כל מה שמתחתיו, כולל הסעיף הצהוב שאחריו.**
+
+**ההחלטה הקודמת (`nhnuuooyxamkkqqpcgmk` כפרויקט הסמכותי) — Superseded.** ראה **ADR-0040**. אודיט חיבור הראה שהפרויקט מחובר ברמת הפלטפורמה ל-Lovable Cloud `fusrapommtdqwfglkmks`, שערכי ה-runtime המוזרקים **גוברים** על `.env` שבריפו, ושאין ב-Lovable מסלול נתמך להחליף backend מנוהל בפרויקט חיצוני. `nhnuuooyxamkkqqpcgmk` **לא נמחק, לא נותק ולא שונה** — הוא מחוץ לשימוש.
+
+**מה בוצע:** `supabase/config.toml` → `fusrapommtdqwfglkmks`. מיגרציית Phase 1 הוחלה **כלשונה** — `profiles` + `goals` בלבד, RLS מופעל על שתיהן, 6 policies כולן ב-`auth.uid()`, **אפס policy של delete**, אין trigger על `auth.users`. `src/integrations/supabase/types.ts` נוצר מחדש ע"י Lovable ומכיל את שתי הטבלאות. **לא נוצרו משתמשי Auth, buckets, edge functions או טבלאות נוספות.** נתונים מקומיים (`fitlog:*`), מזהים יציבים, routes, פורמט גיבוי ו-SSR — ללא שינוי.
+
+<details><summary>הסעיף הקודם (Superseded, נשמר כרשומה היסטורית)</summary>
 
 ### מה הוחלט
 **`nhnuuooyxamkkqqpcgmk` הוא הפרויקט הסמכותי.** ה-merge ל-`main` בוצע (`3775ff4`, non-fast-forward, ההיסטוריה נשמרה) ונדחף.
+
+</details>
+
 
 ### מה קיים עכשיו בקוד — Phase 1
 | רכיב | קובץ | מצב |

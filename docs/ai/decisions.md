@@ -375,3 +375,12 @@ export function useHomeSessions() {
 **חלופה שנדחתה — לכבות SSR למסלולים האלה.** היא פותרת את הבעיה מהשורש (לשרת אין ולא יהיו נתונים), אך זו החלטה ארכיטקטונית שמשנה את התנהגות ה-deploy, ולכן דורשת החלטה מפורשת. נרשמה כאפשרות ב-`open-tasks.md`.
 
 **חלופה שנדחתה — גידור גלובלי בתוך `readXState()`.** היה פותר הכול בעריכה אחת למודול, אבל היה משקר גם ל-**route loaders** (שרצים לפני ה-render) ועלול לגרום ל-`notFound()` שגוי ולכתיבת state ריק. שכבת ה-hook בטוחה יותר.
+## ADR-0040 · 2026-08-01 · `fusrapommtdqwfglkmks` הוא ה-backend הסמכותי — ADR-0039א/החלטת `nhnuuooyxamkkqqpcgmk` **Superseded**
+
+**הקשר:** ההחלטה הקודמת קבעה את `nhnuuooyxamkkqqpcgmk` (פרויקט Supabase חיצוני קיים) כ-backend הסמכותי, והריפו יושר אליו ב-`67438e7`. אודיט חיבור מלא (2026-08-01) הראה שלוש עובדות: (1) הפרויקט מחובר ברמת הפלטפורמה ל-Lovable Cloud `fusrapommtdqwfglkmks`; (2) ערכי ה-runtime מוזרקים ע"י הפלטפורמה ו**גוברים** על `.env` שבריפו — `SUPABASE_*` הוא prefix שמור; (3) **אין** ב-Lovable מסלול נתמך להחליף backend מנוהל בפרויקט Supabase חיצוני — לא ניתוק, לא reconnect, לא import. ההחלטה הקודמת לא הייתה ברת-מימוש.
+
+**החלטה:** `fusrapommtdqwfglkmks` הוא ה-backend הסמכותי של Fit Log. ההחלטה על `nhnuuooyxamkkqqpcgmk` מסומנת **Superseded**. הפרויקט `nhnuuooyxamkkqqpcgmk` **לא נמחק, לא נותק ולא שונה** — הוא פשוט אינו בשימוש.
+
+**נימוק:** backend שאי אפשר להחיל עליו DDL מכאן אינו backend. החסם ב-R-31/T-01 (403 מה-CLI, מפתח ציבורי לא נגיש) לא היה תקלה זמנית אלא מגבלת פלטפורמה. `fusrapommtdqwfglkmks` היה ריק לחלוטין באימות — 0 טבלאות, 0 משתמשי Auth, 0 buckets, 0 objects, 0 מיגרציות, 0 edge functions — ולכן אין נתונים שנפגעים ואין מיגרציית נתונים, רק יישור קונפיגורציה.
+
+**השלכה:** `supabase/config.toml` → `fusrapommtdqwfglkmks`. `.env` מנוהל ע"י הפלטפורמה ואינו נערך ידנית. מיגרציית Phase 1 הוחלה כלשונה על `fusrapommtdqwfglkmks`. R-31 ו-T-01 נסגרים כ-Superseded. כל הנתונים המקומיים (`fitlog:*`), המזהים היציבים, פורמט הגיבוי, ה-routes וה-fallback המקומי — ללא שינוי.
