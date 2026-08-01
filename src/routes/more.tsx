@@ -16,6 +16,7 @@ import {
   Layers,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import { AccountTile } from "@/components/account/AccountTile";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
@@ -50,6 +51,7 @@ function MorePage() {
       <div className="grid grid-cols-1 gap-3 px-4 sm:px-6">
         <DefaultModuleSetting />
         <DataSourceTile />
+        <AccountTile />
       </div>
 
       <SectionHeader title="קטלוג" />
