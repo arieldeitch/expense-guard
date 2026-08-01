@@ -1,6 +1,44 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: **2026-07-31** (סגירת סשן — האפליקציה פורסמה ונמצאת בשימוש)
+תאריך עדכון: **2026-08-01** (ביקורת — Lovable Cloud הופעל בטעות ב-`origin/main`)
+
+---
+
+## 🔴 מצב 2026-08-01 — backend של Lovable Cloud חובר ל-`origin/main` שלא בכוונה
+
+> **הסעיף הזה גובר על כל אמירה "אין Supabase בריפו" שמופיעה מטה.** האמירות ההן היו נכונות עד `0b0d000`; הן **אינן נכונות יותר** ל-`origin/main`.
+
+### מה קרה — עובדות מ-Git, לא הערכה
+`origin/main` התקדם מ-**`0b0d000`** ל-**`681d40c`** בשמונה commits של Lovable, ובהם **`bdcfdae` — "יצר backend Lovable Cloud חדש"** ו-**`681d40c` — "Verified Supabase connection"**. ה-`main` המקומי נשאר ב-`0b0d000` והוא **אב קדמון** של `681d40c` (fast-forward אפשרי, אין divergence).
+
+### מה נוסף בפועל (11 קבצים, +447/−14)
+| קובץ | תפקיד |
+|---|---|
+| `.env` | **מסומן ב-Git (tracked)**. 6 משתנים: `SUPABASE_PROJECT_ID` / `URL` / `PUBLISHABLE_KEY` + מראות `VITE_*`. |
+| `supabase/config.toml` | שורה אחת: `project_id = "fusrapommtdqwfglkmks"` |
+| `src/integrations/supabase/client.ts` | client ציבורי, **נוצר עצלנית דרך Proxy** |
+| `src/integrations/supabase/client.server.ts` | client עם service role — קורא `SUPABASE_SERVICE_ROLE_KEY` מ-`process.env` **בלבד** |
+| `src/integrations/supabase/auth-middleware.ts` | `requireSupabaseAuth` (server) |
+| `src/integrations/supabase/auth-attacher.ts` | `attachSupabaseAuth` (client) |
+| `src/integrations/supabase/types.ts` | טיפוסים מיוצרים — **`Tables`/`Views`/`Functions`/`Enums` ריקים לחלוטין** (schema ריק, `PostgrestVersion: 14.15`) |
+| `src/start.ts` | נוסף `functionMiddleware: [attachSupabaseAuth]` |
+| `package.json` / `bun.lock` | נוסף `@supabase/supabase-js ^2.111.0`; `@lovable.dev/vite-tanstack-config` `2.8.3` → **`2.8.4`** |
+| `src/routeTree.gen.ts` | −10 שורות (רגנרציה) |
+
+### 🔑 ממצא מפתח — אין secret בריפו
+ב-`.env` יש **רק מפתחות ציבוריים** בפורמט `sb_publishable_*`. **אין `SUPABASE_SERVICE_ROLE_KEY` ואין `sb_secret_*` בריפו.** מפתח ה-service role נצרך מ-`process.env` בזמן ריצה בלבד (הזרקה של Lovable). זו **אינה** דליפת סוד.
+
+### 🔑 ממצא מפתח — היקף המעבר הוא שני קבצים בלבד
+סריקה על `origin/main` הראתה ש-`fusrapommtdqwfglkmks` מופיע **אך ורק** ב-`.env` ו-`supabase/config.toml`. **אין ולו מזהה פרויקט אחד קשיח ב-`src/`** — כל קוד ה-integration נשען על משתני סביבה (`VITE_SUPABASE_URL` / `VITE_SUPABASE_PUBLISHABLE_KEY` בלקוח, `SUPABASE_*` בשרת). לכן המעבר לפרויקט הסמכותי הוא **שינוי קונפיגורציה ציבורית בלבד** — ללא נגיעה בקוד.
+
+### מצב זמן ריצה — האפליקציה עדיין לא נוגעת ב-backend
+`supabase` ו-`supabaseAdmin` שניהם **Proxy עצל**: ה-client נוצר רק בגישה ראשונה לתכונה. אין קריאת query, אין UI של Auth, ואין טבלאות. **הנתונים עדיין ב-`localStorage` בלבד.** `fitlog:*` לא נוגע.
+
+### החסם היחיד
+**המפתח הציבורי (`publishable`) של `nhnuuooyxamkkqqpcgmk` אינו נגיש מכאן.** Supabase CLI **מותקן ומחובר** (v2.101.0) אך החשבון המחובר מחזיר **403** על שני ה-refs — הוא רואה רק את ארגון `jauaspogygzagvdgwzwi`, ושני הפרויקטים אינם בו. סריקה של `C:\Users\user\Desktop` לא מצאה את ה-ref בשום פרויקט מקומי אחר. שני הפרויקטים **חיים** (`/rest/v1/` → 401, כצפוי ללא מפתח).
+
+### מה **לא** נעשה בביקורת הזו
+לא נוצר schema · לא נוצרו RLS/Auth/מיגרציות · לא נגענו באף DB · לא נמחק ולא נותק ה-backend הריק · לא שונה `.env` · לא בוצע push · לא הותקנה dependency · `main` המקומי לא הוזז (יש tag `checkpoint/pre-supabase-switch-audit`).
 
 ---
 
@@ -24,6 +62,8 @@
 build לפרודקשן · ניווט ישיר ו-refresh · כל המסלולים הראשיים · פריסת 360px · סריקת console (0 שגיאות ב-24 מסכים) · התמדה ב-localStorage · ייצוא גיבוי ואימותו · כל זרימות הליבה (בית · כוח · ריצה · היסטוריה · גיבוי).
 
 ### ארכיטקטורה — ללא שינוי, במכוון
+> ⚠️ **גובר ע"י הסעיף של 2026-08-01 שלמעלה.** נכון ל-`0b0d000` בלבד. ב-`origin/main` (`681d40c`) **כן** קיימים `@supabase/supabase-js`, `.env`, `supabase/config.toml` ו-`src/integrations/supabase/*`. עדיין אין schema, Auth, RLS או sync.
+
 **משתמש יחיד · localStorage בלבד.** **אין** Supabase · אין authentication · אין RLS · אין migrations · אין cloud sync · אין CI. **הנתונים שייכים לדפדפן ולמכשיר הנוכחיים בלבד** — אין סנכרון ואין גיבוי אוטומטי מחוץ למכשיר.
 
 ### הצעד הבא — המתנה מכוונת

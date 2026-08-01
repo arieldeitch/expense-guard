@@ -6,6 +6,19 @@
 
 ---
 
+## ⛔ חוסם פתוח (2026-08-01) — מעבר ל-Supabase הסמכותי
+
+**T-01 · להשלים את מעבר הקונפיגורציה מ-`fusrapommtdqwfglkmks` ל-`nhnuuooyxamkkqqpcgmk`.**
+
+- **מצב:** הביקורת הושלמה. ההיקף המדויק ידוע: **שני קבצים** — `.env` (4 שורות ערך) ו-`supabase/config.toml` (שורה אחת). **אין ref קשיח ב-`src/`.**
+- **החסם היחיד:** **המפתח הציבורי (`publishable`) של הפרויקט הסמכותי.** ה-CLI המחובר מחזיר 403 על שני ה-refs; המפתח אינו קיים בשום מקום מקומי. **אין להמציא אותו.**
+- **הענף המוכן:** `chore/supabase-authoritative-switch` (מבוסס `681d40c`, **לא נדחף**). checkpoint: tag `checkpoint/pre-supabase-switch-audit` על `0b0d000`.
+- **סדר העבודה אחרי שהמפתח יתקבל:** להחליף 5 ערכים → `bun install --frozen-lockfile` → typecheck + `bun run test` + build → לאמת ש-`fusrapommtdqwfglkmks` נעלם מהריפו → לוודא ש-`fitlog:*` ב-`localStorage` לא נגעו → רק אז push.
+- **חובה לפני schema/Auth/RLS:** ראה **R-31**. אין ליצור טבלאות לפני שהמעבר הושלם.
+- **פתוח לבירור:** האם Lovable מזריק את משתני הסביבה בזמן build/deploy ודורס את `.env`. אם כן — הריפו לבדו אינו מספיק לפרודקשן, ותידרש פעולה נוספת בצד Lovable.
+
+---
+
 ## 🎯 יעד הסשן הבא (נקבע בסגירת 2026-07-31)
 
 > 🚀 **Fit Log פורסם ונמצא בשימוש:** https://fitlog-workout.lovable.app · `origin/main` = **`904d50f`** · בסיס מוכנות לפרודקשן = **`fc9089b`** · **375 בדיקות עוברות**.

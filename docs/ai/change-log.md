@@ -1,5 +1,17 @@
 # Change Log
 
+## 2026-08-01 · ביקורת — Lovable Cloud הופעל בטעות; הוכן מעבר לפרויקט הסמכותי (Claude Code)
+
+- **סוג:** **docs בלבד.** לא נגענו ב-`.env`, ב-`supabase/config.toml`, בקוד מוצר, באף DB, ב-`fitlog:*` או ב-routes. לא בוצע push. לא הותקנה dependency.
+- **הממצא:** `origin/main` התקדם מ-`0b0d000` ל-**`681d40c`** ב-8 commits של Lovable, ובהם `bdcfdae` *"יצר backend Lovable Cloud חדש"* ו-`681d40c` *"Verified Supabase connection"*. `main` המקומי הוא **אב קדמון** — fast-forward אפשרי, אין divergence.
+- **מה נוסף:** 11 קבצים (+447/−14) — `.env` (tracked), `supabase/config.toml`, `src/integrations/supabase/{client,client.server,auth-middleware,auth-attacher,types}.ts`, `functionMiddleware` ב-`src/start.ts`, `@supabase/supabase-js ^2.111.0`, ו-`@lovable.dev/vite-tanstack-config` `2.8.3` → **`2.8.4`** (בניגוד לנעיצה שנקבעה אתמול — ראה R-30).
+- **אין דליפת סוד:** `.env` מכיל **רק** מפתחות `sb_publishable_*`. אין service role ואין `sb_secret_*` בריפו; `client.server.ts` קורא אותו מ-`process.env` בזמן ריצה בלבד. נרשם כ-**R-32** בגלל ש-`.env` הוא tracked.
+- **היקף המעבר אומת ב-Git, לא הונח:** `fusrapommtdqwfglkmks` מופיע **אך ורק** ב-`.env` ו-`supabase/config.toml`. **אפס refs קשיחים ב-`src/`** — כל ה-integration מונע-env. לכן המעבר הוא **שינוי קונפיגורציה ציבורית בלבד**.
+- **אין השפעת runtime:** `supabase`/`supabaseAdmin` הם Proxy עצל שלא נקרא באף מסלול. אין schema (`types.ts` ריק), אין Auth UI, אין query. הנתונים ב-`localStorage` בלבד.
+- **החסם:** המפתח הציבורי של `nhnuuooyxamkkqqpcgmk` אינו נגיש. Supabase CLI v2.101.0 מותקן ומחובר, אך מחזיר **403** על שני ה-refs (רואה רק ארגון `jauaspogygzagvdgwzwi`). סריקת `Desktop` לא מצאה את ה-ref. שני הפרויקטים חיים (401 על `/rest/v1/`).
+- **הוכן:** ענף `chore/supabase-authoritative-switch` (מ-`681d40c`, **לא נדחף**) + tag `checkpoint/pre-supabase-switch-audit` על `0b0d000`.
+- **נרשמו:** **R-31** (חיבור ל-backend הלא נכון), **R-32** (`.env` tracked), **T-01** (המעבר עצמו).
+
 ## 2026-07-31 (ד) · סגירת סשן — פרסום, נעיצת build tooling, ותיעוד מצב (Claude Code)
 
 - **סוג:** **docs בלבד** + אימות מחדש. **אין שינוי קוד מוצר, אין dependency חדשה, אין Supabase/auth/sync, אין שינוי SSR/routes/schema/מפתחות/פורמט גיבוי.**
