@@ -1,5 +1,20 @@
 # Change Log
 
+## 2026-08-01 (ג) · Phase 1 של Supabase — מומש בריפו, לא הוחל על ה-DB (Claude Code)
+
+- **merge ל-`main`:** `3775ff4` — non-fast-forward, ההיסטוריה נשמרה במלואה (ללא squash/rebase/force). נדחף.
+- **Phase 1 — commit `2a93716`.** היקף **מכוון ומצומצם: goals בלבד.** `CLOUD_ENTITIES` (30 ישויות) **לא** מומש. `sessions`/`runs`/`templates`/`catalog`/`exercises` נשארים מקומיים.
+- **Schema + RLS** (`supabase/migrations/20260801090000_phase1_profiles_and_goals.sql`): `profiles` + `goals`, `id` = המזהה המקומי היציב. **RLS מופעל באותה מיגרציה** · כל policy ב-`auth.uid()` · `goals.user_id default auth.uid()` · `GRANT` = select/insert/update **בלבד** · **אין policy של delete** (מחיקה בלתי אפשרית דרך ה-API) · **אין trigger על `auth.users`** — במקומו `ensureProfile()` בצד לקוח, כדי לא להפר את האיסור לגעת ב-`auth.users`.
+- **Auth:** אימייל+סיסמה בלבד. אין ספקים חברתיים, אין magic link, אין מסך אדמין. כל קריאה מוגנת ומחזירה תוצאה מוטיפסת במקום לזרוק.
+- **Repository:** `createSupabaseRepository()` מאחורי החוזה **הקיים**. `activeRepo`/`activeRepoKind` ללא שינוי; בחירת הענן היא opt-in דרך `resolveRepository()`, שנופל חזרה למקומי בכל כשל. `listActivities` מחזיר `[]` — **זהה ל-mock**, אפס רגרסיה.
+- **העלאה idempotent:** `planGoalUpload` טהור ודטרמיניסטי; מזהי פעולה נגזרים מהמזהה היציב + checksum, **לא ממונה רץ**. כתיבה היא insert-if-absent — **שורה קיימת בענן לעולם אינה נדרסת**, וריצה חוזרת היא no-op אמיתי. בעלות **אך ורק** מה-user המאומת; ה-owner המקומי נשמר כ-`source_metadata` בלבד. שדות סוד נחתכים לפני שליחה.
+- **נתונים מקומיים:** מצב הסנכרון ב-`fitlog:sync-state:v1` — **אינו `StorageModule`**, ולכן בלתי נראה ל-backup, לגרסת schema, ל-snapshot ול-rollback. **אף מפתח `fitlog:*` לא נקרא/נמחק/נדרס/הוסר.** פורמט הגיבוי ללא שינוי.
+- **אימות:** typecheck exit 0 (וגם אחרי build) · **test:unit 348/23 קבצים** (מ-314/21 — **+34**) · **test:router 61/10** · build exit 0 · 7 מסלולים 200 עם SSR · ה-bundle מכיל **רק** `nhnuuooyxamkkqqpcgmk` · סריקת סודות נקייה · **אין token/session ב-SSR HTML** · `routeTree.gen.ts` — רק בלוק R-30, **אפס שינוי routes**.
+- **❌ המיגרציה לא הוחלה.** אין גישה מורשית (CLI מחזיר 403, תוסף Chrome לא מחובר). **לא נכתב דבר לאף DB.** נרשם כ-**R-34** ו-**T-04**.
+- **❌ Lovable לא בנה מחדש** 43 דקות אחרי הדחיפה — ה-bundle החי עדיין ללא Supabase. **מסקנה: אין בנייה אוטומטית מדחיפת GitHub.** T-02 עודכן.
+- **נרשם גם R-35** — טיפוסי Supabase מוצהרים ידנית (`src/lib/supabase/tables.ts`) עד שהמיגרציה תוחל ו-`types.ts` ייווצר מחדש.
+- **`lint` לא נגע ולא תוקן** — עדיין נכשל על CRLF קיים מראש (R-33), במכוון.
+
 ## 2026-08-01 (ב) · המעבר לפרויקט Supabase הסמכותי — בוצע ואומת (Claude Code)
 
 - **סוג:** **קונפיגורציה בלבד** — שני קבצים, חמישה ערכים. **אפס שינוי בקוד האפליקציה**, אפס נגיעה ב-DB, **לא נוצרו** schema/טבלאות/מיגרציות/RLS/Auth/Storage/Edge Functions, לא נוספה dependency, לא שונו routes/IDs/מפתחות אחסון/פורמט גיבוי/SSR, ו-`fitlog:*` לא נקרא ולא נכתב.
