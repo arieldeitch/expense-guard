@@ -1,6 +1,43 @@
 # Current State — מצב הפרויקט
 
-תאריך עדכון: **2026-08-01** (המעבר לפרויקט הסמכותי בוצע ואומת בריפו)
+תאריך עדכון: **2026-08-01** (Phase 1 מומש בריפו; המיגרציה טרם הוחלה)
+
+---
+
+## 🟡 מצב 2026-08-01 (ג) — Phase 1 מומש במלואו בריפו, לא הוחל על ה-DB
+
+> **הסעיף הזה גובר על הסעיפים שמתחתיו.**
+
+### מה הוחלט
+**`nhnuuooyxamkkqqpcgmk` הוא הפרויקט הסמכותי.** ה-merge ל-`main` בוצע (`3775ff4`, non-fast-forward, ההיסטוריה נשמרה) ונדחף.
+
+### מה קיים עכשיו בקוד — Phase 1
+| רכיב | קובץ | מצב |
+|---|---|---|
+| Auth (אימייל+סיסמה בלבד) | `src/lib/supabase/session.ts` | ✅ מומש |
+| Schema + RLS | `supabase/migrations/20260801090000_phase1_profiles_and_goals.sql` | ✅ נכתב · ❌ **לא הוחל** |
+| Repository adapter | `src/lib/repo/supabase.ts` + `resolveRepository()` | ✅ מומש |
+| העלאה idempotent | `src/lib/sync/` | ✅ מומש |
+| מצב סנכרון | `fitlog:sync-state:v1` | ✅ מפתח **נפרד** |
+| UI | `src/components/account/AccountTile.tsx` בתוך `/more` | ✅ ללא route חדש |
+
+### היקף מכוון — **לא** כל מודל הנתונים
+Phase 1 מכסה **goals בלבד**. `sessions` · `runs` · `templates` · `catalog` · `exercises` נשארים **מקומיים בלבד**. `CLOUD_ENTITIES` (30 ישויות) **לא** מומש. `listActivities` מחזיר `[]` — **זהה למה שה-mock מחזיר היום**, ולכן אין רגרסיה.
+
+### אבטחה — מה נאכף במיגרציה
+RLS מופעל **באותה מיגרציה** שיוצרת כל טבלה · כל policy מסונן ב-`auth.uid()` · `goals.user_id` עם `default auth.uid()` כך שלקוח **אינו יכול** להחדיר שורה בבעלות אחר · `GRANT` הוא `select, insert, update` **בלבד** · **אין policy של delete כלל** → מחיקה בלתי אפשרית דרך ה-API (soft delete בלבד) · **אין trigger על `auth.users`** — במקומו `ensureProfile()` בצד לקוח.
+
+### שמירת נתונים מקומיים
+`fitlog:sync-state:v1` **אינו `StorageModule`** ולכן אינו נראה ל-backup, לגרסת ה-schema המקומית, ל-snapshot או ל-rollback. **אף מפתח `fitlog:*` של דומיין לא נקרא, נמחק, נדרס או הוסר.** הצלחה מוסיפה סמן בלבד. פורמט הגיבוי ללא שינוי.
+
+### ראיות אימות (על `2a93716`)
+typecheck exit 0 (וגם אחרי build) · **test:unit 348** ב-23 קבצים (מ-314 ב-21 — **+34 חדשות**) · **test:router 61** ב-10 קבצים · build exit 0 · 7 מסלולים → **200 עם SSR HTML** · ה-bundle שהוגש מכיל **רק** `nhnuuooyxamkkqqpcgmk` · סריקת סודות נקייה · **אין token/session ב-SSR HTML** · `routeTree.gen.ts` — רק בלוק R-30 המוכר, **אפס שינוי routes**.
+
+### 🔴 שני חסמים
+1. **המיגרציה לא הוחלה.** אין גישה מורשית ל-DB: Supabase CLI מחזיר **403** על ה-ref (מחובר לארגון אחר), ותוסף ה-Chrome אינו מחובר. **לא נכתב דבר לאף DB.**
+2. **Lovable לא בנה מחדש.** 43 דקות אחרי הדחיפה ל-`main`, ה-bundle החי עדיין `index-Dm-gL1BL.js` — **ללא Supabase כלל**. הפריסה עדיין על הגרסה שלפני החיבור.
+
+**לכן:** אין schema · אין טבלאות · אין RLS פעיל · אין משתמשי Auth · אין sync בפועל. הקוד מוכן; ה-DB ריק.
 
 ---
 

@@ -10,7 +10,21 @@
 
 מעבר הקונפיגורציה ל-`nhnuuooyxamkkqqpcgmk` בוצע ואומת. commit **`67438e7`**, ענף `chore/supabase-authoritative-switch`. שני קבצים, חמישה ערכים, **אפס שינוי קוד**. אימות מלא ב-`current-state.md`.
 
-## ⛔ T-02 · לאמת את הפריסה של Lovable — **החוסם היחיד שנותר**
+## ⛔ T-04 · להחיל את מיגרציית Phase 1 — **החוסם המרכזי**
+
+הקובץ מוכן: `supabase/migrations/20260801090000_phase1_profiles_and_goals.sql`. **לא הוחל על אף DB.**
+
+**החסם:** אין גישה מורשית. Supabase CLI מחזיר **403** על `nhnuuooyxamkkqqpcgmk` (מחובר לארגון `jauaspogygzagvdgwzwi` בלבד), ותוסף ה-Chrome אינו מחובר. **המפתח הציבורי אינו מספיק** — החלת DDL דורשת הרשאה מורשית.
+
+**אחרי ההחלה:** לתת ל-Lovable לייצר מחדש את `src/integrations/supabase/types.ts`, למחוק את `src/lib/supabase/tables.ts` ולהחליף את הייבוא (R-35). ואז לבדוק התחברות והעלאה מקצה לקצה.
+
+**עד אז:** R-34 בתוקף — אין להבטיח שהתחברות עובדת.
+
+## ⛔ T-02 · לאמת את הפריסה של Lovable — **פתוח, עם ממצא חדש**
+
+**ממצא 2026-08-01 (ג):** `main` נדחף (`3775ff4`) ו-**Lovable לא בנה מחדש תוך 43 דקות**. ה-bundle החי נותר `index-Dm-gL1BL.js` וללא Supabase. **Lovable אינו בונה אוטומטית מדחיפת GitHub** — נדרשת פעולה יזומה ב-Lovable.
+
+### הנוסח הקודם
 
 **מה לא ידוע:** האם Lovable מזריק `SUPABASE_*` בזמן build ודורס את ה-`.env` שב-commit.
 
