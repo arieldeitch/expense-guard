@@ -11,8 +11,20 @@
  *
  * Every read is scoped by RLS to auth.uid(); this file never filters by user
  * itself, because a client-side filter is not a security boundary.
+ *
+ * Row shapes come from the generated `Database` type (R-35). There is no local
+ * duplicate of the schema and no cast on the query result.
  */
+import type { Database } from "@/integrations/supabase/types";
 import type { Activity, Domain, Goal, Repository } from "./types";
+
+type GoalRow = Database["public"]["Tables"]["goals"]["Row"];
+
+/** The columns `listGoals` actually selects. Derived, never re-declared. */
+export type GoalSummaryRow = Pick<
+  GoalRow,
+  "id" | "domain" | "name" | "target_value" | "target_unit" | "current_value" | "priority" | "status"
+>;
 
 /** Only these three map onto the repository contract's narrow status set. */
 function toRepoStatus(status: string): Goal["status"] | null {
@@ -30,34 +42,25 @@ function toRepoStatus(status: string): Goal["status"] | null {
   }
 }
 
-interface CloudGoalRowShape {
-  id: string;
-  domain: string;
-  name: string | null;
-  target_value: number | string | null;
-  target_unit: string | null;
-  current_value: number | string | null;
-  priority: number | null;
-  status: string;
-}
-
-/** `numeric` comes back from PostgREST as a string; coerce without losing null. */
-function num(v: number | string | null | undefined): number {
+/**
+ * The generated type says `number | null`. PostgREST can still hand back a
+ * `numeric` as a string depending on server configuration, so this coerces
+ * rather than silently reporting 0 if that ever happens.
+ */
+function num(v: number | null): number {
   if (typeof v === "number" && Number.isFinite(v)) return v;
-  if (typeof v === "string") {
-    const parsed = Number(v);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-  return 0;
+  if (v === null || v === undefined) return 0;
+  const parsed = Number(v);
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
-export function toRepoGoal(row: CloudGoalRowShape): Goal | null {
+export function toRepoGoal(row: GoalSummaryRow): Goal | null {
   const status = toRepoStatus(row.status);
   if (status === null) return null;
   return {
     id: row.id,
     domain: row.domain as Domain,
-    title: row.name ?? "",
+    title: row.name,
     targetValue: num(row.target_value),
     targetUnit: row.target_unit ?? "",
     currentValue: num(row.current_value),
@@ -67,8 +70,8 @@ export function toRepoGoal(row: CloudGoalRowShape): Goal | null {
 }
 
 async function client() {
-  const { phase1Client } = await import("@/lib/supabase/tables");
-  return phase1Client();
+  const { supabase } = await import("@/integrations/supabase/client");
+  return supabase;
 }
 
 /**
@@ -97,9 +100,7 @@ export function createSupabaseRepository(): Repository {
           .order("id", { ascending: true });
 
         if (error || !Array.isArray(data)) return [];
-        return (data as unknown as CloudGoalRowShape[])
-          .map(toRepoGoal)
-          .filter((g): g is Goal => g !== null);
+        return data.map(toRepoGoal).filter((g): g is Goal => g !== null);
       } catch {
         return [];
       }

@@ -128,12 +128,13 @@ export async function signOut(): Promise<void> {
 export async function ensureProfile(): Promise<boolean> {
   if (!isSupabaseConfigured()) return false;
   try {
-    const { phase1Client, upsertProfile } = await import("./tables");
-    const supabase = await phase1Client();
+    const supabase = await client();
     const { data } = await supabase.auth.getSession();
     const userId = data.session?.user?.id;
     if (!userId) return false;
-    const { error } = await upsertProfile(supabase, { id: userId });
+    const { error } = await supabase
+      .from("profiles")
+      .upsert({ id: userId }, { onConflict: "id", ignoreDuplicates: true });
     return error === null;
   } catch {
     return false;

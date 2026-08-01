@@ -6,6 +6,7 @@
  * No network, no Supabase client, no real clock.
  */
 import { beforeEach, describe, expect, it } from "vitest";
+import type { Json } from "@/integrations/supabase/types";
 import type { Goal } from "@/lib/goals/types";
 import {
   GOALS_SYNC_MODULE,
@@ -14,7 +15,7 @@ import {
   planGoalUpload,
   payloadContainsSecret,
   toCloudGoalRow,
-  type CloudGoalRow,
+  type PlannedGoalRow,
   type GoalUploadClient,
 } from "../goalsUpload";
 import {
@@ -25,6 +26,12 @@ import {
 } from "../state";
 
 const AUTH_USER = "11111111-2222-3333-4444-555555555555";
+
+/** Narrows a generated `Json` column to an object so assertions stay type-safe. */
+function jsonObject(value: Json | undefined): Record<string, Json | undefined> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return {};
+  return value;
+}
 
 function goal(over: Partial<Goal> = {}): Goal {
   return {
@@ -64,14 +71,14 @@ function goal(over: Partial<Goal> = {}): Goal {
 }
 
 /** In-memory stand-in with the real no-overwrite semantics. */
-function fakeClient(seed: CloudGoalRow[] = []) {
-  const rows = new Map<string, CloudGoalRow>(seed.map((r) => [r.id, r]));
+function fakeClient(seed: PlannedGoalRow[] = []) {
+  const rows = new Map<string, PlannedGoalRow>(seed.map((r) => [r.id, r]));
   const writes: string[][] = [];
   return {
     rows,
     writes,
     client: {
-      async upsertGoals(incoming: CloudGoalRow[]) {
+      async upsertGoals(incoming: PlannedGoalRow[]) {
         writes.push(incoming.map((r) => r.id));
         for (const r of incoming) {
           // ignoreDuplicates: existing rows are left exactly as they are.
@@ -104,8 +111,8 @@ describe("planGoalUpload — identity and ownership", () => {
 
   it("keeps the local owner as documentation only, never as authority", () => {
     const row = toCloudGoalRow(goal({ user_id: "single-user" }), AUTH_USER);
-    expect(row.source_metadata.source_owner_id).toBe("single-user");
-    expect(row.payload).not.toHaveProperty("user_id");
+    expect(jsonObject(row.source_metadata).source_owner_id).toBe("single-user");
+    expect(jsonObject(row.payload)).not.toHaveProperty("user_id");
   });
 });
 
@@ -178,8 +185,8 @@ describe("secrets", () => {
     dirty["access_token"] = "should-not-travel";
     dirty["api_key"] = "nope";
     const row = toCloudGoalRow(dirty as unknown as Goal, AUTH_USER);
-    expect(row.payload).not.toHaveProperty("access_token");
-    expect(row.payload).not.toHaveProperty("api_key");
+    expect(jsonObject(row.payload)).not.toHaveProperty("access_token");
+    expect(jsonObject(row.payload)).not.toHaveProperty("api_key");
     expect(payloadContainsSecret(row)).toBe(false);
     expect(JSON.stringify(row)).not.toContain("should-not-travel");
   });

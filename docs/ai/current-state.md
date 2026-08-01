@@ -1,5 +1,55 @@
 # Current State — מצב הפרויקט
 
+תאריך עדכון: **2026-08-01 (ד)** — R-35 נסגר · אימות חי בוצע · חסם אחד נותר
+
+---
+
+## ✅ מצב 2026-08-01 (ד) — R-35 סגור, Phase 1 חי ומאומת חלקית
+
+> **הסעיף הזה גובר על כל הסעיפים שמתחתיו.**
+
+### ⚠️ שינוי סמכות — הפרויקט הסמכותי הוחלף
+**`fusrapommtdqwfglkmks` הוא כעת הפרויקט הסמכותי.** ההחלטה בוצעה מחוץ ל-Claude, ב-commit **`d479acd` — "Realigned to fusrapommtdqwfglkmks"**. זהו **היפוך** מול הסשנים הקודמים, שבהם `nhnuuooyxamkkqqpcgmk` היה הסמכותי. המסמכים הישנים שמדברים על `nhnuuooyxamkkqqpcgmk` כסמכותי הם **רשומה היסטורית בלבד**.
+
+### ✅ R-35 — **סגור**
+`src/lib/supabase/tables.ts` **נמחק**. כל הקוד עובר ל-`Database` המיוצר מ-`src/integrations/supabase/types.ts`:
+- `CloudGoalRow` = `Database["public"]["Tables"]["goals"]["Insert"]` — **אין עותק שני של הסכמה**.
+- `PlannedGoalRow` = חידוד (`op_id` מובטח), לא הגדרה מחדש.
+- `GoalSummaryRow` נגזר ב-`Pick<>` מה-`Row` המיוצר.
+- **אין `any`, אין cast על תוצאת query, אין עריכה של קובץ מיוצר.**
+- בדיקת רגרסיה חדשה `generatedTypes.test.ts` נכשלת אם עותק כזה יחזור או אם ה-shim ישוחזר.
+
+**הטיפוסים המיוצרים חשפו אי-דיוק אמיתי** ב-shim הידני: `target_value`/`current_value` הוגדרו כ-`number | string | null` בעוד הסכמה מגדירה `number | null`. תוקן.
+
+### 🐛 באג אמיתי שנמצא ותוקן — מיגרציה כפולה
+Lovable החיל מיגרציה משלו (`20260801061825_...`). קובץ Phase 1 שלי (`20260801090000_...`) נשאר בעץ. **הוכח ש-ה-DDL של שניהם זהה לחלוטין** (השוואת ערכות משפטים). מכיוון ש-`create policy` **אינו** תומך ב-`IF NOT EXISTS`, `supabase db reset` היה **נכשל**. הקובץ הכפול — שמעולם לא הוחל — **הוסר**. נוספו שתי בדיקות: כל טבלה נוצרת פעם אחת, וכל policy מוצהר פעם אחת.
+
+### ✅ אומת חי מול הפרודקשן
+| בדיקה | תוצאה |
+|---|---|
+| `fitlog-workout.lovable.app` | ✅ 9 מסלולים → **200** |
+| ה-runtime החי מכוון ל-`fusrapommtdqwfglkmks` | ✅ **כן** |
+| `nhnuuooyxamkkqqpcgmk` ב-runtime הפעיל | ✅ **0 מופעים ב-25 chunks + HTML** |
+| סוד כלשהו מוגש ללקוח | ✅ **אין** |
+| RLS — SELECT אנונימי | ✅ `[]` (auth.uid() null → אין שורות) |
+| RLS — INSERT אנונימי | ✅ **401** `new row violates row-level security policy` |
+| RLS — DELETE אנונימי | ✅ **0 שורות** (`return=representation` → `[]`) — אין policy של delete |
+
+### 🔴 החסם היחיד — אישור אימייל
+`GET /auth/v1/settings` מחזיר **`mailer_autoconfirm: false`**. נוסתה הרשמה בפועל: המשתמש **נוצר**, אבל **לא הוחזר `access_token`**, ו-`email_confirmed_at` הוא `null`. **אין גישה לתיבת דואר ואין להמציא כזו.**
+
+**לכן לא ניתן היה לאמת:** `ensureProfile()` · העלאת יעד · שימור מזהה/payload בענן · גזירת `user_id` מה-session · RLS **עם** משתמש מחובר · ריצה שנייה כ-no-op.
+
+**נוצר משתמש בדיקה אחד** לא מאומת, מסומן בבירור (`fitlog-e2e-*@fitlog-e2e.invalid`), בפרויקט הסמכותי. **הסיסמה לא נכתבה לשום קובץ בריפו, ללא log וללא commit.** ניתן למחוק אותו.
+
+### נתונים מקומיים
+**אף `fitlog:*` לא נקרא, נמחק, נדרס או הוסר.** לא הועלה שום נתון אמיתי של המשתמש — ההעלאה כלל לא רצה. `fitlog:sync-state:v1` נשאר מפתח נפרד שאינו `StorageModule`.
+
+### אימות מלא
+typecheck exit 0 (וגם אחרי build) · **416 בדיקות** (355 unit ב-24 קבצים + 61 router) · build exit 0 · `routeTree.gen.ts` — **סדר imports שונה בין הגנרטור של Lovable לזה המקומי; ערכת ה-routes זהה לחלוטין (55 מודולים, 79 נתיבים)** ולכן אין drift אמיתי · סריקת סודות נקייה.
+
+---
+
 תאריך עדכון: **2026-08-01** (Phase 1 הוחל על ה-DB הסמכותי)
 
 ---

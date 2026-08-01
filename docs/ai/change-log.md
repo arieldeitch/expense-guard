@@ -1,5 +1,19 @@
 # Change Log
 
+## 2026-08-01 (ד) · R-35 נסגר · מיגרציה כפולה הוסרה · אימות חי חלקי (Claude Code)
+
+- **סמכות חדשה:** `fusrapommtdqwfglkmks` הוא הפרויקט הסמכותי, לפי commit **`d479acd`** של Lovable ("Realigned to fusrapommtdqwfglkmks"). **היפוך** מול הסשנים הקודמים; מסמכים שמדברים על `nhnuuooyxamkkqqpcgmk` כסמכותי הם היסטוריה.
+- **R-35 סגור.** `src/lib/supabase/tables.ts` נמחק. `CloudGoalRow` נגזר מה-`Insert` המיוצר, `GoalSummaryRow` ב-`Pick<>` מה-`Row`, `PlannedGoalRow` הוא חידוד בלבד. **אין `any`, אין cast על query, אין עותק שני של הסכמה, אין עריכת קובץ מיוצר.** בדיקת רגרסיה: `generatedTypes.test.ts`.
+- **הטיפוסים המיוצרים חשפו אי-דיוק אמיתי** ב-shim: העמודות המספריות הוגדרו `number | string | null` במקום `number | null`. תוקן, והבדיקות עודכנו בהתאם.
+- **🐛 באג שנמצא ותוקן — מיגרציה כפולה.** `20260801090000_phase1_profiles_and_goals.sql` (שלי, מעולם לא הוחל) ו-`20260801061825_...` (של Lovable, הוחל) יוצרים את אותם אובייקטים. **הוכח ש-ה-DDL זהה לחלוטין.** `create policy` אינו תומך ב-`IF NOT EXISTS`, ולכן `db reset` היה נכשל. הקובץ הכפול הוסר; נוספו בדיקות שכל טבלה נוצרת פעם אחת וכל policy מוצהר פעם אחת.
+- **אימות חי:** 9 מסלולים → 200 · ה-runtime מכוון ל-`fusrapommtdqwfglkmks` · **`nhnuuooyxamkkqqpcgmk` = 0 מופעים ב-25 chunks וב-HTML** · אין סוד מוגש ללקוח.
+- **RLS אומת חי (ללא משתמש):** SELECT אנונימי → `[]` · INSERT אנונימי → **401 RLS violation** · DELETE אנונימי → **0 שורות** (אין policy של delete). נרשם **R-37** על כך שברירת המחדל של DELETE לא נשללה במפורש — לא מסוכן כל עוד RLS דלוק.
+- **🔴 חסם:** `mailer_autoconfirm: false`. הרשמה נוסתה בפועל — משתמש נוצר, **`access_token` לא הוחזר**, `email_confirmed_at` null. **אין גישה לתיבת דואר.** לכן `ensureProfile`, העלאה, שימור מזהה, גזירת `user_id`, RLS-עם-משתמש וה-no-op **לא אומתו**. נרשם **R-36** ו-**T-05**.
+- נוצר משתמש בדיקה אחד לא מאומת, מסומן בבירור. **הסיסמה מעולם לא נכתבה לריפו, ללא log, ללא commit.**
+- **נתונים מקומיים:** אף `fitlog:*` לא נגע. **לא הועלה שום נתון אמיתי של המשתמש.**
+- **אימות:** typecheck exit 0 (וגם אחרי build) · **416 בדיקות** (355 unit/24 קבצים + 61 router) · build exit 0 · סריקת סודות נקייה · `routeTree.gen.ts` — ערכת routes **זהה** (55 מודולים, 79 נתיבים), רק סדר imports שונה בין גנרטורים → אין drift אמיתי.
+- **CRLF (R-33) לא נגע** במכוון.
+
 ## 2026-08-01 (ג, מאוחר) · Phase 1 הוחל על ה-DB · ה-backend הסמכותי הוחלף ל-`fusrapommtdqwfglkmks` (Lovable)
 
 - **ADR-0040:** ההחלטה על `nhnuuooyxamkkqqpcgmk` מסומנת **Superseded**. אודיט חיבור הראה חיבור פלטפורמה ל-Lovable Cloud `fusrapommtdqwfglkmks`, הזרקת runtime שגוברת על `.env`, ואי-קיום מסלול נתמך להחלפת backend מנוהל בפרויקט חיצוני. `nhnuuooyxamkkqqpcgmk` **לא נמחק, לא נותק, לא שונה.**

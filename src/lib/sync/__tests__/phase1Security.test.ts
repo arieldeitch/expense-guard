@@ -1,29 +1,33 @@
 /**
- * Phase 1 security + fallback guarantees.
+ * Phase 1 security guarantees, asserted against the real migration files.
  *
- * The migration assertions read the real SQL file. They are the only automated
- * check that RLS is on and that ownership is auth.uid() until the migration is
- * actually applied to a database, so they are deliberately strict.
+ * Scans EVERY file in supabase/migrations rather than one hard-coded path, so
+ * the checks keep working when Lovable adds or renames a migration, and so a
+ * second migration cannot quietly reintroduce something these rules forbid.
+ *
+ * Until an authenticated end-to-end run is possible these are the strongest
+ * automated evidence that RLS is on and ownership is auth.uid().
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveRepository } from "@/lib/repo";
 import { toRepoGoal } from "@/lib/repo/supabase";
 
-const MIGRATION_PATH = join(
-  process.cwd(),
-  "supabase",
-  "migrations",
-  "20260801090000_phase1_profiles_and_goals.sql",
-);
-const sql = readFileSync(MIGRATION_PATH, "utf8");
+const NL = String.fromCharCode(10);
+const MIGRATIONS_DIR = join(process.cwd(), "supabase", "migrations");
+
+const migrationFiles = readdirSync(MIGRATIONS_DIR)
+  .filter((f) => f.endsWith(".sql"))
+  .sort();
+
+const sql = migrationFiles.map((f) => readFileSync(join(MIGRATIONS_DIR, f), "utf8")).join(NL);
 
 /** Executable SQL only — prose in comments must not satisfy or break a check. */
 const statements = sql
-  .split("\n")
+  .split(NL)
   .filter((line) => !line.trimStart().startsWith("--"))
-  .join("\n");
+  .join(NL);
 
 const USER_TABLES = ["public.profiles", "public.goals"];
 
@@ -81,6 +85,21 @@ describe("migration — RLS", () => {
     }
   });
 
+  it("creates each table exactly once across all migrations — replay-safe", () => {
+    // `create policy` has no IF NOT EXISTS in Postgres, so a duplicated
+    // migration would fail a `db reset` even though every table guard passes.
+    for (const table of USER_TABLES) {
+      const needle = `create table if not exists ${table}`;
+      const creates = statements.split(needle).length - 1;
+      expect(creates).toBe(1);
+    }
+  });
+
+  it("declares each policy exactly once", () => {
+    const names = (statements.match(/create policy (\w+)/g) ?? []).map((m) => m.replace("create policy ", ""));
+    expect(new Set(names).size).toBe(names.length);
+  });
+
   it("uses numeric, never float or double precision", () => {
     expect(statements.toLowerCase()).not.toMatch(/\b(float|double precision|real)\b/);
     expect(statements).toContain("numeric");
@@ -107,14 +126,14 @@ describe("supabase adapter — row mapping", () => {
     id: "g1",
     domain: "running",
     name: "20 ק״מ",
-    target_value: "20.5",
+    target_value: 20.5,
     target_unit: "ק״מ",
-    current_value: "12.25",
+    current_value: 12.25,
     priority: 1,
     status: "active",
   };
 
-  it("coerces PostgREST numeric strings without losing precision", () => {
+  it("carries numeric values through without losing precision", () => {
     const mapped = toRepoGoal(base);
     expect(mapped?.targetValue).toBe(20.5);
     expect(mapped?.currentValue).toBe(12.25);

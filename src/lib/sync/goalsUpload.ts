@@ -16,6 +16,7 @@
  *     write uses ignoreDuplicates so an existing row is never overwritten.
  *   * Secrets never travel.
  */
+import type { Database, Json } from "@/integrations/supabase/types";
 import type { Goal } from "@/lib/goals/types";
 import { checksumOf, stableStringify } from "@/lib/storage/checksum";
 
@@ -25,26 +26,21 @@ export const GOALS_SYNC_MODULE = "goals";
 const FORBIDDEN_FIELD_PATTERN =
   /(^|_)(token|secret|password|passwd|api_?key|access_?key|service_?role|session_?token|bearer|credential)s?($|_)/i;
 
-export interface CloudGoalRow {
-  id: string;
-  user_id: string;
-  domain: string;
-  goal_type: string;
-  name: string;
-  status: string;
-  priority: number;
-  is_primary: boolean;
-  target_value: number | null;
-  target_unit: string | null;
-  current_value: number | null;
-  version: number;
-  payload: Record<string, unknown>;
-  source_metadata: Record<string, unknown>;
-  content_checksum: string;
-  op_id: string;
-  client_created_at: string | null;
-  client_updated_at: string | null;
-}
+/**
+ * The row we send. Derived from the generated schema (R-35) — this file holds
+ * no second copy of the goals table shape.
+ */
+export type CloudGoalRow = Database["public"]["Tables"]["goals"]["Insert"];
+
+/**
+ * A row this planner produced. Identical to the generated Insert type, except
+ * `op_id` is guaranteed present — the planner always sets it, and the upload
+ * report depends on that. A refinement, not a second copy of the schema.
+ */
+export type PlannedGoalRow = CloudGoalRow & { op_id: string };
+
+/** A JSON object, as the generated `payload` / `source_metadata` columns expect. */
+type JsonObject = { [key: string]: Json | undefined };
 
 export interface SkippedGoal {
   id: string;
@@ -53,7 +49,7 @@ export interface SkippedGoal {
 
 export interface GoalUploadPlan {
   /** Rows to write, ordered deterministically by id. */
-  rows: CloudGoalRow[];
+  rows: PlannedGoalRow[];
   skipped: SkippedGoal[];
   /** Deterministic — same input always yields the same ids, in the same order. */
   operationIds: string[];
@@ -64,11 +60,21 @@ export interface GoalUploadPlan {
 
 const VALID_DOMAINS = new Set(["running", "gym", "home"]);
 
-function stripSecrets(record: Record<string, unknown>): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
-  for (const [k, v] of Object.entries(record)) {
+/**
+ * Round-trips through JSON and drops secret-shaped keys.
+ *
+ * The round-trip is what makes the result genuinely JSON-shaped; the check
+ * below confirms it at runtime instead of asserting it with a cast.
+ */
+function toSafeJsonObject(value: unknown): JsonObject {
+  const roundTripped: unknown = JSON.parse(JSON.stringify(value ?? {}));
+  if (typeof roundTripped !== "object" || roundTripped === null || Array.isArray(roundTripped)) {
+    return {};
+  }
+  const out: JsonObject = {};
+  for (const [k, v] of Object.entries(roundTripped)) {
     if (FORBIDDEN_FIELD_PATTERN.test(k)) continue;
-    out[k] = v;
+    out[k] = v as Json;
   }
   return out;
 }
@@ -81,8 +87,8 @@ function numberOrNull(v: unknown): number | null {
  * Maps one local goal to its cloud row. `authenticatedUserId` is the ONLY
  * source of ownership.
  */
-export function toCloudGoalRow(goal: Goal, authenticatedUserId: string): CloudGoalRow {
-  const payload = stripSecrets(JSON.parse(JSON.stringify(goal)) as Record<string, unknown>);
+export function toCloudGoalRow(goal: Goal, authenticatedUserId: string): PlannedGoalRow {
+  const payload = toSafeJsonObject(goal);
   // The local owner is documentation only; it must not appear as authority.
   delete payload["user_id"];
 
@@ -125,7 +131,7 @@ export function planGoalUpload(input: PlanGoalUploadInput): GoalUploadPlan {
   const { goals, authenticatedUserId } = input;
   const alreadyUploaded = input.alreadyUploaded ?? new Set<string>();
 
-  const rows: CloudGoalRow[] = [];
+  const rows: PlannedGoalRow[] = [];
   const skipped: SkippedGoal[] = [];
   const ignoredOwners = new Set<string>();
   const seen = new Set<string>();
@@ -182,7 +188,7 @@ export interface GoalUploadResult {
 
 /** The narrow slice of the Supabase client this module needs. Keeps tests honest. */
 export interface GoalUploadClient {
-  upsertGoals: (rows: CloudGoalRow[]) => Promise<{ error: string | null }>;
+  upsertGoals: (rows: PlannedGoalRow[]) => Promise<{ error: string | null }>;
   listGoalIds: () => Promise<{ ids: string[]; error: string | null }>;
 }
 
@@ -247,7 +253,7 @@ export async function executeGoalUpload(
 }
 
 /** Exposed for tests that assert nothing secret ever reaches a payload. */
-export function payloadContainsSecret(row: CloudGoalRow): boolean {
+export function payloadContainsSecret(row: PlannedGoalRow): boolean {
   return /("(?:[a-z_]*)(token|secret|password|api_?key|service_?role|credential)[a-z_]*")/i.test(
     stableStringify(row),
   );

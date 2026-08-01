@@ -11,7 +11,7 @@ import {
   executeGoalUpload,
   planGoalUpload,
   GOALS_SYNC_MODULE,
-  type CloudGoalRow,
+  type PlannedGoalRow,
   type GoalUploadClient,
   type GoalUploadResult,
 } from "./goalsUpload";
@@ -22,16 +22,18 @@ export * from "./goalsUpload";
 
 /** Real client. Isolated here so every other module stays network-free. */
 export function createSupabaseGoalUploadClient(): GoalUploadClient {
-  const load = async () => (await import("@/lib/supabase/tables")).phase1Client();
+  const load = async () => (await import("@/integrations/supabase/client")).supabase;
 
   return {
-    async upsertGoals(rows: CloudGoalRow[]) {
+    async upsertGoals(rows: PlannedGoalRow[]) {
       try {
         const supabase = await load();
-        const { upsertGoals } = await import("@/lib/supabase/tables");
         // Insert-if-absent: an existing cloud row is never overwritten, and a
         // re-run of the same upload is a genuine no-op.
-        return upsertGoals(supabase, rows);
+        const { error } = await supabase
+          .from("goals")
+          .upsert(rows, { onConflict: "id", ignoreDuplicates: true });
+        return { error: error ? error.message : null };
       } catch (e) {
         return { error: e instanceof Error ? e.message : "upload failed" };
       }
@@ -40,8 +42,9 @@ export function createSupabaseGoalUploadClient(): GoalUploadClient {
     async listGoalIds() {
       try {
         const supabase = await load();
-        const { selectGoalIds } = await import("@/lib/supabase/tables");
-        return selectGoalIds(supabase);
+        const { data, error } = await supabase.from("goals").select("id");
+        if (error) return { ids: [], error: error.message };
+        return { ids: data.map((r) => r.id), error: null };
       } catch (e) {
         return { ids: [], error: e instanceof Error ? e.message : "read failed" };
       }
