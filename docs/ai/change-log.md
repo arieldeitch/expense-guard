@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-08-01 (ג, מאוחר) · Phase 1 הוחל על ה-DB · ה-backend הסמכותי הוחלף ל-`fusrapommtdqwfglkmks` (Lovable)
+
+- **ADR-0040:** ההחלטה על `nhnuuooyxamkkqqpcgmk` מסומנת **Superseded**. אודיט חיבור הראה חיבור פלטפורמה ל-Lovable Cloud `fusrapommtdqwfglkmks`, הזרקת runtime שגוברת על `.env`, ואי-קיום מסלול נתמך להחלפת backend מנוהל בפרויקט חיצוני. `nhnuuooyxamkkqqpcgmk` **לא נמחק, לא נותק, לא שונה.**
+- **יישור ריפו:** `supabase/config.toml` → `fusrapommtdqwfglkmks`. `.env` מנוהל ע"י הפלטפורמה — לא נערך.
+- **מיגרציה הוחלה כלשונה:** `profiles` + `goals` בלבד. אומת ב-DB: `rowsecurity = true` על שתיהן · 6 policies, כולן `auth.uid()` · **0 policies של delete** · אין trigger על `auth.users` · `GRANT` = select/insert/update ל-`authenticated` בלבד.
+- **טיפוסים:** `src/integrations/supabase/types.ts` נוצר מחדש ע"י Lovable ומכיל `goals` + `profiles`.
+- **לא בוצע (במכוון):** אין העלאת נתונים מקומיים · אין משתמשי Auth · אין ספקים · אין Storage/Edge Functions/realtime · אין טבלאות מעבר להיקף Phase 1.
+- **נשמר ללא שינוי:** כל מפתחות `fitlog:*`, המזהים היציבים, ה-routes, פורמט הגיבוי, התנהגות ה-SSR וה-fallback המקומי.
+
 ## 2026-08-01 (ג) · Phase 1 של Supabase — מומש בריפו, לא הוחל על ה-DB (Claude Code)
 
 - **merge ל-`main`:** `3775ff4` — non-fast-forward, ההיסטוריה נשמרה במלואה (ללא squash/rebase/force). נדחף.
