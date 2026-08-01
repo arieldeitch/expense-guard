@@ -1,5 +1,31 @@
 # Change Log
 
+## 2026-08-01 (ב) · המעבר לפרויקט Supabase הסמכותי — בוצע ואומת (Claude Code)
+
+- **סוג:** **קונפיגורציה בלבד** — שני קבצים, חמישה ערכים. **אפס שינוי בקוד האפליקציה**, אפס נגיעה ב-DB, **לא נוצרו** schema/טבלאות/מיגרציות/RLS/Auth/Storage/Edge Functions, לא נוספה dependency, לא שונו routes/IDs/מפתחות אחסון/פורמט גיבוי/SSR, ו-`fitlog:*` לא נקרא ולא נכתב.
+- **commit `67438e7`** על `chore/supabase-authoritative-switch`: `.env` (server + `VITE_*`) ו-`supabase/config.toml` → **`nhnuuooyxamkkqqpcgmk`**.
+- **לא נדרש תיקון תאימות.** ה-integration מונע-env במלואו, ולכן החלפת הערכים הספיקה — כפי שהביקורת חזתה.
+- **המפתח אומת לפני שנכתב:** `/auth/v1/health` → 200, `/auth/v1/settings` → קונפיגורציה אמיתית. ה-401 על `/rest/v1/` **אינו תקלה** — המפתח של הפרויקט הישן מחזיר את אותה תשובה בדיוק (`Secret API key required`), התנהגות ידועה של פורמט המפתח האטום החדש.
+- **אימות:** `bun install --frozen-lockfile` ✅ · typecheck exit 0 (וגם אחרי build) ✅ · `bun run test` exit 0 — **375 בדיקות** (314 unit ב-21 קבצים + 61 router) ✅ · backup/storage/migration **99 בדיקות** ✅ · build exit 0 ✅ · ה-build לפרודקשן הוגש בפועל ו-6 מסלולים החזירו **200 עם SSR HTML** ✅ · ה-bundle שהוגש לדפדפן מכיל **רק** את הפרויקט החדש, **0** מופעים של הישן ✅ · סריקת סודות נקייה ✅.
+- **שני מצבים קיימים מראש נמדדו ובמכוון לא תוקנו:**
+  - **`lint` נכשל (29,784 שגיאות CRLF ב-245 קבצים)** — **לא רגרסיה**: הרצה על `681d40c` נקי נתנה תוצאה **זהה בייט-לבייט**. שורש: R-17. נרשם כ-**R-33** ו-**T-03**, לתיקון ב-commit renormalize ייעודי.
+  - **drift ב-`routeTree.gen.ts`** — build מקומי מחזיר בלוק `Register` בן 10 שורות ש-Lovable הסיר. **בדיוק תחזית R-30** לנעיצה 2.8.3→2.8.4. הוחזר לקדמותו כדי לשמור על commit מצומצם; typecheck ירוק בשתי הצורות.
+- **🔎 ממצא פריסה מהותי:** האפליקציה החיה **אינה מכילה קוד Supabase כלל** — נסרקו **כל 21 ה-chunks** וה-HTML: 0 `supabase`, 0 לשני ה-refs. **ה-backend השגוי מעולם לא הגיע לפרודקשן.** לכן שאלת הדריסה של Lovable **עדיין אינה ניתנת לצפייה** ולא נענתה לכאן או לכאן.
+- **סטטוס סיכונים:** **R-31 מופחת** (הריפו תקין; הפריסה טרם אומתה) · **R-32 פתוח** (`.env` tracked, מכיל רק מפתחות ציבוריים) · **R-33 חדש** (CRLF/lint).
+- **הצעד הבא:** T-02 — לתת ל-Lovable לבנות מחדש ולסרוק שוב את ה-bundle החי.
+
+## 2026-08-01 · ביקורת — Lovable Cloud הופעל בטעות; הוכן מעבר לפרויקט הסמכותי (Claude Code)
+
+- **סוג:** **docs בלבד.** לא נגענו ב-`.env`, ב-`supabase/config.toml`, בקוד מוצר, באף DB, ב-`fitlog:*` או ב-routes. לא בוצע push. לא הותקנה dependency.
+- **הממצא:** `origin/main` התקדם מ-`0b0d000` ל-**`681d40c`** ב-8 commits של Lovable, ובהם `bdcfdae` *"יצר backend Lovable Cloud חדש"* ו-`681d40c` *"Verified Supabase connection"*. `main` המקומי הוא **אב קדמון** — fast-forward אפשרי, אין divergence.
+- **מה נוסף:** 11 קבצים (+447/−14) — `.env` (tracked), `supabase/config.toml`, `src/integrations/supabase/{client,client.server,auth-middleware,auth-attacher,types}.ts`, `functionMiddleware` ב-`src/start.ts`, `@supabase/supabase-js ^2.111.0`, ו-`@lovable.dev/vite-tanstack-config` `2.8.3` → **`2.8.4`** (בניגוד לנעיצה שנקבעה אתמול — ראה R-30).
+- **אין דליפת סוד:** `.env` מכיל **רק** מפתחות `sb_publishable_*`. אין service role ואין `sb_secret_*` בריפו; `client.server.ts` קורא אותו מ-`process.env` בזמן ריצה בלבד. נרשם כ-**R-32** בגלל ש-`.env` הוא tracked.
+- **היקף המעבר אומת ב-Git, לא הונח:** `fusrapommtdqwfglkmks` מופיע **אך ורק** ב-`.env` ו-`supabase/config.toml`. **אפס refs קשיחים ב-`src/`** — כל ה-integration מונע-env. לכן המעבר הוא **שינוי קונפיגורציה ציבורית בלבד**.
+- **אין השפעת runtime:** `supabase`/`supabaseAdmin` הם Proxy עצל שלא נקרא באף מסלול. אין schema (`types.ts` ריק), אין Auth UI, אין query. הנתונים ב-`localStorage` בלבד.
+- **החסם:** המפתח הציבורי של `nhnuuooyxamkkqqpcgmk` אינו נגיש. Supabase CLI v2.101.0 מותקן ומחובר, אך מחזיר **403** על שני ה-refs (רואה רק ארגון `jauaspogygzagvdgwzwi`). סריקת `Desktop` לא מצאה את ה-ref. שני הפרויקטים חיים (401 על `/rest/v1/`).
+- **הוכן:** ענף `chore/supabase-authoritative-switch` (מ-`681d40c`, **לא נדחף**) + tag `checkpoint/pre-supabase-switch-audit` על `0b0d000`.
+- **נרשמו:** **R-31** (חיבור ל-backend הלא נכון), **R-32** (`.env` tracked), **T-01** (המעבר עצמו).
+
 ## 2026-07-31 (ד) · סגירת סשן — פרסום, נעיצת build tooling, ותיעוד מצב (Claude Code)
 
 - **סוג:** **docs בלבד** + אימות מחדש. **אין שינוי קוד מוצר, אין dependency חדשה, אין Supabase/auth/sync, אין שינוי SSR/routes/schema/מפתחות/פורמט גיבוי.**
