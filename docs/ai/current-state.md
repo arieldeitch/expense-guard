@@ -17,6 +17,8 @@
 ### מה הוחלט
 **`nhnuuooyxamkkqqpcgmk` הוא הפרויקט הסמכותי.** ה-merge ל-`main` בוצע (`3775ff4`, non-fast-forward, ההיסטוריה נשמרה) ונדחף.
 
+</details>
+
 
 ### מה קיים עכשיו בקוד — Phase 1
 | רכיב | קובץ | מצב |
