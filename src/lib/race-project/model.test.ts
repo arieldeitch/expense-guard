@@ -1,5 +1,13 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { createWeek, DEFAULT_SETTINGS, INITIAL_RACES, dayKey, weekStart } from "./model";
+import {
+  createWeek,
+  DEFAULT_SETTINGS,
+  INITIAL_RACES,
+  dayKey,
+  formatDayMonth,
+  formatWeekRange,
+  weekStart,
+} from "./model";
 import { ensureWeek, saveSettings, updateWeek, regenerateWeek } from "./repo";
 import { __resetRunsStateForTests, readRunsState } from "@/lib/runs/storage";
 const settings = { ...DEFAULT_SETTINGS, weekly_minutes: 180, longest_minutes: 80 };
@@ -55,9 +63,21 @@ describe("weekly running project", () => {
       days: w.days.map((d, i) => (i === 6 ? { ...d, chosen: { ...d.chosen, minutes: 55 } } : d)),
     });
     expect(ensureWeek(w.id).days[6].chosen.minutes).toBe(55);
+    // Day edits and accept/reject are not versions — the history stays empty.
+    expect(readRunsState().trainingWeeks![0].revisions).toHaveLength(0);
     regenerateWeek(w.id);
     const next = readRunsState().trainingWeeks![0];
+    expect(next.revisions).toHaveLength(1);
     expect(next.revisions.at(-1)?.days[6].chosen.minutes).toBe(55);
+    expect(next.revisions.at(-1)?.status).toBe("accepted");
     expect(next.days[6].recommended.minutes).toBe(80);
+    expect(next.status).toBe("pending");
+    // A later edit keeps the recorded version.
+    updateWeek({ ...next, status: "rejected" });
+    expect(readRunsState().trainingWeeks![0].revisions).toHaveLength(1);
+  });
+  it("formats dates day-first for Hebrew readers", () => {
+    expect(formatDayMonth("2026-09-21")).toBe("21.9");
+    expect(formatWeekRange("2026-09-20")).toBe("20.9 – 26.9.2026");
   });
 });

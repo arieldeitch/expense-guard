@@ -19,6 +19,7 @@ import {
   addSet,
   completeHomeSession,
   duplicateSet,
+  listEntrySets,
   markSetCompleted,
   markSetSkipped,
   previousPerformance,
@@ -446,12 +447,17 @@ function BulkReps({ entryId }: { entryId: string }) {
             setError("יש להזין חזרות שלמות וחיוביות לכל סט, למשל 15, 20, 17");
             return;
           }
-          for (const p of parts)
-            addSet(entryId, {
-              reps: Number(p),
-              completed: true,
-              completed_at: new Date().toISOString(),
-            });
+          // Fill untouched placeholder sets first (a new entry starts with one empty set),
+          // then append the rest — no empty "set 1" left behind to skew the summary.
+          const at = new Date().toISOString();
+          const empty = listEntrySets(entryId).filter(
+            (s) => !s.completed && !s.skipped && !s.reps && !s.duration_seconds,
+          );
+          parts.forEach((p, i) => {
+            const patch = { reps: Number(p), completed: true, completed_at: at };
+            if (i < empty.length) updateSet(empty[i].id, patch);
+            else addSet(entryId, patch);
+          });
           setText("");
           setError("");
         }}

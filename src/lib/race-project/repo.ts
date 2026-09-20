@@ -40,14 +40,23 @@ export function ensureWeek(start: string): WeekPlan {
   writeRunsState({ ...s, trainingWeeks: [...(s.trainingWeeks ?? []), week] });
   return week;
 }
-export function updateWeek(week: WeekPlan) {
+/**
+ * Day edits, accept and reject update the week in place. A revision (the previous version)
+ * is recorded only when `snapshotPrevious` is set — i.e. on explicit regeneration — so the
+ * history lists real versions of the recommendation, not every keystroke.
+ */
+export function updateWeek(week: WeekPlan, options: { snapshotPrevious?: boolean } = {}) {
   const s = readRunsState();
   const prev = s.trainingWeeks?.find((w) => w.id === week.id);
   const now = new Date().toISOString();
+  const revisions = prev?.revisions ?? week.revisions ?? [];
   const next = {
     ...week,
     updated_at: now,
-    revisions: prev ? [...prev.revisions, { at: now, days: prev.days, status: prev.status }] : [],
+    revisions:
+      prev && options.snapshotPrevious
+        ? [...revisions, { at: now, days: prev.days, status: prev.status }]
+        : revisions,
   };
   writeRunsState({
     ...s,
@@ -58,5 +67,6 @@ export function regenerateWeek(start: string) {
   const s = readRunsState();
   updateWeek(
     createWeek(start, s.coachSettings?.[0] ?? DEFAULT_SETTINGS, s.races ?? INITIAL_RACES, s.runs),
+    { snapshotPrevious: true },
   );
 }

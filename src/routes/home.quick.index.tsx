@@ -1,6 +1,7 @@
 /**
  * /home/quick — בחירת תרגיל לדיווח מהיר.
- * מציג: מועדפים, אחרונים, כל תרגילי הבית + חיפוש.
+ * מציג: מועדפים, אחרונים, הקטלוג הביתי המצומצם לפי קבוצות (ADR-0029), התרגילים המותאמים
+ * של המשתמש, תרגיל מותאם חדש, וחיפוש במאגר המלא.
  */
 import { useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -12,7 +13,10 @@ import { Tile } from "@/components/tile/Tile";
 import { Input } from "@/components/ui/input";
 import { useAllExercises } from "@/lib/exercises";
 import type { Exercise } from "@/lib/exercises";
+import { curatedGroups, curatedSlugs } from "@/lib/exercises/homeCatalog";
+import { CustomExerciseForm } from "@/components/home/HomeExercisePicker";
 import { startQuickEntry, useRecentHomeExerciseIds } from "@/lib/home";
+import { useHydrated } from "@/lib/storage/useHydrated";
 
 export const Route = createFileRoute("/home/quick/")({
   head: () => ({
@@ -41,6 +45,14 @@ function QuickPickPage() {
     [all],
   );
   const favorites = homeCandidates.filter((e) => e.is_favorite).slice(0, 8);
+  // The curated home groups (push-ups, crunch variants, jump rope, weights…) — not an
+  // alphabetical slice of the whole catalog, which buried them behind gym exercises.
+  const groups = useMemo(() => curatedGroups(homeCandidates), [homeCandidates]);
+  const curated = useMemo(() => new Set(curatedSlugs()), []);
+  // User-created exercises exist only in localStorage — render them after hydration (R-27).
+  const hydrated = useHydrated();
+  const mine = hydrated ? homeCandidates.filter((e) => !e.is_system && !curated.has(e.slug)) : [];
+  const [customOpen, setCustomOpen] = useState(false);
   // ה-hook (ולא `recentExerciseIds()` הישיר) נגזר מה-store ולכן עקבי ב-hydration.
   const recentIds = useRecentHomeExerciseIds(8);
   const recent = recentIds
@@ -138,20 +150,42 @@ function QuickPickPage() {
               </div>
             </>
           ) : null}
-          <SectionHeader title="כל תרגילי הבית" />
-          <div className="grid grid-cols-2 gap-2 px-4 sm:px-6">
-            {homeCandidates.slice(0, 40).map((e) => (
-              <PickTile key={e.id} exercise={e} onPick={start} />
-            ))}
-          </div>
+          {mine.length > 0 ? (
+            <>
+              <SectionHeader title="התרגילים שלי" />
+              <div className="grid grid-cols-2 gap-2 px-4 sm:px-6">
+                {mine.map((e) => (
+                  <PickTile key={e.id} exercise={e} onPick={start} />
+                ))}
+              </div>
+            </>
+          ) : null}
+          {groups.map(({ group, exercises }) => (
+            <div key={group.id}>
+              <SectionHeader title={group.label} />
+              <div className="grid grid-cols-2 gap-2 px-4 sm:px-6">
+                {exercises.map((e) => (
+                  <PickTile key={e.id} exercise={e} onPick={start} />
+                ))}
+              </div>
+            </div>
+          ))}
           <div className="mt-4 px-4 sm:px-6">
-            <Link
-              to="/exercises"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border-strong bg-tint px-4 text-sm font-bold text-muted-foreground"
-            >
-              <Plus aria-hidden className="size-4" />
-              יצירת תרגיל חדש
-            </Link>
+            {customOpen ? (
+              <CustomExerciseForm
+                onCancel={() => setCustomOpen(false)}
+                onCreate={(created) => start(created.id)}
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setCustomOpen(true)}
+                className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border-strong bg-tint px-4 text-sm font-bold text-muted-foreground"
+              >
+                <Plus aria-hidden className="size-4" />
+                תרגיל מותאם (למשל עם משקולות)
+              </button>
+            )}
           </div>
         </>
       )}
@@ -169,11 +203,7 @@ function PickTile({
   favorite?: boolean;
 }) {
   return (
-    <button
-      type="button"
-      onClick={() => onPick(exercise.id)}
-      className="text-start"
-    >
+    <button type="button" onClick={() => onPick(exercise.id)} className="text-start">
       <Tile variant="home" tone="soft" interactive size="sm">
         <div className="flex items-center gap-2">
           {favorite ? (

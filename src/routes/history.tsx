@@ -8,7 +8,10 @@ import { useAllRuns, formatDurationHMS } from "@/lib/runs";
 import { useAllSessions } from "@/lib/sessions";
 import { useHomeSessions } from "@/lib/home";
 
-export const Route = createFileRoute("/history")({ component: History });
+export const Route = createFileRoute("/history")({
+  component: History,
+  head: () => ({ meta: [{ title: "כל ההיסטוריה · Fit Log" }] }),
+});
 function History() {
   const runs = useAllRuns();
   const gym = useAllSessions();
@@ -42,7 +45,7 @@ function History() {
       <div className="space-y-3 px-4 sm:px-6">
         <label className="block text-sm">
           חיפוש לפי שם, תאריך או הערה
-          <Input value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Input className="min-h-11" value={query} onChange={(e) => setQuery(e.target.value)} />
         </label>
         <div className="flex flex-wrap gap-2">
           {[

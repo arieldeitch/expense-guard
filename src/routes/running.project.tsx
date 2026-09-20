@@ -15,6 +15,8 @@ import {
   weekStart,
   shiftDay,
   dayKey,
+  formatDayMonth,
+  formatWeekRange,
   type CoachSettings,
   type Race,
   type TrainingKind,
@@ -35,6 +37,10 @@ export const Route = createFileRoute("/running/project")({
 });
 const selectClass =
   "min-h-11 w-full min-w-0 rounded-xl border border-border-strong bg-surface px-2 text-sm";
+// 44px minimum tap targets on the whole screen (Input/Button defaults are 36px).
+const inputClass = "min-h-11";
+const buttonClass = "min-h-11";
+const summaryClass = "min-h-11 cursor-pointer py-2.5 font-bold";
 
 function RaceProject() {
   const hydrated = useHydrated();
@@ -75,16 +81,19 @@ function RaceProject() {
       <div className="space-y-4 px-4 sm:px-6">
         <Tile variant="run" tone="soft">
           <div className="text-2xl font-black">
-            {completedRaces} הושלמו · יעד {settings.target_min}–{settings.target_max}
+            {completedRaces} הושלמו · יעד{" "}
+            <span dir="ltr">
+              {settings.target_min}–{settings.target_max}
+            </span>
           </div>
           <p className="text-sm text-muted-foreground">
             באר שבע נרשם כהושלם לפי הדיווח שלך. זמן ותוצאה לא הומצאו.
           </p>
           <div className="flex flex-wrap gap-2">
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className={buttonClass}>
               <Link to="/running/history">יומן הריצות</Link>
             </Button>
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" className={buttonClass}>
               <Link to="/running/new/$type" params={{ type: "treadmill" }}>
                 דיווח ריצה
               </Link>
@@ -92,9 +101,7 @@ function RaceProject() {
           </div>
         </Tile>
         <details className="rounded-2xl border-2 border-border-strong p-4">
-          <summary className="cursor-pointer font-bold">
-            המרוצים שלי · עריכת תאריכים והוספת מרוץ
-          </summary>
+          <summary className={summaryClass}>המרוצים שלי · עריכת תאריכים והוספת מרוץ</summary>
           <p className="my-3 text-sm text-muted-foreground">
             המועדים המשוערים הם מהדיווח שלך. הזן תאריך מדויק כדי להתאים את שבוע המרוץ וההתאוששות.
           </p>
@@ -109,6 +116,7 @@ function RaceProject() {
             ))}
           <Button
             variant="outline"
+            className={buttonClass}
             onClick={() =>
               saveRaces([
                 ...races,
@@ -128,7 +136,7 @@ function RaceProject() {
           className="rounded-2xl border-2 border-border-strong p-4"
           open={!settings.weekly_minutes}
         >
-          <summary className="cursor-pointer font-bold">העדפות ונתוני בסיס להמלצה</summary>
+          <summary className={summaryClass}>העדפות ונתוני בסיס להמלצה</summary>
           <SettingsForm key={JSON.stringify(settings)} settings={settings} onSave={saveSettings} />
         </details>
         <Tile>
@@ -136,31 +144,35 @@ function RaceProject() {
           <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
             <Button
               variant="outline"
+              className={buttonClass}
               aria-label="שבוע קודם"
               onClick={() => setStart(shiftDay(start, -7))}
             >
               קודם
             </Button>
-            <span className="text-center text-sm" dir="ltr">
-              {start} — {shiftDay(start, 6)}
+            <span className="text-center text-sm font-bold" dir="ltr">
+              {formatWeekRange(start)}
             </span>
             <Button
               variant="outline"
+              className={buttonClass}
               aria-label="שבוע הבא"
               onClick={() => setStart(shiftDay(start, 7))}
             >
               הבא
             </Button>
           </div>
-          <Button variant="ghost" onClick={() => setStart(weekStart())}>
-            השבוע הנוכחי · ראשון עד שבת
-          </Button>
+          {start !== weekStart() && (
+            <Button variant="ghost" className={buttonClass} onClick={() => setStart(weekStart())}>
+              חזרה לשבוע הנוכחי · ראשון עד שבת
+            </Button>
+          )}
           <p className="text-sm text-muted-foreground">
             מלווה אימונים מבוסס כללים, לא שירות AI חיצוני. מציע תוכנית בפתיחה הראשונה של השבוע; אינו
             פועל כשהאפליקציה סגורה. ההמלצה היא בסיס לשינוי שלך.
           </p>
           <a
-            className="text-sm underline"
+            className="inline-flex min-h-11 items-center text-sm underline"
             href="https://www.baa.org/races/boston-half/info-for-athletes/boston-half-training/"
             target="_blank"
             rel="noreferrer"
@@ -180,11 +192,15 @@ function RaceProject() {
                     : "טיוטת המלצה — ניתנת לעריכה"}
               </p>
               <div className="flex flex-wrap gap-2">
-                <Button onClick={() => updateWeek({ ...week, status: "accepted" })}>
+                <Button
+                  className={buttonClass}
+                  onClick={() => updateWeek({ ...week, status: "accepted" })}
+                >
                   אשר את הבחירות שלי
                 </Button>
                 <Button
                   variant="outline"
+                  className={buttonClass}
                   onClick={() => {
                     if (window.confirm("ליצור המלצה חדשה? הגרסה הקודמת תישמר בהיסטוריית השינויים."))
                       regenerateWeek(start);
@@ -192,7 +208,11 @@ function RaceProject() {
                 >
                   עדכן המלצה מהנתונים
                 </Button>
-                <Button variant="ghost" onClick={() => updateWeek({ ...week, status: "rejected" })}>
+                <Button
+                  variant="ghost"
+                  className={buttonClass}
+                  onClick={() => updateWeek({ ...week, status: "rejected" })}
+                >
                   דחה המלצה
                 </Button>
               </div>
@@ -210,7 +230,7 @@ function RaceProject() {
             <Tile key={d.id} variant="run" tone={linked.length ? "soft" : "outline"}>
               <div className="flex justify-between gap-2">
                 <h3 className="font-bold">
-                  {DAYS[i]} · {d.date.slice(5)}
+                  {DAYS[i]} · {formatDayMonth(d.date)}
                 </h3>
                 <span className="text-sm">
                   {linked.length ? "דווח ביומן" : d.skipped ? "דילגת" : "טרם בוצע"}
@@ -243,7 +263,9 @@ function RaceProject() {
                 <label className="text-sm">
                   משך בדקות
                   <Input
+                    className={inputClass}
                     type="number"
+                    inputMode="numeric"
                     min={0}
                     max={600}
                     value={d.chosen.minutes ?? ""}
@@ -278,6 +300,7 @@ function RaceProject() {
                 <label className="text-sm">
                   התאמה אישית
                   <Input
+                    className={inputClass}
                     key={d.chosen.note}
                     defaultValue={d.chosen.note}
                     onBlur={(e) =>
@@ -287,7 +310,7 @@ function RaceProject() {
                 </label>
               </div>
               <div className="flex flex-wrap gap-2">
-                <Button asChild>
+                <Button asChild className={buttonClass}>
                   <Link
                     to="/running/new/$type"
                     params={{ type: d.chosen.surface }}
@@ -296,7 +319,11 @@ function RaceProject() {
                     דווח ביצוע
                   </Link>
                 </Button>
-                <Button variant="outline" onClick={() => changeDay(d.id, { skipped: !d.skipped })}>
+                <Button
+                  variant="outline"
+                  className={buttonClass}
+                  onClick={() => changeDay(d.id, { skipped: !d.skipped })}
+                >
                   {d.skipped ? "בטל דילוג" : "דלג על היום"}
                 </Button>
               </div>
@@ -305,7 +332,7 @@ function RaceProject() {
                   key={r.id}
                   to="/running/$id"
                   params={{ id: r.id }}
-                  className="text-sm underline"
+                  className="inline-flex min-h-11 items-center text-sm underline"
                 >
                   פתח ריצה · {formatDistanceKm(r.distance_meters)} ק״מ ·{" "}
                   {formatDurationHMS(r.duration_seconds)}
@@ -316,18 +343,30 @@ function RaceProject() {
         })}
         {week && week.revisions.length > 0 && (
           <details className="rounded-2xl border p-4">
-            <summary className="cursor-pointer font-bold">
-              היסטוריית שינויים · {week.revisions.length}
+            <summary className={summaryClass}>
+              גרסאות קודמות של ההמלצה · {week.revisions.length}
             </summary>
+            <p className="text-sm text-muted-foreground">
+              נשמרות רק בעדכון מפורש של ההמלצה; כל גרסה כוללת את ההתאמות שלך באותו זמן.
+            </p>
             {[...week.revisions].reverse().map((revision, i) => (
               <details key={`${revision.at}-${i}`} className="my-2">
-                <summary className="cursor-pointer text-sm">
-                  {new Date(revision.at).toLocaleString("he-IL")} · גרסה קודמת
+                <summary className="min-h-11 cursor-pointer py-3 text-sm">
+                  {new Date(revision.at).toLocaleString("he-IL", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                  })}{" "}
+                  ·{" "}
+                  {revision.status === "accepted"
+                    ? "אושרה"
+                    : revision.status === "rejected"
+                      ? "נדחתה"
+                      : "טיוטה"}
                 </summary>
-                {revision.days.map((d) => (
+                {revision.days.map((d, di) => (
                   <p key={d.id} className="text-sm">
-                    {d.date}: {KIND_LABELS[d.chosen.kind]} · {d.chosen.minutes ?? "—"} דקות ·{" "}
-                    {d.chosen.note}
+                    {DAYS[di]} {formatDayMonth(d.date)}: {KIND_LABELS[d.chosen.kind]} ·{" "}
+                    {d.chosen.minutes ?? "—"} דקות · {d.chosen.note}
                   </p>
                 ))}
               </details>
@@ -336,7 +375,7 @@ function RaceProject() {
         )}
         <p className="text-sm text-muted-foreground">
           הנתונים נשמרים במכשיר זה ונכללים בגיבוי.{" "}
-          <Link to="/backup" className="underline">
+          <Link to="/backup" className="inline-flex min-h-11 items-center underline">
             ייצוא ושחזור
           </Link>
         </p>
@@ -358,6 +397,7 @@ function RaceEditor({ race, onSave }: { race: Race; onSave: (race: Race) => void
       <label className="block text-sm">
         שם המרוץ
         <Input
+          className={inputClass}
           required
           value={draft.name}
           onChange={(e) => setDraft({ ...draft, name: e.target.value })}
@@ -367,6 +407,7 @@ function RaceEditor({ race, onSave }: { race: Race; onSave: (race: Race) => void
       <label className="block text-sm">
         תאריך מאומת על ידך
         <Input
+          className={inputClass}
           type="date"
           min="2026-01-01"
           max="2026-12-31"
@@ -385,7 +426,7 @@ function RaceEditor({ race, onSave }: { race: Race; onSave: (race: Race) => void
           <option value="completed">הושלם לפי הדיווח שלי</option>
         </select>
       </label>
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant="outline" className={buttonClass}>
         שמור מרוץ
       </Button>
     </form>
@@ -417,8 +458,10 @@ function SettingsForm({
         <label className="text-sm">
           דקות ריצה בשבוע רגיל
           <Input
+            className={inputClass}
             required
             type="number"
+            inputMode="numeric"
             min={1}
             max={1500}
             value={draft.weekly_minutes ?? ""}
@@ -428,8 +471,10 @@ function SettingsForm({
         <label className="text-sm">
           ריצה ארוכה רגילה — דקות
           <Input
+            className={inputClass}
             required
             type="number"
+            inputMode="numeric"
             min={1}
             max={300}
             value={draft.longest_minutes ?? ""}
@@ -503,7 +548,9 @@ function SettingsForm({
           ))}
         </div>
       </fieldset>
-      <Button type="submit">שמור העדפות</Button>
+      <Button type="submit" className={buttonClass}>
+        שמור העדפות
+      </Button>
       {saved && (
         <p role="status" className="text-sm">
           ההעדפות עודכנו. לחץ “עדכן המלצה מהנתונים” כדי לעדכן שבוע קיים בלי לדרוס התאמות בשקט.

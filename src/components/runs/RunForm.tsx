@@ -23,7 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
 import { CountryPicker } from "@/components/catalog/CountryPicker";
 import { useRaceProject } from "@/lib/race-project/repo";
-import { DAYS } from "@/lib/race-project/model";
+import { DAYS, KIND_LABELS, formatDayMonth } from "@/lib/race-project/model";
 import { DurationField } from "@/components/inputs/DurationField";
 import { getStorageStatuses } from "@/lib/storage/safeStorage";
 import { SegmentsEditor } from "./SegmentsEditor";
@@ -84,14 +84,24 @@ function toLocalDateTimeInput(iso: string) {
 
 function fromExisting(r: RunSession | null | undefined, defaults?: Partial<RunSession>): FormState {
   const base = r ?? defaults ?? {};
+  // Derived pace/speed are not user input: the form keeps them empty so they are recomputed live
+  // from duration + distance, and the repository re-derives them on every save (never a manual value).
+  const provenance = { ...((base.provenance as FormState["provenance"]) ?? {}) };
+  const manualOnly = (field: "average_pace_s_per_km" | "average_speed_kmh") => {
+    if (provenance[field] !== "derived") return base[field] ?? null;
+    delete provenance[field];
+    return null;
+  };
+  const average_pace_s_per_km = manualOnly("average_pace_s_per_km");
+  const average_speed_kmh = manualOnly("average_speed_kmh");
   return {
     training_plan_item_id: base.training_plan_item_id ?? null,
     race_id: base.race_id ?? null,
     started_at: toLocalDateTimeInput(r?.started_at ?? new Date().toISOString()),
     duration_seconds: base.duration_seconds ?? null,
     distance_meters: base.distance_meters ?? null,
-    average_pace_s_per_km: base.average_pace_s_per_km ?? null,
-    average_speed_kmh: base.average_speed_kmh ?? null,
+    average_pace_s_per_km,
+    average_speed_kmh,
     max_speed_kmh: base.max_speed_kmh ?? null,
     average_incline_pct: base.average_incline_pct ?? null,
     max_incline_pct: base.max_incline_pct ?? null,
@@ -110,7 +120,39 @@ function fromExisting(r: RunSession | null | undefined, defaults?: Partial<RunSe
     free_text_location: base.free_text_location ?? "",
     notes: base.notes ?? "",
     segments: base.segments ?? [],
-    provenance: (base.provenance as FormState["provenance"]) ?? {},
+    provenance,
+  };
+}
+
+/** One mapping for autosave, flush-on-leave and save-and-complete — every path writes the same record. */
+function toRunPatch(s: FormState) {
+  return {
+    training_plan_item_id: s.training_plan_item_id,
+    race_id: s.race_id,
+    started_at: new Date(s.started_at).toISOString(),
+    duration_seconds: s.duration_seconds,
+    distance_meters: s.distance_meters,
+    average_speed_kmh: s.average_speed_kmh,
+    max_speed_kmh: s.max_speed_kmh,
+    average_pace_s_per_km: s.average_pace_s_per_km,
+    average_incline_pct: s.average_incline_pct,
+    max_incline_pct: s.max_incline_pct,
+    calories: s.calories,
+    average_heart_rate: s.average_heart_rate,
+    max_heart_rate: s.max_heart_rate,
+    average_cadence_spm: s.average_cadence_spm,
+    elevation_gain_m: s.elevation_gain_m,
+    elevation_loss_m: s.elevation_loss_m,
+    location_id: s.location_id,
+    treadmill_id: s.treadmill_id,
+    route_id: s.route_id,
+    country_code: s.country_code,
+    city_or_area: s.city_or_area || null,
+    free_text_location: s.free_text_location || null,
+    perceived_effort: s.perceived_effort,
+    notes: s.notes || null,
+    segments: s.segments,
+    provenance: s.provenance,
   };
 }
 
@@ -205,10 +247,7 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
       clearTimeout(timer.current);
       const current = latestState.current;
       if (Number.isFinite(new Date(current.started_at).getTime()))
-        runsRepo.updateRun(runIdRef.current, {
-          ...current,
-          started_at: new Date(current.started_at).toISOString(),
-        });
+        runsRepo.updateRun(runIdRef.current, toRunPatch(current));
     },
     [],
   );
@@ -216,34 +255,7 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
     if (!runIdRef.current || !Number.isFinite(new Date(state.started_at).getTime())) return;
     setSavingStatus("saving");
     timer.current = setTimeout(() => {
-      runsRepo.updateRun(runIdRef.current!, {
-        training_plan_item_id: state.training_plan_item_id,
-        race_id: state.race_id,
-        started_at: new Date(state.started_at).toISOString(),
-        duration_seconds: state.duration_seconds,
-        distance_meters: state.distance_meters,
-        average_speed_kmh: state.average_speed_kmh,
-        max_speed_kmh: state.max_speed_kmh,
-        average_pace_s_per_km: state.average_pace_s_per_km,
-        average_incline_pct: state.average_incline_pct,
-        max_incline_pct: state.max_incline_pct,
-        calories: state.calories,
-        average_heart_rate: state.average_heart_rate,
-        max_heart_rate: state.max_heart_rate,
-        average_cadence_spm: state.average_cadence_spm,
-        elevation_gain_m: state.elevation_gain_m,
-        elevation_loss_m: state.elevation_loss_m,
-        location_id: state.location_id,
-        treadmill_id: state.treadmill_id,
-        route_id: state.route_id,
-        country_code: state.country_code,
-        city_or_area: state.city_or_area || null,
-        free_text_location: state.free_text_location || null,
-        perceived_effort: state.perceived_effort,
-        notes: state.notes || null,
-        segments: state.segments,
-        provenance: state.provenance,
-      });
+      runsRepo.updateRun(runIdRef.current!, toRunPatch(state));
       timer.current = null;
       setSavingStatus(getStorageStatuses().runs?.status === "saved" ? "saved" : "error");
     }, 300);
@@ -311,8 +323,7 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
       timer.current = null;
     }
     runsRepo.updateRun(runIdRef.current, {
-      ...state,
-      started_at: new Date(state.started_at).toISOString(),
+      ...toRunPatch(state),
       status: "completed",
       ended_at: state.duration_seconds
         ? new Date(
@@ -374,13 +385,15 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
             onChange={(e) => setField("training_plan_item_id", e.target.value || null)}
           >
             <option value="">ריצה חופשית</option>
-            {project.weeks.flatMap((w) =>
-              w.days.map((d, i) => (
-                <option key={d.id} value={d.id}>
-                  {DAYS[i]} · {d.date}
-                </option>
-              )),
-            )}
+            {[...project.weeks]
+              .sort((a, b) => a.week_start.localeCompare(b.week_start))
+              .flatMap((w) =>
+                w.days.map((d, i) => (
+                  <option key={d.id} value={d.id}>
+                    {DAYS[i]} {formatDayMonth(d.date)} · {KIND_LABELS[d.chosen.kind]}
+                  </option>
+                )),
+              )}
           </select>
         </label>
         <label className="text-sm">
@@ -411,16 +424,11 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
               onChange={(e) => setField("started_at", e.target.value)}
             />
           </Field>
-          <DurationField
-            label="משך הריצה"
-            value={state.duration_seconds}
-            onChange={(v) => setField("duration_seconds", v)}
-          />
           <Field label='מרחק (ק"מ)'>
             <Input
               aria-label="מרחק בקילומטרים"
               inputMode="decimal"
-              placeholder="0.0"
+              placeholder="6.25"
               defaultValue={
                 state.distance_meters != null ? (state.distance_meters / 1000).toString() : ""
               }
@@ -430,10 +438,23 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
               }}
             />
           </Field>
+          {/* Minutes + seconds each get a full half row; pace shows the derived value as its hint. */}
           <DurationField
+            className="col-span-2"
+            label="משך הריצה"
+            value={state.duration_seconds}
+            onChange={(v) => setField("duration_seconds", v)}
+            placeholder={{ minutes: "37", seconds: "20" }}
+          />
+          <DurationField
+            className="col-span-2"
             label="קצב לק״מ"
             value={state.average_pace_s_per_km}
             onChange={(v) => setField("average_pace_s_per_km", v)}
+            placeholder={{
+              minutes: derivedPace ? String(Math.floor(derivedPace / 60)) : "—",
+              seconds: derivedPace ? String(Math.round(derivedPace % 60)).padStart(2, "0") : "—",
+            }}
           />
           <Field label='מהירות ממוצעת (קמ"ש)'>
             <Input

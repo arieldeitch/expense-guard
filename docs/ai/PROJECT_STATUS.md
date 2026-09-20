@@ -1,8 +1,10 @@
 # Fit Log — Project Status
 
-## עדכון פעיל — 2026-09-20T20:16:16+03:00
-מצב YELLOW. baseline מאומת: `4413f99e`; ענף `feat/fitness-recovery-race-project`. יושמו פרויקט חצאי מרתון, דיווח זמן מדויק, הרחבת פק״ל והיסטוריה מאוחדת. זהו קוד בגרסת עבודה, לא פרסום חי. אין שינוי backend. QA חזותי 390×844 וסנכרון מאומת פתוחים. דוח מלא: [`09_END_OF_RUN_REPORT.md`](../ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project/09_END_OF_RUN_REPORT.md). המידע להלן הוא היסטורי ככל שהוא סותר עדכון זה.
+## עדכון פעיל — 2026-09-20T21:30:00+03:00 (Claude Code)
+מצב **GREEN**. ענף `feat/fitness-recovery-race-project` (PR #1 על `main` `4413f99`) נסקר במלואו; **QA מובייל 390×844 RTL בוצע ב-Chrome אמיתי** ו-12 ליקויים תוקנו (היסטוריית גרסאות שהתנפחה, 404 ברענון של `/running/{id}[/edit]`, קצב נגזר שהוצג כקלט, תאריכי MM-DD, מטרות מגע 36px, קיצורים בכל מסך, "דיווח מהיר" עם תרגילי מכון, סט ריק אחרי הוספה מרוכזת ועוד). שערים: frozen install · typecheck · **364 יחידה + 71 מסכים = 435** · build · lint לקבצים ששונו · `diff --check` · סודות — כולם ירוקים. אין שינוי backend/Auth/RLS/מיגרציות; הפרויקט הסמכותי נשאר `fusrapommtdqwfglkmks`. מצב מיזוג/פרסום: `docs/AI_RUN_CONTEXT_LEDGER.yaml`. דוח מלא: [`09_END_OF_RUN_REPORT.md`](../ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project/09_END_OF_RUN_REPORT.md) (סעיף ההמשך). המידע להלן היסטורי ככל שהוא סותר עדכון זה.
 
+### היסטוריה — 2026-09-20T20:16:16+03:00 (Codex)
+מצב YELLOW: המימוש נבדק מקומית ב-jsdom בלבד; QA חזותי היה פתוח. נסגר בעדכון שמעל.
 
 **Last verified:** 2026-08-01 19:02 Asia/Jerusalem (UTC+03:00)
 **Verified against:** working tree at commit `36b0453`, inspected directly — not carried over from chat history.

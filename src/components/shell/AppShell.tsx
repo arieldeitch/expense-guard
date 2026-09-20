@@ -69,23 +69,32 @@ export function AppShell({
       <SideNav />
       {topBar ? <TopBar {...topBar} /> : null}
       <main role="main" className="mx-auto w-full max-w-3xl pb-28 pt-4 sm:pt-6 lg:pb-8">
-        <nav
-          aria-label="קיצורי דרך"
-          className="mb-4 grid grid-cols-3 gap-2 px-4 text-center text-sm sm:px-6"
-        >
-          <Link
-            to="/running/project"
-            className="rounded-xl border-2 border-border-strong p-2 font-bold"
+        {/* Three named shortcuts on top-level screens only; detail/form screens keep the back link. */}
+        {!topBar?.back ? (
+          <nav
+            aria-label="קיצורי דרך"
+            className="mb-4 grid grid-cols-3 gap-2 px-4 text-center text-sm sm:px-6"
           >
-            חצאי מרתון
-          </Link>
-          <Link to="/history" className="rounded-xl border-2 border-border-strong p-2 font-bold">
-            כל ההיסטוריה
-          </Link>
-          <Link to="/home/new" className="rounded-xl border-2 border-border-strong p-2 font-bold">
-            פק״ל ביתי
-          </Link>
-        </nav>
+            <Link
+              to="/running/project"
+              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
+            >
+              חצאי מרתון
+            </Link>
+            <Link
+              to="/history"
+              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
+            >
+              כל ההיסטוריה
+            </Link>
+            <Link
+              to="/home/quick"
+              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
+            >
+              פק״ל ביתי
+            </Link>
+          </nav>
+        ) : null}
         {children}
       </main>
       <BottomNav />

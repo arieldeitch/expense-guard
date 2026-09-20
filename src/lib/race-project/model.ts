@@ -1,7 +1,14 @@
 import type { RunSession } from "@/lib/runs/types";
 
 export type TrainingKind =
-  "rest" | "easy" | "long" | "intervals" | "hills" | "tempo" | "strides" | "race";
+  | "rest"
+  | "easy"
+  | "long"
+  | "intervals"
+  | "hills"
+  | "tempo"
+  | "strides"
+  | "race";
 export const KIND_LABELS: Record<TrainingKind, string> = {
   rest: "מנוחה",
   easy: "ריצה קלה",
@@ -118,6 +125,15 @@ export function shiftDay(day: string, n: number) {
 }
 export function weekStart(day = dayKey()) {
   return shiftDay(day, -new Date(`${day}T12:00:00Z`).getUTCDay());
+}
+/** "2026-09-21" → "21.9" — Israeli day.month order, never MM-DD. */
+export function formatDayMonth(day: string) {
+  const [, m, d] = day.split("-");
+  return `${Number(d)}.${Number(m)}`;
+}
+/** Sunday–Saturday range label, e.g. "20.9 – 26.9.2026". */
+export function formatWeekRange(start: string) {
+  return `${formatDayMonth(start)} – ${formatDayMonth(shiftDay(start, 6))}.${start.slice(0, 4)}`;
 }
 export function completedRuns(runs: RunSession[]) {
   return runs.filter((r) => !r.deleted_at && r.status === "completed");

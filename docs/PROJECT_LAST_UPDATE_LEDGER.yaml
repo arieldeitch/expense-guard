@@ -1,8 +1,12 @@
 project_id: fitness_app_recovery
 run_id: fitness_app_recovery-20260920-recovery-race-project
-last_project_update_at: "2026-09-20T20:16:16+03:00"
-status: YELLOW
+last_project_update_at: "2026-09-20T21:30:00+03:00"
+status: GREEN
 capsule: docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project
-next_action: "Mobile RTL visual QA; then publish after gates pass"
+continuation: "Claude Code 2026-09-20 evening: PR #1 reviewed, mobile QA 390x844 RTL in real Chrome, 12 defects fixed, 435 tests, all gates green"
+pr: https://github.com/arieldeitch/expense-guard/pull/1
+merge_state: pending
+publish_state: pending
+next_action: "Merge PR #1, publish the existing Lovable project, verify live on mobile"
 control_tower: pending
 chief_of_staff: pending

@@ -35,13 +35,7 @@ interface Props {
   onAdd: (exerciseIds: string[]) => void;
 }
 
-const EQUIPMENT_ORDER: HomeEquipmentFilter[] = [
-  "none",
-  "band",
-  "dumbbells",
-  "pullup_bar",
-  "other",
-];
+const EQUIPMENT_ORDER: HomeEquipmentFilter[] = ["none", "band", "dumbbells", "pullup_bar", "other"];
 
 export function HomeExercisePicker({
   open,
@@ -76,7 +70,11 @@ export function HomeExercisePicker({
   }, [all, recentIds, passes]);
 
   const favorites = useMemo(
-    () => all.filter((e) => e.is_favorite).filter(passes).slice(0, 8),
+    () =>
+      all
+        .filter((e) => e.is_favorite)
+        .filter(passes)
+        .slice(0, 8),
     [all, passes],
   );
 
@@ -272,7 +270,9 @@ function Row({
         aria-hidden
         className={cn(
           "grid size-8 shrink-0 place-items-center rounded-lg border",
-          selected ? "border-home bg-home text-white" : "border-border-strong text-muted-foreground",
+          selected
+            ? "border-home bg-home text-white"
+            : "border-border-strong text-muted-foreground",
         )}
       >
         {selected ? <Check className="size-4" /> : <Plus className="size-4" />}
@@ -282,7 +282,7 @@ function Row({
 }
 
 /** תרגיל מותאם — שם, סוג מדידה וציוד בלבד. ללא מטא-דאטה נוסף. */
-function CustomExerciseForm({
+export function CustomExerciseForm({
   onCancel,
   onCreate,
 }: {
