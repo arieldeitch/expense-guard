@@ -5,16 +5,7 @@
  */
 import { useMemo, useState } from "react";
 import { createFileRoute, useNavigate, Link, notFound } from "@tanstack/react-router";
-import {
-  ArrowLeftRight,
-  Check,
-  ChevronsUpDown,
-  Copy,
-  Plus,
-  Save,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ArrowLeftRight, Check, ChevronsUpDown, Copy, Plus, Save, Trash2, X } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
@@ -28,6 +19,7 @@ import {
   addSet,
   completeHomeSession,
   duplicateSet,
+  listEntrySets,
   markSetCompleted,
   markSetSkipped,
   previousPerformance,
@@ -65,10 +57,7 @@ function SessionPage() {
   if (!session) {
     return (
       <AppShell topBar={{ title: "לא נמצא", back: { to: "/home" } }}>
-        <EmptyState
-          title="האימון לא נמצא"
-          description="ייתכן שנמחק או שהמזהה שגוי."
-        />
+        <EmptyState title="האימון לא נמצא" description="ייתכן שנמחק או שהמזהה שגוי." />
       </AppShell>
     );
   }
@@ -111,6 +100,20 @@ function SessionPage() {
         />
       </div>
 
+      <div className="mb-3 px-4 sm:px-6">
+        <label className="text-sm">
+          עם מי מתאמנים? (לא חובה)
+          <Input
+            aria-label="שותף לאימון"
+            placeholder="למשל תום"
+            value={session.training_partner ?? ""}
+            onChange={(e) => updateHomeSession(id, { training_partner: e.target.value || null })}
+          />
+        </label>
+        <p className="mt-1 text-sm text-muted-foreground">
+          הסטים כאן הם שלך. שם השותף הוא הקשר לאימון ואינו מוסיף ביצועים שלו למדדים שלך.
+        </p>
+      </div>
       {entries.map((entry) => (
         <EntryBlock key={entry.id} entryId={entry.id} sessionId={id} />
       ))}
@@ -223,6 +226,9 @@ function EntryBlock({ entryId, sessionId }: { entryId: string; sessionId: string
       </Tile>
 
       <div className="mt-3 space-y-2">
+        {!["time", "static_hold", "weight_time", "distance"].includes(
+          entry.snapshot.tracking_type,
+        ) && <BulkReps entryId={entryId} />}
         {sets.map((s) => {
           const p = prevBySetNumber.get(s.set_number);
           return (
@@ -401,6 +407,63 @@ function AddExerciseControl({ sessionId }: { sessionId: string }) {
           </div>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function BulkReps({ entryId }: { entryId: string }) {
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
+  return (
+    <div className="rounded-xl border p-3">
+      <label className="text-sm">
+        הוספת כמה סטים בבת אחת
+        <Input
+          aria-label="חזרות לכל סט"
+          placeholder="15, 20, 17"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          dir="ltr"
+        />
+      </label>
+      <p className="my-1 text-xs text-muted-foreground">
+        מספר חזרות לכל סט, מופרד בפסיק או ברווח. הסטים יתווספו לביצוע הקיים.
+      </p>
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
+      <button
+        type="button"
+        className="min-h-11 rounded-xl border px-3 text-sm font-bold"
+        onClick={() => {
+          const parts = text.trim().split(/[,;\s]+/);
+          if (
+            !text.trim() ||
+            parts.length > 50 ||
+            parts.some((p) => !/^\d+$/.test(p) || Number(p) < 1 || Number(p) > 9999)
+          ) {
+            setError("יש להזין חזרות שלמות וחיוביות לכל סט, למשל 15, 20, 17");
+            return;
+          }
+          // Fill untouched placeholder sets first (a new entry starts with one empty set),
+          // then append the rest — no empty "set 1" left behind to skew the summary.
+          const at = new Date().toISOString();
+          const empty = listEntrySets(entryId).filter(
+            (s) => !s.completed && !s.skipped && !s.reps && !s.duration_seconds,
+          );
+          parts.forEach((p, i) => {
+            const patch = { reps: Number(p), completed: true, completed_at: at };
+            if (i < empty.length) updateSet(empty[i].id, patch);
+            else addSet(entryId, patch);
+          });
+          setText("");
+          setError("");
+        }}
+      >
+        הוסף סטים שבוצעו
+      </button>
     </div>
   );
 }

@@ -2,6 +2,7 @@
  * Runs storage — persistent state ב-localStorage. תואם ל-SSR.
  * מפתח יחיד `fitlog:runs:v1`. בעתיד יוחלף ב-Supabase repo באותו contract.
  */
+import type { Race, WeekPlan, CoachSettings } from "@/lib/race-project/model";
 import type { RunSession, RunningRoute } from "./types";
 import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
 
@@ -10,6 +11,9 @@ export const STORAGE_KEY = "fitlog:runs:v1";
 export const CURRENT_OWNER_ID = "single-user";
 
 export interface RunsState {
+  races?: Race[];
+  trainingWeeks?: WeekPlan[];
+  coachSettings?: CoachSettings[];
   runs: RunSession[];
   routes: RunningRoute[];
   /** last-used defaults למילוי מהיר של טופס חדש. */
@@ -55,6 +59,11 @@ function isRecord(v: unknown): v is Record<string, unknown> {
 function coerce(raw: unknown): RunsState {
   if (!isRecord(raw)) return { ...EMPTY_STATE, lastUsed: { ...EMPTY_STATE.lastUsed } };
   return {
+    ...(Array.isArray(raw.races) ? { races: raw.races as Race[] } : {}),
+    ...(Array.isArray(raw.trainingWeeks) ? { trainingWeeks: raw.trainingWeeks as WeekPlan[] } : {}),
+    ...(Array.isArray(raw.coachSettings)
+      ? { coachSettings: raw.coachSettings as CoachSettings[] }
+      : {}),
     runs: Array.isArray(raw.runs) ? (raw.runs as RunSession[]) : [],
     routes: Array.isArray(raw.routes) ? (raw.routes as RunningRoute[]) : [],
     lastUsed: isRecord(raw.lastUsed)

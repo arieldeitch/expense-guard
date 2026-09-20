@@ -14,7 +14,7 @@ const items: NavItem[] = [
   { to: "/", label: "ראשי", icon: <Home aria-hidden />, activeClass: "text-primary" },
   { to: "/running", label: "ריצה", icon: <Footprints aria-hidden />, activeClass: "text-run" },
   { to: "/gym", label: "חדר כושר", icon: <Dumbbell aria-hidden />, activeClass: "text-gym" },
-  { to: "/home", label: "בית", icon: <HeartPulse aria-hidden />, activeClass: "text-home" },
+  { to: "/home", label: "פק״ל בבית", icon: <HeartPulse aria-hidden />, activeClass: "text-home" },
   { to: "/more", label: "עוד", icon: <MoreHorizontal aria-hidden />, activeClass: "text-primary" },
 ];
 

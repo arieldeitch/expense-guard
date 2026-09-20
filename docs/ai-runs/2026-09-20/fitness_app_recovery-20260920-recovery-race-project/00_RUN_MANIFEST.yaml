@@ -1,0 +1,11 @@
+project_id: fitness_app_recovery
+run_id: fitness_app_recovery-20260920-recovery-race-project
+updated_at: "2026-09-20T21:30:00+03:00"
+status: GREEN
+repository: arieldeitch/expense-guard
+baseline: 4413f99e3072f3d341595fa0764229a948dc0001
+branch: feat/fitness-recovery-race-project
+permission_model_changed: false
+published: false
+raw_history_gaps: "Tool transcripts from the compacted earlier Codex segment are not reproduced; no substitute transcript invented. Claude Code continuation (2026-09-20 evening) has full transcript in its session; evidence summarised in 09 and assets/mobile-qa-390x844."
+continuation: "Claude Code 2026-09-20 evening — PR #1 reviewed, mobile QA 390x844 RTL done in real Chrome, 12 defects fixed, all gates green"

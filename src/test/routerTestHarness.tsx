@@ -9,7 +9,7 @@
  */
 import "@testing-library/jest-dom/vitest";
 import { afterEach, beforeEach, expect } from "vitest";
-import { cleanup, render, waitFor, type RenderResult } from "@testing-library/react";
+import { cleanup, render, waitFor, queries, type RenderResult } from "@testing-library/react";
 import { QueryClient } from "@tanstack/react-query";
 import {
   RouterProvider,
@@ -107,7 +107,7 @@ afterEach(() => {
   resetAllStores();
 });
 
-export interface RenderRouteResult extends RenderResult {
+export interface RenderRouteResult extends RenderResult<typeof queries, Document> {
   router: AnyRouter;
   /** ה-pathname הנוכחי לאחר navigation/redirects. */
   currentPath: () => string;
@@ -141,7 +141,7 @@ export async function renderRoute(initialPath: string): Promise<RenderRouteResul
   // מרֵנדר את ההתאמה ההתחלתית + loaders לפני ה-render (memory history).
   await router.load();
 
-  const utils = render(<RouterProvider router={router as AnyRouter} />);
+  const utils = render(<RouterProvider router={router as AnyRouter} />, { container: document });
 
   // ממתין להתייצבות ה-router (idle לניווט/redirect/notFound; error ל-validation errors) —
   // לא "pending". כך ניתן לבדוק גם מסכי שגיאה ולא רק זרימות מוצלחות.

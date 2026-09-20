@@ -1,0 +1,17 @@
+{
+  "project_id": "fitness_app_recovery",
+  "run_id": "fitness_app_recovery-20260920-recovery-race-project",
+  "checked_at": null,
+  "source_ref": "https://docs.google.com/document/d/1E8tR6lqhPuPpGm2WeQ97l7BwQJ2QmGb5Yj_hFn9FWGw/edit",
+  "source_version": "Start Here 1.1; CURRENT_OS_VERSION 1.0.0",
+  "access_state": "read earlier in same logical run; exact read timestamp missing after compaction",
+  "changes_applied": [
+    "Project capsule and pending reporting outbox",
+    "No permission model changes"
+  ],
+  "unresolved_gaps": [
+    "OS version drift",
+    "Control Tower/Chief of Staff receipt unavailable"
+  ],
+  "permission_model_changed": false
+}

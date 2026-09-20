@@ -167,3 +167,10 @@ describe("runs repository", () => {
     expect(agg.avg_pace_s_per_km).toBe(360);
   });
 });
+
+it("refreshes existing derived pace and clears it when the basis is removed", () => {
+  __resetRunsStateForTests();
+  const r = repo.createRun(baseInput());
+  expect(repo.updateRun(r.id, { duration_seconds: 2240 })?.average_pace_s_per_km).toBe(448);
+  expect(repo.updateRun(r.id, { distance_meters: null })?.average_pace_s_per_km).toBeNull();
+});

@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-09-20 (ערב) · סקירת PR #1 · QA מובייל 390×844 RTL · 12 תיקונים · שערים ירוקים (Claude Code)
+
+- **QA דפדפן אמיתי** (Chrome, 390×844, RTL, he-IL, Asia/Jerusalem) על כל 25 סעיפי הקבלה — עבר; ראיות ב-`docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project/assets/mobile-qa-390x844/`.
+- **תיקונים:** revision רק בעדכון מפורש של ההמלצה (`updateWeek({snapshotPrevious})`) · **R-43** — רענון `/running/{id}[/edit]` ללא 404 (loader לא מכריע בשרת; ADR-0039 ברכיב) · קצב/מהירות נגזרים לא נטענים כקלט לטופס ומתעדכנים חי (`fromExisting`) · `toRunPatch()` יחיד לשלושת נתיבי השמירה · תאריכים `d.M` וטווחים `dir="ltr"` (`formatDayMonth`, `formatWeekRange`) · מטרות מגע 44px במסכים החדשים · קיצורי דרך במסכים ראשיים בלבד · `DurationField` עם `placeholder`/`className`; משך וקצב בשורה מלאה · "דיווח מהיר" מציג את הקטלוג הביתי המצומצם + "התרגילים שלי" (אחרי hydration) + תרגיל מותאם inline (`CustomExerciseForm` מיוצא) · הוספת סטים מרוכזת ממלאת סט ריק קיים · פרטי ריצה מציגים קישור לתוכנית/מרוץ · כותרת ל-`/history`.
+- **בדיקות:** `model.test.ts` 7 · `fitnessRecovery.test.tsx` 9 (יציאה מיידית דרך "חזרה", קיצורים במסך הראשי בלבד, קצב נגזר חי בעריכה, מילוי סט ריק, קטלוג מצומצם) · `durationField` 1. `package.json`: `test:router:duration-field`, `test:router:fitness-recovery` נוספו לשרשרת. **364 יחידה / 25 קבצים + 71 מסכים / 12 קבצים = 435.**
+- **שערים:** frozen install ✅ · typecheck ✅ · build ✅ · lint לקבצים ששונו ✅ (הריפו: 390 בעיות baseline, `main`: 395 — R-33) · `git diff --check` ✅ · סודות ✅ · `routeTree.gen.ts` לא נערך (R-30: סדר שונה בלבד, diff ממוין 0).
+- **אין שינוי** backend / Auth / RLS / מיגרציות / תלויות / lockfile. `fitlog:*` לא נמחק ולא נכתב מחדש (מפתחות זהים לפני ואחרי; ריצה ישנה נטענה).
+- ADR: אין חדש (ADR-0041 תקף). סיכונים: R-43, R-44 נוספו.
+
 ## 2026-08-01 (ד) · R-35 נסגר · מיגרציה כפולה הוסרה · אימות חי חלקי (Claude Code)
 
 - **סמכות חדשה:** `fusrapommtdqwfglkmks` הוא הפרויקט הסמכותי, לפי commit **`d479acd`** של Lovable ("Realigned to fusrapommtdqwfglkmks"). **היפוך** מול הסשנים הקודמים; מסמכים שמדברים על `nhnuuooyxamkkqqpcgmk` כסמכותי הם היסטוריה.
@@ -358,3 +367,7 @@
 - `src/routes/goals.tsx`, `goals.$id.tsx`, `goals.new.tsx`: list + filter + create form + detail (progress, projection, manual current, snapshots, versions, lifecycle actions).
 - Tests: 11 new (150 total passing). Typecheck + build clean.
 - Notes: is_primary is single-per-domain; material field changes bump version + write GoalVersion; snapshots append-only; event goals show days-remaining only (no % progress).
+
+
+## 2026-09-20T20:16:16+03:00
+הרחבת פרויקט חצאי המרתון, זמן בדקות/שניות, פק״ל עם סטים משתנים, קטלוג וריאציות, היסטוריה מאוחדת; בדיקות מאגרים ואינטראקציה. טרם פורסם: QA חזותי נדרש. ADR-0041.

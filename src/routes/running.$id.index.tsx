@@ -18,6 +18,9 @@ import {
   useRun,
 } from "@/lib/runs";
 import { useAllLocations, useTreadmill } from "@/lib/catalog";
+import { useHydrated } from "@/lib/storage/useHydrated";
+import { useRaceProject } from "@/lib/race-project/repo";
+import { DAYS, KIND_LABELS, formatDayMonth } from "@/lib/race-project/model";
 import { useActiveRoutes } from "@/lib/runs";
 import { SuuntoForm } from "@/components/suunto/SuuntoForm";
 import { ComparisonTiles } from "@/components/suunto/ComparisonTiles";
@@ -39,6 +42,9 @@ export const Route = createFileRoute("/running/$id/")({
     ],
   }),
   loader: ({ params }) => {
+    // Runs live in localStorage, which the server does not have. Deciding "not found" on the
+    // server turned every refresh of a real run into an HTTP 404 (R-43); the client decides instead.
+    if (typeof window === "undefined") return { id: params.id };
     const run = runsRepo.getRun(params.id);
     if (!run) throw notFound();
     return { id: params.id };
@@ -48,7 +54,9 @@ export const Route = createFileRoute("/running/$id/")({
 
 function RunDetail() {
   const { id } = Route.useParams();
+  const hydrated = useHydrated();
   const run = useRun(id);
+  const project = useRaceProject();
   const navigate = useNavigate();
   const locations = useAllLocations();
   const routes = useActiveRoutes();
@@ -57,7 +65,13 @@ function RunDetail() {
   const hasTrashedSuunto = useHasTrashedSource(id, "suunto");
   const [suuntoOpen, setSuuntoOpen] = useState(false);
 
-  if (!run) return null;
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
+  if (!run) throw notFound();
+  const planDay = project.weeks
+    .flatMap((w) => w.days.map((d, i) => ({ ...d, dayName: DAYS[i] })))
+    .find((d) => d.id === run.training_plan_item_id);
+  const race = project.races.find((r) => r.id === run.race_id);
   const locationName = run.location_id
     ? locations.find((l) => l.id === run.location_id)?.name
     : null;
@@ -101,6 +115,24 @@ function RunDetail() {
           <TileFootnote>{provTag("average_pace_s_per_km")}</TileFootnote>
         </Tile>
       </div>
+
+      {planDay || race ? (
+        <div className="mt-3 px-4 sm:px-6">
+          <Link
+            to="/running/project"
+            className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-border-strong bg-surface px-3 text-sm"
+          >
+            <span>
+              {planDay
+                ? `בתוכנית: ${planDay.dayName} ${formatDayMonth(planDay.date)} · ${KIND_LABELS[planDay.chosen.kind]}`
+                : null}
+              {planDay && race ? " · " : null}
+              {race ? `מרוץ: ${race.name}` : null}
+            </span>
+            <span className="text-muted-foreground">לפרויקט ←</span>
+          </Link>
+        </div>
+      ) : null}
 
       <SectionHeader title="מדדים נוספים" />
       <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-4 sm:px-6">

@@ -3,6 +3,7 @@ import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { RunForm } from "@/components/runs/RunForm";
 import { RUN_TYPE_LABELS, runsRepo, useRun } from "@/lib/runs";
+import { useHydrated } from "@/lib/storage/useHydrated";
 
 export const Route = createFileRoute("/running/$id/edit")({
   head: () => ({
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/running/$id/edit")({
     ],
   }),
   loader: ({ params }) => {
+    // The draft URL (`/running/{id}/edit`) must survive a refresh: no server-side 404 (R-43).
+    if (typeof window === "undefined") return { id: params.id };
     const r = runsRepo.getRun(params.id);
     if (!r) throw notFound();
     return { id: params.id };
@@ -23,8 +26,11 @@ export const Route = createFileRoute("/running/$id/edit")({
 
 function EditRunPage() {
   const { id } = Route.useLoaderData();
+  const hydrated = useHydrated();
   const run = useRun(id);
-  if (!run) return null;
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
+  if (!run) throw notFound();
   return (
     <AppShell
       topBar={{

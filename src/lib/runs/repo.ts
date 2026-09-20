@@ -43,10 +43,10 @@ export function derive(r: RunSessionInput): RunSessionInput {
   let { average_pace_s_per_km, average_speed_kmh } = r;
 
   const isDerivable = (field: RunNumericField, current: number | null) => {
-    if (current != null) return false;
+    if (current != null && prov[field] !== "derived") return false;
     const src = prov[field];
     // don't overwrite manual/device/suunto values; but current==null so nothing to overwrite
-    return src == null || src === "derived";
+    return current == null || src === "derived";
   };
 
   if (r.duration_seconds && r.distance_meters) {
@@ -60,6 +60,10 @@ export function derive(r: RunSessionInput): RunSessionInput {
     }
   }
 
+  if (!r.duration_seconds || !r.distance_meters) {
+    if (prov.average_pace_s_per_km === "derived") average_pace_s_per_km = null;
+    if (prov.average_speed_kmh === "derived") average_speed_kmh = null;
+  }
   return { ...r, average_pace_s_per_km, average_speed_kmh, provenance: prov };
 }
 

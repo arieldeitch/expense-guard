@@ -114,6 +114,7 @@ export interface HomeExerciseEntry {
 }
 
 export interface HomeSession {
+  training_partner?: string | null;
   id: string;
   owner_id: string;
 

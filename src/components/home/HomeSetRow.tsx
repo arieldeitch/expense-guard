@@ -37,15 +37,15 @@ export function HomeSetRow({
   onDuplicate,
   onDelete,
 }: Props) {
-  const showTime =
-    tracking === "time" ||
-    tracking === "static_hold" ||
-    tracking === "weight_time";
+  const showTime = tracking === "time" || tracking === "static_hold" || tracking === "weight_time";
   const showReps =
     tracking !== "time" &&
     tracking !== "static_hold" &&
-    tracking !== "distance";
-  const showAddedWeight = tracking === "bodyweight_plus_weight";
+    tracking !== "distance" &&
+    tracking !== "weight_time";
+  const showAddedWeight = ["bodyweight_plus_weight", "weight_reps", "weight_time"].includes(
+    tracking,
+  );
   const showAssistance = tracking === "assisted_reps";
   const showSide = unilateral || tracking === "left_right_reps";
 

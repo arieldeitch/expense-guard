@@ -1,0 +1,395 @@
+===== p1-home-project
+[01-home] url=/ dir=rtl overflowX=false (390/390) wide=0 small=3
+   SMALL: a 71x16 "הגדרת יעד" | a 71x16 "הגדרת יעד" | a 71x16 "הגדרת יעד"
+[01-home-full] url=/ dir=rtl overflowX=false (390/390) wide=0 small=3
+   SMALL: a 71x16 "הגדרת יעד" | a 71x16 "הגדרת יעד" | a 71x16 "הגדרת יעד"
+shortcuts: [ 'חצאי מרתון', 'כל ההיסטוריה', 'פק״ל ביתי' ]
+[02-project-top] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+[02-project-full] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+המלצה → ההתאמות שלך → ביצוע ביומן → השבוע הבא
+1 הושלמו · יעד 5–10
+באר שבע נרשם כהושלם לפי הדיווח שלך. זמן ותוצאה לא הומצאו.
+יומן הריצות
+דיווח ריצה
+המרוצים שלי · עריכת תאריכים והוספת מרוץ
+העדפות ונתוני בסיס להמלצה
+הזן מה שאתה כבר עושה בנוחות, לא יעד חדש. אם יש לפחות שש ריצות בארבעת השבועות הקודמים, ההמלצה תשתמש ביומן.
+דקות ריצה בשבוע רגיל
+ריצה ארוכה רגילה — דקות
+יום לריצת נפח
+ראשון
+שני
+שלישי
+רביעי
+חמישי
+שישי
+שבת
+אימון איכות מועדף
+ריצה קלה
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+תחושה השבוע
+רגילה
+עייפות
+כאב
+ימים שנוחים לך לריצה
+ראשון
+שני
+שלישי
+רביעי
+חמישי
+שישי
+שבת
+שמור העדפות
+התוכנית השבועית
+קודם
+20.9 – 26.9.2026
+הבא
+מלווה אימונים מבוסס כללים, לא שירות AI חיצוני. מציע תוכנית בפתיחה הראשונה של השבוע; אינו פועל כשהאפליקציה סגורה. ההמלצה היא בסיס לשינוי שלך.
+מקור לעקרונות אימון כלליים: B.A.A.
+חסרים נפח שבועי וריצה ארוכה רגילה. מלא אותם בהעדפות כדי לקבל המלצה מספרית. אין הגדלה אוטומטית של נפח האימונים. למרוצים ללא תאריך מדויק אין התאמת עומס לפי תאריך. השלם תאריכים לפני הסתמכות על ההמלצה.
+טיוטת המלצה — ניתנת לעריכה
+אשר את הבחירות שלי
+עדכן המלצה מהנתונים
+דחה המלצה
+בפועל השבוע: 0 ריצות · 0.00 ק״מ · 0:00
+ראשון · 20.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך להשלים אימון שהוחמץ.
+הבחירה שלי
+מנוחה
+ריצה קלה
+ריצת נפח
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+מרוץ
+משך בדקות
+איפה
+הליכון בקיבוץ
+בחוץ
+התאמה אישית
+דווח ביצוע
+דלג על היום
+שני · 21.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך להשלים אימון שהוחמץ.
+הבחירה שלי
+מנוחה
+ריצה קלה
+ריצת נפח
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+מרוץ
+משך בדקות
+איפה
+הליכון בקיבוץ
+בחוץ
+התאמה אישית
+דווח ביצוע
+דלג על היום
+שלישי · 22.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך להשלים אימון שהוחמץ.
+הבחירה שלי
+מנוחה
+ריצה קלה
+ריצת נפח
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+מרוץ
+משך בדקות
+איפה
+הליכון בקיבוץ
+בחוץ
+התאמה אישית
+דווח ביצוע
+דלג על היום
+רביעי · 23.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך להשלים אימון שהוחמץ.
+הבחירה שלי
+מנוחה
+ריצה קלה
+ריצת נפח
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+מרוץ
+משך בדקות
+איפה
+הליכון בקיבוץ
+בחוץ
+התאמה אישית
+דווח ביצוע
+דלג על היום
+חמישי · 24.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך להשלים אימון שהוחמץ.
+הבחירה שלי
+מנוחה
+ריצה קלה
+ריצת נפח
+אינטרוולים
+עליות
+קצב מתמשך
+האצות קצרות
+מרוץ
+משך בדקות
+איפה
+הליכון בקיבוץ
+בחוץ
+התאמה אישית
+דווח ביצוע
+דלג על היום
+שישי · 25.9
+טרם בוצע
+המלצה מקורית: מנוחה
+מנוחה או תנועה קלה לפי ההרגשה; אין צורך לה
+runs state keys: [ 'runs', 'routes', 'lastUsed', 'trainingWeeks' ]
+PAGE ERRORS: none
+===== p2-project-flow
+[03-races-open] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+race forms: 3
+race[1] name: מרוץ הסרגל
+races after save: [
+  'חצי מרתון באר שבע:null:completed',
+  'מרוץ הסרגל:2026-10-02:planned',
+  'מרוץ הגור:null:planned'
+]
+[04-race-saved] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+coachSettings: [{"id":"half-marathons-2026","year":2026,"target_min":5,"target_max":10,"weekly_minutes":180,"longest_minutes":80,"running_days":[1,3,6],"long_day":6,"quality":"intervals","surface":"treadmill","recovery":"normal"}]
+[05-settings-saved] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+week before regen: status pending minutes [
+  null, null,
+  null, null,
+  null, null,
+  null
+]
+DIALOG(confirm): ליצור המלצה חדשה? הגרסה הקודמת תישמר בהיסטוריית השינויים.
+week after regen: status pending revisions 1 days [
+  'rest:null',
+  'easy:30',
+  'rest:null',
+  'easy:30',
+  'rest:null',
+  'rest:null',
+  'easy:48'
+]
+rationale: מבוסס על נתוני הבסיס שהזנת; ההיסטוריה עדיין חלקית. אין הגדלה אוטומטית של נפח האימונים. השבוע מופחת עקב עייפות או קרבה למרוץ; ללא אימון איכות. למרוצים ללא תאריך מדויק אין התאמת עומס לפי תאריך. השלם תאריכים לפני הסתמכות על ההמלצה.
+[06-regenerated] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+[06-regenerated-full] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+day selects: 7
+monday chosen: {"kind":"hills","minutes":35,"surface":"treadmill","note":"על ההליכון בקיבוץ, שיפוע 3"} recommended: {"kind":"easy","minutes":30,"surface":"treadmill","note":"קצב שיחה נוח. אפשר על ההליכון בקיבוץ. המהירות לפי ההרגשה, לא יעד מחייב."} revisions 1
+[07-edited-day] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+after accept: status accepted revisions 1 monday chosen minutes 35
+[08-accepted] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+after reload: status accepted monday chosen {"kind":"hills","minutes":35,"surface":"treadmill","note":"על ההליכון בקיבוץ, שיפוע 3"} weeks [ '2026-09-20' ]
+after reject: status rejected revisions 1
+history summary: גרסאות קודמות של ההמלצה · 1
+[09-revisions] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+weeks after next: [ '2026-09-20', '2026-09-27' ]
+[10-next-week] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+weeks after prev x2: [ '2026-09-20', '2026-09-27', '2026-09-13' ]
+[11-prev-week] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+range text: 20.9 – 26.9.2026
+DIALOG(confirm): ליצור המלצה חדשה? הגרסה הקודמת תישמר בהיסטוריית השינויים.
+pain week: rest,rest,rest,rest,rest,rest,rest | revisions 2
+pain rationale: מבוסס על נתוני הבסיס שהזנת; ההיסטוריה עדיין חלקית. אין הגדלה אוטומטית של נפח האימונים. דיווחת על כאב: אין המלצת ריצה; חזור לפעילות לאחר בירור מתאים. למרוצים ללא תאריך מדויק אין התאמת עומס לפי תאריך. השלם תאריכים לפני הסתמכות על ההמלצה.
+DIALOG(confirm): ליצור המלצה חדשה? הגרסה הקודמת תישמר בהיסטוריית השינויים.
+normal again: rest:null,easy:30,rest:null,easy:30,rest:null,rest:null,easy:48 | revisions 3
+legacy run intact: 1 ריצה ישנה מלפני השדרוג | marker: untouched
+back → http://localhost:8080/running
+[12-back-to-running] url=/running dir=rtl overflowX=false (390/390) wide=0 small=0
+PAGE ERRORS: none
+===== p3-run-report
+url: http://localhost:8080/running/new/treadmill?plan=2026-09-20-1
+url after draft: http://localhost:8080/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit
+[13-runform-top] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit dir=rtl overflowX=false (390/390) wide=0 small=16
+   SMALL: input 156x36 "" | input 156x36 "מרחק בקילומטרים" | input 158x36 "משך הריצה בדקות" | input 158x36 "משך הריצה בשניות" | input 158x36 "קצב לק״מ בדקות" | input 158x36 "קצב לק״מ בשניות" | input 156x36 "מהירות ממוצעת בקמש" | input 156x36 "—" | input 156x36 "—" | input 156x36 "—" | button 324x36 "— ללא מקום —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים" | button 216x36 "שמור וסיים" | button 50x36 "שכפל" | button 58x36 "מחק"
+[13-runform-full] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit dir=rtl overflowX=false (390/390) wide=0 small=16
+   SMALL: input 156x36 "" | input 156x36 "מרחק בקילומטרים" | input 158x36 "משך הריצה בדקות" | input 158x36 "משך הריצה בשניות" | input 158x36 "קצב לק״מ בדקות" | input 158x36 "קצב לק״מ בשניות" | input 156x36 "מהירות ממוצעת בקמש" | input 156x36 "—" | input 156x36 "—" | input 156x36 "—" | button 324x36 "— ללא מקום —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים" | button 216x36 "שמור וסיים" | button 50x36 "שכפל" | button 58x36 "מחק"
+plan link value: 2026-09-20-1
+[14-runform-filled-before-speed] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit dir=rtl overflowX=false (390/390) wide=0 small=16
+   SMALL: input 156x36 "" | input 156x36 "מרחק בקילומטרים" | input 158x36 "משך הריצה בדקות" | input 158x36 "משך הריצה בשניות" | input 158x36 "קצב לק״מ בדקות" | input 158x36 "קצב לק״מ בשניות" | input 156x36 "מהירות ממוצעת בקמש" | input 156x36 "—" | input 156x36 "—" | input 156x36 "—" | button 324x36 "— ללא מקום —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים" | button 216x36 "שמור וסיים" | button 50x36 "שכפל" | button 58x36 "מחק"
+derived footnote: קצב מחושב: 5:58 /ק"מ (מבוסס משך+מרחק)
+saved run: {
+  status: 'completed',
+  duration_seconds: 2240,
+  distance_meters: 6250,
+  average_speed_kmh: 10.4,
+  average_pace_s_per_km: 358.4,
+  provenance: {
+    duration_seconds: 'manual',
+    distance_meters: 'manual',
+    average_speed_kmh: 'manual',
+    average_pace_s_per_km: 'derived'
+  },
+  plan: '2026-09-20-1'
+}
+[15-run-detail] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50 dir=rtl overflowX=false (390/390) wide=0 small=5
+   SMALL: button 85x32 "הוספה" | a 175x36 "עריכה" | button 175x36 "שכפול" | button 175x36 "ארכוב" | button 175x36 "מחיקה"
+[15-run-detail-full] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50 dir=rtl overflowX=false (390/390) wide=0 small=5
+   SMALL: button 85x32 "הוספה" | a 175x36 "עריכה" | button 175x36 "שכפול" | button 175x36 "ארכוב" | button 175x36 "מחיקה"
+linked run link: פתח ריצה · 6.25 ק״מ · 37:20
+actual line: בפועל השבוע: 1 ריצות · 6.25 ק״מ · 37:20
+[16-project-with-actual] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+[17-history] url=/history dir=rtl overflowX=false (390/390) wide=0 small=0
+[17-history-full] url=/history dir=rtl overflowX=false (390/390) wide=0 small=0
+history text: כל האימונים במקום אחד
+ריצות, פק״ל בבית ואימוני מכון — כולל טיוטות שאפשר להמשיך
+חיפוש לפי שם, תאריך או הערה
+הכול
+ריצה
+מכון
+2 אימונים
+ריצה על הליכון
+20.9.2026, 21:18:00 · 37:20
+הושלם
+פתח ריצה
+ריצה על הליכון
+17.9.2026, 21:18:37 · 30:00
+הושלם
+פתח ריצה
+PAGE ERRORS: none
+===== p4-persistence
+A) draft after immediate leave: {
+  duration_seconds: 2527,
+  distance_meters: 7500,
+  pace: 336.93333333333334,
+  prov: {
+    duration_seconds: 'manual',
+    distance_meters: 'manual',
+    average_pace_s_per_km: 'derived',
+    average_speed_kmh: 'derived'
+  }
+}
+A) form shows minutes/seconds/distance: 42 7 7.5
+A) derived footnote: קצב מחושב: 5:37 /ק"מ (מבוסס משך+מרחק)
+B) manual pace kept: 330 manual duration 2707
+B) after clearing pace: 360.93333333333334 derived
+B) footnote: קצב מחושב: 6:01 /ק"מ (מבוסס משך+מרחק)
+C) after reload minutes/seconds/distance: 45 7 7.5
+C) pace inputs:
+C) footnote: קצב מחושב: 6:01 /ק"מ (מבוסס משך+מרחק)
+D) after removing distance: pace null speed null prov { duration_seconds: 'manual', distance_meters: 'manual' }
+D) footnote: none
+E) edit form pace inputs (expected empty when derived):  /  footnote: קצב מחושב: 5:58 /ק"מ (מבוסס משך+מרחק)
+[18-edit-existing-run] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit dir=rtl overflowX=false (390/390) wide=0 small=16
+   SMALL: input 156x36 "" | input 156x36 "מרחק בקילומטרים" | input 158x36 "משך הריצה בדקות" | input 158x36 "משך הריצה בשניות" | input 158x36 "קצב לק״מ בדקות" | input 158x36 "קצב לק״מ בשניות" | input 156x36 "מהירות ממוצעת בקמש" | input 156x36 "—" | input 156x36 "—" | input 156x36 "—" | button 324x36 "— ללא מקום —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים" | button 216x36 "שמור וסיים" | button 50x36 "שכפל" | button 58x36 "מחק"
+E) after duration→40:20: pace 387.2 (expected 388) speed 10.4 prov {
+  duration_seconds: 'manual',
+  distance_meters: 'manual',
+  average_speed_kmh: 'manual',
+  average_pace_s_per_km: 'derived'
+}
+E) footnote: קצב מחושב: 6:27 /ק"מ (מבוסס משך+מרחק)
+F) history count line: אימונים אישיים
+PAGE ERRORS: none
+===== p5-home
+[19-home-quick] url=/home/quick dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 358x36 "חיפוש תרגיל"
+[19-home-quick-full] url=/home/quick dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 358x36 "חיפוש תרגיל"
+quick headers: [
+  'חזה ודחיפה',
+  'גב ומשיכה',
+  'רגליים וישבן',
+  'ליבה',
+  'כתפיים וידיים',
+  'גוף מלא ותנועה'
+]
+[22-session-pushups-bulk] url=/home/sessions/bb2cfed2-306b-4dc7-a866-8730cb6f7dd0 dir=rtl overflowX=false (390/390) wide=0 small=10
+   SMALL: button 70x36 "סיום אימון" | input 358x36 "שם האימון" | input 358x36 "שותף לאימון" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 25x44 "הפחת סט 2 חזרות" | button 25x44 "הוסף סט 2 חזרות" | button 25x44 "הפחת סט 3 חזרות" | button 25x44 "הוסף סט 3 חזרות"
+after push-ups bulk: [{"tracking":"bodyweight_reps","sets":["19r/-s/-kg✓","48r/-s/-kg✓","32r/-s/-kg✓"]}]
+after variants: [{"tracking":"bodyweight_reps","sets":["19r/-s/-kg✓","48r/-s/-kg✓","32r/-s/-kg✓"]},{"tracking":"bodyweight_reps","sets":["12r/-s/-kg✓","10r/-s/-kg✓"]},{"tracking":"bodyweight_reps","sets":["15r/-s/-kg✓","20r/-s/-kg✓","17r/-s/-kg✓"]},{"tracking":"bodyweight_reps","sets":["12r/-s/-kg✓"]},{"tracking":"bodyweight_reps","sets":["14r/-s/-kg✓"]},{"tracking":"time","sets":["-r/-s/-kg"]}]
+rope time control: 1 DIV
+[24-session-variants-full] url=/home/sessions/bb2cfed2-306b-4dc7-a866-8730cb6f7dd0 dir=rtl overflowX=false (390/390) wide=0 small=20
+   SMALL: button 70x36 "סיום אימון" | input 358x36 "שם האימון" | input 358x36 "שותף לאימון" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 25x44 "הפחת סט 2 חזרות" | button 25x44 "הוסף סט 2 חזרות" | button 25x44 "הפחת סט 3 חזרות" | button 25x44 "הוסף סט 3 חזרות" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 25x44 "הפחת סט 2 חזרות" | button 25x44 "הוסף סט 2 חזרות" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 25x44 "הפחת סט 2 חזרות" | button 25x44 "הוסף סט 2 חזרות"
+partner note present: true | partner value: תום
+[27-custom-exercise-form] url=/home/quick dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: input 358x36 "חיפוש תרגיל" | input 332x36 "שם התרגיל"
+[28-custom-session] url=/home/sessions/e31a8e79-2502-4536-8fb5-5de8d309fc60 dir=rtl overflowX=false (390/390) wide=0 small=8
+   SMALL: button 70x36 "סיום אימון" | input 358x36 "שם האימון" | input 358x36 "שותף לאימון" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 26x40 "הפחת משקל נוסף" | button 26x40 "הוסף משקל נוסף"
+custom reps control: INPUT text
+weight input count: 1
+custom session: [{"tracking":"weight_reps","sets":["10r/-s/2.5kg✓"]}]
+[29-custom-session-filled] url=/home/sessions/e31a8e79-2502-4536-8fb5-5de8d309fc60 dir=rtl overflowX=false (390/390) wide=0 small=8
+   SMALL: button 70x36 "סיום אימון" | input 358x36 "שם האימון" | input 358x36 "שותף לאימון" | input 332x36 "חזרות לכל סט" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 26x40 "הפחת משקל נוסף" | button 26x40 "הוסף משקל נוסף"
+custom exercise: { tracking: 'weight_reps', eq: [ 'dumbbells' ], system: false }
+quick headers now: [
+  'אחרונים',
+  'התרגילים שלי',
+  'חזה ודחיפה',
+  'גב ומשיכה',
+  'רגליים וישבן',
+  'ליבה',
+  'כתפיים וידיים',
+  'גוף מלא ותנועה'
+]
+PAGE ERRORS: none
+===== p6-backup-nav
+fitlog keys: [
+  'fitlog:exercises:v1',
+  'fitlog:home:v1',
+  'fitlog:migration-snapshot',
+  'fitlog:qa-marker',
+  'fitlog:runs:v1',
+  'fitlog:storage-meta'
+]
+[30-backup] url=/backup dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 1x1 "בחר קובץ גיבוי"
+backup controls: [ 'הורד גיבוי' ]
+backup top keys: [
+  'format',
+  'schema_version',
+  'exported_at',
+  'app_version',
+  'entities',
+  'metadata'
+] modules keys: undefined {"format":"workout-data-system","schema_version":"1.0.0","exported_at":"2026-09-20T18:19:53.940Z","app_version":"1.0.0","entities":{"catalog":{"locations":[],"treadmills":[],"equipment":[]},"exercises":{"muscle_groups":[{"id":"mg_chest","owner_id":"single-user","code":"chest","name_he":"חזה","name_e
+backup runs keys: [
+  'races',
+  'trainingWeeks',
+  'coachSettings',
+  'runs',
+  'routes',
+  'lastUsed'
+] | races: 3 weeks: 3 coach: 1 runs: 3
+linked runs in backup: [ '2026-09-20-1:2240' ]
+home sessions with partner: [ 'תום' ]
+BACK /running/project → /running
+BACK /history → /
+BACK /home/quick → /home
+BACK /running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50 → /running/history
+BACK /running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50/edit → /running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50
+BACK /home/sessions/e31a8e79-2502-4536-8fb5-5de8d309fc60 → /home
+BACK /more: no back link
+plan line: בתוכנית: שני 21.9 · ריצה קלהלפרויקט ←
+[31-run-detail-plan-link] url=/running/3a8b9ba4-25f4-420c-99c9-6db8675f9a50 dir=rtl overflowX=false (390/390) wide=0 small=5
+   SMALL: button 85x32 "הוספה" | a 175x36 "עריכה" | button 175x36 "שכפול" | button 175x36 "ארכוב" | button 175x36 "מחיקה"
+after hard reload title: פרטי ריצה · Fit Log | 404? false
+keys unchanged: true | marker: untouched
+PAGE ERRORS: none
+===== p7-restore
+[32-restore-preview] url=/backup dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 1x1 "בחר קובץ גיבוי"
+preview text: נתונים מקומיים | גיבוי ושחזור | הנתונים נשמרים בדפדפן הזה בלבד. ייצוא קובץ הוא הדרך היחידה לשמור עותק מחוץ למכשיר. | מה יגובה | תוכניות ואימוני בית | 21 | אימוני כוח | 0 | תרגילים | 67 | ריצות | 2 | יעדים | 0 | תבניות | 0 | סה״כ 90 רשומות · גרסת schema 1.0.0 | הורד גיבוי | שחזור מקובץ | בחר קובץ גיבוי | מה ישתנה | רשומות חדשות שיתווספו | 8 | רשומות זהות (ללא שינוי) | 90 | התנגשויות | 0 | לפני כל שחזור נשמר snapshot של המצב הנוכחי. גרסת schema: 1.0.0. | הוסף חדשים בלבד (שמור על המכשיר)
+after import text: נתונים מקומיים | גיבוי ושחזור | הנתונים נשמרים בדפדפן הזה בלבד. ייצוא קובץ הוא הדרך היחידה לשמור עותק מחוץ למכשיר. | מה יגובה | תוכניות ואימוני בית | 21 | אימוני כוח | 0 | תרגילים | 67 | ריצות | 10 | יעדים | 0 | תבניות | 0 | סה״כ 98 רשומות · גרסת schema 1.0.0 | הורד גיבוי | שחזור מקובץ | בחר קובץ גיבוי | השחזור הושלם | 8 רשומות יובאו. נשמר snapshot של המצב הקודם.
+restored: races 3 weeks [ '2026-09-27:rev0', '2026-09-13:rev0', '2026-09-20:rev3' ] coach 180 linked runs 1
+[33-restore-done] url=/backup dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 1x1 "בחר קובץ גיבוי"
+PAGE ERRORS: none

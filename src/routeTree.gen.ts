@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as TrashRouteImport } from './routes/trash'
 import { Route as BackupIndexRouteImport } from './routes/backup.index'
@@ -26,6 +27,7 @@ import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsIdRouteImport } from './routes/locations.$id'
 import { Route as RunningIndexRouteImport } from './routes/running.index'
 import { Route as RunningHistoryRouteImport } from './routes/running.history'
+import { Route as RunningProjectRouteImport } from './routes/running.project'
 import { Route as RunningRoutesRouteImport } from './routes/running.routes'
 import { Route as TemplatesIndexRouteImport } from './routes/templates.index'
 import { Route as TreadmillsIdRouteImport } from './routes/treadmills.$id'
@@ -67,6 +69,11 @@ import { Route as RunningGoalsIdEditRouteImport } from './routes/running.goals.$
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -147,6 +154,11 @@ const RunningIndexRoute = RunningIndexRouteImport.update({
 const RunningHistoryRoute = RunningHistoryRouteImport.update({
   id: '/running/history',
   path: '/running/history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RunningProjectRoute = RunningProjectRouteImport.update({
+  id: '/running/project',
+  path: '/running/project',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunningRoutesRoute = RunningRoutesRouteImport.update({
@@ -337,6 +349,7 @@ const RunningGoalsIdEditRoute = RunningGoalsIdEditRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
@@ -346,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
   '/running/history': typeof RunningHistoryRoute
+  '/running/project': typeof RunningProjectRoute
   '/running/routes': typeof RunningRoutesRoute
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/backup/': typeof BackupIndexRoute
@@ -393,6 +407,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
@@ -402,6 +417,7 @@ export interface FileRoutesByTo {
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
   '/running/history': typeof RunningHistoryRoute
+  '/running/project': typeof RunningProjectRoute
   '/running/routes': typeof RunningRoutesRoute
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/backup': typeof BackupIndexRoute
@@ -450,6 +466,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
@@ -459,6 +476,7 @@ export interface FileRoutesById {
   '/home/new': typeof HomeNewRoute
   '/locations/$id': typeof LocationsIdRoute
   '/running/history': typeof RunningHistoryRoute
+  '/running/project': typeof RunningProjectRoute
   '/running/routes': typeof RunningRoutesRoute
   '/treadmills/$id': typeof TreadmillsIdRoute
   '/backup/': typeof BackupIndexRoute
@@ -508,6 +526,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/history'
     | '/more'
     | '/trash'
     | '/goals/$id'
@@ -517,6 +536,7 @@ export interface FileRouteTypes {
     | '/home/new'
     | '/locations/$id'
     | '/running/history'
+    | '/running/project'
     | '/running/routes'
     | '/treadmills/$id'
     | '/backup/'
@@ -564,6 +584,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/history'
     | '/more'
     | '/trash'
     | '/goals/$id'
@@ -573,6 +594,7 @@ export interface FileRouteTypes {
     | '/home/new'
     | '/locations/$id'
     | '/running/history'
+    | '/running/project'
     | '/running/routes'
     | '/treadmills/$id'
     | '/backup'
@@ -620,6 +642,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/history'
     | '/more'
     | '/trash'
     | '/goals/$id'
@@ -629,6 +652,7 @@ export interface FileRouteTypes {
     | '/home/new'
     | '/locations/$id'
     | '/running/history'
+    | '/running/project'
     | '/running/routes'
     | '/treadmills/$id'
     | '/backup/'
@@ -677,6 +701,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HistoryRoute: typeof HistoryRoute
   MoreRoute: typeof MoreRoute
   TrashRoute: typeof TrashRoute
   GoalsIdRoute: typeof GoalsIdRoute
@@ -686,6 +711,7 @@ export interface RootRouteChildren {
   HomeNewRoute: typeof HomeNewRoute
   LocationsIdRoute: typeof LocationsIdRoute
   RunningHistoryRoute: typeof RunningHistoryRoute
+  RunningProjectRoute: typeof RunningProjectRoute
   RunningRoutesRoute: typeof RunningRoutesRoute
   TreadmillsIdRoute: typeof TreadmillsIdRoute
   BackupIndexRoute: typeof BackupIndexRoute
@@ -739,6 +765,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -851,6 +884,13 @@ declare module '@tanstack/react-router' {
       path: '/running/history'
       fullPath: '/running/history'
       preLoaderRoute: typeof RunningHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/running/project': {
+      id: '/running/project'
+      path: '/running/project'
+      fullPath: '/running/project'
+      preLoaderRoute: typeof RunningProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/running/routes': {
@@ -1117,6 +1157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HistoryRoute: HistoryRoute,
   MoreRoute: MoreRoute,
   TrashRoute: TrashRoute,
   GoalsIdRoute: GoalsIdRoute,
@@ -1126,6 +1167,7 @@ const rootRouteChildren: RootRouteChildren = {
   HomeNewRoute: HomeNewRoute,
   LocationsIdRoute: LocationsIdRoute,
   RunningHistoryRoute: RunningHistoryRoute,
+  RunningProjectRoute: RunningProjectRoute,
   RunningRoutesRoute: RunningRoutesRoute,
   TreadmillsIdRoute: TreadmillsIdRoute,
   BackupIndexRoute: BackupIndexRoute,
@@ -1174,3 +1216,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

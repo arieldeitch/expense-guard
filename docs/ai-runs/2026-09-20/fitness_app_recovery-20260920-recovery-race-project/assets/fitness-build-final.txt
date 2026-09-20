@@ -1,0 +1,1049 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> build
+> vite build
+
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+vite v8.3.0 building client environment for production...
+transforming...
+✓ 2330 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/styles-CND5XsQ_.css                    100.56 kB │ gzip:  16.39 kB
+.output/public/assets/home.history._id-DJ7LAi8J.js             0.03 kB │ gzip:   0.05 kB
+.output/public/assets/home.new-DJ7LAi8J.js                     0.03 kB │ gzip:   0.05 kB
+.output/public/assets/exercises._id.index-DN2jR56w.js          0.08 kB │ gzip:   0.10 kB
+.output/public/assets/minus-CEB4WI_n.js                        0.11 kB │ gzip:   0.13 kB
+.output/public/assets/not-found-i5RsCZif.js                    0.11 kB │ gzip:   0.11 kB
+.output/public/assets/check-DBb-5BMN.js                        0.12 kB │ gzip:   0.14 kB
+.output/public/assets/goalDomainConfig-DloTNl_y.js             0.12 kB │ gzip:   0.13 kB
+.output/public/assets/chevron-down-BdeimqYR.js                 0.12 kB │ gzip:   0.14 kB
+.output/public/assets/chevron-up-B57XHDSk.js                   0.12 kB │ gzip:   0.14 kB
+.output/public/assets/chevron-left-CbBsBAHc.js                 0.13 kB │ gzip:   0.14 kB
+.output/public/assets/plus-SbkE_4Qq.js                         0.15 kB │ gzip:   0.15 kB
+.output/public/assets/x-DG9l2qws.js                            0.15 kB │ gzip:   0.15 kB
+.output/public/assets/arrow-right-DXeYlqww.js                  0.16 kB │ gzip:   0.16 kB
+.output/public/assets/useHydrated-pz-R03QM.js                  0.17 kB │ gzip:   0.16 kB
+.output/public/assets/chevrons-up-down-CxUaUYsY.js             0.17 kB │ gzip:   0.16 kB
+.output/public/assets/search-WubxEiTS.js                       0.17 kB │ gzip:   0.17 kB
+.output/public/assets/gauge-ngHx_UeT.js                        0.17 kB │ gzip:   0.16 kB
+.output/public/assets/circle-check-DW7iYQLg.js                 0.17 kB │ gzip:   0.16 kB
+.output/public/assets/play-Xq52XAyd.js                         0.19 kB │ gzip:   0.17 kB
+.output/public/assets/rotate-ccw-BTInGlyN.js                   0.20 kB │ gzip:   0.18 kB
+.output/public/assets/undo-2-Dm1378wJ.js                       0.20 kB │ gzip:   0.18 kB
+.output/public/assets/pause-CE8WLwa9.js                        0.21 kB │ gzip:   0.16 kB
+.output/public/assets/target-Di7kBdzD.js                       0.22 kB │ gzip:   0.16 kB
+.output/public/assets/download-Dm6r-n7a.js                     0.23 kB │ gzip:   0.19 kB
+.output/public/assets/pen-CqwsZFjZ.js                          0.23 kB │ gzip:   0.20 kB
+.output/public/assets/copy-BXK2uuoX.js                         0.23 kB │ gzip:   0.20 kB
+.output/public/assets/history-BSsoTWQW.js                      0.23 kB │ gzip:   0.19 kB
+.output/public/assets/timer-CtQOL9K2.js                        0.23 kB │ gzip:   0.18 kB
+.output/public/assets/arrow-left-right-CGcS60ps.js             0.24 kB │ gzip:   0.19 kB
+.output/public/assets/settings-2-CxxspbNQ.js                   0.25 kB │ gzip:   0.19 kB
+.output/public/assets/archive-DJWvUNDq.js                      0.25 kB │ gzip:   0.21 kB
+.output/public/assets/funnel-CA8pJan-.js                       0.25 kB │ gzip:   0.21 kB
+.output/public/assets/map-pin-wKmJYVXZ.js                      0.25 kB │ gzip:   0.22 kB
+.output/public/assets/arrow-up-Bz0XyHW2.js                     0.27 kB │ gzip:   0.20 kB
+.output/public/assets/pencil-C2qErZxK.js                       0.27 kB │ gzip:   0.22 kB
+.output/public/assets/bolt-cyTxvnP2.js                         0.27 kB │ gzip:   0.21 kB
+.output/public/assets/book-open-BGUWYZRZ.js                    0.27 kB │ gzip:   0.20 kB
+.output/public/assets/layout-template-ByqSyxxD.js              0.28 kB │ gzip:   0.19 kB
+.output/public/assets/save-zykVNZGF.js                         0.32 kB │ gzip:   0.22 kB
+.output/public/assets/trash-2-B28GDhsE.js                      0.32 kB │ gzip:   0.21 kB
+.output/public/assets/archive-restore-dlG0w6G0.js              0.34 kB │ gzip:   0.24 kB
+.output/public/assets/layers-CmcucrRs.js                       0.42 kB │ gzip:   0.24 kB
+.output/public/assets/star-DPLp-nlH.js                         0.47 kB │ gzip:   0.29 kB
+.output/public/assets/gym.goals._id.index-BrC0qdUF.js          0.49 kB │ gzip:   0.35 kB
+.output/public/assets/home.goals._id.index-U8A_SrFu.js         0.50 kB │ gzip:   0.35 kB
+.output/public/assets/home.goals.index-L6L9fmiX.js             0.51 kB │ gzip:   0.36 kB
+.output/public/assets/running.goals._id.index-C4hlh0i_.js      0.51 kB │ gzip:   0.36 kB
+.output/public/assets/hooks-DOtBWZk9.js                        0.51 kB │ gzip:   0.29 kB
+.output/public/assets/star-off-LWV04flh.js                     0.52 kB │ gzip:   0.32 kB
+.output/public/assets/running.goals.index-BBhn8exs.js          0.52 kB │ gzip:   0.36 kB
+.output/public/assets/gym.goals.index-BdIQKNzI.js              0.52 kB │ gzip:   0.36 kB
+.output/public/assets/home.quick._exerciseId-CEMDwGc_.js       0.59 kB │ gzip:   0.43 kB
+.output/public/assets/goals._id-DdKY7y9K.js                    0.60 kB │ gzip:   0.41 kB
+.output/public/assets/input-CoBy4ktg.js                        0.62 kB │ gzip:   0.39 kB
+.output/public/assets/goals.new-9_6Lt9I3.js                    0.63 kB │ gzip:   0.43 kB
+.output/public/assets/running.new._type-8MVf5yTP.js            0.63 kB │ gzip:   0.45 kB
+.output/public/assets/hooks-DQitBL5k.js                        0.64 kB │ gzip:   0.33 kB
+.output/public/assets/running._id.edit-Dng12qpP.js             0.67 kB │ gzip:   0.47 kB
+.output/public/assets/home.goals._id.edit-CkZnCCl9.js          0.67 kB │ gzip:   0.43 kB
+.output/public/assets/gym.goals._id.edit-BznVfF42.js           0.68 kB │ gzip:   0.44 kB
+.output/public/assets/home.goals.new-Bua-ZHgU.js               0.68 kB │ gzip:   0.44 kB
+.output/public/assets/exercises._id.index-CqSkvXCk.js          0.68 kB │ gzip:   0.44 kB
+.output/public/assets/goals.index-2XLLzWfy.js                  0.69 kB │ gzip:   0.45 kB
+.output/public/assets/running.goals._id.edit-oJCOe-KL.js       0.69 kB │ gzip:   0.43 kB
+.output/public/assets/gym.goals.new-p7wO9ex6.js                0.69 kB │ gzip:   0.45 kB
+.output/public/assets/running.goals.new-t-3So8x9.js            0.70 kB │ gzip:   0.45 kB
+.output/public/assets/locations._id-iH66cXVj.js                0.70 kB │ gzip:   0.46 kB
+.output/public/assets/hooks-DRxOZdNd.js                        0.72 kB │ gzip:   0.36 kB
+.output/public/assets/EmptyState-DrlGOLzF.js                   0.72 kB │ gzip:   0.38 kB
+.output/public/assets/hooks-DFcEID5b.js                        0.74 kB │ gzip:   0.37 kB
+.output/public/assets/exercises._id.history-50aLi7k0.js        0.81 kB │ gzip:   0.54 kB
+.output/public/assets/storage-_Mqryw3S.js                      0.86 kB │ gzip:   0.45 kB
+.output/public/assets/labels-CHMkMRe3.js                       1.01 kB │ gzip:   0.55 kB
+.output/public/assets/repo-Bo-y0Vts.js                         1.08 kB │ gzip:   0.50 kB
+.output/public/assets/GoalDomainChooser-DZyK49Dk.js            1.08 kB │ gzip:   0.57 kB
+.output/public/assets/PageHeader-Bjn021i1.js                   1.09 kB │ gzip:   0.48 kB
+.output/public/assets/textarea-BIJjh3da.js                     1.12 kB │ gzip:   0.64 kB
+.output/public/assets/storage-CGkaw2y1.js                      1.21 kB │ gzip:   0.55 kB
+.output/public/assets/hooks-FoZJwMDE.js                        1.22 kB │ gzip:   0.54 kB
+.output/public/assets/selectors-nMk02XQN.js                    1.28 kB │ gzip:   0.59 kB
+.output/public/assets/shared-B8nSdL16.js                       1.37 kB │ gzip:   0.66 kB
+.output/public/assets/button-DUesV4KG.js                       1.38 kB │ gzip:   0.68 kB
+.output/public/assets/safeStorage-Dm_wPwAW.js                  1.57 kB │ gzip:   0.80 kB
+.output/public/assets/running.new.index-Ce3s42cb.js            1.65 kB │ gzip:   0.88 kB
+.output/public/assets/availability-DOIz2JX0.js                 1.72 kB │ gzip:   0.64 kB
+.output/public/assets/home.history.index-CNaucvZh.js           1.87 kB │ gzip:   0.97 kB
+.output/public/assets/templates._id.history-CROFPTof.js        1.93 kB │ gzip:   1.04 kB
+.output/public/assets/RunTile-nxCdqWI6.js                      1.93 kB │ gzip:   0.77 kB
+.output/public/assets/NumberField-7jwBvu78.js                  1.95 kB │ gzip:   0.93 kB
+.output/public/assets/goalLinks-Bf-NM7UY.js                    1.98 kB │ gzip:   0.40 kB
+.output/public/assets/volume-DZrOIPje.js                       2.02 kB │ gzip:   0.96 kB
+.output/public/assets/GoalsListView-oxSvmMXJ.js                2.26 kB │ gzip:   0.97 kB
+.output/public/assets/QualityBreakdown-BMVO7gDl.js             2.29 kB │ gzip:   1.06 kB
+.output/public/assets/DomainPrimaryGoalTile-CxacRLFb.js        2.30 kB │ gzip:   1.14 kB
+.output/public/assets/HomeSessionTileWrapper-BBGNPCLk.js       2.46 kB │ gzip:   1.25 kB
+.output/public/assets/sheet-BrxKnpYv.js                        2.55 kB │ gzip:   0.99 kB
+.output/public/assets/sessionHistory-D4X9JjEz.js               2.59 kB │ gzip:   1.02 kB
+.output/public/assets/metrics-SHkdetJG.js                      2.59 kB │ gzip:   1.04 kB
+.output/public/assets/muscleLoad-D28h9yy7.js                   2.75 kB │ gzip:   1.36 kB
+.output/public/assets/dist-BndbZk_R.js                         2.88 kB │ gzip:   1.27 kB
+.output/public/assets/home.templates._id.index-C7Q3qaQX.js     2.88 kB │ gzip:   1.23 kB
+.output/public/assets/history-BC0j7ZDT.js                      2.96 kB │ gzip:   1.41 kB
+.output/public/assets/records-D1D6FFGZ.js                      3.42 kB │ gzip:   1.26 kB
+.output/public/assets/GoalForm-DVUBawup.js                     3.71 kB │ gzip:   1.22 kB
+.output/public/assets/Tile-CEQGMoWW.js                         3.89 kB │ gzip:   1.56 kB
+.output/public/assets/TemplateSummary-AAXNyet7.js              4.14 kB │ gzip:   1.76 kB
+.output/public/assets/home.quick.index-CZlcYxzK.js             4.18 kB │ gzip:   1.61 kB
+.output/public/assets/gym.index-DEMXfrCs.js                    4.23 kB │ gzip:   1.61 kB
+.output/public/assets/ConfirmDialog-BBFFl4n7.js                4.24 kB │ gzip:   1.48 kB
+.output/public/assets/switch-BLqMM0PF.js                       4.33 kB │ gzip:   1.85 kB
+.output/public/assets/home.templates.index-nx47xevj.js         4.60 kB │ gzip:   1.74 kB
+.output/public/assets/gym.new-D_Do0jwe.js                      4.76 kB │ gzip:   1.67 kB
+.output/public/assets/dist-CpWvU-XP.js                         4.78 kB │ gzip:   1.72 kB
+.output/public/assets/templates._id.index-CkYQ_wXi.js          4.84 kB │ gzip:   1.90 kB
+.output/public/assets/sessions._id.summary-y1ElZSGk.js         4.92 kB │ gzip:   1.85 kB
+.output/public/assets/popover-Bo2w-ZGp.js                      5.07 kB │ gzip:   1.91 kB
+.output/public/assets/running.history-C_OzSm1Q.js              5.21 kB │ gzip:   1.84 kB
+.output/public/assets/CountryPicker-CxbBOtvE.js                5.40 kB │ gzip:   2.27 kB
+.output/public/assets/GoalDetailView-CnwCk-t1.js               5.61 kB │ gzip:   2.01 kB
+.output/public/assets/hooks-NVqwlSc2.js                        5.63 kB │ gzip:   2.04 kB
+.output/public/assets/gym.compare-BSFbHdaD.js                  5.70 kB │ gzip:   2.13 kB
+.output/public/assets/ExercisePickerSheet-uXCiTykm.js          5.74 kB │ gzip:   2.33 kB
+.output/public/assets/running.routes-BPm3Ls-W.js               5.90 kB │ gzip:   2.28 kB
+.output/public/assets/repo-BNNrvSxD.js                         6.07 kB │ gzip:   2.73 kB
+.output/public/assets/trash-C4kL_PWL.js                        6.16 kB │ gzip:   2.28 kB
+.output/public/assets/gym.history._id-uE5zaLs4.js              6.20 kB │ gzip:   2.28 kB
+.output/public/assets/routes-B0i7B2in.js                       6.57 kB │ gzip:   2.22 kB
+.output/public/assets/home.index-CFCnWK88.js                   6.61 kB │ gzip:   2.05 kB
+.output/public/assets/home.sessions._id.summary-C3-CUYgD.js    6.62 kB │ gzip:   2.50 kB
+.output/public/assets/running.index-wfOo7nOk.js                6.81 kB │ gzip:   2.51 kB
+.output/public/assets/repo-C4RtuEJA.js                         7.23 kB │ gzip:   2.80 kB
+.output/public/assets/repo-D6NleHPY.js                         7.37 kB │ gzip:   2.29 kB
+.output/public/assets/repo-eKMb0j8s.js                         8.44 kB │ gzip:   2.50 kB
+.output/public/assets/LocationForm-GEiI7ahD.js                 8.65 kB │ gzip:   2.86 kB
+.output/public/assets/templates.index-kvAuZGgI.js              8.96 kB │ gzip:   3.17 kB
+.output/public/assets/use-domain-summary-CjVtA-s-.js           9.47 kB │ gzip:   3.69 kB
+.output/public/assets/quality-CltrGudU.js                      9.69 kB │ gzip:   3.29 kB
+.output/public/assets/locations.index-BcTLqBh3.js              9.96 kB │ gzip:   3.66 kB
+.output/public/assets/gym.history.index-DAR8nnkZ.js           10.27 kB │ gzip:   3.44 kB
+.output/public/assets/repo-_W19EL4d.js                        12.04 kB │ gzip:   3.34 kB
+.output/public/assets/hooks-YePx3ONT.js                       12.04 kB │ gzip:   3.80 kB
+.output/public/assets/running.project-b8msoK3n.js             12.40 kB │ gzip:   4.04 kB
+.output/public/assets/backup.index-CTKJ9CIn.js                13.00 kB │ gzip:   4.77 kB
+.output/public/assets/hooks-BVRDTacG.js                       13.06 kB │ gzip:   3.46 kB
+.output/public/assets/ExerciseHistoryPanel-DD4tl80f.js        13.64 kB │ gzip:   5.06 kB
+.output/public/assets/exercises.index-_YKP3Rga.js             13.70 kB │ gzip:   4.64 kB
+.output/public/assets/treadmills._id-Dmj5WCvX.js              14.49 kB │ gzip:   4.87 kB
+.output/public/assets/ExerciseForm-BieevluE.js                15.59 kB │ gzip:   4.18 kB
+.output/public/assets/home.templates._id.edit-CBlZr_gO.js     15.75 kB │ gzip:   5.08 kB
+.output/public/assets/repo-C01D9sY5.js                        18.22 kB │ gzip:   3.76 kB
+.output/public/assets/dist-KdBXQWpF.js                        19.64 kB │ gzip:   4.52 kB
+.output/public/assets/home.sessions._id.index-2HpXHj1p.js     19.65 kB │ gzip:   5.32 kB
+.output/public/assets/templates._id.edit-BxO8cWd9.js          19.81 kB │ gzip:   5.14 kB
+.output/public/assets/exercises._id.index-DzJjx750.js         20.58 kB │ gzip:   6.17 kB
+.output/public/assets/createLucideIcon-BFi801Kn.js            21.15 kB │ gzip:   8.51 kB
+.output/public/assets/more-B1WdGjDm.js                        21.44 kB │ gzip:   6.88 kB
+.output/public/assets/RunForm-CaJ2iyVw.js                     25.23 kB │ gzip:   6.84 kB
+.output/public/assets/dist-BNLlB6tF.js                        26.09 kB │ gzip:  10.08 kB
+.output/public/assets/running._id.index-BBEN4yEv.js           27.22 kB │ gzip:   7.88 kB
+.output/public/assets/sessions._id.index-DNqsyYcY.js          27.49 kB │ gzip:   7.49 kB
+.output/public/assets/select-DlzeVEeM.js                      29.61 kB │ gzip:   9.84 kB
+.output/public/assets/Combination-DB8w0-MT.js                 29.71 kB │ gzip:  10.45 kB
+.output/public/assets/AppShell-DFojEQEj.js                    33.55 kB │ gzip:  10.89 kB
+.output/public/assets/locations._id-NoiYN6A9.js               48.77 kB │ gzip:  12.82 kB
+.output/public/assets/types-DEcUJjmY.js                       56.35 kB │ gzip:  12.90 kB
+.output/public/assets/index-CT4Xtj5O.js                      649.70 kB │ gzip: 186.95 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.75s
+vite v8.3.0 building ssr environment for production...
+transforming...
+✓ 362 modules transformed.
+rendering chunks...
+computing gzip size...
+node_modules/.nitro/vite/services/ssr/assets/styles-CND5XsQ_.css                     100.56 kB │ gzip: 16.39 kB
+node_modules/.nitro/vite/services/ssr/assets/exercises._id.index-CfbvO-9H.js           0.12 kB │ gzip:  0.11 kB
+node_modules/.nitro/vite/services/ssr/assets/home.new-CyEp7cAH.js                      0.21 kB │ gzip:  0.19 kB
+node_modules/.nitro/vite/services/ssr/assets/empty-plugin-adapters-D9UWiqvJ.js         0.22 kB │ gzip:  0.16 kB
+node_modules/.nitro/vite/services/ssr/assets/home.history._id-ckJKPEd2.js              0.25 kB │ gzip:  0.21 kB
+node_modules/.nitro/vite/services/ssr/assets/rolldown-runtime-D7D4PA-g.js              0.36 kB │ gzip:  0.25 kB
+node_modules/.nitro/vite/services/ssr/assets/goalDomainConfig-PwGlcUN3.js              0.55 kB │ gzip:  0.40 kB
+node_modules/.nitro/vite/services/ssr/assets/input-CGwuXL1m.js                         0.76 kB │ gzip:  0.46 kB
+node_modules/.nitro/vite/services/ssr/assets/home.goals.index-DsrTmc77.js              0.88 kB │ gzip:  0.52 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.goals._id.index-CvaD9JeU.js           0.91 kB │ gzip:  0.51 kB
+node_modules/.nitro/vite/services/ssr/assets/running.goals.index-DjVucTVG.js           0.91 kB │ gzip:  0.52 kB
+node_modules/.nitro/vite/services/ssr/assets/home.goals._id.index-BYjqAiIB.js          0.91 kB │ gzip:  0.51 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.goals.index-COy6AKFt.js               0.91 kB │ gzip:  0.53 kB
+node_modules/.nitro/vite/services/ssr/assets/running.goals._id.index-8RfQ10KR.js       0.94 kB │ gzip:  0.52 kB
+node_modules/.nitro/vite/services/ssr/assets/running.new._type-11-a6Jh-.js             1.01 kB │ gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/running._id.edit-gCApSPPq.js              1.06 kB │ gzip:  0.61 kB
+node_modules/.nitro/vite/services/ssr/assets/home.goals.new-B7QrYE6v.js                1.09 kB │ gzip:  0.58 kB
+node_modules/.nitro/vite/services/ssr/assets/switch-DzK3tYkY.js                        1.10 kB │ gzip:  0.56 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.goals.new-CEg7Cbug.js                 1.10 kB │ gzip:  0.59 kB
+node_modules/.nitro/vite/services/ssr/assets/running.goals.new-Cu4I_uG2.js             1.13 kB │ gzip:  0.59 kB
+node_modules/.nitro/vite/services/ssr/assets/home.goals._id.edit-BUfDsYzW.js           1.18 kB │ gzip:  0.59 kB
+node_modules/.nitro/vite/services/ssr/assets/textarea-Akg1XdmN.js                      1.18 kB │ gzip:  0.58 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.goals._id.edit-Bt7aRLJQ.js            1.18 kB │ gzip:  0.60 kB
+node_modules/.nitro/vite/services/ssr/assets/locations._id-q7_5vIA9.js                 1.19 kB │ gzip:  0.67 kB
+node_modules/.nitro/vite/services/ssr/assets/home.quick._exerciseId-CA0WH0Hp.js        1.19 kB │ gzip:  0.69 kB
+node_modules/.nitro/vite/services/ssr/assets/running.goals._id.edit-Dy1oEY-h.js        1.21 kB │ gzip:  0.60 kB
+node_modules/.nitro/vite/services/ssr/assets/exercises._id.index-CXZwClZl.js           1.21 kB │ gzip:  0.69 kB
+node_modules/.nitro/vite/services/ssr/assets/popover-8i5itcxG.js                       1.21 kB │ gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/EmptyState-D2lLAvpH.js                    1.24 kB │ gzip:  0.63 kB
+node_modules/.nitro/vite/services/ssr/assets/goals._id-BwdobWXX.js                     1.25 kB │ gzip:  0.70 kB
+node_modules/.nitro/vite/services/ssr/assets/goals.new-C8FPvwZ8.js                     1.29 kB │ gzip:  0.71 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-vSf-LJSF.js                         1.31 kB │ gzip:  0.49 kB
+node_modules/.nitro/vite/services/ssr/assets/exercises._id.history-GOiCegh2.js         1.36 kB │ gzip:  0.71 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-Z5ofC0BD.js                         1.46 kB │ gzip:  0.52 kB
+node_modules/.nitro/vite/services/ssr/assets/goals.index-a5znINJx.js                   1.48 kB │ gzip:  0.78 kB
+node_modules/.nitro/vite/services/ssr/assets/useHydrated-CSJgLswR.js                   1.64 kB │ gzip:  0.86 kB
+node_modules/.nitro/vite/services/ssr/assets/labels-D28G3g_o.js                        1.68 kB │ gzip:  0.75 kB
+node_modules/.nitro/vite/services/ssr/assets/button-K56JUjAF.js                        1.68 kB │ gzip:  0.78 kB
+node_modules/.nitro/vite/services/ssr/assets/PageHeader-B-5uUnv3.js                    1.73 kB │ gzip:  0.71 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-qUtOMBXE.js                         1.81 kB │ gzip:  0.72 kB
+node_modules/.nitro/vite/services/ssr/assets/start-yhWN96dy.js                         1.85 kB │ gzip:  0.83 kB
+node_modules/.nitro/vite/services/ssr/assets/shared-CxAmBiIM.js                        1.89 kB │ gzip:  0.91 kB
+node_modules/.nitro/vite/services/ssr/assets/GoalDomainChooser-4C7WnYKE.js             1.95 kB │ gzip:  0.90 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-q4uAGxpt.js                         1.97 kB │ gzip:  0.60 kB
+node_modules/.nitro/vite/services/ssr/assets/storage-_a5J-EZQ.js                       1.97 kB │ gzip:  0.89 kB
+node_modules/.nitro/vite/services/ssr/assets/selectors-CEVSfGSj.js                     2.26 kB │ gzip:  0.81 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-egFAqPGg.js                          2.27 kB │ gzip:  1.00 kB
+node_modules/.nitro/vite/services/ssr/assets/storage-DxczvWtI.js                       2.44 kB │ gzip:  1.02 kB
+node_modules/.nitro/vite/services/ssr/assets/running.new.index-CgftnUiE.js             2.48 kB │ gzip:  1.08 kB
+node_modules/.nitro/vite/services/ssr/assets/home.history.index-ciO0toHw.js            2.91 kB │ gzip:  1.26 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-BQMzMaL3.js                         2.94 kB │ gzip:  0.97 kB
+node_modules/.nitro/vite/services/ssr/assets/NumberField-fS83aUMn.js                   2.99 kB │ gzip:  1.26 kB
+node_modules/.nitro/vite/services/ssr/assets/QualityBreakdown-DzTDok9w.js              3.04 kB │ gzip:  1.20 kB
+node_modules/.nitro/vite/services/ssr/assets/client-CRoXOAKU.js                        3.07 kB │ gzip:  1.15 kB
+node_modules/.nitro/vite/services/ssr/assets/templates._id.history-YzWkTCSf.js         3.09 kB │ gzip:  1.35 kB
+node_modules/.nitro/vite/services/ssr/assets/RunTile-CdQhJwcW.js                       3.09 kB │ gzip:  1.08 kB
+node_modules/.nitro/vite/services/ssr/assets/availability-DIoqUIOk.js                  3.37 kB │ gzip:  0.97 kB
+node_modules/.nitro/vite/services/ssr/assets/use-domain-summary-CagCqARC.js            3.42 kB │ gzip:  1.38 kB
+node_modules/.nitro/vite/services/ssr/assets/GoalsListView-CJkFYQ-3.js                 3.53 kB │ gzip:  1.30 kB
+node_modules/.nitro/vite/services/ssr/assets/sheet-DFIG78s3.js                         3.57 kB │ gzip:  1.15 kB
+node_modules/.nitro/vite/services/ssr/assets/volume-4hfG1XUO.js                        3.62 kB │ gzip:  1.50 kB
+node_modules/.nitro/vite/services/ssr/assets/DomainPrimaryGoalTile-BA5ngrEj.js         3.82 kB │ gzip:  1.54 kB
+node_modules/.nitro/vite/services/ssr/assets/HomeSessionTileWrapper-GrjGRE75.js        3.93 kB │ gzip:  1.54 kB
+node_modules/.nitro/vite/services/ssr/assets/goalLinks-BW4jhyhW.js                     4.07 kB │ gzip:  0.88 kB
+node_modules/.nitro/vite/services/ssr/assets/ConfirmDialog-BlSjph4I.js                 4.20 kB │ gzip:  1.16 kB
+node_modules/.nitro/vite/services/ssr/assets/history-ByRZCHg4.js                       4.31 kB │ gzip:  1.71 kB
+node_modules/.nitro/vite/services/ssr/assets/safeStorage-5ClL5rdr.js                   4.34 kB │ gzip:  1.79 kB
+node_modules/.nitro/vite/services/ssr/assets/sessionHistory-CyD1LO4d.js                4.45 kB │ gzip:  1.58 kB
+node_modules/.nitro/vite/services/ssr/assets/home.templates._id.index-DbaPHuPk.js      4.53 kB │ gzip:  1.61 kB
+node_modules/.nitro/vite/services/ssr/index.js                                         4.63 kB │ gzip:  1.93 kB
+node_modules/.nitro/vite/services/ssr/assets/select-DkUPjs4O.js                        4.67 kB │ gzip:  1.34 kB
+node_modules/.nitro/vite/services/ssr/assets/Tile-dBAHdZqC.js                          5.25 kB │ gzip:  1.91 kB
+node_modules/.nitro/vite/services/ssr/assets/metrics-Dyj4t1Va.js                       5.50 kB │ gzip:  1.93 kB
+node_modules/.nitro/vite/services/ssr/assets/muscleLoad-DU-tzasz.js                    5.70 kB │ gzip:  2.15 kB
+node_modules/.nitro/vite/services/ssr/assets/records-CO7sx618.js                       5.79 kB │ gzip:  1.90 kB
+node_modules/.nitro/vite/services/ssr/assets/GoalForm-lO_Y4_r8.js                      5.81 kB │ gzip:  1.71 kB
+node_modules/.nitro/vite/services/ssr/assets/home.quick.index-DV23Q5At.js              6.39 kB │ gzip:  2.03 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.index-BHZkQ5gJ.js                     6.64 kB │ gzip:  1.99 kB
+node_modules/.nitro/vite/services/ssr/assets/AppShell-CK5wyHSP.js                      6.83 kB │ gzip:  2.14 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.new-DqB-lmgc.js                       6.86 kB │ gzip:  2.02 kB
+node_modules/.nitro/vite/services/ssr/assets/TemplateSummary-Xb3vLBbS.js               6.95 kB │ gzip:  2.29 kB
+node_modules/.nitro/vite/services/ssr/assets/home.templates.index-C_jwTeWF.js          7.40 kB │ gzip:  2.22 kB
+node_modules/.nitro/vite/services/ssr/assets/templates._id.index-DpkYA4YC.js           7.62 kB │ gzip:  2.51 kB
+node_modules/.nitro/vite/services/ssr/assets/CountryPicker-CJgZYG-y.js                 7.71 kB │ gzip:  2.60 kB
+node_modules/.nitro/vite/services/ssr/assets/sessions._id.summary-DwQZGvWx.js          7.71 kB │ gzip:  2.39 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-DaeZAGV2.js                          9.14 kB │ gzip:  3.42 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.compare-YF-CjSuI.js                   9.15 kB │ gzip:  2.75 kB
+node_modules/.nitro/vite/services/ssr/assets/GoalDetailView--4rwLK3B.js                9.28 kB │ gzip:  2.68 kB
+node_modules/.nitro/vite/services/ssr/assets/running.history-Qpn-pBFa.js               9.48 kB │ gzip:  2.46 kB
+node_modules/.nitro/vite/services/ssr/assets/ExercisePickerSheet-BDQW7hs9.js           9.51 kB │ gzip:  3.07 kB
+node_modules/.nitro/vite/services/ssr/assets/running.routes-Zk-sQ30H.js                9.79 kB │ gzip:  2.95 kB
+node_modules/.nitro/vite/services/ssr/assets/trash-DbZjVQlT.js                         9.88 kB │ gzip:  2.96 kB
+node_modules/.nitro/vite/services/ssr/assets/home.sessions._id.summary-DFkd8uJG.js    10.06 kB │ gzip:  3.01 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-Dq41m3Sm.js                       10.23 kB │ gzip:  3.00 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.history._id-apqDQ9eo.js              10.32 kB │ gzip:  3.01 kB
+node_modules/.nitro/vite/services/ssr/assets/home.index-Wf5b6jD6.js                   10.33 kB │ gzip:  2.47 kB
+node_modules/.nitro/vite/services/ssr/assets/running.index-Bec7nVBv.js                10.39 kB │ gzip:  2.92 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-5Qu7_qAV.js                         11.29 kB │ gzip:  3.20 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-B8qlVefQ.js                         12.04 kB │ gzip:  3.88 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-BAMVfRsp.js                        12.52 kB │ gzip:  3.62 kB
+node_modules/.nitro/vite/services/ssr/assets/locations.index-B2hGJHId.js              13.66 kB │ gzip:  4.08 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-Bq1iTUxc.js                         13.69 kB │ gzip:  3.47 kB
+node_modules/.nitro/vite/services/ssr/assets/LocationForm-jvaqDwQX.js                 14.15 kB │ gzip:  3.79 kB
+node_modules/.nitro/vite/services/ssr/assets/templates.index-Dj9Gn_1k.js              14.19 kB │ gzip:  4.09 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-D8txXg8w.js                         15.03 kB │ gzip:  3.77 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-Brve43RE.js                         16.44 kB │ gzip:  3.96 kB
+node_modules/.nitro/vite/services/ssr/assets/quality-DYs4pJMq.js                      16.47 kB │ gzip:  4.45 kB
+node_modules/.nitro/vite/services/ssr/assets/gym.history.index-CCsJxVkK.js            17.33 kB │ gzip:  4.65 kB
+node_modules/.nitro/vite/services/ssr/assets/running.project-Cy6Hfeu1.js              20.24 kB │ gzip:  5.17 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-BwkY9f-Q.js                        21.26 kB │ gzip:  5.71 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-DhbeGHXR.js                         21.68 kB │ gzip:  5.26 kB
+node_modules/.nitro/vite/services/ssr/assets/hooks-GwCif6qO.js                        22.33 kB │ gzip:  4.95 kB
+node_modules/.nitro/vite/services/ssr/assets/exercises.index-D8GjaBfP.js              22.81 kB │ gzip:  6.02 kB
+node_modules/.nitro/vite/services/ssr/assets/ExerciseHistoryPanel-Bp6l12vJ.js         23.53 kB │ gzip:  7.03 kB
+node_modules/.nitro/vite/services/ssr/assets/backup.index-DN8Mbcko.js                 24.08 kB │ gzip:  7.38 kB
+node_modules/.nitro/vite/services/ssr/assets/repo-BxZDdSVY.js                         24.31 kB │ gzip:  4.66 kB
+node_modules/.nitro/vite/services/ssr/assets/treadmills._id-CNfFiZPA.js               25.26 kB │ gzip:  7.04 kB
+node_modules/.nitro/vite/services/ssr/assets/ExerciseForm-B6V-kfS_.js                 25.62 kB │ gzip:  5.59 kB
+node_modules/.nitro/vite/services/ssr/assets/home.templates._id.edit-CVLZq_CI.js      26.50 kB │ gzip:  7.30 kB
+node_modules/.nitro/vite/services/ssr/assets/home.sessions._id.index-DBGSvnw4.js      29.87 kB │ gzip:  6.94 kB
+node_modules/.nitro/vite/services/ssr/assets/templates._id.edit-BWl84zv2.js           31.14 kB │ gzip:  6.64 kB
+node_modules/.nitro/vite/services/ssr/assets/exercises._id.index-DUxE5jAo.js          32.85 kB │ gzip:  7.67 kB
+node_modules/.nitro/vite/services/ssr/assets/more-BIjfzZO2.js                         32.91 kB │ gzip:  9.38 kB
+node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-Baf8Na5F.js   33.89 kB │ gzip:  3.93 kB
+node_modules/.nitro/vite/services/ssr/assets/RunForm-Ctkjhr9Q.js                      39.69 kB │ gzip:  9.05 kB
+node_modules/.nitro/vite/services/ssr/assets/running._id.index-Gfj6MBGH.js            41.12 kB │ gzip:  9.45 kB
+node_modules/.nitro/vite/services/ssr/assets/sessions._id.index-BoG3irTA.js           44.82 kB │ gzip:  9.85 kB
+node_modules/.nitro/vite/services/ssr/assets/locations._id-BGpVbzJP.js                61.73 kB │ gzip: 11.63 kB
+node_modules/.nitro/vite/services/ssr/assets/server-CNLuVapY.js                       68.20 kB │ gzip: 17.46 kB
+node_modules/.nitro/vite/services/ssr/assets/router-C6ZQO-UI.js                      112.74 kB │ gzip: 23.75 kB
+
+✓ built in 1.77s
+
+[nitro] ◐ Building [Nitro] (preset: cloudflare-module, compatibility: 2026-09-20)
+[nitro] ✔ Generated public .output/public
+vite v8.3.0 building nitro environment for production...
+
+ WARN  inlineDynamicImports option is ignored because the codeSplitting option is specified.
+
+transforming...
+✓ 2213 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/server/_ssr/exercises._id.index-CfbvO-9H.mjs           0.12 kB │ gzip:   0.11 kB
+.output/server/_ssr/empty-plugin-adapters-D9UWiqvJ.mjs         0.23 kB │ gzip:   0.16 kB
+.output/server/_ssr/home.new-CyEp7cAH.mjs                      0.23 kB │ gzip:   0.21 kB
+.output/server/_ssr/home.history._id-ckJKPEd2.mjs              0.27 kB │ gzip:   0.24 kB
+.output/server/_libs/radix-ui__number.mjs                      0.32 kB │ gzip:   0.24 kB
+.output/server/_ssr/rolldown-runtime-D7D4PA-g.mjs              0.41 kB │ gzip:   0.29 kB
+.output/server/_ssr/goalDomainConfig-PwGlcUN3.mjs              0.59 kB │ gzip:   0.43 kB
+.output/server/_chunks/ssr-renderer.mjs                        0.60 kB │ gzip:   0.36 kB
+.output/server/_libs/radix-ui__react-direction.mjs             0.76 kB │ gzip:   0.40 kB
+.output/server/_libs/radix-ui__react-label.mjs                 1.00 kB │ gzip:   0.51 kB
+.output/server/_ssr/home.goals.index-DsrTmc77.mjs              1.07 kB │ gzip:   0.60 kB
+.output/server/_ssr/input-CGwuXL1m.mjs                         1.08 kB │ gzip:   0.57 kB
+.output/server/_ssr/running.goals.index-DjVucTVG.mjs           1.10 kB │ gzip:   0.60 kB
+.output/server/_ssr/gym.goals.index-COy6AKFt.mjs               1.10 kB │ gzip:   0.61 kB
+.output/server/_ssr/gym.goals._id.index-CvaD9JeU.mjs           1.11 kB │ gzip:   0.60 kB
+.output/server/_ssr/home.goals._id.index-BYjqAiIB.mjs          1.11 kB │ gzip:   0.60 kB
+.output/server/_ssr/running.goals._id.index-8RfQ10KR.mjs       1.14 kB │ gzip:   0.60 kB
+.output/server/_libs/hookable.mjs                              1.17 kB │ gzip:   0.52 kB
+.output/server/_runtime.mjs                                    1.18 kB │ gzip:   0.57 kB
+.output/server/_ssr/running.new._type-11-a6Jh-.mjs             1.21 kB │ gzip:   0.66 kB
+.output/server/_ssr/running._id.edit-gCApSPPq.mjs              1.26 kB │ gzip:   0.69 kB
+.output/server/_ssr/home.goals.new-B7QrYE6v.mjs                1.33 kB │ gzip:   0.66 kB
+.output/server/_ssr/gym.goals.new-CEg7Cbug.mjs                 1.34 kB │ gzip:   0.67 kB
+.output/server/_ssr/running.goals.new-Cu4I_uG2.mjs             1.36 kB │ gzip:   0.66 kB
+.output/server/_ssr/home.goals._id.edit-BUfDsYzW.mjs           1.42 kB │ gzip:   0.68 kB
+.output/server/_ssr/gym.goals._id.edit-Bt7aRLJQ.mjs            1.42 kB │ gzip:   0.68 kB
+.output/server/_ssr/locations._id-q7_5vIA9.mjs                 1.43 kB │ gzip:   0.76 kB
+.output/server/_ssr/switch-DzK3tYkY.mjs                        1.44 kB │ gzip:   0.67 kB
+.output/server/_ssr/goals._id-BwdobWXX.mjs                     1.45 kB │ gzip:   0.79 kB
+.output/server/_ssr/running.goals._id.edit-Dy1oEY-h.mjs        1.45 kB │ gzip:   0.68 kB
+.output/server/_ssr/exercises._id.index-CXZwClZl.mjs           1.46 kB │ gzip:   0.79 kB
+.output/server/_ssr/textarea-Akg1XdmN.mjs                      1.48 kB │ gzip:   0.68 kB
+.output/server/_ssr/EmptyState-D2lLAvpH.mjs                    1.51 kB │ gzip:   0.71 kB
+.output/server/_ssr/hooks-vSf-LJSF.mjs                         1.51 kB │ gzip:   0.61 kB
+.output/server/_ssr/goals.new-C8FPvwZ8.mjs                     1.52 kB │ gzip:   0.80 kB
+.output/server/_ssr/popover-8i5itcxG.mjs                       1.53 kB │ gzip:   0.68 kB
+.output/server/_ssr/home.quick._exerciseId-CA0WH0Hp.mjs        1.57 kB │ gzip:   0.83 kB
+.output/server/_ssr/exercises._id.history-GOiCegh2.mjs         1.60 kB │ gzip:   0.80 kB
+.output/server/_ssr/hooks-Z5ofC0BD.mjs                         1.62 kB │ gzip:   0.62 kB
+.output/server/_ssr/goals.index-a5znINJx.mjs                   1.71 kB │ gzip:   0.87 kB
+.output/server/_ssr/labels-D28G3g_o.mjs                        1.72 kB │ gzip:   0.78 kB
+.output/server/_ssr/start-yhWN96dy.mjs                         1.75 kB │ gzip:   0.80 kB
+.output/server/_libs/radix-ui__primitive.mjs                   1.83 kB │ gzip:   0.72 kB
+.output/server/_ssr/useHydrated-CSJgLswR.mjs                   1.84 kB │ gzip:   0.99 kB
+.output/server/_ssr/hooks-qUtOMBXE.mjs                         1.97 kB │ gzip:   0.83 kB
+.output/server/_ssr/button-K56JUjAF.mjs                        1.99 kB │ gzip:   0.90 kB
+.output/server/_ssr/PageHeader-B-5uUnv3.mjs                    2.07 kB │ gzip:   0.79 kB
+.output/server/_ssr/hooks-q4uAGxpt.mjs                         2.17 kB │ gzip:   0.72 kB
+.output/server/_ssr/repo-egFAqPGg.mjs                          2.21 kB │ gzip:   1.01 kB
+.output/server/_ssr/selectors-CEVSfGSj.mjs                     2.24 kB │ gzip:   0.83 kB
+.output/server/_ssr/shared-CxAmBiIM.mjs                        2.30 kB │ gzip:   1.03 kB
+.output/server/_ssr/GoalDomainChooser-4C7WnYKE.mjs             2.34 kB │ gzip:   0.99 kB
+.output/server/_ssr/running.new.index-CgftnUiE.mjs             2.96 kB │ gzip:   1.17 kB
+.output/server/_ssr/hooks-BQMzMaL3.mjs                         3.15 kB │ gzip:   1.09 kB
+.output/server/_libs/class-variance-authority+clsx.mjs         3.17 kB │ gzip:   1.24 kB
+.output/server/_ssr/client-CRoXOAKU.mjs                        3.17 kB │ gzip:   1.20 kB
+.output/server/_ssr/availability-DIoqUIOk.mjs                  3.40 kB │ gzip:   1.01 kB
+.output/server/_ssr/use-domain-summary-CagCqARC.mjs            3.42 kB │ gzip:   1.40 kB
+.output/server/_ssr/home.history.index-ciO0toHw.mjs            3.49 kB │ gzip:   1.40 kB
+.output/server/_ssr/NumberField-fS83aUMn.mjs                   3.49 kB │ gzip:   1.40 kB
+.output/server/_ssr/volume-4hfG1XUO.mjs                        3.50 kB │ gzip:   1.50 kB
+.output/server/_ssr/templates._id.history-YzWkTCSf.mjs         3.57 kB │ gzip:   1.44 kB
+.output/server/_ssr/QualityBreakdown-DzTDok9w.mjs              3.62 kB │ gzip:   1.29 kB
+.output/server/_ssr/RunTile-CdQhJwcW.mjs                       3.77 kB │ gzip:   1.17 kB
+.output/server/_ssr/sheet-DFIG78s3.mjs                         4.17 kB │ gzip:   1.29 kB
+.output/server/_ssr/GoalsListView-CJkFYQ-3.mjs                 4.22 kB │ gzip:   1.39 kB
+.output/server/_ssr/DomainPrimaryGoalTile-BA5ngrEj.mjs         4.35 kB │ gzip:   1.64 kB
+.output/server/_ssr/safeStorage-5ClL5rdr.mjs                   4.38 kB │ gzip:   1.82 kB
+.output/server/_ssr/HomeSessionTileWrapper-GrjGRE75.mjs        4.43 kB │ gzip:   1.64 kB
+.output/server/_ssr/sessionHistory-CyD1LO4d.mjs                4.49 kB │ gzip:   1.61 kB
+.output/server/_ssr/ssr.mjs                                    4.57 kB │ gzip:   1.93 kB
+.output/server/_ssr/ConfirmDialog-BlSjph4I.mjs                 4.65 kB │ gzip:   1.29 kB
+.output/server/_ssr/goalLinks-BW4jhyhW.mjs                     4.73 kB │ gzip:   0.98 kB
+.output/server/_ssr/history-ByRZCHg4.mjs                       5.04 kB │ gzip:   1.85 kB
+.output/server/_ssr/home.templates._id.index-DbaPHuPk.mjs      5.25 kB │ gzip:   1.71 kB
+.output/server/_libs/radix-ui__react-collapsible.mjs           5.53 kB │ gzip:   1.62 kB
+.output/server/_ssr/metrics-Dyj4t1Va.mjs                       5.54 kB │ gzip:   1.96 kB
+.output/server/_ssr/select-DkUPjs4O.mjs                        5.62 kB │ gzip:   1.54 kB
+.output/server/_ssr/muscleLoad-DU-tzasz.mjs                    5.64 kB │ gzip:   2.16 kB
+.output/server/_ssr/Tile-dBAHdZqC.mjs                          5.64 kB │ gzip:   2.01 kB
+.output/server/_ssr/records-CO7sx618.mjs                       5.83 kB │ gzip:   1.93 kB
+.output/server/_libs/radix-ui__react-tabs.mjs                  6.08 kB │ gzip:   1.76 kB
+.output/server/_ssr/GoalForm-lO_Y4_r8.mjs                      6.74 kB │ gzip:   1.85 kB
+.output/server/_ssr/home.quick.index-DV23Q5At.mjs              7.67 kB │ gzip:   2.19 kB
+.output/server/_libs/radix-ui__react-switch.mjs                7.73 kB │ gzip:   2.21 kB
+.output/server/_ssr/TemplateSummary-Xb3vLBbS.mjs               7.82 kB │ gzip:   2.39 kB
+.output/server/_ssr/gym.index-BHZkQ5gJ.mjs                     7.87 kB │ gzip:   2.10 kB
+.output/server/_ssr/AppShell-CK5wyHSP.mjs                      7.92 kB │ gzip:   2.26 kB
+.output/server/_ssr/gym.new-DqB-lmgc.mjs                       8.06 kB │ gzip:   2.12 kB
+.output/server/_libs/tanstack__react-query.mjs                 8.41 kB │ gzip:   2.62 kB
+.output/server/_ssr/home.templates.index-C_jwTeWF.mjs          8.50 kB │ gzip:   2.33 kB
+.output/server/_ssr/CountryPicker-CJgZYG-y.mjs                 8.51 kB │ gzip:   2.73 kB
+.output/server/_ssr/templates._id.index-DpkYA4YC.mjs           8.79 kB │ gzip:   2.63 kB
+.output/server/_ssr/sessions._id.summary-DwQZGvWx.mjs          8.88 kB │ gzip:   2.50 kB
+.output/server/_ssr/repo-DaeZAGV2.mjs                          9.28 kB │ gzip:   3.50 kB
+.output/server/_libs/@radix-ui/react-checkbox+[...].mjs        9.74 kB │ gzip:   2.71 kB
+.output/server/_libs/h3-v2+rou3+srvx.mjs                       9.87 kB │ gzip:   3.06 kB
+.output/server/_libs/@radix-ui/react-roving-focus+[...].mjs   10.17 kB │ gzip:   2.81 kB
+.output/server/_ssr/gym.compare-YF-CjSuI.mjs                  10.21 kB │ gzip:   2.83 kB
+.output/server/_ssr/ExercisePickerSheet-BDQW7hs9.mjs          10.76 kB │ gzip:   3.23 kB
+.output/server/_ssr/GoalDetailView--4rwLK3B.mjs               10.94 kB │ gzip:   2.84 kB
+.output/server/_ssr/trash-DbZjVQlT.mjs                        11.26 kB │ gzip:   3.13 kB
+.output/server/_ssr/home.sessions._id.summary-DFkd8uJG.mjs    11.52 kB │ gzip:   3.13 kB
+.output/server/_ssr/running.history-Qpn-pBFa.mjs              11.53 kB │ gzip:   2.63 kB
+.output/server/_ssr/running.routes-Zk-sQ30H.mjs               11.64 kB │ gzip:   3.14 kB
+.output/server/_ssr/routes-Dq41m3Sm.mjs                       11.78 kB │ gzip:   3.14 kB
+.output/server/_ssr/running.index-Bec7nVBv.mjs                12.08 kB │ gzip:   3.03 kB
+.output/server/_ssr/repo-B8qlVefQ.mjs                         12.17 kB │ gzip:   3.93 kB
+.output/server/_ssr/gym.history._id-apqDQ9eo.mjs              12.22 kB │ gzip:   3.18 kB
+.output/server/_ssr/home.index-Wf5b6jD6.mjs                   12.33 kB │ gzip:   2.60 kB
+.output/server/_libs/tanstack__history.mjs                    12.50 kB │ gzip:   3.70 kB
+.output/server/_libs/supabase__functions-js.mjs               12.55 kB │ gzip:   3.48 kB
+.output/server/_ssr/hooks-BAMVfRsp.mjs                        12.69 kB │ gzip:   3.69 kB
+.output/server/_ssr/repo-5Qu7_qAV.mjs                         13.63 kB │ gzip:   3.98 kB
+.output/server/_ssr/repo-Bq1iTUxc.mjs                         13.68 kB │ gzip:   3.48 kB
+.output/server/_ssr/repo-D8txXg8w.mjs                         15.10 kB │ gzip:   3.81 kB
+.output/server/_ssr/locations.index-B2hGJHId.mjs              15.82 kB │ gzip:   4.27 kB
+.output/server/_ssr/LocationForm-jvaqDwQX.mjs                 16.13 kB │ gzip:   3.95 kB
+.output/server/_ssr/templates.index-Dj9Gn_1k.mjs              16.19 kB │ gzip:   4.27 kB
+.output/server/_ssr/quality-DYs4pJMq.mjs                      16.45 kB │ gzip:   4.46 kB
+.output/server/_libs/radix-ui__react-collection.mjs           16.59 kB │ gzip:   3.70 kB
+.output/server/_libs/h3+rou3+srvx.mjs                         17.32 kB │ gzip:   4.99 kB
+.output/server/_ssr/repo-Brve43RE.mjs                         18.41 kB │ gzip:   4.64 kB
+.output/server/_libs/@radix-ui/react-popover+[...].mjs        18.64 kB │ gzip:   4.63 kB
+.output/server/_ssr/gym.history.index-CCsJxVkK.mjs            19.35 kB │ gzip:   4.80 kB
+.output/server/_ssr/hooks-BwkY9f-Q.mjs                        21.33 kB │ gzip:   5.80 kB
+.output/server/_ssr/repo-DhbeGHXR.mjs                         21.72 kB │ gzip:   5.30 kB
+.output/server/_ssr/hooks-GwCif6qO.mjs                        22.53 kB │ gzip:   5.06 kB
+.output/server/_ssr/running.project-Cy6Hfeu1.mjs              23.08 kB │ gzip:   5.33 kB
+.output/server/_libs/sonner.mjs                               23.85 kB │ gzip:   5.19 kB
+.output/server/_ssr/repo-BxZDdSVY.mjs                         24.32 kB │ gzip:   4.68 kB
+.output/server/_ssr/ExerciseHistoryPanel-Bp6l12vJ.mjs         24.80 kB │ gzip:   7.14 kB
+.output/server/_libs/@floating-ui/dom+[...].mjs               25.39 kB │ gzip:   6.57 kB
+.output/server/_libs/@floating-ui/core+[...].mjs              25.56 kB │ gzip:   6.32 kB
+.output/server/_ssr/backup.index-DN8Mbcko.mjs                 25.58 kB │ gzip:   7.52 kB
+.output/server/_ssr/exercises.index-D8GjaBfP.mjs              25.80 kB │ gzip:   6.21 kB
+.output/server/_ssr/treadmills._id-CNfFiZPA.mjs               27.71 kB │ gzip:   7.18 kB
+.output/server/_ssr/ExerciseForm-B6V-kfS_.mjs                 28.62 kB │ gzip:   5.77 kB
+.output/server/_ssr/home.templates._id.edit-CVLZq_CI.mjs      29.47 kB │ gzip:   7.47 kB
+.output/server/_libs/@tanstack/router-core+[...].mjs          29.60 kB │ gzip:   7.98 kB
+.output/server/_libs/@floating-ui/react-dom+[...].mjs         32.68 kB │ gzip:   8.25 kB
+.output/server/_ssr/home.sessions._id.index-DBGSvnw4.mjs      33.76 kB │ gzip:   7.13 kB
+.output/server/_tanstack-start-manifest_v-Baf8Na5F.mjs        33.95 kB │ gzip:   3.96 kB
+.output/server/_ssr/templates._id.edit-BWl84zv2.mjs           35.20 kB │ gzip:   6.86 kB
+.output/server/_ssr/more-BIjfzZO2.mjs                         35.53 kB │ gzip:   9.52 kB
+.output/server/_ssr/exercises._id.index-DUxE5jAo.mjs          37.65 kB │ gzip:   7.87 kB
+.output/server/_libs/supabase__supabase-js.mjs                37.86 kB │ gzip:  11.17 kB
+.output/server/_ssr/RunForm-Ctkjhr9Q.mjs                      44.18 kB │ gzip:   9.29 kB
+.output/server/_libs/@radix-ui/react-select+[...].mjs         45.91 kB │ gzip:   9.71 kB
+.output/server/_libs/lucide-react.mjs                         46.12 kB │ gzip:   8.78 kB
+.output/server/_ssr/running._id.index-Gfj6MBGH.mjs            46.43 kB │ gzip:   9.70 kB
+.output/server/index.mjs                                      49.34 kB │ gzip:  11.42 kB
+.output/server/_libs/supabase__phoenix.mjs                    50.54 kB │ gzip:  12.76 kB
+.output/server/_ssr/sessions._id.index-BoG3irTA.mjs           50.74 kB │ gzip:  10.11 kB
+.output/server/_ssr/server-CNLuVapY.mjs                       66.42 kB │ gzip:  17.33 kB
+.output/server/_ssr/locations._id-BGpVbzJP.mjs                69.37 kB │ gzip:  11.99 kB
+.output/server/_libs/supabase__realtime-js+unenv.mjs          81.72 kB │ gzip:  20.85 kB
+.output/server/_libs/tailwind-merge.mjs                       88.92 kB │ gzip:  15.71 kB
+.output/server/_libs/@radix-ui/react-alert-dialog+[...].mjs   93.68 kB │ gzip:  21.27 kB
+.output/server/_libs/zod.mjs                                 100.11 kB │ gzip:  17.30 kB
+.output/server/_libs/tanstack__query-core.mjs                105.17 kB │ gzip:  24.71 kB
+.output/server/_ssr/router-C6ZQO-UI.mjs                      109.96 kB │ gzip:  23.49 kB
+.output/server/_libs/supabase__postgrest-js.mjs              110.15 kB │ gzip:  23.14 kB
+.output/server/_libs/@supabase/storage-js+[...].mjs          126.29 kB │ gzip:  23.51 kB
+.output/server/_libs/supabase__auth-js.mjs                   319.07 kB │ gzip:  64.27 kB
+.output/server/_libs/@tanstack/react-router+[...].mjs        776.77 kB │ gzip: 163.64 kB
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/index.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/index.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/ClientOnly.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/ClientOnly.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouterState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouterState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/utils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/utils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useRouter.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useRouter.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Match.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Match.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useLocation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useLocation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useMatch.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useMatch.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Asset.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Asset.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/HeadContent.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/HeadContent.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/link.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/link.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/RouterProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/RouterProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useNavigate.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useNavigate.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/useBlocker.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/useBlocker.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/CatchBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Matches.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Matches.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/routerContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/routerContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/nonRouteComponentContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/matchContext.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/matchContext.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-router/dist/esm/Transitioner.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-router/dist/esm/Transitioner.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/sonner/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/sonner/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m 'use client';
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-collapsible/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-collapsible/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-tabs/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-tabs/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-checkbox/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-checkbox/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/HydrationBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/IsRestoringProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useQueries.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useQueries.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryErrorResetBoundary.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useIsFetching.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useIsFetching.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutation.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutation.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-popover/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-popover/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-alert-dialog/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-alert-dialog/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-switch/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-switch/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-direction/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-direction/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-dialog/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-dialog/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useMutationState.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useMutationState.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-label/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-label/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useInfiniteQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-select/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-select/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-presence/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-presence/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/errorBoundaryUtils.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@tanstack/react-query/build/modern/useBaseQuery.js" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@tanstack/react-query/build/modern/useBaseQuery.js:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-focus-guards/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-focus-guards/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-portal/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-portal/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-focus-scope/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-focus-scope/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-roving-focus/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-roving-focus/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-popper/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-popper/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-collection/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-collection/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m node_modules/@radix-ui/react-dismissable-layer/dist/index.mjs:1:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m1 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 648ms
+[nitro] ℹ Using auto generated worker name: arieldeitch-expense-guard
+ℹ Generated .output/server/wrangler.json
+ℹ Generated .wrangler/deploy/config.json
+ℹ Generated .output/public/_headers
+ℹ Generated .output/nitro.json
+
+[nitro] ✔ You can preview this build using npx vite preview
+[nitro] ✔ You can deploy this build using npx nitro deploy --prebuilt

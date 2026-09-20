@@ -19,9 +19,7 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <p className="ltr-nums text-7xl font-black text-foreground">404</p>
         <h1 className="mt-4 text-xl font-bold text-foreground">העמוד לא נמצא</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          ייתכן שהעמוד הוסר או שהכתובת שגויה.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">ייתכן שהעמוד הוסר או שהכתובת שגויה.</p>
         <div className="mt-6">
           <Link
             to="/"
@@ -35,7 +33,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
