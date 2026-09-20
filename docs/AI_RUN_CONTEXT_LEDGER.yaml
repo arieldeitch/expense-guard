@@ -1,12 +1,12 @@
 project_id: fitness_app_recovery
 run_id: fitness_app_recovery-20260920-recovery-race-project
-last_project_update_at: "2026-09-20T21:30:00+03:00"
-status: GREEN
+last_project_update_at: "2026-09-20T21:33:00+03:00"
+status: YELLOW
 capsule: docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project
-continuation: "Claude Code 2026-09-20 evening: PR #1 reviewed, mobile QA 390x844 RTL in real Chrome, 12 defects fixed, 435 tests, all gates green"
+continuation: "Claude Code 2026-09-20 evening: PR #1 reviewed, mobile QA 390x844 RTL in real Chrome, 12 defects fixed, 435 tests, all gates green, merged to main"
 pr: https://github.com/arieldeitch/expense-guard/pull/1
-merge_state: pending
-publish_state: pending
-next_action: "Merge PR #1, publish the existing Lovable project, verify live on mobile"
+merge_state: "merged 2026-09-20T21:29:09+03:00 — merge commit 4754d82 on main (f709114 + 3ac1a70)"
+publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d is not accessible from the connected Lovable account (licenses-hq / workspace 'Noris's Lovable': project_not_found); live https://fitlog-workout.lovable.app still serves the previous build (/running/project → 404)"
+next_action: "Ariel: open https://lovable.dev/projects/2b79da21-331d-4a52-bd0f-e49f64b4e79d and click Publish (main at 4754d82); then verify https://fitlog-workout.lovable.app/running/project on the phone"
 control_tower: pending
 chief_of_staff: pending

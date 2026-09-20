@@ -8,6 +8,7 @@
 - **שערים:** frozen install ✅ · typecheck ✅ · build ✅ · lint לקבצים ששונו ✅ (הריפו: 390 בעיות baseline, `main`: 395 — R-33) · `git diff --check` ✅ · סודות ✅ · `routeTree.gen.ts` לא נערך (R-30: סדר שונה בלבד, diff ממוין 0).
 - **אין שינוי** backend / Auth / RLS / מיגרציות / תלויות / lockfile. `fitlog:*` לא נמחק ולא נכתב מחדש (מפתחות זהים לפני ואחרי; ריצה ישנה נטענה).
 - ADR: אין חדש (ADR-0041 תקף). סיכונים: R-43, R-44 נוספו.
+- **Git:** PR #1 סומן ready ומוזג ל-`main` ב-merge commit `4754d82` (21:29). **פרסום:** חסום — חשבון Lovable המחובר אינו רואה את הפרויקט (`project_not_found`); ה-live עדיין ב-build הקודם. נדרש Publish ידני של אריאל.
 
 ## 2026-08-01 (ד) · R-35 נסגר · מיגרציה כפולה הוסרה · אימות חי חלקי (Claude Code)
 
