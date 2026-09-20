@@ -1,0 +1,1 @@
+ראו src/lib/race-project, src/routes/running.project.tsx, src/routes/history.tsx, DurationField, RunForm, HomeSetRow, קטלוג הבית והבדיקות. פלטי build/בדיקות ב־assets. קובץ routeTree נוצר על ידי build, לא נערך ידנית.

@@ -50,6 +50,8 @@ export interface RunSegment {
 }
 
 export interface RunSession {
+  training_plan_item_id?: string | null;
+  race_id?: string | null;
   id: string;
   owner_id: string;
   run_type: RunType;

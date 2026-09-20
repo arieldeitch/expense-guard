@@ -1,0 +1,8 @@
+project_id: fitness_app_recovery
+run_id: fitness_app_recovery-20260920-recovery-race-project
+last_project_update_at: "2026-09-20T20:16:16+03:00"
+status: YELLOW
+capsule: docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project
+next_action: "Mobile RTL visual QA; then publish after gates pass"
+control_tower: pending
+chief_of_staff: pending

@@ -44,6 +44,7 @@ export const HOME_GROUPS: HomeGroup[] = [
     label: "חזה ודחיפה",
     slugs: [
       "push-ups",
+      "diamond-push-ups",
       "incline-push-ups",
       "close-grip-push-ups",
       "knee-push-ups",
@@ -81,6 +82,9 @@ export const HOME_GROUPS: HomeGroup[] = [
     id: "core",
     label: "ליבה",
     slugs: [
+      "crunches",
+      "sit-ups",
+      "reverse-crunches",
       "plank",
       "side-plank",
       "dead-bug",
@@ -102,7 +106,7 @@ export const HOME_GROUPS: HomeGroup[] = [
   {
     id: "fullbody",
     label: "גוף מלא ותנועה",
-    slugs: ["burpees", "kettlebell-swing", "jumping-jacks", "farmer-s-carry"],
+    slugs: ["jump-rope", "burpees", "kettlebell-swing", "jumping-jacks", "farmer-s-carry"],
   },
 ];
 
@@ -158,7 +162,14 @@ export function buildCustomHomeExercise(input: {
     primary_muscle_group_id: input.primaryMuscleGroupId,
     secondary_muscle_group_ids: [],
     movement_pattern: "custom",
-    tracking_type: isTime ? "time" : "bodyweight_reps",
+    tracking_type:
+      input.equipment === "dumbbells"
+        ? isTime
+          ? "weight_time"
+          : "weight_reps"
+        : isTime
+          ? "time"
+          : "bodyweight_reps",
     required_equipment_ids: [],
     optional_equipment_ids: [],
     required_equipment_types: input.equipment === "none" ? [] : [input.equipment],

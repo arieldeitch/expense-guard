@@ -1,5 +1,9 @@
 # Fit Log — Project Status
 
+## עדכון פעיל — 2026-09-20T20:16:16+03:00
+מצב YELLOW. baseline מאומת: `4413f99e`; ענף `feat/fitness-recovery-race-project`. יושמו פרויקט חצאי מרתון, דיווח זמן מדויק, הרחבת פק״ל והיסטוריה מאוחדת. זהו קוד בגרסת עבודה, לא פרסום חי. אין שינוי backend. QA חזותי 390×844 וסנכרון מאומת פתוחים. דוח מלא: [`09_END_OF_RUN_REPORT.md`](../ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project/09_END_OF_RUN_REPORT.md). המידע להלן הוא היסטורי ככל שהוא סותר עדכון זה.
+
+
 **Last verified:** 2026-08-01 19:02 Asia/Jerusalem (UTC+03:00)
 **Verified against:** working tree at commit `36b0453`, inspected directly — not carried over from chat history.
 

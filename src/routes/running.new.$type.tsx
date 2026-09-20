@@ -6,6 +6,9 @@ import { RUN_TYPE_LABELS } from "@/lib/runs";
 import type { RunType } from "@/lib/runs";
 
 export const Route = createFileRoute("/running/new/$type")({
+  validateSearch: (search: Record<string, unknown>): { plan?: string } => ({
+    plan: typeof search.plan === "string" ? search.plan : undefined,
+  }),
   head: ({ params }) => ({
     meta: [
       { title: `ריצה חדשה · ${params.type === "treadmill" ? "הליכון" : "חוץ"} · Fit Log` },
@@ -23,6 +26,7 @@ export const Route = createFileRoute("/running/new/$type")({
 
 function NewRunForm() {
   const { type } = Route.useParams();
+  const { plan } = Route.useSearch();
   const runType = type as RunType;
   return (
     <AppShell
@@ -36,7 +40,7 @@ function NewRunForm() {
         title={RUN_TYPE_LABELS[runType]}
         description="הטופס נשמר כטיוטה אוטומטית."
       />
-      <RunForm runType={runType} />
+      <RunForm runType={runType} planItemId={plan} />
     </AppShell>
   );
 }

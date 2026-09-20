@@ -358,3 +358,7 @@
 - `src/routes/goals.tsx`, `goals.$id.tsx`, `goals.new.tsx`: list + filter + create form + detail (progress, projection, manual current, snapshots, versions, lifecycle actions).
 - Tests: 11 new (150 total passing). Typecheck + build clean.
 - Notes: is_primary is single-per-domain; material field changes bump version + write GoalVersion; snapshots append-only; event goals show days-remaining only (no % progress).
+
+
+## 2026-09-20T20:16:16+03:00
+הרחבת פרויקט חצאי המרתון, זמן בדקות/שניות, פק״ל עם סטים משתנים, קטלוג וריאציות, היסטוריה מאוחדת; בדיקות מאגרים ואינטראקציה. טרם פורסם: QA חזותי נדרש. ADR-0041.

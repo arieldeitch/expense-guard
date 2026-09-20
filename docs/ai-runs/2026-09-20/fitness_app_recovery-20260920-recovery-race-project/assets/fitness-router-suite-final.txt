@@ -1,0 +1,156 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  19:12:44
+   Duration  2.96s (transform 1.58s, setup 0ms, import 2.14s, tests 134ms, environment 550ms)
+
+
+SUITE_RESULT src/test/catalogRouteLoaders.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  11 passed (11)
+   Start at  19:12:47
+   Duration  3.38s (transform 1.35s, setup 0ms, import 2.01s, tests 768ms, environment 473ms)
+
+
+SUITE_RESULT src/test/compatRoutes.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  19:12:51
+   Duration  3.11s (transform 1.33s, setup 0ms, import 1.94s, tests 564ms, environment 477ms)
+
+
+SUITE_RESULT src/test/domainGoalRoutes.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  19:12:55
+   Duration  943ms (transform 40ms, setup 0ms, import 125ms, tests 137ms, environment 541ms)
+
+
+SUITE_RESULT src/test/durationField.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  19:12:57
+   Duration  3.53s (transform 1.71s, setup 0ms, import 2.34s, tests 430ms, environment 596ms)
+
+
+SUITE_RESULT src/test/fitnessRecovery.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  19:13:01
+   Duration  3.50s (transform 1.52s, setup 0ms, import 2.15s, tests 577ms, environment 606ms)
+
+
+SUITE_RESULT src/test/globalPersistenceWarning.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  19:13:05
+   Duration  3.32s (transform 1.43s, setup 0ms, import 2.02s, tests 681ms, environment 479ms)
+
+
+SUITE_RESULT src/test/homePlanPicker.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:13:09
+   Duration  2.97s (transform 1.43s, setup 0ms, import 2.07s, tests 269ms, environment 498ms)
+
+
+SUITE_RESULT src/test/runningRouteLoaders.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  19:13:12
+   Duration  2.64s (transform 1.30s, setup 0ms, import 1.88s, tests 154ms, environment 477ms)
+
+
+SUITE_RESULT src/test/systemScreens.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:13:15
+   Duration  3.44s (transform 1.44s, setup 0ms, import 2.03s, tests 778ms, environment 498ms)
+
+
+SUITE_RESULT src/test/workoutExecution.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  19:13:19
+   Duration  2.93s (transform 1.38s, setup 0ms, import 1.98s, tests 302ms, environment 505ms)
+
+
+SUITE_RESULT src/test/workoutExecutionAddSet.test.tsx: 0
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.11 /workspace/scratch/ba570eedff67/fitness-app
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  19:13:23
+   Duration  3.61s (transform 1.71s, setup 0ms, import 2.34s, tests 647ms, environment 496ms)
+
+
+SUITE_RESULT src/test/workoutExecutionEditing.test.tsx: 0

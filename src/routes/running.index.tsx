@@ -49,6 +49,14 @@ function RunningPage() {
         description="דיווח מהיר, מדדים עובדתיים, היסטוריה שקופה."
       />
 
+      <div className="mb-3 px-4 sm:px-6">
+        <Link
+          to="/running/project"
+          className="block rounded-2xl border-2 border-run bg-run/10 p-4 font-bold"
+        >
+          פרויקט חצאי המרתון · תוכנית השבוע והמרוצים שלי ←
+        </Link>
+      </div>
       <div className="px-4 sm:px-6">
         <Link to="/running/new" className="block">
           <Tile variant="run" tone="solid" size="lg" interactive>

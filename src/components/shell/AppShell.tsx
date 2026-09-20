@@ -32,10 +32,11 @@ export function TopBar({
             <Link
               to={typeof back === "object" ? back.to : "/"}
               aria-label={typeof back === "object" ? (back.label ?? "חזרה") : "חזרה"}
-              className="inline-flex size-11 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-tint hover:text-foreground"
+              className="inline-flex min-h-11 items-center justify-center gap-1 px-2 rounded-xl text-muted-foreground transition-colors hover:bg-tint hover:text-foreground"
             >
               {/* Chevron מתהפך אוטומטית ב־RTL דרך logical direction */}
-              <ChevronRight aria-hidden className="size-5 rtl:rotate-180" />
+              <ChevronRight aria-hidden className="size-5" />
+              <span className="text-sm">חזרה</span>
             </Link>
           ) : null}
         </div>
@@ -68,6 +69,23 @@ export function AppShell({
       <SideNav />
       {topBar ? <TopBar {...topBar} /> : null}
       <main role="main" className="mx-auto w-full max-w-3xl pb-28 pt-4 sm:pt-6 lg:pb-8">
+        <nav
+          aria-label="קיצורי דרך"
+          className="mb-4 grid grid-cols-3 gap-2 px-4 text-center text-sm sm:px-6"
+        >
+          <Link
+            to="/running/project"
+            className="rounded-xl border-2 border-border-strong p-2 font-bold"
+          >
+            חצאי מרתון
+          </Link>
+          <Link to="/history" className="rounded-xl border-2 border-border-strong p-2 font-bold">
+            כל ההיסטוריה
+          </Link>
+          <Link to="/home/new" className="rounded-xl border-2 border-border-strong p-2 font-bold">
+            פק״ל ביתי
+          </Link>
+        </nav>
         {children}
       </main>
       <BottomNav />

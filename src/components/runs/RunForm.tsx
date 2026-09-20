@@ -22,15 +22,16 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tile, TileFootnote, TileLabel } from "@/components/tile/Tile";
 import { CountryPicker } from "@/components/catalog/CountryPicker";
+import { useRaceProject } from "@/lib/race-project/repo";
+import { DAYS } from "@/lib/race-project/model";
+import { DurationField } from "@/components/inputs/DurationField";
+import { getStorageStatuses } from "@/lib/storage/safeStorage";
 import { SegmentsEditor } from "./SegmentsEditor";
 import {
   RUN_TYPE_LABELS,
   detectOutliers,
   runFormSchema,
-  formatDurationHMS,
-  parseDurationInput,
   parseDecimal,
-  parsePaceMSS,
   formatPace,
   runsRepo,
 } from "@/lib/runs";
@@ -39,6 +40,7 @@ import { useAllLocations, useTreadmillsInLocation } from "@/lib/catalog";
 import { useActiveRoutes } from "@/lib/runs";
 
 interface Props {
+  planItemId?: string;
   runType: RunType;
   existing?: RunSession | null;
   /** אם ניתן initial — הטופס פותח בערכים אלו אך יוצר run חדש (שכפול). */
@@ -46,6 +48,8 @@ interface Props {
 }
 
 type FormState = {
+  training_plan_item_id: string | null;
+  race_id: string | null;
   started_at: string;
   duration_seconds: number | null;
   distance_meters: number | null;
@@ -81,6 +85,8 @@ function toLocalDateTimeInput(iso: string) {
 function fromExisting(r: RunSession | null | undefined, defaults?: Partial<RunSession>): FormState {
   const base = r ?? defaults ?? {};
   return {
+    training_plan_item_id: base.training_plan_item_id ?? null,
+    race_id: base.race_id ?? null,
     started_at: toLocalDateTimeInput(r?.started_at ?? new Date().toISOString()),
     duration_seconds: base.duration_seconds ?? null,
     distance_meters: base.distance_meters ?? null,
@@ -108,8 +114,10 @@ function fromExisting(r: RunSession | null | undefined, defaults?: Partial<RunSe
   };
 }
 
-export function RunForm({ runType, existing, initial }: Props) {
+export function RunForm({ runType, existing, initial, planItemId }: Props) {
   const navigate = useNavigate();
+  const project = useRaceProject();
+  const formRef = useRef<HTMLDivElement>(null);
   const locations = useAllLocations().filter((l) => l.deleted_at == null && l.is_active);
   const lastUsed = runsRepo.getLastUsed();
   const routes = useActiveRoutes();
@@ -119,6 +127,7 @@ export function RunForm({ runType, existing, initial }: Props) {
       fromExisting(
         existing ?? undefined,
         initial ?? {
+          training_plan_item_id: planItemId ?? null,
           location_id: lastUsed.location_id,
           treadmill_id: lastUsed.treadmill_id,
           route_id: lastUsed.route_id,
@@ -136,7 +145,7 @@ export function RunForm({ runType, existing, initial }: Props) {
 
   // Manage the underlying draft record.
   const runIdRef = useRef<string | null>(existing?.id ?? null);
-  const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showSegments, setShowSegments] = useState((existing?.segments?.length ?? 0) > 0);
 
@@ -144,6 +153,8 @@ export function RunForm({ runType, existing, initial }: Props) {
   useEffect(() => {
     if (runIdRef.current) return;
     const draft = runsRepo.createRun({
+      training_plan_item_id: state.training_plan_item_id,
+      race_id: state.race_id,
       run_type: runType,
       status: "draft",
       started_at: new Date(state.started_at).toISOString(),
@@ -184,14 +195,30 @@ export function RunForm({ runType, existing, initial }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Debounced autosave.
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latestState = useRef(state);
+  latestState.current = state;
+  // Flush pending changes on navigation; no last-keystroke loss.
+  useEffect(
+    () => () => {
+      if (!timer.current || !runIdRef.current) return;
+      clearTimeout(timer.current);
+      const current = latestState.current;
+      if (Number.isFinite(new Date(current.started_at).getTime()))
+        runsRepo.updateRun(runIdRef.current, {
+          ...current,
+          started_at: new Date(current.started_at).toISOString(),
+        });
+    },
+    [],
+  );
   useEffect(() => {
-    if (!runIdRef.current) return;
+    if (!runIdRef.current || !Number.isFinite(new Date(state.started_at).getTime())) return;
     setSavingStatus("saving");
-    if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       runsRepo.updateRun(runIdRef.current!, {
+        training_plan_item_id: state.training_plan_item_id,
+        race_id: state.race_id,
         started_at: new Date(state.started_at).toISOString(),
         duration_seconds: state.duration_seconds,
         distance_meters: state.distance_meters,
@@ -217,8 +244,9 @@ export function RunForm({ runType, existing, initial }: Props) {
         segments: state.segments,
         provenance: state.provenance,
       });
-      setSavingStatus("saved");
-    }, 500);
+      timer.current = null;
+      setSavingStatus(getStorageStatuses().runs?.status === "saved" ? "saved" : "error");
+    }, 300);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
@@ -271,12 +299,20 @@ export function RunForm({ runType, existing, initial }: Props) {
 
   async function saveAndComplete() {
     if (!runIdRef.current) return;
+    const fields = formRef.current?.querySelectorAll<HTMLInputElement>("input");
+    if (fields && !Array.from(fields).every((field) => field.reportValidity())) return;
     const parsed = runFormSchema.safeParse({ ...state, run_type: runType, status: "completed" });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "טופס לא תקין");
       return;
     }
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
     runsRepo.updateRun(runIdRef.current, {
+      ...state,
+      started_at: new Date(state.started_at).toISOString(),
       status: "completed",
       ended_at: state.duration_seconds
         ? new Date(
@@ -287,7 +323,12 @@ export function RunForm({ runType, existing, initial }: Props) {
         (o: string) => o !== "perceived_effort",
       ) as RunNumericField[],
     });
-    toast.success("הריצה נשמרה");
+    if (getStorageStatuses().runs?.status !== "saved") {
+      toast.error("הריצה בזיכרון בלבד — לא נשמרה במכשיר. אל תסגור את המסך; נסה שוב או ייצא גיבוי.");
+      setSavingStatus("error");
+      return;
+    }
+    toast.success("הריצה נשמרה במכשיר");
     navigate({ to: "/running/$id", params: { id: runIdRef.current } });
   }
 
@@ -312,7 +353,7 @@ export function RunForm({ runType, existing, initial }: Props) {
   const useLastTreadmill = () => setField("treadmill_id", lastUsed.treadmill_id);
 
   return (
-    <div className="space-y-4 px-4 sm:px-6" dir="rtl">
+    <div ref={formRef} className="space-y-4 px-4 sm:px-6" dir="rtl">
       <Tile variant="run" tone="soft" size="sm">
         <div className="flex items-center justify-between gap-2">
           <div>
@@ -323,6 +364,43 @@ export function RunForm({ runType, existing, initial }: Props) {
         </div>
       </Tile>
 
+      <Tile size="md">
+        <SectionTitle>קישור לפרויקט חצאי המרתון</SectionTitle>
+        <label className="text-sm">
+          האימון בתוכנית (לא חובה)
+          <select
+            className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
+            value={state.training_plan_item_id ?? ""}
+            onChange={(e) => setField("training_plan_item_id", e.target.value || null)}
+          >
+            <option value="">ריצה חופשית</option>
+            {project.weeks.flatMap((w) =>
+              w.days.map((d, i) => (
+                <option key={d.id} value={d.id}>
+                  {DAYS[i]} · {d.date}
+                </option>
+              )),
+            )}
+          </select>
+        </label>
+        <label className="text-sm">
+          מרוץ שהושלם (לא חובה)
+          <select
+            className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
+            value={state.race_id ?? ""}
+            onChange={(e) => setField("race_id", e.target.value || null)}
+          >
+            <option value="">אימון רגיל</option>
+            {project.races
+              .filter((r) => !r.deleted_at)
+              .map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+          </select>
+        </label>
+      </Tile>
       <Tile size="md" className="gap-3">
         <SectionTitle>מדדי ליבה</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
@@ -333,45 +411,37 @@ export function RunForm({ runType, existing, initial }: Props) {
               onChange={(e) => setField("started_at", e.target.value)}
             />
           </Field>
-          <Field label="משך (mm:ss / hh:mm:ss)">
-            <Input
-              inputMode="numeric"
-              placeholder="0:00"
-              defaultValue={
-                state.duration_seconds != null ? formatDurationHMS(state.duration_seconds) : ""
-              }
-              onBlur={(e) => setField("duration_seconds", parseDurationInput(e.target.value))}
-            />
-          </Field>
+          <DurationField
+            label="משך הריצה"
+            value={state.duration_seconds}
+            onChange={(v) => setField("duration_seconds", v)}
+          />
           <Field label='מרחק (ק"מ)'>
             <Input
+              aria-label="מרחק בקילומטרים"
               inputMode="decimal"
               placeholder="0.0"
               defaultValue={
                 state.distance_meters != null ? (state.distance_meters / 1000).toString() : ""
               }
-              onBlur={(e) => {
+              onChange={(e) => {
                 const v = parseDecimal(e.target.value);
                 setField("distance_meters", v == null ? null : v * 1000);
               }}
             />
           </Field>
-          <Field label='קצב ממוצע (mm:ss /ק"מ)'>
-            <Input
-              inputMode="numeric"
-              placeholder="0:00"
-              defaultValue={
-                state.average_pace_s_per_km != null ? formatPace(state.average_pace_s_per_km) : ""
-              }
-              onBlur={(e) => setField("average_pace_s_per_km", parsePaceMSS(e.target.value))}
-            />
-          </Field>
+          <DurationField
+            label="קצב לק״מ"
+            value={state.average_pace_s_per_km}
+            onChange={(v) => setField("average_pace_s_per_km", v)}
+          />
           <Field label='מהירות ממוצעת (קמ"ש)'>
             <Input
+              aria-label="מהירות ממוצעת בקמש"
               inputMode="decimal"
               placeholder={derivedPace ? (3600 / derivedPace).toFixed(1) : "—"}
               defaultValue={state.average_speed_kmh?.toString() ?? ""}
-              onBlur={(e) => setField("average_speed_kmh", parseDecimal(e.target.value))}
+              onChange={(e) => setField("average_speed_kmh", parseDecimal(e.target.value))}
             />
           </Field>
           {runType === "treadmill" ? (
@@ -381,7 +451,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                   inputMode="decimal"
                   placeholder="—"
                   defaultValue={state.max_speed_kmh?.toString() ?? ""}
-                  onBlur={(e) => setField("max_speed_kmh", parseDecimal(e.target.value))}
+                  onChange={(e) => setField("max_speed_kmh", parseDecimal(e.target.value))}
                 />
               </Field>
               <Field label="שיפוע ממוצע %">
@@ -389,7 +459,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                   inputMode="decimal"
                   placeholder="—"
                   defaultValue={state.average_incline_pct?.toString() ?? ""}
-                  onBlur={(e) => setField("average_incline_pct", parseDecimal(e.target.value))}
+                  onChange={(e) => setField("average_incline_pct", parseDecimal(e.target.value))}
                 />
               </Field>
               <Field label="שיפוע מרבי %">
@@ -397,7 +467,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                   inputMode="decimal"
                   placeholder="—"
                   defaultValue={state.max_incline_pct?.toString() ?? ""}
-                  onBlur={(e) => setField("max_incline_pct", parseDecimal(e.target.value))}
+                  onChange={(e) => setField("max_incline_pct", parseDecimal(e.target.value))}
                 />
               </Field>
             </>
@@ -502,14 +572,14 @@ export function RunForm({ runType, existing, initial }: Props) {
                 <Input
                   placeholder="למשל: כפר סבא, פארק הירקון"
                   defaultValue={state.city_or_area}
-                  onBlur={(e) => setField("city_or_area", e.target.value)}
+                  onChange={(e) => setField("city_or_area", e.target.value)}
                 />
               </Field>
               <Field label="מקום חופשי (אם אין מסלול)">
                 <Input
                   placeholder="למשל: 'המרובע', סמטה מאחורי הבית"
                   defaultValue={state.free_text_location}
-                  onBlur={(e) => setField("free_text_location", e.target.value)}
+                  onChange={(e) => setField("free_text_location", e.target.value)}
                 />
               </Field>
             </>
@@ -533,7 +603,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                 inputMode="numeric"
                 placeholder="—"
                 defaultValue={state.average_heart_rate?.toString() ?? ""}
-                onBlur={(e) => setField("average_heart_rate", parseDecimal(e.target.value))}
+                onChange={(e) => setField("average_heart_rate", parseDecimal(e.target.value))}
               />
             </Field>
             <Field label="דופק מרבי">
@@ -541,7 +611,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                 inputMode="numeric"
                 placeholder="—"
                 defaultValue={state.max_heart_rate?.toString() ?? ""}
-                onBlur={(e) => setField("max_heart_rate", parseDecimal(e.target.value))}
+                onChange={(e) => setField("max_heart_rate", parseDecimal(e.target.value))}
               />
             </Field>
             <Field label="Cadence (spm)">
@@ -549,7 +619,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                 inputMode="numeric"
                 placeholder="—"
                 defaultValue={state.average_cadence_spm?.toString() ?? ""}
-                onBlur={(e) => setField("average_cadence_spm", parseDecimal(e.target.value))}
+                onChange={(e) => setField("average_cadence_spm", parseDecimal(e.target.value))}
               />
             </Field>
             <Field label="קלוריות">
@@ -557,7 +627,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                 inputMode="numeric"
                 placeholder="—"
                 defaultValue={state.calories?.toString() ?? ""}
-                onBlur={(e) => setField("calories", parseDecimal(e.target.value))}
+                onChange={(e) => setField("calories", parseDecimal(e.target.value))}
               />
             </Field>
             {runType === "outdoor" ? (
@@ -567,7 +637,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                     inputMode="numeric"
                     placeholder="—"
                     defaultValue={state.elevation_gain_m?.toString() ?? ""}
-                    onBlur={(e) => setField("elevation_gain_m", parseDecimal(e.target.value))}
+                    onChange={(e) => setField("elevation_gain_m", parseDecimal(e.target.value))}
                   />
                 </Field>
                 <Field label="ירידה (מ')">
@@ -575,7 +645,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                     inputMode="numeric"
                     placeholder="—"
                     defaultValue={state.elevation_loss_m?.toString() ?? ""}
-                    onBlur={(e) => setField("elevation_loss_m", parseDecimal(e.target.value))}
+                    onChange={(e) => setField("elevation_loss_m", parseDecimal(e.target.value))}
                   />
                 </Field>
               </>
@@ -585,7 +655,7 @@ export function RunForm({ runType, existing, initial }: Props) {
                 inputMode="numeric"
                 placeholder="—"
                 defaultValue={state.perceived_effort?.toString() ?? ""}
-                onBlur={(e) => setField("perceived_effort", parseDecimal(e.target.value))}
+                onChange={(e) => setField("perceived_effort", parseDecimal(e.target.value))}
               />
             </Field>
           </div>
@@ -615,7 +685,7 @@ export function RunForm({ runType, existing, initial }: Props) {
             rows={3}
             defaultValue={state.notes}
             placeholder="תחושה, מזג אוויר, פציעה קלה..."
-            onBlur={(e) => setField("notes", e.target.value)}
+            onChange={(e) => setField("notes", e.target.value)}
           />
         </Field>
       </Tile>
@@ -651,13 +721,19 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-function SaveIndicator({ status }: { status: "idle" | "saving" | "saved" }) {
+function SaveIndicator({ status }: { status: "idle" | "saving" | "saved" | "error" }) {
+  if (status === "error")
+    return (
+      <span role="alert" className="text-xs text-destructive">
+        לא נשמר במכשיר
+      </span>
+    );
   if (status === "saving") return <span className="text-xs text-muted-foreground">שומר…</span>;
   if (status === "saved")
     return (
       <span className="flex items-center gap-1 text-xs text-success">
         <CheckCircle2 className="size-3" />
-        נשמר
+        נשמר במכשיר
       </span>
     );
   return null;

@@ -2,6 +2,7 @@
  * SegmentsEditor — עורך מקטעים אופציונלי לריצה.
  * לא ברירת מחדל; המשתמש בוחר להוסיף. סכומים לא דורסים את סיכום הריצה.
  */
+import { DurationField } from "@/components/inputs/DurationField";
 import { Fragment } from "react";
 import { Plus, Trash2, ArrowUp, ArrowDown, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,6 @@ import {
   formatDurationHMS,
   formatDistanceKm,
   formatPace,
-  parseDurationInput,
   parseDecimal,
   runsRepo,
 } from "@/lib/runs";
@@ -137,19 +137,11 @@ export function SegmentsEditor({ segments, onChange, totals }: Props) {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                  <div>
-                    <Label className="text-xs">משך (mm:ss)</Label>
-                    <Input
-                      inputMode="numeric"
-                      placeholder="0:00"
-                      defaultValue={
-                        s.duration_seconds != null ? formatDurationHMS(s.duration_seconds) : ""
-                      }
-                      onBlur={(e) =>
-                        patch(s.id, { duration_seconds: parseDurationInput(e.target.value) })
-                      }
-                    />
-                  </div>
+                  <DurationField
+                    label={`משך מקטע ${i + 1}`}
+                    value={s.duration_seconds}
+                    onChange={(v) => patch(s.id, { duration_seconds: v })}
+                  />
                   <div>
                     <Label className="text-xs">מרחק (ק"מ)</Label>
                     <Input
@@ -158,7 +150,7 @@ export function SegmentsEditor({ segments, onChange, totals }: Props) {
                       defaultValue={
                         s.distance_meters != null ? (s.distance_meters / 1000).toString() : ""
                       }
-                      onBlur={(e) => {
+                      onChange={(e) => {
                         const v = parseDecimal(e.target.value);
                         patch(s.id, { distance_meters: v == null ? null : v * 1000 });
                       }}
@@ -170,7 +162,7 @@ export function SegmentsEditor({ segments, onChange, totals }: Props) {
                       inputMode="decimal"
                       placeholder="—"
                       defaultValue={s.average_speed_kmh?.toString() ?? ""}
-                      onBlur={(e) =>
+                      onChange={(e) =>
                         patch(s.id, { average_speed_kmh: parseDecimal(e.target.value) })
                       }
                     />
@@ -181,7 +173,7 @@ export function SegmentsEditor({ segments, onChange, totals }: Props) {
                       inputMode="decimal"
                       placeholder="—"
                       defaultValue={s.incline_pct?.toString() ?? ""}
-                      onBlur={(e) => patch(s.id, { incline_pct: parseDecimal(e.target.value) })}
+                      onChange={(e) => patch(s.id, { incline_pct: parseDecimal(e.target.value) })}
                     />
                   </div>
                 </div>

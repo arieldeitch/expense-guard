@@ -7,6 +7,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { listExercises } from "@/lib/exercises";
 import { _resetExercisesStateForTests } from "@/lib/exercises/storage";
 import {
+  buildCustomHomeExercise,
   HOME_GROUPS,
   curatedGroups,
   curatedSlugs,
@@ -30,8 +31,8 @@ describe("curated home catalog — תקינות", () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it("הקטלוג המוצג אינו עולה על 36 תרגילים", () => {
-    expect(curatedSlugs().length).toBeLessThanOrEqual(36);
+  it("הקטלוג המוצג כולל את הרחבת הפק״ל ואינו עולה על 42 תרגילים", () => {
+    expect(curatedSlugs().length).toBeLessThanOrEqual(42);
     expect(curatedSlugs().length).toBeGreaterThanOrEqual(30);
   });
 
@@ -116,4 +117,14 @@ describe("שמירת תאימות IDs", () => {
       "גוף מלא ותנועה",
     ]);
   });
+});
+
+it("custom dumbbell exercises retain weight tracking", () => {
+  const base = {
+    name_he: "תרגיל משקולות",
+    equipment: "dumbbells" as const,
+    primaryMuscleGroupId: "core",
+  };
+  expect(buildCustomHomeExercise({ ...base, measure: "reps" }).tracking_type).toBe("weight_reps");
+  expect(buildCustomHomeExercise({ ...base, measure: "time" }).tracking_type).toBe("weight_time");
 });
