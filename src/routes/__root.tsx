@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GlobalStorageBanner } from "../components/storage/GlobalStorageBanner";
+import { installNativeBridges } from "../lib/native";
 
 function NotFoundComponent() {
   return (
@@ -133,6 +134,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Android shell only (no-op on the web): hardware Back → in-app back / minimise.
+  useEffect(() => {
+    void installNativeBridges();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
