@@ -3,7 +3,7 @@
   "project_id": "fitness_app_recovery",
   "run_id": "fitness_app_recovery-20260921-compact-ux-android-apk",
   "event_type": "milestone",
-  "occurred_at": "2026-09-21T13:58:00+03:00",
+  "occurred_at": "2026-09-21T13:33:00+03:00",
   "milestone": "compact-ux-and-android-apk",
   "health": "YELLOW",
   "summary": "Compact mobile UX with a five-destination navigation and a history centre, plus an installable Android app (Capacitor 8) with a reproducible CI APK build. 471 tests, real-Chrome 390x844 QA and Pixel 7 emulator QA green. Lovable publish and physical-device acceptance remain with Ariel.",
@@ -32,7 +32,7 @@
     "https://github.com/arieldeitch/expense-guard/actions/runs/35587726424",
     "https://github.com/arieldeitch/expense-guard/actions/runs/35588979743"
   ],
-  "last_project_update_at": "2026-09-21T13:58:00+03:00",
+  "last_project_update_at": "2026-09-21T13:33:00+03:00",
   "os_version": "unresolved: Start Here 1.1 vs CURRENT_OS_VERSION 1.0.0",
   "documentation_state": "capsule complete; docs/ai active blocks, ADR-0042/0043, risks R-45..R-47, android.md, ledgers updated",
   "delivery": {
