@@ -74,7 +74,10 @@ jobs:
         if: env.VARIANT == 'debug'
         uses: actions/cache@v4
         with:
-          path: ~/.android/debug.keystore
+          # AGP on the Ubuntu runner follows XDG and writes ~/.config/.android/debug.keystore.
+          path: |
+            ~/.config/.android/debug.keystore
+            ~/.android/debug.keystore
           key: fitlog-android-debug-keystore-v1
 
       - name: Release signing from secrets (only when configured)
@@ -94,12 +97,6 @@ jobs:
           FITLOG_KEY_ALIAS: ${{ secrets.FITLOG_KEY_ALIAS }}
           FITLOG_KEY_PASSWORD: ${{ secrets.FITLOG_KEY_PASSWORD }}
         run: node scripts/android-apk.mjs --variant "$VARIANT"
-
-      - name: Locate the debug keystore (for the cache path)
-        if: env.VARIANT == 'debug'
-        run: |
-          echo "ANDROID_USER_HOME=${ANDROID_USER_HOME:-unset} ANDROID_SDK_HOME=${ANDROID_SDK_HOME:-unset}"
-          find "$HOME" "$RUNNER_TEMP" -name debug.keystore 2>/dev/null || true
 
       - name: Summary
         run: |
