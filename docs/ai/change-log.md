@@ -1,5 +1,13 @@
 # Change Log
 
+## 2026-09-21 · UX קומפקטי + ניווט + מרכז היסטוריה · אפליקציית Android (Capacitor) · PR #2 (Claude Code)
+
+- **ADR-0042 (UX):** ניווט ראשי · דיווח · היסטוריה · תוכניות · עוד (`src/lib/nav.ts`, `Nav.tsx`, `AppShell.tsx`); `/history` חדש (שורות `list-row`, קיבוץ שבועי, chips, חיפוש, חודש, איפוס, Empty); `/report`, `/plans`; `WeekSnapshot` + `useLocalDomainSummary` (המסך הראשי וגם `gym.index` קראו מה-mock); `DomainSummaryTile` קומפקטי; PageHeader 20px, Tile/Input/Button/Select 44px, `--radius` 14px, `h1` 20px ב-`styles.css`; `RunForm`: טיוטה עצלה, `completingRef`, קישור לתוכנית ב-`details`; `treadmills.$id` ללא 404 בשרת; `more.tsx` קומפקטי + AboutTile; eyebrows כפולים הוסרו.
+- **ADR-0043 (Android):** `capacitor.config.ts`, `vite.android.config.ts`, `build-info.ts`, `android/` (Gradle, ערכת נושא, אייקון+splash מ-`scripts/android-assets.mjs`), `src/lib/native.ts` (Back, ייצוא גיבוי דרך Share), `src/lib/build-info.ts`, `scripts/android-apk.mjs`, `.github/workflows/android-apk.yml`; `package.json` version 1.1.0 + סקריפטים; תלויות `@capacitor/*`; `.gitignore`/`eslint.config.js` מתעלמים מ-outputs.
+- **בדיקות:** `src/lib/history/items.test.ts` (5), `src/lib/nav.test.ts` (21), `src/test/compactUx.test.tsx` (10, `test:router:compact-ux`); `fitnessRecovery` עודכן. **390 יחידה / 27 + 81 מסכים / 13 = 471.**
+- **QA:** Web 390×844 (17/17) · Android אמולטור Pixel 7 API 35 (20 פריטים; מכשיר פיזי — פעולת קבלה לאריאל). ראיות ב-`docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk/assets/`.
+- **סיכונים:** R-28, R-43 נסגרו; R-45, R-46, R-47 נוספו. **תיעוד:** `docs/ai/android.md` חדש.
+
 ## 2026-09-20 (ערב) · סקירת PR #1 · QA מובייל 390×844 RTL · 12 תיקונים · שערים ירוקים (Claude Code)
 
 - **QA דפדפן אמיתי** (Chrome, 390×844, RTL, he-IL, Asia/Jerusalem) על כל 25 סעיפי הקבלה — עבר; ראיות ב-`docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project/assets/mobile-qa-390x844/`.

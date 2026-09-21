@@ -1,0 +1,14 @@
+project_id: fitness_app_recovery
+run_id: fitness_app_recovery-20260921-compact-ux-android-apk
+updated_at: "2026-09-21T13:05:00+03:00"
+status: YELLOW
+repository: arieldeitch/expense-guard
+baseline: 1722d531df0b8897d78a9150ed63eaa096a080d0
+branch: feat/compact-mobile-ux-android-apk
+lovable_project: 2b79da21-331d-4a52-bd0f-e49f64b4e79d
+live_url: https://fitlog-workout.lovable.app
+permission_model_changed: false
+android_app_id: com.arieldeitch.fitlog
+android_version_name: "1.1.0"
+android_version_code: 10100
+raw_history_gaps: "Full Claude Code transcript lives in the session; every claim below is backed by files in assets/ (QA logs, screenshots, APK JSON)."

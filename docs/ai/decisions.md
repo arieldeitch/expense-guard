@@ -420,3 +420,23 @@ export function useHomeSessions() {
 
 ## ADR-0041 · 2026-09-20 · שיקום מוצר ופרויקט חצאי מרתון
 בקשת אריאל האחרונה מאשרת את הרחבת המוצר המתוארת ב-§9. Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d אומת מול repo expense-guard ב-4413f99. נשמרת הארכיטקטורה המקומית המאומתת מ-PROJECT_STATUS, הגוברת על סעיפי ארכיטקטורה עתידית במסמכים ישנים. נתוני מרוצים/המלצות יצורפו כאוספים אופציונליים למודול runs הקיים כדי להיכלל בגיבוי ובמיזוג ללא מפתח חדש. המלצה מקורית נפרדת מהתאמות ומקושרת ליומן דרך מזהה, לא עותק אימון. מנוע v1 הוא חוקים מקומיים, אינו שירות LLM ואינו מבטיח תזמון ברקע.
+
+## ADR-0042 · 2026-09-21 · שפה קומפקטית, ניווט חמישה יעדים ומרכז היסטוריה
+
+**הקשר:** פידבק אריאל (2026-09-21): היסטוריה ודיווח לא אינטואיטיביים; האפליקציה גדולה ועמוסה; נדרשת חוויית Android אמיתית. מחקר 8 אפליקציות וביקורת UX ב-`docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk/03,04`.
+
+**החלטה:** ניווט תחתון/צד **ראשי · דיווח · היסטוריה · תוכניות · עוד**, יעד פעיל אחד לכל כתובת (`src/lib/nav.ts`). `/history` הוא מרכז ההיסטוריה: שורות קומפקטיות, קיבוץ שבועי עם סיכום, chips, חיפוש, חודש, איפוס, Empty state; מודל שורה אחיד ב-`src/lib/history/items.ts`. מסכי `/report` ו-`/plans` חדשים. המסך הראשי מחשב Snapshot מהנתונים המקומיים (`useLocalDomainSummary`) — לא מה-mock. סולם טיפוגרפי 20/24/14/12, radius 14px, Input/Button/Select 44px, `list-row`. טיוטת ריצה נוצרת בעריכה הראשונה (R-28); "שמור וסיים" חסום ללחיצה כפולה; R-43 נסגר ל-`treadmills.$id`.
+
+**נימוק:** היסטוריה ודיווח הם הפעולות היומיות — חייבים להיות יעד ראשי; Snapshot לפני פירוט; היררכיה במקום הקטנת פונטים גלובלית.
+
+**השלכה:** קיצורי הדרך משורת המסך הוסרו; `routeTree.gen.ts` נוצר מחדש (מסלולים חדשים `/report`, `/plans`); הבדיקות `compactUx.test.tsx`, `nav.test.ts`, `history/items.test.ts`. אין שינוי בנתונים, במפתחות או בגיבוי.
+
+## ADR-0043 · 2026-09-21 · Android דרך Capacitor 8 (WebView מקומי), build משתחזר, ללא keystore בריפו
+
+**הקשר:** נדרש APK ניתן להתקנה, לא "אתר בתוך מסגרת". חלופות: TWA (תלוי באתר החי וב-localStorage של Chrome), PWA ארוז (לא APK), React Native/Native (שכתוב, שני מקורות אמת).
+
+**החלטה:** Capacitor 8.5.2 + WebView מקומי. `vite.android.config.ts` בונה SPA shell מאותו `src/` (`nitro: false`, `spa.enabled`) ל-`dist-android/client`; `capacitor.config.ts` (`com.arieldeitch.fitlog`, "Fit Log", `https://localhost`, edge-to-edge); `android/` מחויב ללא outputs/keystore; `versionName` = `package.json`, `versionCode` = major·10000+minor·100+patch; commit כמשאב. Plugins: app (Back), filesystem + share (ייצוא גיבוי). הרשאה: INTERNET בלבד. `scripts/android-apk.mjs` ו-`.github/workflows/android-apk.yml` (Bun 1.4.2 · JDK 21 · SDK 36 · Gradle 8.14.3 · AGP 8.13.0) מפיקים `fitlog-<ver>-<code>-<commit>-<variant>.apk` + SHA-256. חתימה: debug להפצה פנימית; release רק עם `FITLOG_KEYSTORE_*` secrets.
+
+**נימוק:** מקור אמת אחד, עבודה ללא רשת, localStorage יציב, Back/מקלדת/Safe-areas דרך API מתועד, build אוטומטי ובדיק.
+
+**השלכה:** ה-APK מתחיל עם localStorage ריק — מעבר דרך Export/Restore (`docs/ai/android.md`). Play Store מחוץ להיקף. תלויות חדשות: `@capacitor/{core,app,filesystem,share}` ו-`@capacitor/{cli,android}` (dev). JDK 21 נדרש מקומית ל-build.
