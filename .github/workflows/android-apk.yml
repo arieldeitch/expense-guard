@@ -95,6 +95,12 @@ jobs:
           FITLOG_KEY_PASSWORD: ${{ secrets.FITLOG_KEY_PASSWORD }}
         run: node scripts/android-apk.mjs --variant "$VARIANT"
 
+      - name: Locate the debug keystore (for the cache path)
+        if: env.VARIANT == 'debug'
+        run: |
+          echo "ANDROID_USER_HOME=${ANDROID_USER_HOME:-unset} ANDROID_SDK_HOME=${ANDROID_SDK_HOME:-unset}"
+          find "$HOME" "$RUNNER_TEMP" -name debug.keystore 2>/dev/null || true
+
       - name: Summary
         run: |
           echo "## Fit Log APK" >> "$GITHUB_STEP_SUMMARY"
