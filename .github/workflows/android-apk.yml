@@ -1,12 +1,17 @@
 # Fit Log — reproducible Android APK (ADR-0043).
 # Same steps as `bun run android:apk` locally: web SPA build → cap sync → Gradle → rename + SHA-256.
-# Runs on every push to main and on demand. Debug-signed by default (internal install only).
+# Runs on pull requests, on every push to main and on demand. Debug-signed by default (internal install only).
 # A release-signed APK is produced ONLY when the FITLOG_KEYSTORE_* secrets exist; nothing is
 # invented and no keystore is stored in the repository.
 name: android-apk
 
 on:
   push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+  pull_request:
     branches: [main]
     paths-ignore:
       - "docs/**"
