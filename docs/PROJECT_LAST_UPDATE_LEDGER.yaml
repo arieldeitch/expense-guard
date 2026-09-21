@@ -1,6 +1,6 @@
 project_id: fitness_app_recovery
 run_id: fitness_app_recovery-20260921-compact-ux-android-apk
-last_project_update_at: "2026-09-21T13:45:00+03:00"
+last_project_update_at: "2026-09-21T13:58:00+03:00"
 status: YELLOW
 capsule: docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk
 previous_run: fitness_app_recovery-20260920-recovery-race-project
@@ -9,18 +9,21 @@ pr: https://github.com/arieldeitch/expense-guard/pull/2
 merge_state: "merged 2026-09-21T13:14+03:00 — merge commit 2d7cffde8af7b4f2bb4410963e830c87da097416 on main (86f2422, 7c62078, ba96984, 5dae552)"
 publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d not visible to the connected Lovable account (project_not_found); live still serves the previous build (/report, /plans → 404). Ariel publishes."
 apk_official_main:
-  workflow_run: https://github.com/arieldeitch/expense-guard/actions/runs/35587726424
-  artifact: fitlog-apk-debug-2d7cffde8af7b4f2bb4410963e830c87da097416
-  artifact_id: 10632733461
-  file: fitlog-1.1.0-10100-2d7cffde8a-debug.apk
+  note: "Canonical APK = latest main run; from run 35588770666 on, CI debug builds share one cached signing key (R-46), so newer APKs install over older ones."
+  workflow_run: https://github.com/arieldeitch/expense-guard/actions/runs/35588979743
+  artifact: fitlog-apk-debug-452a17af4061040c2d565f700c1c79352bb2a61c
+  artifact_id: 10633089566
+  file: fitlog-1.1.0-10100-452a17af40-debug.apk
   size_bytes: 4770061
-  sha256: 5a5b466a34f1cebf7c64816eb99127bf81f75e39cd9eb114ca743edc4d56a007
+  sha256: 791aa929c6d1cef88d552ddaebde648aecf61496156549670201106cb0a7910e
+  signer_cert_sha256: 59842bec78e92339817310bf5352bfee9a7741f842fd64e4b8d5ea2b3e662193
   version_name: "1.1.0"
   version_code: 10100
-  commit: 2d7cffde8a
+  commit: 452a17af40
   signing: "debug keystore (internal install only, not Play Store)"
   expires: "2026-12-20"
+  superseded_first_main_apk: "fitlog-1.1.0-10100-2d7cffde8a-debug.apk (run 35587726424) — different, unrepeatable debug signature; do not use as an upgrade base"
 android_app_id: com.arieldeitch.fitlog
-next_action: "Ariel: Publish in Lovable; download the APK artifact from run 35587726424, export a backup from the web app, install, restore (docs/ai/android.md), then verify Back/keyboard/backup on the phone"
+next_action: "Ariel: Publish in Lovable; download the APK artifact from run 35588979743 (or any later main run), export a backup from the web app, install, restore (docs/ai/android.md), then verify Back/keyboard/backup on the phone"
 control_tower: pending
 chief_of_staff: pending

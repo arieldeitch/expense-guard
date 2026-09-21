@@ -9,3 +9,7 @@
 - **נצפה:** APK מ-run אחר (PR) נחתם ב-debug key שונה → התקנה מעל נכשלה (R-46). נוסף cache ל-keystore ב-workflow (commit הסגירה); ייכנס לתוקף מה-run הבא.
 - **פרסום Lovable — חסום מהסשן** (החשבון המחובר: `project_not_found`). live: `/`, `/history` → 200 (build קודם); `/report`, `/plans` → 404 עד לפרסום. **לא נטען שפורסם.**
 - **מכשיר פיזי** — לא נבדק; פעולת קבלה לאריאל.
+
+## תיקון אחרון · 2026-09-21T13:58:00+03:00 — חתימה יציבה ב-CI
+- ה-APK הראשון מ-`main` (`2d7cffde8a`) נחתם במפתח debug חד-פעמי של ה-runner. תוקן: `actions/cache` ל-`~/.config/.android/debug.keystore` (commit `452a17a`). אומת ב-`apksigner`: שני runs עוקבים (35588770666 ו-35588979743) → אותה תעודה `59842bec…2193`.
+- **ה-APK הקנוני למסירה:** run https://github.com/arieldeitch/expense-guard/actions/runs/35588979743 → `fitlog-1.1.0-10100-452a17af40-debug.apk` · SHA-256 `791aa929c6d1cef88d552ddaebde648aecf61496156549670201106cb0a7910e`. כל APK עתידי מ-`main` יתקין מעליו (כל עוד ה-cache חי).
