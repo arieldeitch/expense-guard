@@ -44,8 +44,18 @@ Capacitor 8 + WebView מקומי (ADR-0043); חלופות ונימוקים ב-`0
 ## DATA SAFETY
 אין מיגרציה, אין שינוי מפתחות, אין כתיבה/מחיקה של `fitlog:*` שלא ביוזמת המשתמש; הגיבוי תואם לאחור; ה-APK מתחיל ריק ומקבל נתונים רק דרך Restore מפורש.
 
-## GIT / PR / MERGE · LOVABLE / LIVE · DOWNLOAD
-ראה `10_HANDOFF_AND_NEXT.md` (מתעדכן בסגירה) ו-`docs/AI_RUN_CONTEXT_LEDGER.yaml`.
+## GIT / PR / MERGE
+ענף `feat/compact-mobile-ux-android-apk`: `86f2422` (UX) · `7c62078` (Android) · `ba96984` (CI on PR) · `5dae552` (docs). PR #2 → **MERGED** ב-merge commit `2d7cffde8af7b4f2bb4410963e830c87da097416` (2026-09-21 13:14 +03:00). commit סגירה על `main`: workflow keystore-cache + לדג'רים.
+
+## LOVABLE / LIVE
+**לא פורסם מהסשן** — `project_not_found` לחשבון המחובר (כמו ב-2026-09-20). live: `/`, `/history` → 200 (ה-build הקודם), `/report`, `/plans` → 404 עד ש-אריאל לוחץ Publish.
+
+## DOWNLOAD (APK רשמי מ-main)
+- Run: https://github.com/arieldeitch/expense-guard/actions/runs/35587726424 → Artifacts → `fitlog-apk-debug-2d7cffde8af7b4f2bb4410963e830c87da097416` (zip; בתוכו ה-APK, `.sha256`, `fitlog-apk.json`). תוקף: 2026-12-20.
+- `fitlog-1.1.0-10100-2d7cffde8a-debug.apk` · 4,770,061 bytes · SHA-256 `5a5b466a34f1cebf7c64816eb99127bf81f75e39cd9eb114ca743edc4d56a007` · Package `com.arieldeitch.fitlog` · versionName `1.1.0` · versionCode `10100` · commit `2d7cffde8a` · חתימה: **debug** (התקנה פנימית; לא Play Store).
+
+## INSTALLATION
+1. באתר: עוד → גיבוי ושחזור → **הורד גיבוי** (שים לב למספר הרשומות). 2. הורד את ה-artifact מהקישור למעלה (דרוש login ל-GitHub), חלץ את ה-APK, העבר לטלפון. 3. פתח את ה-APK → אשר "התקנה מאפליקציה לא מוכרת" למקור שממנו פותחים → התקן. 4. באפליקציה: עוד → גיבוי ושחזור → **בחר קובץ גיבוי** → בדוק "רשומות חדשות" → **הוסף חדשים בלבד**. 5. אמת: היסטוריה (כל התקופה), חצאי המרתון, עוד → אודות (`1.1.0 · build 10100 · 2d7cffde8a`). מלא: `docs/ai/android.md`.
 
 ## OPEN ISSUES
 T-05 (session מאומת/סנכרון ענן) · R-45 פיצול נתונים אתר/אפליקציה · R-46 חתימת debug · R-47 פונט מהרשת · Play Store מחוץ להיקף · פער גרסת OS (Start Here 1.1 / 1.0.0).

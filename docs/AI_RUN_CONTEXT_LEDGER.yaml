@@ -1,17 +1,26 @@
 project_id: fitness_app_recovery
 run_id: fitness_app_recovery-20260921-compact-ux-android-apk
-last_project_update_at: "2026-09-21T13:25:00+03:00"
+last_project_update_at: "2026-09-21T13:45:00+03:00"
 status: YELLOW
 capsule: docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk
 previous_run: fitness_app_recovery-20260920-recovery-race-project
 summary: "Compact mobile UX (nav ראשי·דיווח·היסטוריה·תוכניות·עוד, history centre, report/plans), Android APK via Capacitor 8 with reproducible CI build; 471 tests; web + emulator QA green"
 pr: https://github.com/arieldeitch/expense-guard/pull/2
-merge_state: pending
-publish_state: "pending — Lovable publish not reachable from this session (project not visible to the connected account); Ariel publishes"
-apk_ci_pr_run: https://github.com/arieldeitch/expense-guard/actions/runs/35586845306
-apk_official_main: pending
+merge_state: "merged 2026-09-21T13:14+03:00 — merge commit 2d7cffde8af7b4f2bb4410963e830c87da097416 on main (86f2422, 7c62078, ba96984, 5dae552)"
+publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d not visible to the connected Lovable account (project_not_found); live still serves the previous build (/report, /plans → 404). Ariel publishes."
+apk_official_main:
+  workflow_run: https://github.com/arieldeitch/expense-guard/actions/runs/35587726424
+  artifact: fitlog-apk-debug-2d7cffde8af7b4f2bb4410963e830c87da097416
+  artifact_id: 10632733461
+  file: fitlog-1.1.0-10100-2d7cffde8a-debug.apk
+  size_bytes: 4770061
+  sha256: 5a5b466a34f1cebf7c64816eb99127bf81f75e39cd9eb114ca743edc4d56a007
+  version_name: "1.1.0"
+  version_code: 10100
+  commit: 2d7cffde8a
+  signing: "debug keystore (internal install only, not Play Store)"
+  expires: "2026-12-20"
 android_app_id: com.arieldeitch.fitlog
-android_version: "1.1.0 (10100)"
-next_action: "Merge PR #2, wait for the main android-apk run, record the artifact; Ariel publishes Lovable and installs the APK per docs/ai/android.md"
+next_action: "Ariel: Publish in Lovable; download the APK artifact from run 35587726424, export a backup from the web app, install, restore (docs/ai/android.md), then verify Back/keyboard/backup on the phone"
 control_tower: pending
 chief_of_staff: pending

@@ -66,6 +66,17 @@ jobs:
       - name: Gradle cache
         uses: gradle/actions/setup-gradle@v4
 
+      # Debug builds are signed with the runner's auto-generated ~/.android/debug.keystore. Caching it
+      # keeps the signature stable across runs so an APK from run N+1 installs OVER run N without
+      # losing local data (R-46). Best effort: if the cache is evicted, the next APK needs
+      # export → uninstall → install → restore. This is not a release credential.
+      - name: Stable debug keystore (cache)
+        if: env.VARIANT == 'debug'
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: fitlog-android-debug-keystore-v1
+
       - name: Release signing from secrets (only when configured)
         if: env.VARIANT == 'release'
         env:

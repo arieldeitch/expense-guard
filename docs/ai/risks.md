@@ -340,7 +340,8 @@
 
 ## R-46 · חתימת debug ל-APK — 🟢 Low (הוסף 2026-09-21)
 **תרחיש:** ה-APK נחתם ב-debug keystore של ה-SDK (מקומי או של runner ב-CI). התקנה "מעל" גרסה שנחתמה ב-keystore אחר נכשלת (`INSTALL_FAILED_UPDATE_INCOMPATIBLE`) ומחייבת הסרה → localStorage נמחק.
-**מיטיגציה:** תמיד לייצא גיבוי לפני שדרוג; להתקין תמיד מאותו מקור (artifact של CI). release keystore קבוע דורש אישור של אריאל (יצירת credential) — לא נוצר.
+**נצפה בפועל (2026-09-21):** APK מ-run של PR ו-APK מ-run של `main` נחתמו ב-debug keys שונים → `INSTALL_FAILED_UPDATE_INCOMPATIBLE`; נדרשה הסרה והתקנה.
+**מיטיגציה:** ה-workflow שומר את `~/.android/debug.keystore` ב-`actions/cache` (מפתח קבוע) כך שה-APK הבא מתקין מעל הקודם כל עוד ה-cache חי (7 ימים ללא שימוש → נמחק); תמיד לייצא גיבוי לפני שדרוג; להתקין תמיד מאותו מקור (artifact של `main`). release keystore קבוע דורש אישור של אריאל (יצירת credential) — לא נוצר.
 
 ## R-47 · Heebo נטען מ-Google Fonts גם ב-APK — 🟢 Low (הוסף 2026-09-21)
 **תרחיש:** ללא רשת האפליקציה עובדת במלואה אך עם פונט המערכת (אומת במצב טיסה). אפשר לארוז את הפונט (`@fontsource/heebo`) — לא בוצע כדי לא להוסיף תלות ללא צורך מוכח.

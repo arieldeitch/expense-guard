@@ -30,7 +30,7 @@ bun run android:assets           # מייצר אייקון + splash מ-SVG אח�
 רץ על push ל-`main` (למעט docs) ובאופן ידני (`workflow_dispatch`, `variant=debug|release`). Bun 1.4.2 · Temurin 21 · SDK 36 · Gradle 8.14.3 (wrapper מחויב) · AGP 8.13.0. מעלה artifact `fitlog-apk-<variant>-<sha>` (APK + SHA-256 + JSON) ל-90 יום ומדפיס summary. **release** נבנה רק אם קיימים ה-secrets `FITLOG_KEYSTORE_BASE64`, `FITLOG_KEYSTORE_PASSWORD`, `FITLOG_KEY_ALIAS`, `FITLOG_KEY_PASSWORD`; אחרת נכשל במפורש. אין keystore בריפו (`*.jks`/`*.keystore` ב-.gitignore).
 
 ## חתימה
-- **debug** — נחתם ב-debug keystore הסטנדרטי של ה-SDK: מתאים להתקנה ידנית (sideload) ולשימוש פנימי. **לא** מתאים ל-Google Play. שדרוג מגרסה ל-גרסה עובד כל עוד אותו keystore (כל מכונה/CI עם debug key שונה → יש להסיר ולהתקין מחדש; הנתונים אז נמחקים — לכן גיבוי לפני).
+- **debug** — נחתם ב-debug keystore של הסביבה הבונה: מתאים להתקנה ידנית (sideload) ולשימוש פנימי. **לא** מתאים ל-Google Play. ב-CI ה-keystore נשמר ב-`actions/cache` (מפתח `fitlog-android-debug-keystore-v1`) כדי שגרסה חדשה תתקין מעל הקודמת; אם ה-cache נמחק או שמתקינים APK ממכונה אחרת → `INSTALL_FAILED_UPDATE_INCOMPATIBLE` → ייצוא גיבוי, הסרה, התקנה, שחזור (R-46).
 - **release** — רק עם keystore מאושר דרך secrets. פרסום ב-Play Store אינו חלק מהריצה ודורש אישור נפרד.
 
 ## התנהגות Android
