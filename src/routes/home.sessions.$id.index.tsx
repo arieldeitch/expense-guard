@@ -77,7 +77,7 @@ function SessionPage() {
             type="button"
             onClick={() => finish("completed")}
             aria-label="סיום אימון"
-            className="tile-interactive inline-flex min-h-9 items-center gap-1 rounded-xl bg-home px-3 text-xs font-black text-white"
+            className="tile-interactive inline-flex min-h-11 items-center gap-1 rounded-xl bg-home px-3 text-xs font-black text-white"
           >
             <Check aria-hidden className="size-4" />
             סיום

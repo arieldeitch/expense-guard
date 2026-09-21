@@ -77,7 +77,7 @@ function QuickPickPage() {
 
   return (
     <AppShell topBar={{ title: "דיווח מהיר", back: { to: "/home", label: "חזרה" } }}>
-      <PageHeader eyebrow="בית" title="בחר תרגיל" />
+      <PageHeader title="בחר תרגיל" description="תרגיל אחד, סטים גמישים. הסטים נשמרים תוך כדי." />
 
       <div className="mb-3 flex items-center gap-2 px-4 sm:px-6">
         <div className="relative flex-1">

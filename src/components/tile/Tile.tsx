@@ -28,9 +28,9 @@ const tileVariants = cva(
         solid: "",
       },
       size: {
-        sm: "p-3 gap-2",
-        md: "p-4 gap-3",
-        lg: "p-5 gap-4",
+        sm: "p-2.5 gap-1.5",
+        md: "p-3 gap-2",
+        lg: "p-4 gap-3",
       },
       interactive: {
         true: "cursor-pointer hover:bg-surface-elevated active:scale-[0.985] hover:border-primary/60 shadow-[var(--shadow-tile)]",
@@ -140,7 +140,7 @@ export function TileMetric({
 }) {
   return (
     <div className={cn("flex items-baseline gap-1.5", className)}>
-      <span className="ltr-nums text-3xl font-black leading-none tracking-tight">{value}</span>
+      <span className="ltr-nums text-2xl font-black leading-none tracking-tight">{value}</span>
       {unit ? <span className="text-sm font-medium text-muted-foreground">{unit}</span> : null}
     </div>
   );
@@ -148,7 +148,7 @@ export function TileMetric({
 
 /** מידע משני מוגבל בשורה */
 export function TileFootnote({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("text-sm text-muted-foreground", className)}>{children}</div>;
+  return <div className={cn("text-xs text-muted-foreground", className)}>{children}</div>;
 }
 
 /** אינדיקטור השוואה מול הערך הקודם */

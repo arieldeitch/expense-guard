@@ -1,10 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Footprints, Dumbbell, HeartPulse } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { DomainSummaryTile } from "@/components/tile/DomainSummaryTile";
-import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
+import { WeekSnapshot } from "@/components/home/WeekSnapshot";
+import { useAllRuns } from "@/lib/runs";
+import { useHomeSessions } from "@/lib/home";
+import { useAllSessions } from "@/lib/sessions";
+import { buildHistoryItems } from "@/lib/history/items";
+import { useLocalDomainSummary } from "@/lib/selectors/local-domain-summary";
 import {
   hasLandedThisSession,
   markLandedThisSession,
@@ -31,10 +36,17 @@ export const Route = createFileRoute("/")({
 });
 
 function LaunchpadPage() {
-  const running = useDomainSummary("running");
-  const gym = useDomainSummary("gym");
-  const home = useDomainSummary("home");
+  const running = useLocalDomainSummary("running");
+  const gym = useLocalDomainSummary("gym");
+  const home = useLocalDomainSummary("home");
   const navigate = useNavigate();
+  const runs = useAllRuns();
+  const homeSessions = useHomeSessions();
+  const gymSessions = useAllSessions();
+  const items = useMemo(
+    () => buildHistoryItems({ runs, home: homeSessions, gym: gymSessions }),
+    [runs, homeSessions, gymSessions],
+  );
 
   // One-shot redirect לפי landing preference (פעם בסשן, לא reactive לשינויים).
   useEffect(() => {
@@ -52,21 +64,18 @@ function LaunchpadPage() {
 
   return (
     <AppShell>
-      <PageHeader
-        eyebrow="בחירת תחום"
-        title="לאן היום"
-        description="שלושה תחומים. בחירה אחת. אין הזנת נתונים לפני שרוצים."
-      />
+      <PageHeader title="Fit Log" description="השבוע שלך, ודיווח אחד רחוק." />
 
-      <div className="grid grid-cols-1 gap-3 px-4 sm:grid-cols-3 sm:px-6">
+      <WeekSnapshot items={items} />
+
+      <div className="mt-3 grid grid-cols-1 gap-2 px-4 sm:grid-cols-3 sm:px-6">
         <DomainSummaryTile
           variant="run"
           title="ריצה"
           icon={<Footprints aria-hidden />}
           domainPath="/running"
           quickStartPath="/running/new"
-          summary={running.data}
-          loading={running.isPending}
+          summary={running}
         />
         <DomainSummaryTile
           variant="gym"
@@ -74,17 +83,15 @@ function LaunchpadPage() {
           icon={<Dumbbell aria-hidden />}
           domainPath="/gym"
           quickStartPath="/gym/new"
-          summary={gym.data}
-          loading={gym.isPending}
+          summary={gym}
         />
         <DomainSummaryTile
           variant="home"
-          title="בית"
+          title="פק״ל בבית"
           icon={<HeartPulse aria-hidden />}
           domainPath="/home"
-          quickStartPath="/home/new"
-          summary={home.data}
-          loading={home.isPending}
+          quickStartPath="/home/quick"
+          summary={home}
         />
       </div>
     </AppShell>

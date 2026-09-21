@@ -189,53 +189,36 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
   const runIdRef = useRef<string | null>(existing?.id ?? null);
   const [savingStatus, setSavingStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [completing, setCompleting] = useState(false);
+  // Ref, not state: two taps in the same tick must not create two completions.
+  const completingRef = useRef(false);
   const [showSegments, setShowSegments] = useState((existing?.segments?.length ?? 0) > 0);
 
-  // Ensure a draft exists on first mount (only for new).
-  useEffect(() => {
-    if (runIdRef.current) return;
-    const draft = runsRepo.createRun({
-      training_plan_item_id: state.training_plan_item_id,
-      race_id: state.race_id,
-      run_type: runType,
-      status: "draft",
-      started_at: new Date(state.started_at).toISOString(),
-      ended_at: null,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      duration_seconds: state.duration_seconds,
-      distance_meters: state.distance_meters,
-      average_speed_kmh: state.average_speed_kmh,
-      max_speed_kmh: state.max_speed_kmh,
-      average_pace_s_per_km: state.average_pace_s_per_km,
-      average_incline_pct: state.average_incline_pct,
-      max_incline_pct: state.max_incline_pct,
-      calories: state.calories,
-      average_heart_rate: state.average_heart_rate,
-      max_heart_rate: state.max_heart_rate,
-      average_cadence_spm: state.average_cadence_spm,
-      elevation_gain_m: state.elevation_gain_m,
-      elevation_loss_m: state.elevation_loss_m,
-      location_id: state.location_id,
-      treadmill_id: state.treadmill_id,
-      route_id: state.route_id,
-      country_code: state.country_code,
-      city_or_area: state.city_or_area || null,
-      free_text_location: state.free_text_location || null,
-      perceived_effort: state.perceived_effort,
-      notes: state.notes || null,
-      segments: state.segments,
-      provenance: state.provenance,
-      outlier_overrides: [],
-      data_completeness: 0,
-      primary_source: "manual",
-    });
-    runIdRef.current = draft.id;
-    // replace URL so refresh continues the same draft
-    if (typeof window !== "undefined") {
-      window.history.replaceState({}, "", `/running/${draft.id}/edit`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Lazy draft (R-28, ADR-0042): the record is created on the FIRST edit, not on opening the
+  // screen, so leaving an untouched form leaves no orphan draft behind.
+  const dirtyRef = useRef(false);
+  const ensureDraft = useCallback(
+    (s: FormState): string => {
+      if (runIdRef.current) return runIdRef.current;
+      const draft = runsRepo.createRun({
+        ...toRunPatch(s),
+        run_type: runType,
+        status: "draft",
+        ended_at: null,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        outlier_overrides: [],
+        data_completeness: 0,
+        primary_source: "manual",
+      });
+      runIdRef.current = draft.id;
+      // replace URL so refresh continues the same draft
+      if (typeof window !== "undefined") {
+        window.history.replaceState({}, "", `/running/${draft.id}/edit`);
+      }
+      return draft.id;
+    },
+    [runType],
+  );
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestState = useRef(state);
@@ -243,26 +226,26 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
   // Flush pending changes on navigation; no last-keystroke loss.
   useEffect(
     () => () => {
-      if (!timer.current || !runIdRef.current) return;
+      if (!timer.current || !dirtyRef.current) return;
       clearTimeout(timer.current);
       const current = latestState.current;
       if (Number.isFinite(new Date(current.started_at).getTime()))
-        runsRepo.updateRun(runIdRef.current, toRunPatch(current));
+        runsRepo.updateRun(ensureDraft(current), toRunPatch(current));
     },
-    [],
+    [ensureDraft],
   );
   useEffect(() => {
-    if (!runIdRef.current || !Number.isFinite(new Date(state.started_at).getTime())) return;
+    if (!dirtyRef.current || !Number.isFinite(new Date(state.started_at).getTime())) return;
     setSavingStatus("saving");
     timer.current = setTimeout(() => {
-      runsRepo.updateRun(runIdRef.current!, toRunPatch(state));
+      runsRepo.updateRun(ensureDraft(state), toRunPatch(state));
       timer.current = null;
       setSavingStatus(getStorageStatuses().runs?.status === "saved" ? "saved" : "error");
     }, 300);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [state]);
+  }, [state, ensureDraft]);
 
   const setField = useCallback(
     <K extends keyof FormState>(
@@ -270,6 +253,7 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
       v: FormState[K],
       source: FormState["provenance"][string] = "manual",
     ) => {
+      dirtyRef.current = true;
       setState((prev) => {
         const provenance = { ...prev.provenance };
         if (typeof v === "number" || v === null) provenance[k as string] = source;
@@ -310,6 +294,19 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
   );
 
   async function saveAndComplete() {
+    if (completingRef.current) return;
+    completingRef.current = true;
+    setCompleting(true);
+    try {
+      completeNow();
+    } finally {
+      completingRef.current = false;
+      setCompleting(false);
+    }
+  }
+
+  function completeNow() {
+    ensureDraft(state);
     if (!runIdRef.current) return;
     const fields = formRef.current?.querySelectorAll<HTMLInputElement>("input");
     if (fields && !Array.from(fields).every((field) => field.reportValidity())) return;
@@ -344,7 +341,10 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
   }
 
   async function discardDraft() {
-    if (!runIdRef.current) return;
+    if (!runIdRef.current) {
+      navigate({ to: "/running" });
+      return;
+    }
     if (!window.confirm("למחוק את הטיוטה? הפעולה ניתנת לשחזור מסל המחזור.")) return;
     runsRepo.softDeleteRun(runIdRef.current);
     toast.info("הטיוטה הועברה לסל המחזור");
@@ -375,45 +375,6 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
         </div>
       </Tile>
 
-      <Tile size="md">
-        <SectionTitle>קישור לפרויקט חצאי המרתון</SectionTitle>
-        <label className="text-sm">
-          האימון בתוכנית (לא חובה)
-          <select
-            className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
-            value={state.training_plan_item_id ?? ""}
-            onChange={(e) => setField("training_plan_item_id", e.target.value || null)}
-          >
-            <option value="">ריצה חופשית</option>
-            {[...project.weeks]
-              .sort((a, b) => a.week_start.localeCompare(b.week_start))
-              .flatMap((w) =>
-                w.days.map((d, i) => (
-                  <option key={d.id} value={d.id}>
-                    {DAYS[i]} {formatDayMonth(d.date)} · {KIND_LABELS[d.chosen.kind]}
-                  </option>
-                )),
-              )}
-          </select>
-        </label>
-        <label className="text-sm">
-          מרוץ שהושלם (לא חובה)
-          <select
-            className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
-            value={state.race_id ?? ""}
-            onChange={(e) => setField("race_id", e.target.value || null)}
-          >
-            <option value="">אימון רגיל</option>
-            {project.races
-              .filter((r) => !r.deleted_at)
-              .map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-          </select>
-        </label>
-      </Tile>
       <Tile size="md" className="gap-3">
         <SectionTitle>מדדי ליבה</SectionTitle>
         <div className="grid grid-cols-2 gap-3">
@@ -504,6 +465,57 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
           </TileFootnote>
         ) : null}
       </Tile>
+
+      {/* Progressive disclosure (ADR-0042): open when the run came from the weekly plan or is already linked. */}
+      <details
+        className="rounded-2xl border border-border bg-surface p-3"
+        open={Boolean(state.training_plan_item_id || state.race_id)}
+      >
+        <summary className="min-h-11 cursor-pointer py-2 text-sm font-bold">
+          קישור לתוכנית השבועית או למרוץ{" "}
+          <span className="font-normal text-muted-foreground">
+            {state.training_plan_item_id || state.race_id ? "· מקושר" : "· לא חובה"}
+          </span>
+        </summary>
+        <div className="mt-2 grid gap-2">
+          <label className="text-sm">
+            האימון בתוכנית (לא חובה)
+            <select
+              className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
+              value={state.training_plan_item_id ?? ""}
+              onChange={(e) => setField("training_plan_item_id", e.target.value || null)}
+            >
+              <option value="">ריצה חופשית</option>
+              {[...project.weeks]
+                .sort((a, b) => a.week_start.localeCompare(b.week_start))
+                .flatMap((w) =>
+                  w.days.map((d, i) => (
+                    <option key={d.id} value={d.id}>
+                      {DAYS[i]} {formatDayMonth(d.date)} · {KIND_LABELS[d.chosen.kind]}
+                    </option>
+                  )),
+                )}
+            </select>
+          </label>
+          <label className="text-sm">
+            מרוץ שהושלם (לא חובה)
+            <select
+              className="min-h-11 w-full min-w-0 rounded-xl border bg-surface px-2"
+              value={state.race_id ?? ""}
+              onChange={(e) => setField("race_id", e.target.value || null)}
+            >
+              <option value="">אימון רגיל</option>
+              {project.races
+                .filter((r) => !r.deleted_at)
+                .map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </div>
+      </details>
 
       <Tile size="md" className="gap-3">
         <SectionTitle>מיקום</SectionTitle>
@@ -712,7 +724,7 @@ export function RunForm({ runType, existing, initial, planItemId }: Props) {
       </Tile>
 
       <div className="sticky bottom-20 z-20 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 shadow-lg backdrop-blur lg:bottom-4">
-        <Button type="button" className="flex-1" onClick={saveAndComplete}>
+        <Button type="button" className="flex-1" onClick={saveAndComplete} disabled={completing}>
           <Save className="me-1 size-4" />
           שמור וסיים
         </Button>

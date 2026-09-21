@@ -50,55 +50,46 @@ export function DomainSummaryTile({
   loading?: boolean;
 }) {
   return (
-    <Tile variant={variant} tone="soft" size="lg" className="h-full">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-3">
-          <div
+    <Tile variant={variant} tone="soft" size="md" className="h-full">
+      {/* Compact snapshot (ADR-0042): title row is the link to the domain; one metric; one action. */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+        <Link
+          to={domainPath}
+          className="flex min-h-11 min-w-0 items-center gap-2.5 rounded-lg"
+          aria-label={`פתיחת ${title}`}
+        >
+          <span
             className={cn(
-              "inline-flex size-11 shrink-0 items-center justify-center rounded-xl [&_svg]:size-6",
+              "inline-flex size-9 shrink-0 items-center justify-center rounded-lg [&_svg]:size-5",
               VARIANT_ICON_CLASS[variant],
             )}
           >
             {icon}
-          </div>
-          <div className="min-w-0">
-            <div className="truncate text-lg font-black leading-tight">{title}</div>
-            <div className="truncate text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              תחום
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-3 grid grid-cols-1 gap-1">
-        <MetricRow summary={summary} loading={loading} />
-        <LastRow summary={summary} loading={loading} />
-      </div>
-
-      <GoalRow variant={variant} summary={summary} domainPath={domainPath} />
-
-      <div className="mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-        <Link
-          to={domainPath}
-          className="tile-interactive inline-flex min-h-11 items-center justify-between gap-2 rounded-xl border border-border-strong bg-surface px-3 text-sm font-bold text-foreground"
-          aria-label={`פתיחת ${title}`}
-        >
-          <span className="truncate">פתיחת {title}</span>
-          <ChevronLeft aria-hidden className="size-4 rtl:rotate-180" />
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-[15px] font-black leading-tight">{title}</span>
+            <LastRow summary={summary} loading={loading} />
+          </span>
+          <ChevronLeft aria-hidden className="ms-auto size-4 shrink-0 text-muted-foreground" />
         </Link>
         <Link
           to={quickStartPath}
           className={cn(
-            "tile-interactive inline-flex size-11 items-center justify-center rounded-xl text-white",
-            variant === "run" && "bg-run",
-            variant === "gym" && "bg-gym",
-            variant === "home" && "bg-home",
+            "tile-interactive inline-flex min-h-11 items-center gap-1 rounded-lg px-3 text-sm font-bold text-white",
+            variant === "run" && "bg-run text-run-foreground",
+            variant === "gym" && "bg-gym text-gym-foreground",
+            variant === "home" && "bg-home text-home-foreground",
           )}
           aria-label={`דיווח חדש · ${title}`}
         >
-          <Plus aria-hidden className="size-5" />
+          <Plus aria-hidden className="size-4" />
+          דיווח
         </Link>
       </div>
+
+      <MetricRow summary={summary} loading={loading} />
+
+      <GoalRow variant={variant} summary={summary} domainPath={domainPath} />
     </Tile>
   );
 }
@@ -125,24 +116,21 @@ function MetricRow({
     );
   }
   return (
-    <div className="flex flex-col gap-0.5">
-      <div className="flex items-baseline gap-1.5">
-        <span className="ltr-nums text-3xl font-black leading-none tracking-tight">
-          {formatNumber(summary.primary.value)}
-        </span>
-        <span className="text-sm font-medium text-muted-foreground">{summary.primary.unit}</span>
-      </div>
-      <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-        {summary.primary.label}
-      </div>
+    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+      <span className="ltr-nums text-2xl font-black leading-none tracking-tight">
+        {formatNumber(summary.primary.value)}
+      </span>
+      <span className="text-xs font-medium text-muted-foreground">
+        {summary.primary.unit} · {summary.primary.label}
+      </span>
       {summary.secondary && summary.secondary.value !== null ? (
-        <div className="mt-1 text-xs text-muted-foreground">
+        <span className="basis-full text-xs text-muted-foreground">
           <span className="ltr-nums font-bold text-foreground">
             {formatNumber(summary.secondary.value)}
           </span>{" "}
           {summary.secondary.unit ? summary.secondary.unit + " · " : ""}
           {summary.secondary.label}
-        </div>
+        </span>
       ) : null}
     </div>
   );
@@ -154,9 +142,7 @@ function LastRow({ summary, loading }: { summary: DomainSummary | undefined; loa
   const label = formatDaysSince(summary.daysSinceLast);
   if (!label) return null;
   return (
-    <div className="mt-1 text-xs text-muted-foreground">
-      פעילות אחרונה: <span className="font-semibold text-foreground">{label}</span>
-    </div>
+    <span className="block truncate text-xs text-muted-foreground">פעילות אחרונה: {label}</span>
   );
 }
 
@@ -172,11 +158,11 @@ function GoalRow({
   if (!summary) return null;
   if (!summary.activeGoal) {
     return (
-      <div className="mt-3">
+      <div>
         <Link
           to={domainPath}
           hash="goals"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"
+          className="inline-flex min-h-11 items-center gap-1 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"
         >
           <Target aria-hidden className="size-3.5" />
           הגדרת יעד
@@ -186,7 +172,7 @@ function GoalRow({
   }
   const goal = summary.activeGoal;
   return (
-    <div className="mt-3 rounded-xl border border-border-strong bg-surface/60 p-3">
+    <div className="rounded-lg border border-border bg-surface/60 p-2.5">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0">
           <div className="truncate text-xs font-semibold uppercase tracking-wider text-muted-foreground">

@@ -43,11 +43,7 @@ function RunningPage() {
 
   return (
     <AppShell topBar={{ title: "ריצה", back: { to: "/", label: "חזרה למסך הראשי" } }}>
-      <PageHeader
-        eyebrow="תחום"
-        title="ריצה"
-        description="דיווח מהיר, מדדים עובדתיים, היסטוריה שקופה."
-      />
+      <PageHeader title="ריצה" description="דיווח מהיר, מדדים עובדתיים, היסטוריה שקופה." />
 
       <div className="mb-3 px-4 sm:px-6">
         <Link

@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileLabel, TileMetric, TileFootnote } from "@/components/tile/Tile";
 import { DomainPrimaryGoalTile } from "@/components/goals/DomainPrimaryGoalTile";
 import { Chip } from "@/components/catalog/shared";
-import { useDomainSummary } from "@/lib/hooks/use-domain-summary";
+import { useLocalDomainSummary } from "@/lib/selectors/local-domain-summary";
 import { formatDaysSince } from "@/lib/selectors/domain-summary";
 import { useAllTemplates } from "@/lib/templates";
 import { useActiveSession } from "@/lib/sessions";
@@ -24,7 +24,8 @@ export const Route = createFileRoute("/gym/")({
 });
 
 function GymPage() {
-  const { data: summary, isPending } = useDomainSummary("gym");
+  const summary = useLocalDomainSummary("gym");
+  const isPending = false;
   const templates = useAllTemplates();
   const activeSession = useActiveSession();
   const hasActivity = summary?.hasAnyActivity ?? false;
@@ -46,7 +47,6 @@ function GymPage() {
       }}
     >
       <PageHeader
-        eyebrow="תחום"
         title="חדר כושר"
         description="תבניות אימון, סטים, סופרסטים. שיאים מחושבים מהדיווח."
       />
