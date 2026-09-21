@@ -8,6 +8,8 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useHydrated } from "@/lib/storage/useHydrated";
+import { saveBackupFile } from "@/lib/native";
+import { isNativeApp } from "@/lib/build-info";
 import { AlertTriangle, Download, Upload } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -41,7 +43,7 @@ function BackupPage() {
   const [pending, setPending] = useState<unknown>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
 
-  function handleExport() {
+  async function handleExport() {
     setExportError(null);
     const envelope = buildBackup(BACKUP_SCHEMA_VERSION);
     const report = validateBackup(envelope);
@@ -53,14 +55,14 @@ function BackupPage() {
       return;
     }
     const name = backupFileName(new Date());
-    const blob = new Blob([JSON.stringify(envelope, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = name;
-    a.click();
-    URL.revokeObjectURL(url);
-    setLastExport({ file: name, total: envelope.metadata.integrity.total_records });
+    try {
+      await saveBackupFile(name, JSON.stringify(envelope, null, 2));
+      setLastExport({ file: name, total: envelope.metadata.integrity.total_records });
+    } catch (error) {
+      // A cancelled share sheet is not a failure; anything else is shown, never swallowed.
+      const message = error instanceof Error ? error.message : String(error);
+      if (!/cancel/i.test(message)) setExportError(`הגיבוי לא נשמר: ${message}`);
+    }
   }
 
   async function handleFile(file: File) {
@@ -98,7 +100,11 @@ function BackupPage() {
       <PageHeader
         eyebrow="נתונים מקומיים"
         title="גיבוי ושחזור"
-        description="הנתונים נשמרים בדפדפן הזה בלבד. ייצוא קובץ הוא הדרך היחידה לשמור עותק מחוץ למכשיר."
+        description={
+          isNativeApp()
+            ? "הנתונים נשמרים באפליקציה במכשיר זה בלבד. ייצוא (שיתוף ל-Drive או לקובץ) הוא הדרך היחידה לשמור עותק מחוץ למכשיר."
+            : "הנתונים נשמרים בדפדפן הזה בלבד. ייצוא קובץ הוא הדרך היחידה לשמור עותק מחוץ למכשיר."
+        }
       />
 
       <div className="flex flex-col gap-3 px-4 pb-24 sm:px-6">
@@ -113,8 +119,7 @@ function BackupPage() {
             <Stat label="תבניות" value={counts.templates ?? 0} />
           </div>
           <TileFootnote>
-            סה״כ {totalRecords} רשומות · גרסת schema{" "}
-            {BACKUP_SCHEMA_VERSION}
+            סה״כ {totalRecords} רשומות · גרסת schema {BACKUP_SCHEMA_VERSION}
           </TileFootnote>
         </Tile>
 

@@ -61,11 +61,12 @@ it("keeps the last edit when leaving through the back link immediately", async (
   expect(listRuns()[0].average_pace_s_per_km).toBeCloseTo(358.4, 3);
   expect(listRuns()[0].provenance.average_pace_s_per_km).toBe("derived");
 });
-it("shows the three shortcuts on the home screen, not inside the run form", async () => {
+it("the home screen offers report and history in the main navigation", async () => {
   await renderRoute("/");
-  expect(screen.getByRole("link", { name: "חצאי מרתון" })).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "כל ההיסטוריה" })).toBeInTheDocument();
-  expect(screen.getByRole("link", { name: "פק״ל ביתי" })).toBeInTheDocument();
+  const nav = screen.getAllByRole("navigation", { name: "ניווט ראשי" })[0];
+  expect(nav).toHaveTextContent("דיווח");
+  expect(nav).toHaveTextContent("היסטוריה");
+  expect(nav).toHaveTextContent("תוכניות");
 });
 it("editing an existing run keeps derived pace live instead of freezing it as input", async () => {
   await renderRoute("/running/new/treadmill");

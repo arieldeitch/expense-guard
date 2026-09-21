@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mirrors src/styles.css tokens (oklch → sRGB). -->
+    <color name="fitlog_background">#1A1D2B</color>
+    <color name="fitlog_primary">#7EC2FF</color>
+    <color name="fitlog_run">#FF9A3C</color>
+</resources>

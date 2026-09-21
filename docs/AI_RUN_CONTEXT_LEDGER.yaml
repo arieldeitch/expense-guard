@@ -1,12 +1,17 @@
 project_id: fitness_app_recovery
-run_id: fitness_app_recovery-20260920-recovery-race-project
-last_project_update_at: "2026-09-20T21:33:00+03:00"
+run_id: fitness_app_recovery-20260921-compact-ux-android-apk
+last_project_update_at: "2026-09-21T13:25:00+03:00"
 status: YELLOW
-capsule: docs/ai-runs/2026-09-20/fitness_app_recovery-20260920-recovery-race-project
-continuation: "Claude Code 2026-09-20 evening: PR #1 reviewed, mobile QA 390x844 RTL in real Chrome, 12 defects fixed, 435 tests, all gates green, merged to main"
-pr: https://github.com/arieldeitch/expense-guard/pull/1
-merge_state: "merged 2026-09-20T21:29:09+03:00 — merge commit 4754d82 on main (f709114 + 3ac1a70)"
-publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d is not accessible from the connected Lovable account (licenses-hq / workspace 'Noris's Lovable': project_not_found); live https://fitlog-workout.lovable.app still serves the previous build (/running/project → 404)"
-next_action: "Ariel: open https://lovable.dev/projects/2b79da21-331d-4a52-bd0f-e49f64b4e79d and click Publish (main at 4754d82); then verify https://fitlog-workout.lovable.app/running/project on the phone"
+capsule: docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk
+previous_run: fitness_app_recovery-20260920-recovery-race-project
+summary: "Compact mobile UX (nav ראשי·דיווח·היסטוריה·תוכניות·עוד, history centre, report/plans), Android APK via Capacitor 8 with reproducible CI build; 471 tests; web + emulator QA green"
+pr: https://github.com/arieldeitch/expense-guard/pull/2
+merge_state: pending
+publish_state: "pending — Lovable publish not reachable from this session (project not visible to the connected account); Ariel publishes"
+apk_ci_pr_run: https://github.com/arieldeitch/expense-guard/actions/runs/35586845306
+apk_official_main: pending
+android_app_id: com.arieldeitch.fitlog
+android_version: "1.1.0 (10100)"
+next_action: "Merge PR #2, wait for the main android-apk run, record the artifact; Ariel publishes Lovable and installs the APK per docs/ai/android.md"
 control_tower: pending
 chief_of_staff: pending

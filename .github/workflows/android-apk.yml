@@ -1,0 +1,103 @@
+# Fit Log — reproducible Android APK (ADR-0043).
+# Same steps as `bun run android:apk` locally: web SPA build → cap sync → Gradle → rename + SHA-256.
+# Runs on pull requests, on every push to main and on demand. Debug-signed by default (internal install only).
+# A release-signed APK is produced ONLY when the FITLOG_KEYSTORE_* secrets exist; nothing is
+# invented and no keystore is stored in the repository.
+name: android-apk
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "**/*.md"
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: "debug (default) or release (needs FITLOG_KEYSTORE_* secrets)"
+        default: debug
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-apk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      VARIANT: ${{ github.event.inputs.variant || 'debug' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bun (from package manager lockfile)
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+
+      - name: Install (frozen lockfile)
+        run: bun install --frozen-lockfile
+
+      - name: Web checks (typecheck + unit tests)
+        run: |
+          bun run typecheck
+          bun run test:unit
+
+      - name: JDK 21 (Temurin) — Capacitor 8 / AGP 8.13
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Android SDK (platform 36, build-tools 36)
+        uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Release signing from secrets (only when configured)
+        if: env.VARIANT == 'release'
+        env:
+          KEYSTORE_B64: ${{ secrets.FITLOG_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::release requested but FITLOG_KEYSTORE_BASE64 is not configured"; exit 1
+          fi
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/fitlog-release.jks"
+          echo "FITLOG_KEYSTORE_PATH=$RUNNER_TEMP/fitlog-release.jks" >> "$GITHUB_ENV"
+
+      - name: Build APK
+        env:
+          FITLOG_KEYSTORE_PASSWORD: ${{ secrets.FITLOG_KEYSTORE_PASSWORD }}
+          FITLOG_KEY_ALIAS: ${{ secrets.FITLOG_KEY_ALIAS }}
+          FITLOG_KEY_PASSWORD: ${{ secrets.FITLOG_KEY_PASSWORD }}
+        run: node scripts/android-apk.mjs --variant "$VARIANT"
+
+      - name: Summary
+        run: |
+          echo "## Fit Log APK" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat android/app/build/outputs/fitlog/fitlog-apk.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload APK + checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: fitlog-apk-${{ env.VARIANT }}-${{ github.sha }}
+          path: |
+            android/app/build/outputs/fitlog/*.apk
+            android/app/build/outputs/fitlog/*.sha256
+            android/app/build/outputs/fitlog/fitlog-apk.json
+          if-no-files-found: error
+          retention-days: 90

@@ -53,9 +53,7 @@ function HomePage() {
   const freq = frequencyPerWeek(completed.map((s) => s.started_at));
   // ה-hook (ולא `recentExerciseIds()` הישיר) נגזר מה-store ולכן עקבי ב-hydration.
   const recentIds = useRecentHomeExerciseIds(4);
-  const recentExercises = recentIds
-    .map((id) => exercises.find((e) => e.id === id))
-    .filter(Boolean);
+  const recentExercises = recentIds.map((id) => exercises.find((e) => e.id === id)).filter(Boolean);
   const favorites = exercises
     .filter((e) => e.is_favorite && !e.deleted_at && e.is_active)
     .filter((e) => e.bodyweight_based || e.category === "bodyweight")
@@ -77,11 +75,7 @@ function HomePage() {
         ),
       }}
     >
-      <PageHeader
-        eyebrow="תחום"
-        title="כוח בבית"
-        description="דיווח מהיר של תרגיל יחיד או אימון קצר."
-      />
+      <PageHeader title="כוח בבית" description="דיווח מהיר של תרגיל יחיד או אימון קצר." />
 
       {/* Primary action tiles */}
       <div className="grid grid-cols-2 gap-3 px-4 sm:px-6">
@@ -250,4 +244,3 @@ function HomePage() {
     </AppShell>
   );
 }
-

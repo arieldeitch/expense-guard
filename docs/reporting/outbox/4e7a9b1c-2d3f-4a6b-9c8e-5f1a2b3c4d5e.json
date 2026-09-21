@@ -1,0 +1,33 @@
+{
+  "event_id": "4e7a9b1c-2d3f-4a6b-9c8e-5f1a2b3c4d5e",
+  "project_id": "fitness_app_recovery",
+  "run_id": "fitness_app_recovery-20260921-compact-ux-android-apk",
+  "event_type": "milestone",
+  "occurred_at": "2026-09-21T13:25:00+03:00",
+  "milestone": "compact-ux-and-android-apk",
+  "health": "YELLOW",
+  "summary": "Compact mobile UX with a five-destination navigation and a history centre, plus an installable Android app (Capacitor 8) with a reproducible CI APK build. 471 tests, real-Chrome 390x844 QA and Pixel 7 emulator QA green. Lovable publish and physical-device acceptance remain with Ariel.",
+  "completed": [
+    "ADR-0042 compact UX: nav, /history, /report, /plans, real home snapshot, 44px targets, lazy drafts",
+    "ADR-0043 Android: Capacitor shell, versioned APK, GitHub Actions workflow, data migration guide",
+    "Web QA 17/17 and Android emulator QA 20/20 (physical device pending)",
+    "PR #2 opened with CI APK artifact"
+  ],
+  "in_progress": ["Merge PR #2 and record the official main APK artifact"],
+  "blockers": ["Lovable publish not reachable from the connected account (unchanged since 2026-09-20)"],
+  "needs_ariel": [
+    "Publish the Lovable project after merge and verify https://fitlog-workout.lovable.app on the phone",
+    "Install the APK from the GitHub Actions artifact and migrate data via export/restore (docs/ai/android.md)",
+    "Physical-device acceptance: Back, keyboard, backup share sheet"
+  ],
+  "next_action": "Merge PR #2 → main android-apk run → hand the artifact link to Ariel",
+  "evidence_refs": [
+    "docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk/09_END_OF_RUN_REPORT.md",
+    "docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk/assets/",
+    "https://github.com/arieldeitch/expense-guard/actions/runs/35586845306"
+  ],
+  "last_project_update_at": "2026-09-21T13:25:00+03:00",
+  "os_version": "unresolved: Start Here 1.1 vs CURRENT_OS_VERSION 1.0.0",
+  "documentation_state": "capsule complete; docs/ai active blocks, ADR-0042/0043, risks R-45..R-47, android.md, ledgers updated",
+  "delivery": { "control_tower": "pending", "chief_of_staff": "pending" }
+}

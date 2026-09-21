@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { CheckCircle2, ShieldOff, Undo2, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
+import { useHydrated } from "@/lib/storage/useHydrated";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
@@ -34,6 +35,8 @@ export const Route = createFileRoute("/treadmills/$id")({
     ],
   }),
   loader: ({ params }) => {
+    // Catalog lives in localStorage; the server must not answer 404 for a real id (R-43).
+    if (typeof window === "undefined") return { id: params.id };
     const t = getTreadmill(params.id);
     if (!t) throw notFound();
     return { id: params.id };
@@ -54,6 +57,7 @@ function TreadmillCalibrationPage() {
   const inputs = useMemo(() => buildCalibrationInputs(id, runs), [id, runs, exclusions]);
   const proposal = useMemo(() => proposeCalibration(id, inputs), [id, inputs]);
   const [confirming, setConfirming] = useState(false);
+  const hydrated = useHydrated();
 
   const diffPoints: DiffPoint[] = useMemo(
     () =>
@@ -69,7 +73,9 @@ function TreadmillCalibrationPage() {
     [inputs],
   );
 
-  if (!treadmill) return null;
+  // ראה ADR-0039 — אין לזרוק notFound() ב-render של השרת (אין שם localStorage).
+  if (!hydrated) return null;
+  if (!treadmill) throw notFound();
 
   const handleApprove = () => {
     if (proposal.factor == null) return;

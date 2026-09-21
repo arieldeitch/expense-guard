@@ -11,6 +11,20 @@ node_modules
 dist
 dist-ssr
 .output
+.output-android
+# Android web bundle + Gradle outputs (rebuilt by scripts/android-apk.mjs)
+dist-android
+android/app/build
+android/build
+android/.gradle
+android/local.properties
+android/capacitor-cordova-android-plugins
+android/app/src/main/assets/public
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/res/xml/config.xml
+*.jks
+*.keystore
 .vinxi
 .tanstack/**
 .nitro

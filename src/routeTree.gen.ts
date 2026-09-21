@@ -9,71 +9,78 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as HistoryRouteImport } from './routes/history'
-import { Route as MoreRouteImport } from './routes/more'
 import { Route as TrashRouteImport } from './routes/trash'
-import { Route as BackupIndexRouteImport } from './routes/backup.index'
-import { Route as ExercisesIndexRouteImport } from './routes/exercises.index'
-import { Route as GoalsIndexRouteImport } from './routes/goals.index'
-import { Route as GoalsIdRouteImport } from './routes/goals.$id'
-import { Route as GoalsNewRouteImport } from './routes/goals.new'
-import { Route as GymIndexRouteImport } from './routes/gym.index'
-import { Route as GymCompareRouteImport } from './routes/gym.compare'
-import { Route as GymNewRouteImport } from './routes/gym.new'
-import { Route as HomeIndexRouteImport } from './routes/home.index'
-import { Route as HomeNewRouteImport } from './routes/home.new'
-import { Route as LocationsIndexRouteImport } from './routes/locations.index'
-import { Route as LocationsIdRouteImport } from './routes/locations.$id'
-import { Route as RunningIndexRouteImport } from './routes/running.index'
-import { Route as RunningHistoryRouteImport } from './routes/running.history'
-import { Route as RunningProjectRouteImport } from './routes/running.project'
-import { Route as RunningRoutesRouteImport } from './routes/running.routes'
+import { Route as ReportRouteImport } from './routes/report'
+import { Route as PlansRouteImport } from './routes/plans'
+import { Route as MoreRouteImport } from './routes/more'
+import { Route as HistoryRouteImport } from './routes/history'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as TemplatesIndexRouteImport } from './routes/templates.index'
+import { Route as RunningIndexRouteImport } from './routes/running.index'
+import { Route as LocationsIndexRouteImport } from './routes/locations.index'
+import { Route as HomeIndexRouteImport } from './routes/home.index'
+import { Route as GymIndexRouteImport } from './routes/gym.index'
+import { Route as GoalsIndexRouteImport } from './routes/goals.index'
+import { Route as ExercisesIndexRouteImport } from './routes/exercises.index'
+import { Route as BackupIndexRouteImport } from './routes/backup.index'
 import { Route as TreadmillsIdRouteImport } from './routes/treadmills.$id'
-import { Route as ExercisesIdIndexRouteImport } from './routes/exercises.$id.index'
-import { Route as ExercisesIdHistoryRouteImport } from './routes/exercises.$id.history'
-import { Route as GymGoalsIndexRouteImport } from './routes/gym.goals.index'
-import { Route as GymGoalsNewRouteImport } from './routes/gym.goals.new'
-import { Route as GymHistoryIndexRouteImport } from './routes/gym.history.index'
-import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
-import { Route as HomeGoalsIndexRouteImport } from './routes/home.goals.index'
-import { Route as HomeGoalsNewRouteImport } from './routes/home.goals.new'
-import { Route as HomeHistoryIndexRouteImport } from './routes/home.history.index'
-import { Route as HomeHistoryIdRouteImport } from './routes/home.history.$id'
-import { Route as HomeQuickIndexRouteImport } from './routes/home.quick.index'
-import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$exerciseId'
-import { Route as HomeTemplatesIndexRouteImport } from './routes/home.templates.index'
-import { Route as RunningIdIndexRouteImport } from './routes/running.$id.index'
-import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
-import { Route as RunningGoalsIndexRouteImport } from './routes/running.goals.index'
-import { Route as RunningGoalsNewRouteImport } from './routes/running.goals.new'
-import { Route as RunningNewIndexRouteImport } from './routes/running.new.index'
-import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
-import { Route as SessionsIdIndexRouteImport } from './routes/sessions.$id.index'
-import { Route as SessionsIdSummaryRouteImport } from './routes/sessions.$id.summary'
+import { Route as RunningRoutesRouteImport } from './routes/running.routes'
+import { Route as RunningProjectRouteImport } from './routes/running.project'
+import { Route as RunningHistoryRouteImport } from './routes/running.history'
+import { Route as LocationsIdRouteImport } from './routes/locations.$id'
+import { Route as HomeNewRouteImport } from './routes/home.new'
+import { Route as GymNewRouteImport } from './routes/gym.new'
+import { Route as GymCompareRouteImport } from './routes/gym.compare'
+import { Route as GoalsNewRouteImport } from './routes/goals.new'
+import { Route as GoalsIdRouteImport } from './routes/goals.$id'
 import { Route as TemplatesIdIndexRouteImport } from './routes/templates.$id.index'
-import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit'
+import { Route as SessionsIdIndexRouteImport } from './routes/sessions.$id.index'
+import { Route as RunningNewIndexRouteImport } from './routes/running.new.index'
+import { Route as RunningGoalsIndexRouteImport } from './routes/running.goals.index'
+import { Route as RunningIdIndexRouteImport } from './routes/running.$id.index'
+import { Route as HomeTemplatesIndexRouteImport } from './routes/home.templates.index'
+import { Route as HomeQuickIndexRouteImport } from './routes/home.quick.index'
+import { Route as HomeHistoryIndexRouteImport } from './routes/home.history.index'
+import { Route as HomeGoalsIndexRouteImport } from './routes/home.goals.index'
+import { Route as GymHistoryIndexRouteImport } from './routes/gym.history.index'
+import { Route as GymGoalsIndexRouteImport } from './routes/gym.goals.index'
+import { Route as ExercisesIdIndexRouteImport } from './routes/exercises.$id.index'
 import { Route as TemplatesIdHistoryRouteImport } from './routes/templates.$id.history'
-import { Route as GymGoalsIdIndexRouteImport } from './routes/gym.goals.$id.index'
-import { Route as GymGoalsIdEditRouteImport } from './routes/gym.goals.$id.edit'
-import { Route as HomeGoalsIdIndexRouteImport } from './routes/home.goals.$id.index'
-import { Route as HomeGoalsIdEditRouteImport } from './routes/home.goals.$id.edit'
-import { Route as HomeSessionsIdIndexRouteImport } from './routes/home.sessions.$id.index'
-import { Route as HomeSessionsIdSummaryRouteImport } from './routes/home.sessions.$id.summary'
-import { Route as HomeTemplatesIdIndexRouteImport } from './routes/home.templates.$id.index'
-import { Route as HomeTemplatesIdEditRouteImport } from './routes/home.templates.$id.edit'
+import { Route as TemplatesIdEditRouteImport } from './routes/templates.$id.edit'
+import { Route as SessionsIdSummaryRouteImport } from './routes/sessions.$id.summary'
+import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
+import { Route as RunningGoalsNewRouteImport } from './routes/running.goals.new'
+import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
+import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$exerciseId'
+import { Route as HomeHistoryIdRouteImport } from './routes/home.history.$id'
+import { Route as HomeGoalsNewRouteImport } from './routes/home.goals.new'
+import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
+import { Route as GymGoalsNewRouteImport } from './routes/gym.goals.new'
+import { Route as ExercisesIdHistoryRouteImport } from './routes/exercises.$id.history'
 import { Route as RunningGoalsIdIndexRouteImport } from './routes/running.goals.$id.index'
+import { Route as HomeTemplatesIdIndexRouteImport } from './routes/home.templates.$id.index'
+import { Route as HomeSessionsIdIndexRouteImport } from './routes/home.sessions.$id.index'
+import { Route as HomeGoalsIdIndexRouteImport } from './routes/home.goals.$id.index'
+import { Route as GymGoalsIdIndexRouteImport } from './routes/gym.goals.$id.index'
 import { Route as RunningGoalsIdEditRouteImport } from './routes/running.goals.$id.edit'
+import { Route as HomeTemplatesIdEditRouteImport } from './routes/home.templates.$id.edit'
+import { Route as HomeSessionsIdSummaryRouteImport } from './routes/home.sessions.$id.summary'
+import { Route as HomeGoalsIdEditRouteImport } from './routes/home.goals.$id.edit'
+import { Route as GymGoalsIdEditRouteImport } from './routes/gym.goals.$id.edit'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const TrashRoute = TrashRouteImport.update({
+  id: '/trash',
+  path: '/trash',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HistoryRoute = HistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -81,89 +88,14 @@ const MoreRoute = MoreRouteImport.update({
   path: '/more',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrashRoute = TrashRouteImport.update({
-  id: '/trash',
-  path: '/trash',
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BackupIndexRoute = BackupIndexRouteImport.update({
-  id: '/backup/',
-  path: '/backup/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExercisesIndexRoute = ExercisesIndexRouteImport.update({
-  id: '/exercises/',
-  path: '/exercises/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GoalsIndexRoute = GoalsIndexRouteImport.update({
-  id: '/goals/',
-  path: '/goals/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GoalsIdRoute = GoalsIdRouteImport.update({
-  id: '/goals/$id',
-  path: '/goals/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GoalsNewRoute = GoalsNewRouteImport.update({
-  id: '/goals/new',
-  path: '/goals/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GymIndexRoute = GymIndexRouteImport.update({
-  id: '/gym/',
-  path: '/gym/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GymCompareRoute = GymCompareRouteImport.update({
-  id: '/gym/compare',
-  path: '/gym/compare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GymNewRoute = GymNewRouteImport.update({
-  id: '/gym/new',
-  path: '/gym/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeNewRoute = HomeNewRouteImport.update({
-  id: '/home/new',
-  path: '/home/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LocationsIndexRoute = LocationsIndexRouteImport.update({
-  id: '/locations/',
-  path: '/locations/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LocationsIdRoute = LocationsIdRouteImport.update({
-  id: '/locations/$id',
-  path: '/locations/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningIndexRoute = RunningIndexRouteImport.update({
-  id: '/running/',
-  path: '/running/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningHistoryRoute = RunningHistoryRouteImport.update({
-  id: '/running/history',
-  path: '/running/history',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningProjectRoute = RunningProjectRouteImport.update({
-  id: '/running/project',
-  path: '/running/project',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningRoutesRoute = RunningRoutesRouteImport.update({
-  id: '/running/routes',
-  path: '/running/routes',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TemplatesIndexRoute = TemplatesIndexRouteImport.update({
@@ -171,114 +103,89 @@ const TemplatesIndexRoute = TemplatesIndexRouteImport.update({
   path: '/templates/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RunningIndexRoute = RunningIndexRouteImport.update({
+  id: '/running/',
+  path: '/running/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/locations/',
+  path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeIndexRoute = HomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymIndexRoute = GymIndexRouteImport.update({
+  id: '/gym/',
+  path: '/gym/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoalsIndexRoute = GoalsIndexRouteImport.update({
+  id: '/goals/',
+  path: '/goals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesIndexRoute = ExercisesIndexRouteImport.update({
+  id: '/exercises/',
+  path: '/exercises/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BackupIndexRoute = BackupIndexRouteImport.update({
+  id: '/backup/',
+  path: '/backup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TreadmillsIdRoute = TreadmillsIdRouteImport.update({
   id: '/treadmills/$id',
   path: '/treadmills/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExercisesIdIndexRoute = ExercisesIdIndexRouteImport.update({
-  id: '/exercises/$id/',
-  path: '/exercises/$id/',
+const RunningRoutesRoute = RunningRoutesRouteImport.update({
+  id: '/running/routes',
+  path: '/running/routes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExercisesIdHistoryRoute = ExercisesIdHistoryRouteImport.update({
-  id: '/exercises/$id/history',
-  path: '/exercises/$id/history',
+const RunningProjectRoute = RunningProjectRouteImport.update({
+  id: '/running/project',
+  path: '/running/project',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymGoalsIndexRoute = GymGoalsIndexRouteImport.update({
-  id: '/gym/goals/',
-  path: '/gym/goals/',
+const RunningHistoryRoute = RunningHistoryRouteImport.update({
+  id: '/running/history',
+  path: '/running/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymGoalsNewRoute = GymGoalsNewRouteImport.update({
-  id: '/gym/goals/new',
-  path: '/gym/goals/new',
+const LocationsIdRoute = LocationsIdRouteImport.update({
+  id: '/locations/$id',
+  path: '/locations/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymHistoryIndexRoute = GymHistoryIndexRouteImport.update({
-  id: '/gym/history/',
-  path: '/gym/history/',
+const HomeNewRoute = HomeNewRouteImport.update({
+  id: '/home/new',
+  path: '/home/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymHistoryIdRoute = GymHistoryIdRouteImport.update({
-  id: '/gym/history/$id',
-  path: '/gym/history/$id',
+const GymNewRoute = GymNewRouteImport.update({
+  id: '/gym/new',
+  path: '/gym/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeGoalsIndexRoute = HomeGoalsIndexRouteImport.update({
-  id: '/home/goals/',
-  path: '/home/goals/',
+const GymCompareRoute = GymCompareRouteImport.update({
+  id: '/gym/compare',
+  path: '/gym/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeGoalsNewRoute = HomeGoalsNewRouteImport.update({
-  id: '/home/goals/new',
-  path: '/home/goals/new',
+const GoalsNewRoute = GoalsNewRouteImport.update({
+  id: '/goals/new',
+  path: '/goals/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeHistoryIndexRoute = HomeHistoryIndexRouteImport.update({
-  id: '/home/history/',
-  path: '/home/history/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeHistoryIdRoute = HomeHistoryIdRouteImport.update({
-  id: '/home/history/$id',
-  path: '/home/history/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeQuickIndexRoute = HomeQuickIndexRouteImport.update({
-  id: '/home/quick/',
-  path: '/home/quick/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeQuickExerciseIdRoute = HomeQuickExerciseIdRouteImport.update({
-  id: '/home/quick/$exerciseId',
-  path: '/home/quick/$exerciseId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
-  id: '/home/templates/',
-  path: '/home/templates/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningIdIndexRoute = RunningIdIndexRouteImport.update({
-  id: '/running/$id/',
-  path: '/running/$id/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningIdEditRoute = RunningIdEditRouteImport.update({
-  id: '/running/$id/edit',
-  path: '/running/$id/edit',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningGoalsIndexRoute = RunningGoalsIndexRouteImport.update({
-  id: '/running/goals/',
-  path: '/running/goals/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningGoalsNewRoute = RunningGoalsNewRouteImport.update({
-  id: '/running/goals/new',
-  path: '/running/goals/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningNewIndexRoute = RunningNewIndexRouteImport.update({
-  id: '/running/new/',
-  path: '/running/new/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RunningNewTypeRoute = RunningNewTypeRouteImport.update({
-  id: '/running/new/$type',
-  path: '/running/new/$type',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SessionsIdIndexRoute = SessionsIdIndexRouteImport.update({
-  id: '/sessions/$id/',
-  path: '/sessions/$id/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SessionsIdSummaryRoute = SessionsIdSummaryRouteImport.update({
-  id: '/sessions/$id/summary',
-  path: '/sessions/$id/summary',
+const GoalsIdRoute = GoalsIdRouteImport.update({
+  id: '/goals/$id',
+  path: '/goals/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TemplatesIdIndexRoute = TemplatesIdIndexRouteImport.update({
@@ -286,9 +193,59 @@ const TemplatesIdIndexRoute = TemplatesIdIndexRouteImport.update({
   path: '/templates/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TemplatesIdEditRoute = TemplatesIdEditRouteImport.update({
-  id: '/templates/$id/edit',
-  path: '/templates/$id/edit',
+const SessionsIdIndexRoute = SessionsIdIndexRouteImport.update({
+  id: '/sessions/$id/',
+  path: '/sessions/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RunningNewIndexRoute = RunningNewIndexRouteImport.update({
+  id: '/running/new/',
+  path: '/running/new/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RunningGoalsIndexRoute = RunningGoalsIndexRouteImport.update({
+  id: '/running/goals/',
+  path: '/running/goals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RunningIdIndexRoute = RunningIdIndexRouteImport.update({
+  id: '/running/$id/',
+  path: '/running/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
+  id: '/home/templates/',
+  path: '/home/templates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeQuickIndexRoute = HomeQuickIndexRouteImport.update({
+  id: '/home/quick/',
+  path: '/home/quick/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeHistoryIndexRoute = HomeHistoryIndexRouteImport.update({
+  id: '/home/history/',
+  path: '/home/history/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeGoalsIndexRoute = HomeGoalsIndexRouteImport.update({
+  id: '/home/goals/',
+  path: '/home/goals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymHistoryIndexRoute = GymHistoryIndexRouteImport.update({
+  id: '/gym/history/',
+  path: '/gym/history/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymGoalsIndexRoute = GymGoalsIndexRouteImport.update({
+  id: '/gym/goals/',
+  path: '/gym/goals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesIdIndexRoute = ExercisesIdIndexRouteImport.update({
+  id: '/exercises/$id/',
+  path: '/exercises/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TemplatesIdHistoryRoute = TemplatesIdHistoryRouteImport.update({
@@ -296,44 +253,59 @@ const TemplatesIdHistoryRoute = TemplatesIdHistoryRouteImport.update({
   path: '/templates/$id/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymGoalsIdIndexRoute = GymGoalsIdIndexRouteImport.update({
-  id: '/gym/goals/$id/',
-  path: '/gym/goals/$id/',
+const TemplatesIdEditRoute = TemplatesIdEditRouteImport.update({
+  id: '/templates/$id/edit',
+  path: '/templates/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GymGoalsIdEditRoute = GymGoalsIdEditRouteImport.update({
-  id: '/gym/goals/$id/edit',
-  path: '/gym/goals/$id/edit',
+const SessionsIdSummaryRoute = SessionsIdSummaryRouteImport.update({
+  id: '/sessions/$id/summary',
+  path: '/sessions/$id/summary',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeGoalsIdIndexRoute = HomeGoalsIdIndexRouteImport.update({
-  id: '/home/goals/$id/',
-  path: '/home/goals/$id/',
+const RunningNewTypeRoute = RunningNewTypeRouteImport.update({
+  id: '/running/new/$type',
+  path: '/running/new/$type',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeGoalsIdEditRoute = HomeGoalsIdEditRouteImport.update({
-  id: '/home/goals/$id/edit',
-  path: '/home/goals/$id/edit',
+const RunningGoalsNewRoute = RunningGoalsNewRouteImport.update({
+  id: '/running/goals/new',
+  path: '/running/goals/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeSessionsIdIndexRoute = HomeSessionsIdIndexRouteImport.update({
-  id: '/home/sessions/$id/',
-  path: '/home/sessions/$id/',
+const RunningIdEditRoute = RunningIdEditRouteImport.update({
+  id: '/running/$id/edit',
+  path: '/running/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeSessionsIdSummaryRoute = HomeSessionsIdSummaryRouteImport.update({
-  id: '/home/sessions/$id/summary',
-  path: '/home/sessions/$id/summary',
+const HomeQuickExerciseIdRoute = HomeQuickExerciseIdRouteImport.update({
+  id: '/home/quick/$exerciseId',
+  path: '/home/quick/$exerciseId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeTemplatesIdIndexRoute = HomeTemplatesIdIndexRouteImport.update({
-  id: '/home/templates/$id/',
-  path: '/home/templates/$id/',
+const HomeHistoryIdRoute = HomeHistoryIdRouteImport.update({
+  id: '/home/history/$id',
+  path: '/home/history/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeTemplatesIdEditRoute = HomeTemplatesIdEditRouteImport.update({
-  id: '/home/templates/$id/edit',
-  path: '/home/templates/$id/edit',
+const HomeGoalsNewRoute = HomeGoalsNewRouteImport.update({
+  id: '/home/goals/new',
+  path: '/home/goals/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymHistoryIdRoute = GymHistoryIdRouteImport.update({
+  id: '/gym/history/$id',
+  path: '/gym/history/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymGoalsNewRoute = GymGoalsNewRouteImport.update({
+  id: '/gym/goals/new',
+  path: '/gym/goals/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesIdHistoryRoute = ExercisesIdHistoryRouteImport.update({
+  id: '/exercises/$id/history',
+  path: '/exercises/$id/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RunningGoalsIdIndexRoute = RunningGoalsIdIndexRouteImport.update({
@@ -341,9 +313,49 @@ const RunningGoalsIdIndexRoute = RunningGoalsIdIndexRouteImport.update({
   path: '/running/goals/$id/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeTemplatesIdIndexRoute = HomeTemplatesIdIndexRouteImport.update({
+  id: '/home/templates/$id/',
+  path: '/home/templates/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeSessionsIdIndexRoute = HomeSessionsIdIndexRouteImport.update({
+  id: '/home/sessions/$id/',
+  path: '/home/sessions/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeGoalsIdIndexRoute = HomeGoalsIdIndexRouteImport.update({
+  id: '/home/goals/$id/',
+  path: '/home/goals/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymGoalsIdIndexRoute = GymGoalsIdIndexRouteImport.update({
+  id: '/gym/goals/$id/',
+  path: '/gym/goals/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RunningGoalsIdEditRoute = RunningGoalsIdEditRouteImport.update({
   id: '/running/goals/$id/edit',
   path: '/running/goals/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeTemplatesIdEditRoute = HomeTemplatesIdEditRouteImport.update({
+  id: '/home/templates/$id/edit',
+  path: '/home/templates/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeSessionsIdSummaryRoute = HomeSessionsIdSummaryRouteImport.update({
+  id: '/home/sessions/$id/summary',
+  path: '/home/sessions/$id/summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeGoalsIdEditRoute = HomeGoalsIdEditRouteImport.update({
+  id: '/home/goals/$id/edit',
+  path: '/home/goals/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GymGoalsIdEditRoute = GymGoalsIdEditRouteImport.update({
+  id: '/gym/goals/$id/edit',
+  path: '/gym/goals/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -351,6 +363,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
+  '/plans': typeof PlansRoute
+  '/report': typeof ReportRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
   '/goals/new': typeof GoalsNewRoute
@@ -409,6 +423,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
+  '/plans': typeof PlansRoute
+  '/report': typeof ReportRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
   '/goals/new': typeof GoalsNewRoute
@@ -468,6 +484,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/history': typeof HistoryRoute
   '/more': typeof MoreRoute
+  '/plans': typeof PlansRoute
+  '/report': typeof ReportRoute
   '/trash': typeof TrashRoute
   '/goals/$id': typeof GoalsIdRoute
   '/goals/new': typeof GoalsNewRoute
@@ -528,6 +546,8 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/more'
+    | '/plans'
+    | '/report'
     | '/trash'
     | '/goals/$id'
     | '/goals/new'
@@ -586,6 +606,8 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/more'
+    | '/plans'
+    | '/report'
     | '/trash'
     | '/goals/$id'
     | '/goals/new'
@@ -644,6 +666,8 @@ export interface FileRouteTypes {
     | '/'
     | '/history'
     | '/more'
+    | '/plans'
+    | '/report'
     | '/trash'
     | '/goals/$id'
     | '/goals/new'
@@ -703,6 +727,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HistoryRoute: typeof HistoryRoute
   MoreRoute: typeof MoreRoute
+  PlansRoute: typeof PlansRoute
+  ReportRoute: typeof ReportRoute
   TrashRoute: typeof TrashRoute
   GoalsIdRoute: typeof GoalsIdRoute
   GoalsNewRoute: typeof GoalsNewRoute
@@ -760,18 +786,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/trash': {
+      id: '/trash'
+      path: '/trash'
+      fullPath: '/trash'
+      preLoaderRoute: typeof TrashRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/history': {
-      id: '/history'
-      path: '/history'
-      fullPath: '/history'
-      preLoaderRoute: typeof HistoryRouteImport
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -781,123 +814,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoreRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trash': {
-      id: '/trash'
-      path: '/trash'
-      fullPath: '/trash'
-      preLoaderRoute: typeof TrashRouteImport
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/backup/': {
-      id: '/backup/'
-      path: '/backup'
-      fullPath: '/backup/'
-      preLoaderRoute: typeof BackupIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/exercises/': {
-      id: '/exercises/'
-      path: '/exercises'
-      fullPath: '/exercises/'
-      preLoaderRoute: typeof ExercisesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/goals/': {
-      id: '/goals/'
-      path: '/goals'
-      fullPath: '/goals/'
-      preLoaderRoute: typeof GoalsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/goals/$id': {
-      id: '/goals/$id'
-      path: '/goals/$id'
-      fullPath: '/goals/$id'
-      preLoaderRoute: typeof GoalsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/goals/new': {
-      id: '/goals/new'
-      path: '/goals/new'
-      fullPath: '/goals/new'
-      preLoaderRoute: typeof GoalsNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gym/': {
-      id: '/gym/'
-      path: '/gym'
-      fullPath: '/gym/'
-      preLoaderRoute: typeof GymIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gym/compare': {
-      id: '/gym/compare'
-      path: '/gym/compare'
-      fullPath: '/gym/compare'
-      preLoaderRoute: typeof GymCompareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gym/new': {
-      id: '/gym/new'
-      path: '/gym/new'
-      fullPath: '/gym/new'
-      preLoaderRoute: typeof GymNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/': {
-      id: '/home/'
-      path: '/home'
-      fullPath: '/home/'
-      preLoaderRoute: typeof HomeIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/new': {
-      id: '/home/new'
-      path: '/home/new'
-      fullPath: '/home/new'
-      preLoaderRoute: typeof HomeNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/locations/': {
-      id: '/locations/'
-      path: '/locations'
-      fullPath: '/locations/'
-      preLoaderRoute: typeof LocationsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/locations/$id': {
-      id: '/locations/$id'
-      path: '/locations/$id'
-      fullPath: '/locations/$id'
-      preLoaderRoute: typeof LocationsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/': {
-      id: '/running/'
-      path: '/running'
-      fullPath: '/running/'
-      preLoaderRoute: typeof RunningIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/history': {
-      id: '/running/history'
-      path: '/running/history'
-      fullPath: '/running/history'
-      preLoaderRoute: typeof RunningHistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/project': {
-      id: '/running/project'
-      path: '/running/project'
-      fullPath: '/running/project'
-      preLoaderRoute: typeof RunningProjectRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/routes': {
-      id: '/running/routes'
-      path: '/running/routes'
-      fullPath: '/running/routes'
-      preLoaderRoute: typeof RunningRoutesRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/templates/': {
@@ -907,6 +835,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TemplatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/running/': {
+      id: '/running/'
+      path: '/running'
+      fullPath: '/running/'
+      preLoaderRoute: typeof RunningIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/': {
+      id: '/locations/'
+      path: '/locations'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/': {
+      id: '/home/'
+      path: '/home'
+      fullPath: '/home/'
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/': {
+      id: '/gym/'
+      path: '/gym'
+      fullPath: '/gym/'
+      preLoaderRoute: typeof GymIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/goals/': {
+      id: '/goals/'
+      path: '/goals'
+      fullPath: '/goals/'
+      preLoaderRoute: typeof GoalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises/': {
+      id: '/exercises/'
+      path: '/exercises'
+      fullPath: '/exercises/'
+      preLoaderRoute: typeof ExercisesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/backup/': {
+      id: '/backup/'
+      path: '/backup'
+      fullPath: '/backup/'
+      preLoaderRoute: typeof BackupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/treadmills/$id': {
       id: '/treadmills/$id'
       path: '/treadmills/$id'
@@ -914,151 +891,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TreadmillsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/exercises/$id/': {
-      id: '/exercises/$id/'
-      path: '/exercises/$id'
-      fullPath: '/exercises/$id/'
-      preLoaderRoute: typeof ExercisesIdIndexRouteImport
+    '/running/routes': {
+      id: '/running/routes'
+      path: '/running/routes'
+      fullPath: '/running/routes'
+      preLoaderRoute: typeof RunningRoutesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/exercises/$id/history': {
-      id: '/exercises/$id/history'
-      path: '/exercises/$id/history'
-      fullPath: '/exercises/$id/history'
-      preLoaderRoute: typeof ExercisesIdHistoryRouteImport
+    '/running/project': {
+      id: '/running/project'
+      path: '/running/project'
+      fullPath: '/running/project'
+      preLoaderRoute: typeof RunningProjectRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/goals/': {
-      id: '/gym/goals/'
-      path: '/gym/goals'
-      fullPath: '/gym/goals/'
-      preLoaderRoute: typeof GymGoalsIndexRouteImport
+    '/running/history': {
+      id: '/running/history'
+      path: '/running/history'
+      fullPath: '/running/history'
+      preLoaderRoute: typeof RunningHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/goals/new': {
-      id: '/gym/goals/new'
-      path: '/gym/goals/new'
-      fullPath: '/gym/goals/new'
-      preLoaderRoute: typeof GymGoalsNewRouteImport
+    '/locations/$id': {
+      id: '/locations/$id'
+      path: '/locations/$id'
+      fullPath: '/locations/$id'
+      preLoaderRoute: typeof LocationsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/history/': {
-      id: '/gym/history/'
-      path: '/gym/history'
-      fullPath: '/gym/history/'
-      preLoaderRoute: typeof GymHistoryIndexRouteImport
+    '/home/new': {
+      id: '/home/new'
+      path: '/home/new'
+      fullPath: '/home/new'
+      preLoaderRoute: typeof HomeNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/history/$id': {
-      id: '/gym/history/$id'
-      path: '/gym/history/$id'
-      fullPath: '/gym/history/$id'
-      preLoaderRoute: typeof GymHistoryIdRouteImport
+    '/gym/new': {
+      id: '/gym/new'
+      path: '/gym/new'
+      fullPath: '/gym/new'
+      preLoaderRoute: typeof GymNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/goals/': {
-      id: '/home/goals/'
-      path: '/home/goals'
-      fullPath: '/home/goals/'
-      preLoaderRoute: typeof HomeGoalsIndexRouteImport
+    '/gym/compare': {
+      id: '/gym/compare'
+      path: '/gym/compare'
+      fullPath: '/gym/compare'
+      preLoaderRoute: typeof GymCompareRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/goals/new': {
-      id: '/home/goals/new'
-      path: '/home/goals/new'
-      fullPath: '/home/goals/new'
-      preLoaderRoute: typeof HomeGoalsNewRouteImport
+    '/goals/new': {
+      id: '/goals/new'
+      path: '/goals/new'
+      fullPath: '/goals/new'
+      preLoaderRoute: typeof GoalsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/history/': {
-      id: '/home/history/'
-      path: '/home/history'
-      fullPath: '/home/history/'
-      preLoaderRoute: typeof HomeHistoryIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/history/$id': {
-      id: '/home/history/$id'
-      path: '/home/history/$id'
-      fullPath: '/home/history/$id'
-      preLoaderRoute: typeof HomeHistoryIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/quick/': {
-      id: '/home/quick/'
-      path: '/home/quick'
-      fullPath: '/home/quick/'
-      preLoaderRoute: typeof HomeQuickIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/quick/$exerciseId': {
-      id: '/home/quick/$exerciseId'
-      path: '/home/quick/$exerciseId'
-      fullPath: '/home/quick/$exerciseId'
-      preLoaderRoute: typeof HomeQuickExerciseIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home/templates/': {
-      id: '/home/templates/'
-      path: '/home/templates'
-      fullPath: '/home/templates/'
-      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/$id/': {
-      id: '/running/$id/'
-      path: '/running/$id'
-      fullPath: '/running/$id/'
-      preLoaderRoute: typeof RunningIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/$id/edit': {
-      id: '/running/$id/edit'
-      path: '/running/$id/edit'
-      fullPath: '/running/$id/edit'
-      preLoaderRoute: typeof RunningIdEditRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/goals/': {
-      id: '/running/goals/'
-      path: '/running/goals'
-      fullPath: '/running/goals/'
-      preLoaderRoute: typeof RunningGoalsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/goals/new': {
-      id: '/running/goals/new'
-      path: '/running/goals/new'
-      fullPath: '/running/goals/new'
-      preLoaderRoute: typeof RunningGoalsNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/new/': {
-      id: '/running/new/'
-      path: '/running/new'
-      fullPath: '/running/new/'
-      preLoaderRoute: typeof RunningNewIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/running/new/$type': {
-      id: '/running/new/$type'
-      path: '/running/new/$type'
-      fullPath: '/running/new/$type'
-      preLoaderRoute: typeof RunningNewTypeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sessions/$id/': {
-      id: '/sessions/$id/'
-      path: '/sessions/$id'
-      fullPath: '/sessions/$id/'
-      preLoaderRoute: typeof SessionsIdIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sessions/$id/summary': {
-      id: '/sessions/$id/summary'
-      path: '/sessions/$id/summary'
-      fullPath: '/sessions/$id/summary'
-      preLoaderRoute: typeof SessionsIdSummaryRouteImport
+    '/goals/$id': {
+      id: '/goals/$id'
+      path: '/goals/$id'
+      fullPath: '/goals/$id'
+      preLoaderRoute: typeof GoalsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/templates/$id/': {
@@ -1068,11 +961,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TemplatesIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/templates/$id/edit': {
-      id: '/templates/$id/edit'
-      path: '/templates/$id/edit'
-      fullPath: '/templates/$id/edit'
-      preLoaderRoute: typeof TemplatesIdEditRouteImport
+    '/sessions/$id/': {
+      id: '/sessions/$id/'
+      path: '/sessions/$id'
+      fullPath: '/sessions/$id/'
+      preLoaderRoute: typeof SessionsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/running/new/': {
+      id: '/running/new/'
+      path: '/running/new'
+      fullPath: '/running/new/'
+      preLoaderRoute: typeof RunningNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/running/goals/': {
+      id: '/running/goals/'
+      path: '/running/goals'
+      fullPath: '/running/goals/'
+      preLoaderRoute: typeof RunningGoalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/running/$id/': {
+      id: '/running/$id/'
+      path: '/running/$id'
+      fullPath: '/running/$id/'
+      preLoaderRoute: typeof RunningIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/templates/': {
+      id: '/home/templates/'
+      path: '/home/templates'
+      fullPath: '/home/templates/'
+      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/quick/': {
+      id: '/home/quick/'
+      path: '/home/quick'
+      fullPath: '/home/quick/'
+      preLoaderRoute: typeof HomeQuickIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/history/': {
+      id: '/home/history/'
+      path: '/home/history'
+      fullPath: '/home/history/'
+      preLoaderRoute: typeof HomeHistoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/goals/': {
+      id: '/home/goals/'
+      path: '/home/goals'
+      fullPath: '/home/goals/'
+      preLoaderRoute: typeof HomeGoalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/history/': {
+      id: '/gym/history/'
+      path: '/gym/history'
+      fullPath: '/gym/history/'
+      preLoaderRoute: typeof GymHistoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/goals/': {
+      id: '/gym/goals/'
+      path: '/gym/goals'
+      fullPath: '/gym/goals/'
+      preLoaderRoute: typeof GymGoalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises/$id/': {
+      id: '/exercises/$id/'
+      path: '/exercises/$id'
+      fullPath: '/exercises/$id/'
+      preLoaderRoute: typeof ExercisesIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/templates/$id/history': {
@@ -1082,60 +1045,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TemplatesIdHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/goals/$id/': {
-      id: '/gym/goals/$id/'
-      path: '/gym/goals/$id'
-      fullPath: '/gym/goals/$id/'
-      preLoaderRoute: typeof GymGoalsIdIndexRouteImport
+    '/templates/$id/edit': {
+      id: '/templates/$id/edit'
+      path: '/templates/$id/edit'
+      fullPath: '/templates/$id/edit'
+      preLoaderRoute: typeof TemplatesIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gym/goals/$id/edit': {
-      id: '/gym/goals/$id/edit'
-      path: '/gym/goals/$id/edit'
-      fullPath: '/gym/goals/$id/edit'
-      preLoaderRoute: typeof GymGoalsIdEditRouteImport
+    '/sessions/$id/summary': {
+      id: '/sessions/$id/summary'
+      path: '/sessions/$id/summary'
+      fullPath: '/sessions/$id/summary'
+      preLoaderRoute: typeof SessionsIdSummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/goals/$id/': {
-      id: '/home/goals/$id/'
-      path: '/home/goals/$id'
-      fullPath: '/home/goals/$id/'
-      preLoaderRoute: typeof HomeGoalsIdIndexRouteImport
+    '/running/new/$type': {
+      id: '/running/new/$type'
+      path: '/running/new/$type'
+      fullPath: '/running/new/$type'
+      preLoaderRoute: typeof RunningNewTypeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/goals/$id/edit': {
-      id: '/home/goals/$id/edit'
-      path: '/home/goals/$id/edit'
-      fullPath: '/home/goals/$id/edit'
-      preLoaderRoute: typeof HomeGoalsIdEditRouteImport
+    '/running/goals/new': {
+      id: '/running/goals/new'
+      path: '/running/goals/new'
+      fullPath: '/running/goals/new'
+      preLoaderRoute: typeof RunningGoalsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/sessions/$id/': {
-      id: '/home/sessions/$id/'
-      path: '/home/sessions/$id'
-      fullPath: '/home/sessions/$id/'
-      preLoaderRoute: typeof HomeSessionsIdIndexRouteImport
+    '/running/$id/edit': {
+      id: '/running/$id/edit'
+      path: '/running/$id/edit'
+      fullPath: '/running/$id/edit'
+      preLoaderRoute: typeof RunningIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/sessions/$id/summary': {
-      id: '/home/sessions/$id/summary'
-      path: '/home/sessions/$id/summary'
-      fullPath: '/home/sessions/$id/summary'
-      preLoaderRoute: typeof HomeSessionsIdSummaryRouteImport
+    '/home/quick/$exerciseId': {
+      id: '/home/quick/$exerciseId'
+      path: '/home/quick/$exerciseId'
+      fullPath: '/home/quick/$exerciseId'
+      preLoaderRoute: typeof HomeQuickExerciseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/templates/$id/': {
-      id: '/home/templates/$id/'
-      path: '/home/templates/$id'
-      fullPath: '/home/templates/$id/'
-      preLoaderRoute: typeof HomeTemplatesIdIndexRouteImport
+    '/home/history/$id': {
+      id: '/home/history/$id'
+      path: '/home/history/$id'
+      fullPath: '/home/history/$id'
+      preLoaderRoute: typeof HomeHistoryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/templates/$id/edit': {
-      id: '/home/templates/$id/edit'
-      path: '/home/templates/$id/edit'
-      fullPath: '/home/templates/$id/edit'
-      preLoaderRoute: typeof HomeTemplatesIdEditRouteImport
+    '/home/goals/new': {
+      id: '/home/goals/new'
+      path: '/home/goals/new'
+      fullPath: '/home/goals/new'
+      preLoaderRoute: typeof HomeGoalsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/history/$id': {
+      id: '/gym/history/$id'
+      path: '/gym/history/$id'
+      fullPath: '/gym/history/$id'
+      preLoaderRoute: typeof GymHistoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/goals/new': {
+      id: '/gym/goals/new'
+      path: '/gym/goals/new'
+      fullPath: '/gym/goals/new'
+      preLoaderRoute: typeof GymGoalsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises/$id/history': {
+      id: '/exercises/$id/history'
+      path: '/exercises/$id/history'
+      fullPath: '/exercises/$id/history'
+      preLoaderRoute: typeof ExercisesIdHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/running/goals/$id/': {
@@ -1145,11 +1129,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RunningGoalsIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/templates/$id/': {
+      id: '/home/templates/$id/'
+      path: '/home/templates/$id'
+      fullPath: '/home/templates/$id/'
+      preLoaderRoute: typeof HomeTemplatesIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/sessions/$id/': {
+      id: '/home/sessions/$id/'
+      path: '/home/sessions/$id'
+      fullPath: '/home/sessions/$id/'
+      preLoaderRoute: typeof HomeSessionsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/goals/$id/': {
+      id: '/home/goals/$id/'
+      path: '/home/goals/$id'
+      fullPath: '/home/goals/$id/'
+      preLoaderRoute: typeof HomeGoalsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/goals/$id/': {
+      id: '/gym/goals/$id/'
+      path: '/gym/goals/$id'
+      fullPath: '/gym/goals/$id/'
+      preLoaderRoute: typeof GymGoalsIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/running/goals/$id/edit': {
       id: '/running/goals/$id/edit'
       path: '/running/goals/$id/edit'
       fullPath: '/running/goals/$id/edit'
       preLoaderRoute: typeof RunningGoalsIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/templates/$id/edit': {
+      id: '/home/templates/$id/edit'
+      path: '/home/templates/$id/edit'
+      fullPath: '/home/templates/$id/edit'
+      preLoaderRoute: typeof HomeTemplatesIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/sessions/$id/summary': {
+      id: '/home/sessions/$id/summary'
+      path: '/home/sessions/$id/summary'
+      fullPath: '/home/sessions/$id/summary'
+      preLoaderRoute: typeof HomeSessionsIdSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/goals/$id/edit': {
+      id: '/home/goals/$id/edit'
+      path: '/home/goals/$id/edit'
+      fullPath: '/home/goals/$id/edit'
+      preLoaderRoute: typeof HomeGoalsIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gym/goals/$id/edit': {
+      id: '/gym/goals/$id/edit'
+      path: '/gym/goals/$id/edit'
+      fullPath: '/gym/goals/$id/edit'
+      preLoaderRoute: typeof GymGoalsIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1159,6 +1199,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HistoryRoute: HistoryRoute,
   MoreRoute: MoreRoute,
+  PlansRoute: PlansRoute,
+  ReportRoute: ReportRoute,
   TrashRoute: TrashRoute,
   GoalsIdRoute: GoalsIdRoute,
   GoalsNewRoute: GoalsNewRoute,

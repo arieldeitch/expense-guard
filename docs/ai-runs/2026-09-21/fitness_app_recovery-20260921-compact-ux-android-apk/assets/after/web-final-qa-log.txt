@@ -1,0 +1,47 @@
+[f01-home] url=/ dir=rtl overflowX=false (390/390) wide=0 small=3
+   SMALL: a 71x36 "הגדרת יעד" | a 71x36 "הגדרת יעד" | a 71x36 "הגדרת יעד"
+nav: [ 'ראשי*', 'דיווח', 'היסטוריה', 'תוכניות', 'עוד' ]
+week snapshot: השבוע · עדיין אין אימונים
+אחרון: ריצה על הליכון · ו׳ 18.9 · 5.00 ק״מ · 30:00
+[f02-report] url=/report dir=rtl overflowX=false (390/390) wide=0 small=0
+drafts before typing: 0
+[f03-runform] url=/running/a9938b52-38a6-45cc-8f7c-011407cdaa87/edit dir=rtl overflowX=false (390/390) wide=0 small=3
+   SMALL: button 332x36 "— ללא מקום —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים"
+derived footnote: קצב מחושב: 5:58 /ק"מ (מבוסס משך+מרחק)
+saved run: {"d":2240,"m":6250,"v":10.4,"pace":358.4,"prov":{"duration_seconds":"manual","distance_meters":"manual","average_speed_kmh":"manual","average_pace_s_per_km":"derived"}}
+[f04-run-detail] url=/running/a9938b52-38a6-45cc-8f7c-011407cdaa87 dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: button 85x36 "הוספה"
+after refresh 404? false | title: פרטי ריצה · Fit Log
+edit footnote: קצב מחושב: 6:27 /ק"מ (מבוסס משך+מרחק)
+draft row: ריצה בחוץ | טיוטה · ב׳ 21.9 · 12:00
+draft recovered minutes: 12
+[f05-draft-recovered] url=/running/a9f51c21-f77f-4c29-9278-7f91b9e2e336/edit dir=rtl overflowX=false (390/390) wide=0 small=4
+   SMALL: button 332x36 "— ללא מקום —" | button 332x36 "— ללא מסלול —" | button 36x20 "הראה מדדים מתקדמים" | button 36x20 "הראה מקטעים"
+[f06-quick] url=/home/quick dir=rtl overflowX=false (390/390) wide=0 small=0
+[f07-home-sets] url=/home/sessions/5f9846fb-9459-4d9b-b60e-13c152133c2a dir=rtl overflowX=false (390/390) wide=0 small=7
+   SMALL: button 70x36 "סיום אימון" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 25x44 "הפחת סט 2 חזרות" | button 25x44 "הוסף סט 2 חזרות" | button 25x44 "הפחת סט 3 חזרות" | button 25x44 "הוסף סט 3 חזרות"
+custom exercise session: ["5r/2.5kg✓"]
+[f08-custom-dumbbell] url=/home/sessions/7fb8fa90-a6bc-43b7-8b5f-cc748b0922a1 dir=rtl overflowX=false (390/390) wide=0 small=5
+   SMALL: button 70x36 "סיום אימון" | button 25x44 "הפחת סט 1 חזרות" | button 25x44 "הוסף סט 1 חזרות" | button 26x40 "הפחת משקל נוסף" | button 26x40 "הוסף משקל נוסף"
+[f09-history] url=/history dir=rtl overflowX=false (390/390) wide=0 small=0
+history count: 5 אימונים | groups: [ 'השבוע', 'שבוע שעבר' ]
+filter home: 2 אימונים
+search 'ישנה': 1 אימונים
+prev month: 0 אימונים · אוגוסט 2026
+[f10-history-month] url=/history dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: button 49x36 "איפוס"
+opened from history: /running/a9938b52-38a6-45cc-8f7c-011407cdaa87
+browser back → /history
+export: fitlog-backup-20260921-1238.json records: 78 runs: 3 home: 2
+restore preview: רשומות חדשות שיתווספו
+1
+legacy run restored: true
+[f11-backup] url=/backup dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: input 1x1 "בחר קובץ גיבוי"
+[f12_plans] url=/plans dir=rtl overflowX=false (390/390) wide=0 small=0
+[f12_more] url=/more dir=rtl overflowX=false (390/390) wide=0 small=0
+[f12_running_project] url=/running/project dir=rtl overflowX=false (390/390) wide=0 small=0
+[f12_history] url=/history dir=rtl overflowX=false (390/390) wide=0 small=0
+[f12_report] url=/report dir=rtl overflowX=false (390/390) wide=0 small=0
+marker: untouched | keys: 13
+PAGE ERRORS: none

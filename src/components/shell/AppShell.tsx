@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { BottomNav, SideNav } from "./Nav";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ export function TopBar({
         className,
       )}
     >
-      <div className="mx-auto grid h-14 max-w-3xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 sm:px-4">
+      <div className="mx-auto grid h-12 max-w-3xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-2 sm:px-4">
         <div className="min-w-9">
           {back ? (
             <Link
@@ -64,40 +64,22 @@ export function AppShell({
     action?: ReactNode;
   };
 }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <div className="min-h-dvh lg:pe-64">
-      <SideNav />
+    <div className="min-h-dvh lg:pe-60">
+      <SideNav pathname={pathname} />
       {topBar ? <TopBar {...topBar} /> : null}
-      <main role="main" className="mx-auto w-full max-w-3xl pb-28 pt-4 sm:pt-6 lg:pb-8">
-        {/* Three named shortcuts on top-level screens only; detail/form screens keep the back link. */}
-        {!topBar?.back ? (
-          <nav
-            aria-label="קיצורי דרך"
-            className="mb-4 grid grid-cols-3 gap-2 px-4 text-center text-sm sm:px-6"
-          >
-            <Link
-              to="/running/project"
-              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
-            >
-              חצאי מרתון
-            </Link>
-            <Link
-              to="/history"
-              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
-            >
-              כל ההיסטוריה
-            </Link>
-            <Link
-              to="/home/quick"
-              className="flex min-h-11 items-center justify-center rounded-xl border-2 border-border-strong p-2 font-bold"
-            >
-              פק״ל ביתי
-            </Link>
-          </nav>
-        ) : null}
+      <main
+        role="main"
+        className={cn(
+          "mx-auto w-full max-w-3xl pb-24 pt-3 sm:pt-4 lg:pb-8",
+          // Without a TopBar the content itself must clear the status bar (edge-to-edge on Android).
+          !topBar && "safe-top",
+        )}
+      >
         {children}
       </main>
-      <BottomNav />
+      <BottomNav pathname={pathname} />
     </div>
   );
 }

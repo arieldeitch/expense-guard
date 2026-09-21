@@ -35,11 +35,7 @@ function NewRunForm() {
         back: { to: "/running/new", label: "חזרה" },
       }}
     >
-      <PageHeader
-        eyebrow="ריצה חדשה"
-        title={RUN_TYPE_LABELS[runType]}
-        description="הטופס נשמר כטיוטה אוטומטית."
-      />
+      <PageHeader title={RUN_TYPE_LABELS[runType]} description="הטופס נשמר כטיוטה אוטומטית." />
       <RunForm runType={runType} planItemId={plan} />
     </AppShell>
   );

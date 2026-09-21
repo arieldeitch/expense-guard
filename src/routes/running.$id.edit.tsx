@@ -38,11 +38,7 @@ function EditRunPage() {
         back: { to: `/running/${run.id}`, label: "חזרה" },
       }}
     >
-      <PageHeader
-        eyebrow="עריכה"
-        title={RUN_TYPE_LABELS[run.run_type]}
-        description="השינויים נשמרים אוטומטית."
-      />
+      <PageHeader title={RUN_TYPE_LABELS[run.run_type]} description="השינויים נשמרים אוטומטית." />
       <RunForm runType={run.run_type} existing={run} />
     </AppShell>
   );

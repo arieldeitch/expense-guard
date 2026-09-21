@@ -1,0 +1,31 @@
+EXIT=0
+BUILD SUCCESSFUL in 14s
+  "file": "fitlog-1.1.0-10100-1722d531df-debug.apk",
+Success
+audit home: {"path":"/","overflowX":false,"w":412,"h":839,"small":["A 71x36 הגדרת יעד","A 71x36 הגדרת יעד","A 71x36 הגדרת יעד"],"dir":"rtl","platform":"android","native":true}
+audit report: {"path":"/report","overflowX":false,"w":412,"h":839,"small":[],"dir":"rtl","platform":"android","native":true}
+keyboard viewport: {"inner":839,"vv":839,"saveBtnVisible":true}
+run detail: {"path":"/running/126d0d30-c391-444e-9387-b76ecef65b88","run":{"status":"completed","d":2240,"m":6250,"v":10.4,"pace":358.4}}
+after hardware back: /running/126d0d30-c391-444e-9387-b76ecef65b88/edit | focus: mCurrentFocus=Window{55efda3 u0 com.arieldeitch.fitlog/com.arieldeitch.fitlog.MainActivity}
+home sets: {"partner":"תום","sets":["19✓","48✓","32✓"]}
+history: {"rows":2,"count":"2 אימונים"}
+audit history: {"path":"/history","overflowX":false,"w":412,"h":839,"small":[],"dir":"rtl","platform":"android","native":true}
+opened from history: /running/126d0d30-c391-444e-9387-b76ecef65b88
+back to: /history
+about: אימונים אישייםFit Logראשידיווחהיסטוריהתוכניותעודעודהגדרותמסך פתיחהלאן להיכנס אחרי פתיחת האפליקציההמסך הראשיריצהחדר כושרביתחשבוןלא מחוברהתחברות היא רשות. בלעדיה האפליקציה עובדת מקומית במלואה.אימיילסיסמההתחברהרשמהנתונים וקטלוגמקומות וציודחדרי כושר, מסלולי ריצה, הליכונים, ציוד ביתיספריית תרגיליםחדר כושר · בית · משקל גוף — עם חלופות וזמינות ציודתבניות אימוןתבניות כוח, סופרסטים, גרסאות ו־snapshotsסל מחזורפריטים שנמחקו — ניתן לשחזרגיבוי ושחזורהורדת קובץ גיבוי מקומי ושחזור ממנו — ללא ענןאודותFit Log 1.1.0Android · build 10100 · 1722d531dfהנתונים נשמרים במכשיר זה בלבד; גיבוי ושחזור למעלה.ראשידיווחהיסטוריהתוכניותעוד
+before force-stop: {"runs":1,"home":1} | after: {"runs":1,"home":1}
+offline: {"online":true,"title":"ראשי · Fit Log","rows":20,"runs":1}
+focus after export: mCurrentFocus=Window{9e38fd0 u0 com.android.intentresolver/com.android.intentresolver.ChooserActivityLauncher}
+cache files: WebView, fitlog-backup-20260921-0905.json
+exported backup: fitlog-backup-20260921-0905.json records: 72 runs: 1 home sessions: 1
+focus after external link: mCurrentFocus=Window{a1fbf46 u0 com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity}
+PAGE ERRORS: none (this session)
+
+[exited with code 0]
+web backup: 98 records; runs: 3 races: 3
+C:\Users\user\AppData\Local\Temp\claude\C--Users-user-Documents-AI-projects-expense-guard\aaa185c4-435d-431f-87ad-73ed869bcdc5\scratchpad\qa\backup-sample.json: 1 file pushed, 0 skipped. 184.1 MB/s (96690 bytes in 0.001s)
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+APK before restore: {"runs":5,"weeks":3,"home":3}
+preview: נתונים מקומיים גיבוי ושחזור הנתונים נשמרים בדפדפן הזה בלבד. ייצוא קובץ הוא הדרך היחידה לשמור עותק מחוץ למכשיר. מה יגובה תוכניות ואימוני בית 26 אימוני כוח 0 תרגילים 67 ריצות 12 יעדים 0 תבניות 0 סה״כ 105 רשומות · גרסת schema 1.0.0 הורד גיבוי שחזור מקובץ בחר קובץ גיבוי מה ישתנה רשומות חדשות שיתווספו 0 רשומות זהות (ללא שינוי) 31 התנגשויות 67 לפני כל שחזור נשמר snapshot של המצב הנוכחי. גרסת schema: 1.0.0. הוסף חדשים בלבד (שמור על המכשיר) העדף את הגיבוי בהתנגשויות (67)
+APK after restore: {"runs":5,"weeks":3,"races":3,"home":3,"snapshots":2}
+history after restore: 8 אימונים
