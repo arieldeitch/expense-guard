@@ -1,29 +1,30 @@
 project_id: fitness_app_recovery
-run_id: fitness_app_recovery-20260921-compact-ux-android-apk
-last_project_update_at: "2026-09-21T13:33:00+03:00"
+run_id: fitness_app_recovery-20260924-pakalim-suunto-home-ux
+last_project_update_at: "2026-09-24T09:45:00+03:00"
 status: YELLOW
-capsule: docs/ai-runs/2026-09-21/fitness_app_recovery-20260921-compact-ux-android-apk
-previous_run: fitness_app_recovery-20260920-recovery-race-project
-summary: "Compact mobile UX (nav ראשי·דיווח·היסטוריה·תוכניות·עוד, history centre, report/plans), Android APK via Capacitor 8 with reproducible CI build; 471 tests; web + emulator QA green"
-pr: https://github.com/arieldeitch/expense-guard/pull/2
-merge_state: "merged 2026-09-21T13:14+03:00 — merge commit 2d7cffde8af7b4f2bb4410963e830c87da097416 on main (86f2422, 7c62078, ba96984, 5dae552)"
-publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d not visible to the connected Lovable account (project_not_found); live still serves the previous build (/report, /plans → 404). Ariel publishes."
+capsule: docs/ai-runs/2026-09-24/fitness_app_recovery-20260924-pakalim-suunto-home-ux
+previous_run: fitness_app_recovery-20260921-compact-ux-android-apk
+summary: "Ariel's 14 real-usage feedback items implemented end to end: one duration/decimal input contract (ADR-0044), quantity-based pakalim with two persistent, editable routines (ADR-0045), home exercise bank by equipment and muscle group with illustrations (ADR-0046), and a single ownership contract with no second-user UX (ADR-0047). 512 tests; real-Chrome 390x844 and Pixel 7 emulator QA green."
+pr: https://github.com/arieldeitch/expense-guard/pull/3
+merge_state: "merged 2026-09-24T09:26+03:00 — merge commit 75533f4631eeaa5bf77387027513d4002ae33973 on main (5c2c89e, c13695d, e4b669b, 55c95ee, 87aa7e1, d6403e9, ae74039, b851b55, be94766, f5a5ad0)"
+publish_state: "blocked — Lovable project 2b79da21-331d-4a52-bd0f-e49f64b4e79d still returns project_not_found for the connected account (third run in a row); the live site does not yet serve this build. Ariel publishes."
+data_model_changes: "none — no schema migration, no RLS or policy change, no dependency or lockfile change. The stored owner value is unchanged (single-user), so no record moved."
 apk_official_main:
-  note: "Canonical APK = latest main run; from run 35588770666 on, CI debug builds share one cached signing key (R-46), so newer APKs install over older ones."
-  workflow_run: https://github.com/arieldeitch/expense-guard/actions/runs/35588979743
-  artifact: fitlog-apk-debug-452a17af4061040c2d565f700c1c79352bb2a61c
-  artifact_id: 10633089566
-  file: fitlog-1.1.0-10100-452a17af40-debug.apk
-  size_bytes: 4770061
-  sha256: 791aa929c6d1cef88d552ddaebde648aecf61496156549670201106cb0a7910e
-  signer_cert_sha256: 59842bec78e92339817310bf5352bfee9a7741f842fd64e4b8d5ea2b3e662193
-  version_name: "1.1.0"
-  version_code: 10100
-  commit: 452a17af40
+  note: "Canonical APK = latest main run. The cached debug keystore was restored on this run (key fitlog-android-debug-keystore-v1), so this APK installs over the 1.1.0 main APK without uninstalling (R-46)."
+  workflow_run: https://github.com/arieldeitch/expense-guard/actions/runs/35964537898
+  artifact: fitlog-apk-debug-75533f4631eeaa5bf77387027513d4002ae33973
+  artifact_id: 10794040563
+  file: fitlog-1.2.0-10200-75533f4631-debug.apk
+  artifact_zip_bytes: 4391377
+  sha256: 61c04ece292cd7374d28cbbd95d29d85348e6250ad8d677f38652609323e02fe
+  version_name: "1.2.0"
+  version_code: 10200
+  commit: 75533f4631
   signing: "debug keystore (internal install only, not Play Store)"
-  expires: "2026-12-20"
-  superseded_first_main_apk: "fitlog-1.1.0-10100-2d7cffde8a-debug.apk (run 35587726424) — different, unrepeatable debug signature; do not use as an upgrade base"
+  supersedes: "fitlog-1.1.0-10100-452a17af40-debug.apk (run 35588979743)"
 android_app_id: com.arieldeitch.fitlog
-next_action: "Ariel: Publish in Lovable; download the APK artifact from run 35588979743 (or any later main run), export a backup from the web app, install, restore (docs/ai/android.md), then verify Back/keyboard/backup on the phone"
+qa_state: "web 390x844 RTL in real Chrome and Pixel 7 / API 36 emulator on the installed APK — both green, including the real soft keyboard, hardware Back, force-stop persistence, offline and build identity. Two touch-target defects found by that QA were fixed (ae74039, b851b55). PHYSICAL-DEVICE ACCEPTANCE IS NOT MARKED PASS."
+new_risks: "R-48 (two duration input shapes coexist), R-49 (owner id centralised but still constant until T-05), R-50 (touch-target defects only caught by real-layout QA)"
+next_action: "Ariel: export a backup, install the APK from run 35964537898, use the morning/evening pakalim for a few days, and press Publish in Lovable. Next session: if email confirmation is disabled (B1/T-05), wire currentOwnerId() to auth.uid() and decide what happens to records stamped single-user (R-49)."
 control_tower: pending
 chief_of_staff: pending

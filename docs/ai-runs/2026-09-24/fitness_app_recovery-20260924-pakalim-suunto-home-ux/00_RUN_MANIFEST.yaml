@@ -1,9 +1,10 @@
 project_id: fitness_app_recovery
 run_id: fitness_app_recovery-20260924-pakalim-suunto-home-ux
-updated_at: "2026-09-24T09:30:00+03:00"
+updated_at: "2026-09-24T09:45:00+03:00"
 status: YELLOW
 repository: arieldeitch/expense-guard
 baseline: ed9f583e0f7ce8dfd6ef72bad62b50ebaa297c4e
+pr: https://github.com/arieldeitch/expense-guard/pull/3
 branch: feat/fitlog-pakalim-suunto-home-ux
 lovable_project: 2b79da21-331d-4a52-bd0f-e49f64b4e79d
 live_url: https://fitlog-workout.lovable.app
@@ -22,8 +23,8 @@ scope:
 raw_history_gaps: >-
   The full Claude Code transcript lives in the session. Every claim in this capsule is backed by a
   file under assets/ (web QA log, Android QA log, screenshots, APK JSON) or by a test in the repo.
-merge_commit: null
-merged_at: null
+merge_commit: 75533f4631eeaa5bf77387027513d4002ae33973
+merged_at: "2026-09-24T09:26:00+03:00"
 apk_local: fitlog-1.2.0-10200-ae740393c0-debug.apk (sha256 bfdbccc715a785c4092815eaddd79112c3654200cbd56acf85301aa2be1c7fcd)
-apk_official: null # filled from the main android-apk.yml run after merge
+apk_official: fitlog-1.2.0-10200-75533f4631-debug.apk (sha256 61c04ece292cd7374d28cbbd95d29d85348e6250ad8d677f38652609323e02fe, run 35964537898, artifact 10794040563)
 published: false # Lovable publish blocked from this session — Ariel publishes

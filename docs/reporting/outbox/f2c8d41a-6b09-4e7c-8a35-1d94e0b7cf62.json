@@ -1,0 +1,54 @@
+{
+  "event_id": "f2c8d41a-6b09-4e7c-8a35-1d94e0b7cf62",
+  "project_id": "fitness_app_recovery",
+  "run_id": "fitness_app_recovery-20260924-pakalim-suunto-home-ux",
+  "event_type": "milestone",
+  "occurred_at": "2026-09-24T09:45:00+03:00",
+  "milestone": "real-usage-feedback-implemented",
+  "health": "YELLOW",
+  "summary": "All 14 of Ariel's real-usage feedback items are implemented, merged to main (75533f46) and built as APK 1.2.0/10200. The product now reads durations one way everywhere and echoes them back before saving, counts pakalim instead of timing them, lets a saved pakal report be corrected instead of duplicated, and organises the home exercise bank by equipment and muscle group with drawings. The data model can hold more than one owner; the product deliberately still shows only one. Physical-device acceptance and the Lovable publish remain with Ariel.",
+  "supersedes": "4e7a9b1c-2d3f-4a6b-9c8e-5f1a2b3c4d5e",
+  "product_state": "Ariel can report a morning or evening pakal in counts, reopen it the same day and correct a number without creating a second report; add a dumbbell or rope exercise by picking equipment then muscle group, with the common exercise first; and enter 7.15 km or 42:15 in a Suunto field and see the app say back '42 דקות ו-15 שניות' before saving. Nothing on his device moved: no migration, no schema change, no data touched.",
+  "completed": [
+    "ADR-0044 one duration/decimal input contract with a live verbal echo; a bare number is seconds",
+    "ADR-0045 quantity-based pakalim, two persistent routines, opening a routine resumes today's report",
+    "ADR-0046 home exercise bank equipment to muscle group to exercise, common first, with target and movement drawings",
+    "ADR-0047 single ownership contract; stored value unchanged so no record migrates; no second-user UX",
+    "512 tests passing across 45 files; all gates green; 0 lint findings in every changed file",
+    "Web QA in real Chrome 390x844 RTL and Pixel 7 emulator QA on the installed APK",
+    "Two touch-target defects found by that QA and fixed (ae74039, b851b55)",
+    "PR #3 merged into main (75533f4631eeaa5bf77387027513d4002ae33973)",
+    "Canonical APK from main: fitlog-1.2.0-10200-75533f4631-debug.apk (run 35964537898)"
+  ],
+  "in_progress": [],
+  "blockers": [
+    "Lovable publish: project 2b79da21-331d-4a52-bd0f-e49f64b4e79d still returns project_not_found for the connected account — third run in a row; requires Ariel's Lovable login",
+    "No authenticated Supabase session (mailer_autoconfirm: false), which is what blocks wiring currentOwnerId() to auth.uid() (R-49)"
+  ],
+  "not_claimed": [
+    "Physical-device acceptance — the Pixel 7 emulator is evidence, not acceptance",
+    "Publication — the live site does not yet serve this build"
+  ],
+  "needs_ariel": [
+    "Export a backup, then install fitlog-1.2.0-10200-75533f4631-debug.apk from workflow run 35964537898",
+    "Use the morning and evening pakalim for a few days and confirm the count-and-correct flow",
+    "Press Publish in Lovable for project 2b79da21-331d-4a52-bd0f-e49f64b4e79d",
+    "Decide whether the two duration input shapes (R-48) are confusing in practice"
+  ],
+  "next_action": "Ariel installs the APK from run 35964537898 and presses Publish in Lovable; the next session wires currentOwnerId() to auth.uid() once an authenticated session is possible",
+  "new_risks": ["R-48", "R-49", "R-50"],
+  "evidence_refs": [
+    "docs/ai-runs/2026-09-24/fitness_app_recovery-20260924-pakalim-suunto-home-ux/09_END_OF_RUN_REPORT.md",
+    "docs/ai-runs/2026-09-24/fitness_app_recovery-20260924-pakalim-suunto-home-ux/08_IMPLEMENTATION_EVIDENCE.md",
+    "docs/ai-runs/2026-09-24/fitness_app_recovery-20260924-pakalim-suunto-home-ux/assets/"
+  ],
+  "last_project_update_at": "2026-09-24T09:45:00+03:00",
+  "os_version": "unresolved: Start Here 1.1 vs CURRENT_OS_VERSION 1.0.0",
+  "documentation_state": "run capsule written (00-10 plus assets); ADR-0044..0047 added; risks R-48..R-50 added; change-log, current-state, PROJECT_STATUS and SESSION_HANDOFF active blocks refreshed; both ledgers updated",
+  "personal_data": "none included — this event carries no workout values, dates or health data",
+  "delivery": {
+    "control_tower": "pending",
+    "chief_of_staff": "pending",
+    "note": "No verified bridge or endpoint is reachable from this session, so this event is prepared in the repo outbox only. Prepared is not sent; sent is not acknowledged."
+  }
+}
