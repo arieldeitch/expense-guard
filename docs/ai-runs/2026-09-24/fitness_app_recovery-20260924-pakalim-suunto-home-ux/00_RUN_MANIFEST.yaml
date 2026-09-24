@@ -1,0 +1,29 @@
+project_id: fitness_app_recovery
+run_id: fitness_app_recovery-20260924-pakalim-suunto-home-ux
+updated_at: "2026-09-24T09:30:00+03:00"
+status: YELLOW
+repository: arieldeitch/expense-guard
+baseline: ed9f583e0f7ce8dfd6ef72bad62b50ebaa297c4e
+branch: feat/fitlog-pakalim-suunto-home-ux
+lovable_project: 2b79da21-331d-4a52-bd0f-e49f64b4e79d
+live_url: https://fitlog-workout.lovable.app
+supabase_project: fusrapommtdqwfglkmks
+permission_model_changed: false
+schema_migration_applied: false
+android_app_id: com.arieldeitch.fitlog
+android_version_name: "1.2.0"
+android_version_code: 10200
+trigger: Ariel's real-usage feedback (14 items) after the 1.1.0 pilot build
+scope:
+  - duration and decimal input contract (Suunto + running)
+  - quantity-first pakalim with two persistent routines, editable in place
+  - home exercise bank by equipment and muscle group, with drawings
+  - ownership contract so the data model is not single-user
+raw_history_gaps: >-
+  The full Claude Code transcript lives in the session. Every claim in this capsule is backed by a
+  file under assets/ (web QA log, Android QA log, screenshots, APK JSON) or by a test in the repo.
+merge_commit: null
+merged_at: null
+apk_local: fitlog-1.2.0-10200-ae740393c0-debug.apk (sha256 bfdbccc715a785c4092815eaddd79112c3654200cbd56acf85301aa2be1c7fcd)
+apk_official: null # filled from the main android-apk.yml run after merge
+published: false # Lovable publish blocked from this session — Ariel publishes

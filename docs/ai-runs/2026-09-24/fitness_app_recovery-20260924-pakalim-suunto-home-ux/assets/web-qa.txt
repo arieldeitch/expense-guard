@@ -1,0 +1,52 @@
+[p01-home] url=/home dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: a 36x36 "דיווח מהיר" | a 39x16 "הכל"
+routine cards: [
+  'פק״לים בוקר3 תרגילים · טרם דווח היום',
+  'פק״לים ערב2 תרגילים · טרם דווח היום'
+]
+[p02-pakal-morning] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+pakal rows: [ 'שכיבות סמיכה', 'כפיפות בטן רגילות', 'קפיצה בחבל' ]
+session name: פק״לים בוקר | template: tpl_pakal_morning
+quantities: [{"name":"שכיבות סמיכה","sets":["31r/-s"]},{"name":"כפיפות בטן רגילות","sets":["-r/-s"]},{"name":"קפיצה בחבל","sets":["-r/-s"]}]
+[p03-pakal-quantities] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+[p04-bank-equipment] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+[p05-bank-muscles] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+[p06-bank-exercises] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+dumbbell biceps list: [
+  'כפיפות מרפקים עם משקולותהנפוץ ביותר · Dumbbell Bicep Curls←',
+  'חתירה חד־יד עם משקולתSingle-arm Dumbbell Row←'
+]
+after add: ["שכיבות סמיכה","כפיפות בטן רגילות","קפיצה בחבל","כפיפות מרפקים עם משקולות"]
+[p07-pakal-after-add] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+sessions after save: 1 | status: completed
+[p08-home-after-report] url=/home dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: a 36x36 "דיווח מהיר" | a 39x16 "הכל"
+sessions after reopen: 1
+value on reopen: 31
+edited quantities: [{"name":"שכיבות סמיכה","sets":["25r/-s"]},{"name":"כפיפות בטן רגילות","sets":["-r/-s"]},{"name":"קפיצה בחבל","sets":["-r/-s"]},{"name":"כפיפות מרפקים עם משקולות","sets":["-r/-s"]}]
+sessions total (no duplicate): 1
+[p09-pakal-edited] url=/home/pakal/morning dir=rtl overflowX=false (390/390) wide=0 small=0
+[p10-run-detail] url=/running/legacy-run-1 dir=rtl overflowX=false (390/390) wide=0 small=1
+   SMALL: button 85x36 "הוספה"
+suunto button: 1
+[p11-suunto-form] url=/running/legacy-run-1 dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: button 85x36 "הוספה" | button 16x16 "Close"
+distance typed → 7.15
+duration typed → 42:15 | echo: 42 דקות ו-15 שניות
+[p12-suunto-typed] url=/running/legacy-run-1 dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: button 85x36 "הוספה" | button 16x16 "Close"
+bare 40 → 40 | echo: 40 שניות
+[p13-suunto-bare-seconds] url=/running/legacy-run-1 dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: button 85x36 "הוספה" | button 16x16 "Close"
+invalid 1.5 echo: פורמט לא תקין. דוגמאות: 40 (שניות) · 5:30 · 1:02:03
+after blur → 42:15
+[p14-suunto-invalid-then-valid] url=/running/legacy-run-1 dir=rtl overflowX=false (390/390) wide=0 small=2
+   SMALL: button 85x36 "הוספה" | button 16x16 "Close"
+[p15-history] url=/history dir=rtl overflowX=false (390/390) wide=0 small=0
+history rows: [
+ "פק״לים בוקר4 תרגילים · 1 סטים · 25 חזרות · שכיבות סמיכה · כפיפות בטן רגילותה׳ 24",
+ "ריצה על הליכון5.00 ק״מ · 30:00ג׳ 22.9"
+]
+marker: untouched
+keys: fitlog:exercises:v1, fitlog:home:v1, fitlog:migration-snapshot, fitlog:qa-marker, fitlog:runs:v1, fitlog:storage-meta
+PAGE ERRORS: none

@@ -1,0 +1,50 @@
+[shot] a01-first-open
+first-open audit: {"path":"/","overflowX":false,"w":412,"small":[],"native":true}
+[shot] a02-home
+home audit: {"path":"/home","overflowX":false,"w":412,"small":["A 36x36 דיווח מהיר","A 39x16 הכל"],"native":true}
+routine cards: ["פק״לים בוקר3 תרגילים · טרם דווח היום","פק״לים ערב2 תרגילים · טרם דווח היום"]
+[shot] a03-pakal-morning
+pakal audit: {"path":"/home/pakal/morning","overflowX":false,"w":412,"small":["BUTTON 32x32 הזז למעלה שכיבות סמיכה","BUTTON 32x32 הזז למטה שכיבות סמיכה","BUTTON 32x32 הסר שכיבות סמיכה","BUTTON 32x32 הזז למעלה כפיפות בטן ר","BUTTON 32x32 הזז למטה כפיפות בטן רג","BUTTON 32x32 הסר כפיפות בטן רגילות"],"native":true}
+pakal rows: [ 'שכיבות סמיכה', 'כפיפות בטן רגילות', 'קפיצה בחבל' ]
+[shot] a04-keyboard-open
+ime shown: true
+focused input: כמות שכיבות סמיכה
+input mode: {"inputMode":"numeric","type":"text"}
+after keyboard typing: {"value":"35","savedReps":[35,null,null]}
+[shot] a05-quantity-typed
+[shot] a06-bank-equipment
+[shot] a07-bank-muscles
+muscle groups: ["ציוד","דאמבלים","יד קדמית","כתפיים","יד אחורית","חזה","גב"]
+[shot] a08-bank-exercises
+biceps list: ["כפיפות מרפקים עם משקולותהנפוץ ביותר · Dumbbell Bic","חתירה חד־יד עם משקולתSingle-arm Dumbbell Row←"]
+state after add: {"sessions":1,"name":"פק״לים בוקר","template":"tpl_pakal_morning","status":"in_progress","lines":["שכיבות סמיכה=35","כפיפות בטן רגילות=-","קפיצה בחבל=-","כפיפות מרפקים עם משקולות=-"]}
+[shot] a09-after-add
+after save: {"sessions":1,"name":"פק״לים בוקר","template":"tpl_pakal_morning","status":"completed","lines":["שכיבות סמיכה=35","כפיפות בטן רגילות=-","קפיצה בחבל=-","כפיפות מרפקים עם משקולות=-"]}
+[shot] a10-home-after-save
+on reopen: {"sessions":1,"value":"35"}
+after edit: {"sessions":1,"name":"פק״לים בוקר","template":"tpl_pakal_morning","status":"completed","lines":["שכיבות סמיכה=25","כפיפות בטן רגילות=-","קפיצה בחבל=-","כפיפות מרפקים עם משקולות=-"]}
+[shot] a11-reopened-edited
+after back -> path: /home | focus: mCurrentFocus=Window{694a116 u0 com.arieldeitch.fitlog/com.arieldeitch.fitlog.MainActivity}
+seed: seeded
+[shot] a12-run-detail
+[shot] a13-suunto-form
+distance 7.15 -> 7.15
+duration 42:15 -> 42:15 | echo: 42 דקות ו-15 שניות
+[shot] a14-suunto-typed
+duration bare 40 -> 40 | echo: 40 שניות
+[shot] a15-suunto-bare-seconds
+duration 1.5 -> 1.5 | echo: פורמט לא תקין. דוגמאות: 40 (שניות) · 5:30 · 1:02:03
+[shot] a16-suunto-invalid
+after blur -> 42:15
+suunto audit: {"path":"/running/legacy-run-1","overflowX":false,"w":412,"small":["BUTTON 85x36 הוספה","BUTTON 16x16 Close"],"native":true}
+before force-stop: {"home":1,"sets":4,"runs":1,"marker":"untouched"}
+after  force-stop: {"home":1,"sets":4,"runs":1,"marker":"untouched"}
+[shot] a17-offline-home
+offline home audit: {"path":"/home","overflowX":false,"w":412,"small":["A 36x36 דיווח מהיר","A 39x16 הכל"],"native":true}
+[shot] a18-more
+version text: ["Fit Log 1.2.0"]
+[shot] a19-history
+history rows: ["פק״לים בוקר4 תרגילים · 1 סטים · 25 חזרות · שכיבות סמיכה · כפיפות בטן רגילותה׳ 24.9","ריצה על הליכון5.00 ק״מ · 30:00ג׳ 22.9"]
+keys: fitlog:exercises:v1, fitlog:home:v1, fitlog:migration-snapshot, fitlog:qa-marker, fitlog:runs:v1, fitlog:storage-meta
+PAGE ERRORS: none
+QA DONE
