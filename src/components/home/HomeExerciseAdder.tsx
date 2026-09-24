@@ -123,7 +123,11 @@ export function HomeExerciseAdder({ onPick }: { onPick: (exerciseId: string) => 
       {/* breadcrumb — always shows where we are and how to go back one level */}
       {!searchResults && (category || group) ? (
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <button type="button" className="min-h-9 font-bold underline" onClick={reset}>
+          <button
+            type="button"
+            className="min-h-11 min-w-11 px-1 font-bold underline"
+            onClick={reset}
+          >
             ציוד
           </button>
           {category ? (
@@ -131,7 +135,7 @@ export function HomeExerciseAdder({ onPick }: { onPick: (exerciseId: string) => 
               <ChevronRight aria-hidden className="size-3 rtl:rotate-180" />
               <button
                 type="button"
-                className="min-h-9 font-bold underline"
+                className="min-h-11 min-w-11 px-1 font-bold underline"
                 onClick={() => setGroup(null)}
               >
                 {HOME_BANK_CATEGORIES.find((c) => c.id === category)?.label}
