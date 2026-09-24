@@ -9,10 +9,12 @@
  */
 import type { EquipmentItem, TrainingLocation, TreadmillProfile } from "./types";
 import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
+import { LOCAL_OWNER_ID } from "@/lib/identity/owner";
 
 /** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
 export const STORAGE_KEY = "fitlog:catalog:v1";
-export const CURRENT_OWNER_ID = "single-user";
+/** Ownership contract lives in one place (ADR-0047); the value is unchanged for compatibility. */
+export const CURRENT_OWNER_ID = LOCAL_OWNER_ID;
 
 export interface CatalogState {
   locations: TrainingLocation[];
