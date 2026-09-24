@@ -126,7 +126,7 @@ function PakalPage() {
                           ),
                         )
                       }
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground disabled:opacity-30"
+                      className="-my-1.5 inline-flex size-11 items-center justify-center rounded-lg text-muted-foreground disabled:opacity-30"
                     >
                       <ArrowUp aria-hidden className="size-3.5" />
                     </button>
@@ -144,7 +144,7 @@ function PakalPage() {
                           ),
                         )
                       }
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground disabled:opacity-30"
+                      className="-my-1.5 inline-flex size-11 items-center justify-center rounded-lg text-muted-foreground disabled:opacity-30"
                     >
                       <ArrowDown aria-hidden className="size-3.5" />
                     </button>
@@ -155,7 +155,7 @@ function PakalPage() {
                         trashEntry(line.entryId);
                         toast.info(`${line.name} הוסר מהדיווח`);
                       }}
-                      className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground"
+                      className="-my-1.5 inline-flex size-11 items-center justify-center rounded-lg text-muted-foreground"
                     >
                       <Trash2 aria-hidden className="size-3.5" />
                     </button>
