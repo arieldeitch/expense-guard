@@ -3,17 +3,8 @@
  * שיא נקבע רק אם קיימת היסטוריה קודמת של אותו תרגיל.
  * אימון ראשון = baseline (לא "שיא").
  */
-import type {
-  HomeExerciseHistorySummary,
-  HomePreviousPerformance,
-  HomeRecord,
-} from "./types";
-import {
-  listAllHomeSessions,
-  listEntrySets,
-  listSessionEntries,
-  getHomeSession,
-} from "./repo";
+import type { HomeExerciseHistorySummary, HomePreviousPerformance, HomeRecord } from "./types";
+import { listAllHomeSessions, listEntrySets, listSessionEntries, getHomeSession } from "./repo";
 import {
   averageDaysBetween,
   daysSince,
@@ -208,12 +199,7 @@ export function detectRecords(exerciseId: string, sessionId: string): HomeRecord
   };
 
   compare("top_reps_in_set", currentAcc.topRepsInSet, priorAcc.topRepsInSet, "reps");
-  compare(
-    "top_reps_in_session",
-    currentAcc.topRepsInSession,
-    priorAcc.topRepsInSession,
-    "reps",
-  );
+  compare("top_reps_in_session", currentAcc.topRepsInSession, priorAcc.topRepsInSession, "reps");
   compare(
     "top_avg_reps_per_set",
     currentAcc.topAvgRepsPerSet,
@@ -224,13 +210,7 @@ export function detectRecords(exerciseId: string, sessionId: string): HomeRecord
   compare("top_hold_seconds", currentAcc.topHoldSeconds, priorAcc.topHoldSeconds, "seconds");
   compare("top_rounds", currentAcc.topRounds, priorAcc.topRounds, "rounds");
   compare("top_reps_per_minute", currentAcc.topRpm, priorAcc.topRpm, "reps_per_minute", 0.5);
-  compare(
-    "top_added_weight",
-    currentAcc.topAddedWeight,
-    priorAcc.topAddedWeight,
-    "kg",
-    0.001,
-  );
+  compare("top_added_weight", currentAcc.topAddedWeight, priorAcc.topAddedWeight, "kg", 0.001);
 
   // Same-load lower RPE: for each (reps, added_weight) in current with RPE, compare to prior min.
   if (!isBaseline) {
@@ -321,9 +301,7 @@ export function summarizeExerciseHistory(exerciseId: string): HomeExerciseHistor
 export function recentExerciseIds(limit = 6): string[] {
   const sessions = listAllHomeSessions()
     .filter((s) => !s.deleted_at && s.status !== "trashed" && s.status !== "draft")
-    .sort(
-      (a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime(),
-    );
+    .sort((a, b) => new Date(b.started_at).getTime() - new Date(a.started_at).getTime());
   const seen: string[] = [];
   for (const s of sessions) {
     for (const e of listSessionEntries(s.id)) {

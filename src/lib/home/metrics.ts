@@ -64,9 +64,7 @@ export function summarizeSets(sets: HomeExerciseSet[]): HomeSetSummary {
   const valid = sets.filter((s) => !s.deleted_at);
   const completed = valid.filter((s) => s.completed && !s.skipped);
   const skipped = valid.filter((s) => s.skipped);
-  const reps = completed
-    .map((s) => s.reps)
-    .filter((r): r is number => typeof r === "number");
+  const reps = completed.map((s) => s.reps).filter((r): r is number => typeof r === "number");
   const durations = completed
     .map((s) => s.duration_seconds)
     .filter((d): d is number => typeof d === "number");
@@ -139,10 +137,7 @@ export function homeQualityScore(input: {
     { label: "השלמה", value: completion * 25, max: 25, missing: false },
     {
       label: "מגמת חזרות",
-      value:
-        repsProgress == null
-          ? 0
-          : Math.max(-25, Math.min(25, repsProgress * 25)) + 12.5, // center 12.5 → range 0-25? No, we want signed
+      value: repsProgress == null ? 0 : Math.max(-25, Math.min(25, repsProgress * 25)) + 12.5, // center 12.5 → range 0-25? No, we want signed
       max: 25,
       missing: repsProgress == null,
     },
@@ -184,9 +179,7 @@ export function frequencyPerWeek(sessionDates: string[], weeks = 4): number | nu
 
 export function averageDaysBetween(sessionDates: string[]): number | null {
   if (sessionDates.length < 2) return null;
-  const sorted = [...sessionDates]
-    .map((d) => new Date(d).getTime())
-    .sort((a, b) => a - b);
+  const sorted = [...sessionDates].map((d) => new Date(d).getTime()).sort((a, b) => a - b);
   const gaps: number[] = [];
   for (let i = 1; i < sorted.length; i++) {
     gaps.push((sorted[i] - sorted[i - 1]) / (24 * 3600 * 1000));

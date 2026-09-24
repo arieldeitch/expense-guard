@@ -13,6 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
+import { PakalCard } from "@/components/home/PakalCard";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { EmptyState } from "@/components/shell/EmptyState";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
@@ -21,6 +22,7 @@ import {
   useHomeSessions,
   useHomeTemplates,
   useRecentHomeExerciseIds,
+  PAKAL_SLOTS,
 } from "@/lib/home";
 import { useAllExercises } from "@/lib/exercises";
 import { daysSince, frequencyPerWeek } from "@/lib/home";
@@ -75,24 +77,31 @@ function HomePage() {
         ),
       }}
     >
-      <PageHeader title="כוח בבית" description="דיווח מהיר של תרגיל יחיד או אימון קצר." />
+      <PageHeader title="כוח בבית" description="הפק״ל היומי, או דיווח מהיר של תרגיל יחיד." />
 
-      {/* Primary action tiles */}
-      <div className="grid grid-cols-2 gap-3 px-4 sm:px-6">
+      {/* The two fixed routines — the fastest path to a report (ADR-0045) */}
+      <div className="grid grid-cols-2 gap-2 px-4 sm:px-6">
+        {PAKAL_SLOTS.map((slot) => (
+          <PakalCard key={slot} slot={slot} />
+        ))}
+      </div>
+
+      {/* Secondary actions */}
+      <div className="mt-2 grid grid-cols-2 gap-2 px-4 sm:px-6">
         <Link to="/home/quick" className="block">
-          <Tile variant="home" tone="solid" size="lg" interactive>
-            <div className="flex items-center gap-2">
-              <Zap aria-hidden className="size-5" />
-              <div className="text-lg font-black">דיווח מהיר</div>
+          <Tile variant="home" tone="soft" size="md" interactive>
+            <div className="flex items-center gap-2 text-home">
+              <Zap aria-hidden className="size-4" />
+              <div className="text-sm font-black">דיווח מהיר</div>
             </div>
-            <TileFootnote className="text-white/80">תרגיל יחיד, סטים גמישים.</TileFootnote>
+            <TileFootnote>תרגיל יחיד, סטים גמישים.</TileFootnote>
           </Tile>
         </Link>
         <Link to="/home/templates" className="block">
-          <Tile variant="home" tone="soft" size="lg" interactive>
+          <Tile variant="home" tone="soft" size="md" interactive>
             <div className="flex items-center gap-2 text-home">
-              <LayoutTemplate aria-hidden className="size-5" />
-              <div className="text-lg font-black">תבניות</div>
+              <LayoutTemplate aria-hidden className="size-4" />
+              <div className="text-sm font-black">תבניות</div>
             </div>
             <TileFootnote>
               {templates.length ? `${templates.length} תבניות פעילות` : "אין תבניות עדיין"}

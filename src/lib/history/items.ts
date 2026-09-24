@@ -103,7 +103,15 @@ export function homeItem(s: HomeSession): HistoryItem {
     day: dayKey(s.started_at),
     title: s.name,
     metric,
-    sub: s.training_partner ? `יחד עם ${s.training_partner}` : "",
+    sub: [
+      entries
+        .slice(0, 2)
+        .map((e) => e.snapshot.exercise_name)
+        .join(" · "),
+      s.training_partner ? `יחד עם ${s.training_partner}` : "",
+    ]
+      .filter(Boolean)
+      .join(" · "),
     status: homeStatus(s),
     duration_seconds: s.duration_seconds,
     distance_meters: null,

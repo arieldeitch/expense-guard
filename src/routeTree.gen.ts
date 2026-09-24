@@ -52,6 +52,7 @@ import { Route as RunningNewTypeRouteImport } from './routes/running.new.$type'
 import { Route as RunningGoalsNewRouteImport } from './routes/running.goals.new'
 import { Route as RunningIdEditRouteImport } from './routes/running.$id.edit'
 import { Route as HomeQuickExerciseIdRouteImport } from './routes/home.quick.$exerciseId'
+import { Route as HomePakalSlotRouteImport } from './routes/home.pakal.$slot'
 import { Route as HomeHistoryIdRouteImport } from './routes/home.history.$id'
 import { Route as HomeGoalsNewRouteImport } from './routes/home.goals.new'
 import { Route as GymHistoryIdRouteImport } from './routes/gym.history.$id'
@@ -283,6 +284,11 @@ const HomeQuickExerciseIdRoute = HomeQuickExerciseIdRouteImport.update({
   path: '/home/quick/$exerciseId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomePakalSlotRoute = HomePakalSlotRouteImport.update({
+  id: '/home/pakal/$slot',
+  path: '/home/pakal/$slot',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HomeHistoryIdRoute = HomeHistoryIdRouteImport.update({
   id: '/home/history/$id',
   path: '/home/history/$id',
@@ -389,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/gym/history/$id': typeof GymHistoryIdRoute
   '/home/goals/new': typeof HomeGoalsNewRoute
   '/home/history/$id': typeof HomeHistoryIdRoute
+  '/home/pakal/$slot': typeof HomePakalSlotRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/goals/new': typeof RunningGoalsNewRoute
@@ -449,6 +456,7 @@ export interface FileRoutesByTo {
   '/gym/history/$id': typeof GymHistoryIdRoute
   '/home/goals/new': typeof HomeGoalsNewRoute
   '/home/history/$id': typeof HomeHistoryIdRoute
+  '/home/pakal/$slot': typeof HomePakalSlotRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/goals/new': typeof RunningGoalsNewRoute
@@ -510,6 +518,7 @@ export interface FileRoutesById {
   '/gym/history/$id': typeof GymHistoryIdRoute
   '/home/goals/new': typeof HomeGoalsNewRoute
   '/home/history/$id': typeof HomeHistoryIdRoute
+  '/home/pakal/$slot': typeof HomePakalSlotRoute
   '/home/quick/$exerciseId': typeof HomeQuickExerciseIdRoute
   '/running/$id/edit': typeof RunningIdEditRoute
   '/running/goals/new': typeof RunningGoalsNewRoute
@@ -572,6 +581,7 @@ export interface FileRouteTypes {
     | '/gym/history/$id'
     | '/home/goals/new'
     | '/home/history/$id'
+    | '/home/pakal/$slot'
     | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/goals/new'
@@ -632,6 +642,7 @@ export interface FileRouteTypes {
     | '/gym/history/$id'
     | '/home/goals/new'
     | '/home/history/$id'
+    | '/home/pakal/$slot'
     | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/goals/new'
@@ -692,6 +703,7 @@ export interface FileRouteTypes {
     | '/gym/history/$id'
     | '/home/goals/new'
     | '/home/history/$id'
+    | '/home/pakal/$slot'
     | '/home/quick/$exerciseId'
     | '/running/$id/edit'
     | '/running/goals/new'
@@ -753,6 +765,7 @@ export interface RootRouteChildren {
   GymHistoryIdRoute: typeof GymHistoryIdRoute
   HomeGoalsNewRoute: typeof HomeGoalsNewRoute
   HomeHistoryIdRoute: typeof HomeHistoryIdRoute
+  HomePakalSlotRoute: typeof HomePakalSlotRoute
   HomeQuickExerciseIdRoute: typeof HomeQuickExerciseIdRoute
   RunningIdEditRoute: typeof RunningIdEditRoute
   RunningGoalsNewRoute: typeof RunningGoalsNewRoute
@@ -1087,6 +1100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeQuickExerciseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/pakal/$slot': {
+      id: '/home/pakal/$slot'
+      path: '/home/pakal/$slot'
+      fullPath: '/home/pakal/$slot'
+      preLoaderRoute: typeof HomePakalSlotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/home/history/$id': {
       id: '/home/history/$id'
       path: '/home/history/$id'
@@ -1225,6 +1245,7 @@ const rootRouteChildren: RootRouteChildren = {
   GymHistoryIdRoute: GymHistoryIdRoute,
   HomeGoalsNewRoute: HomeGoalsNewRoute,
   HomeHistoryIdRoute: HomeHistoryIdRoute,
+  HomePakalSlotRoute: HomePakalSlotRoute,
   HomeQuickExerciseIdRoute: HomeQuickExerciseIdRoute,
   RunningIdEditRoute: RunningIdEditRoute,
   RunningGoalsNewRoute: RunningGoalsNewRoute,

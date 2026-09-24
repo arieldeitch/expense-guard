@@ -84,7 +84,9 @@ describe("unified history rows", () => {
       gym: [],
     });
     expect(items[0].metric).toBe("1 תרגילים · 3 סטים · 99 חזרות");
-    expect(items[0].sub).toBe("יחד עם תום");
+    // The exercise is CONTEXT on the row; it must never become the session's title (ADR-0045).
+    expect(items[0].title).toBe("פק״ל");
+    expect(items[0].sub).toBe("שכיבות סמיכה · יחד עם תום");
     expect(items[0].searchText).toContain("תום");
   });
 

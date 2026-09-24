@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import {
-  _resetHomeStateForTests,
-} from "../storage";
+import { _resetHomeStateForTests } from "../storage";
 import {
   addEntry,
   addSet,
@@ -198,7 +196,9 @@ describe("home repo", () => {
 
   it("startSessionFromTemplate builds entries + sets from snapshot", () => {
     const t = createHomeTemplate({ name: "מלא" });
-    const bws = listExercises().filter((e) => e.bodyweight_based).slice(0, 2);
+    const bws = listExercises()
+      .filter((e) => e.bodyweight_based)
+      .slice(0, 2);
     addHomeTemplateEntry(t.id, bws[0].id, { planned_sets: 3, planned_reps: 12 });
     addHomeTemplateEntry(t.id, bws[1].id, { planned_sets: 2, planned_reps: 10 });
     const session = startSessionFromTemplate(t.id)!;

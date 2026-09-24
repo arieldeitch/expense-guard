@@ -18,6 +18,7 @@ import {
   listTrashedHomeSessions,
 } from "./repo";
 import type { HomeTemplateEntry } from "./types";
+import { pakalLines, type PakalLine } from "./pakalim";
 
 function useHome<T>(selector: (s: HomeState) => T): T {
   return useSyncExternalStore(
@@ -99,10 +100,20 @@ export function useHomeTemplate(id: string | null | undefined): HomeTemplate | n
   return hydrated && id ? getHomeTemplate(id) : null;
 }
 
-export function useHomeTemplateEntries(
-  templateId: string | null | undefined,
-): HomeTemplateEntry[] {
+export function useHomeTemplateEntries(templateId: string | null | undefined): HomeTemplateEntry[] {
   useHome((s) => s.templateEntries);
   const hydrated = useHydrated();
   return hydrated && templateId ? listHomeTemplateEntries(templateId) : [];
+}
+
+/**
+ * Pakal lines for a report — one quantity per exercise — subscribed to BOTH entries and sets,
+ * so typing a quantity (a set change) re-renders the screen. Subscribing to entries alone left
+ * the numbers stale after an edit (ADR-0045).
+ */
+export function useHomeSessionLines(sessionId: string | null | undefined): PakalLine[] {
+  useHome((s) => s.entries);
+  useHome((s) => s.sets);
+  const hydrated = useHydrated();
+  return hydrated && sessionId ? pakalLines(sessionId) : [];
 }

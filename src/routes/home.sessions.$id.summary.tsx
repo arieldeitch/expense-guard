@@ -3,7 +3,7 @@
  * מציג נתונים עובדתיים בלבד: תרגיל, סטים, חזרות, ממוצע, חציון, שינוי מפעם קודמת, שיאים אמיתיים.
  */
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, History as HistoryIcon, Trash2 } from "lucide-react";
+import { ArrowRight, BadgeCheck, History as HistoryIcon, Pencil, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { PageHeader, SectionHeader } from "@/components/shell/PageHeader";
 import { Tile, TileFootnote, TileLabel, TileMetric } from "@/components/tile/Tile";
@@ -16,6 +16,7 @@ import {
   sumDurationSeconds,
   sumReps,
   summarizeSets,
+  pakalSlotOf,
   trashHomeSession,
   useHomeSession,
   useHomeSessionEntries,
@@ -86,9 +87,7 @@ function SummaryPage() {
         <Tile variant="goal" tone="soft" size="sm">
           <TileLabel>שיאים</TileLabel>
           <TileMetric value={totals.records || "–"} />
-          <TileFootnote>
-            {totals.baselines ? `+${totals.baselines} baseline` : ""}
-          </TileFootnote>
+          <TileFootnote>{totals.baselines ? `+${totals.baselines} baseline` : ""}</TileFootnote>
         </Tile>
       </div>
 
@@ -109,8 +108,14 @@ function SummaryPage() {
             <div className="ltr-nums grid grid-cols-3 gap-2 text-xs">
               <Stat label="סטים" value={`${summary.completedSets}/${summary.totalSets}`} />
               <Stat label="חזרות" value={summary.totalReps || "–"} />
-              <Stat label="ממוצע" value={summary.averageReps != null ? summary.averageReps.toFixed(1) : "–"} />
-              <Stat label="חציון" value={summary.medianReps != null ? summary.medianReps.toFixed(1) : "–"} />
+              <Stat
+                label="ממוצע"
+                value={summary.averageReps != null ? summary.averageReps.toFixed(1) : "–"}
+              />
+              <Stat
+                label="חציון"
+                value={summary.medianReps != null ? summary.medianReps.toFixed(1) : "–"}
+              />
               <Stat label="מקס׳ סט" value={summary.maxReps ?? "–"} />
               <Stat
                 label="אחרון/ראשון"
@@ -131,9 +136,7 @@ function SummaryPage() {
                 </b>
               </TileFootnote>
             ) : (
-              <TileFootnote className="mt-1">
-                אימון ראשון לתרגיל זה — נתוני בסיס.
-              </TileFootnote>
+              <TileFootnote className="mt-1">אימון ראשון לתרגיל זה — נתוני בסיס.</TileFootnote>
             )}
             {records.length ? (
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -141,9 +144,7 @@ function SummaryPage() {
                   <span
                     key={i}
                     className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-black ${
-                      r.isBaseline
-                        ? "bg-info-soft text-info"
-                        : "bg-goal-soft text-goal"
+                      r.isBaseline ? "bg-info-soft text-info" : "bg-goal-soft text-goal"
                     }`}
                   >
                     <BadgeCheck className="size-3" aria-hidden />
@@ -165,7 +166,18 @@ function SummaryPage() {
         ))}
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-2 px-4 sm:px-6">
+      {/* Editing a saved report re-opens the very same record — never a copy (ADR-0045). */}
+      <div className="mt-6 px-4 sm:px-6">
+        <Link
+          to={editHref(session)}
+          className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-home px-4 text-sm font-black text-white"
+        >
+          <Pencil aria-hidden className="size-4" />
+          תיקון הדיווח
+        </Link>
+      </div>
+
+      <div className="mt-2 grid grid-cols-2 gap-2 px-4 sm:px-6">
         <Link
           to="/home/history/$id"
           params={{ id }}
@@ -175,7 +187,7 @@ function SummaryPage() {
         </Link>
         <Link
           to="/home"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-home px-4 text-sm font-black text-white"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border-strong bg-surface px-4 text-sm font-bold"
         >
           חזרה לתחום בית
         </Link>
@@ -234,4 +246,10 @@ function formatDuration(sec: number): string {
   const m = Math.floor(sec / 60);
   const s = sec % 60;
   return m ? `${m}ד׳ ${s}שנ׳` : `${s}שנ׳`;
+}
+
+/** A pakal report goes back to its quantity screen; anything else to the session editor. */
+function editHref(session: { id: string; template_id: string | null }): string {
+  const slot = pakalSlotOf(session as never);
+  return slot ? `/home/pakal/${slot}` : `/home/sessions/${session.id}`;
 }
