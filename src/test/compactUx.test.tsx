@@ -74,7 +74,15 @@ it("report screen lists open drafts first and every way to report", async () => 
   createRun(runInput({ status: "draft", duration_seconds: 600 }));
   await renderRoute("/report");
   expect(await screen.findByRole("heading", { name: /להמשיך טיוטה · 1/ })).toBeInTheDocument();
-  for (const name of ["ריצה על הליכון", "ריצה בחוץ", "פק״ל בבית", "אימון מכון"])
+  // ADR-0045: the home entry on this screen is now the two fixed routines + a single exercise.
+  for (const name of [
+    "ריצה על הליכון",
+    "ריצה בחוץ",
+    "פק״לים בוקר",
+    "פק״לים ערב",
+    "תרגיל יחיד",
+    "אימון מכון",
+  ])
     expect(screen.getAllByRole("link", { name: new RegExp(name) }).length).toBeGreaterThan(0);
 });
 

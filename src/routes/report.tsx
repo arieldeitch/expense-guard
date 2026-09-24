@@ -9,7 +9,9 @@ import {
   Footprints,
   HeartPulse,
   CalendarRange,
+  Moon,
   Mountain,
+  Sun,
 } from "lucide-react";
 import { AppShell } from "@/components/shell/AppShell";
 import { SectionHeader } from "@/components/shell/PageHeader";
@@ -34,6 +36,20 @@ const OPTIONS: {
   tint: string;
 }[] = [
   {
+    to: "/home/pakal/morning",
+    title: "פק״לים בוקר",
+    hint: "כמויות בלבד — הרשימה הקבועה שלך",
+    icon: <Sun aria-hidden />,
+    tint: "bg-home/20 text-home",
+  },
+  {
+    to: "/home/pakal/evening",
+    title: "פק״לים ערב",
+    hint: "כמויות בלבד — הרשימה הקבועה שלך",
+    icon: <Moon aria-hidden />,
+    tint: "bg-home/20 text-home",
+  },
+  {
     to: "/running/new/treadmill",
     title: "ריצה על הליכון",
     hint: "דקות ושניות, מרחק, מהירות, שיפוע",
@@ -49,8 +65,8 @@ const OPTIONS: {
   },
   {
     to: "/home/quick",
-    title: "פק״ל בבית",
-    hint: "שכיבות סמיכה, בטן, חבל, משקולות — סטים גמישים",
+    title: "תרגיל יחיד",
+    hint: "דיווח מהיר של תרגיל אחד עם סטים גמישים",
     icon: <HeartPulse aria-hidden />,
     tint: "bg-home/20 text-home",
   },

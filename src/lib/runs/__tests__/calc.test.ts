@@ -79,7 +79,8 @@ describe("run calc", () => {
   it("parsers", () => {
     expect(parseDurationInput("45:30")).toBe(45 * 60 + 30);
     expect(parseDurationInput("1:02:03")).toBe(3723);
-    expect(parseDurationInput("30")).toBe(1800); // 30 minutes
+    // ADR-0044: a bare number is SECONDS (was: minutes) so 40 seconds needs no leading "0:".
+    expect(parseDurationInput("30")).toBe(30);
     expect(parsePaceMSS("5:30")).toBe(330);
     expect(parseDecimal("5,5")).toBe(5.5);
     expect(parseDecimal("")).toBeNull();

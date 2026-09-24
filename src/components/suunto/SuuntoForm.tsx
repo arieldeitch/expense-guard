@@ -23,13 +23,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import {
-  formatDurationHMS,
-  formatPace,
-  parseDecimal,
-  parseDurationInput,
-  parsePaceMSS,
-} from "@/lib/runs";
+import { formatPace } from "@/lib/runs";
+import { DecimalField, DurationTextField } from "@/components/inputs/NumericField";
 import {
   METRIC_DEFS,
   customSlug,
@@ -115,14 +110,6 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [terrainOpen, setTerrainOpen] = useState(false);
   const [customOpen, setCustomOpen] = useState(form.custom.length > 0);
-
-  // Text mirrors for pace/duration inputs (m:ss / h:mm:ss).
-  const [durationText, setDurationText] = useState(() =>
-    form.duration_seconds != null ? formatDurationHMS(form.duration_seconds) : "",
-  );
-  const [paceText, setPaceText] = useState(() =>
-    form.average_pace_s_per_km != null ? formatPace(form.average_pace_s_per_km) : "",
-  );
 
   const setNum = (key: NumFields, value: number | null) => {
     setForm((s) => ({ ...s, [key]: value }));
@@ -232,32 +219,24 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
               error={errors.distance_meters}
               outlier={isOutOfRange("distance_meters", form.distance_meters)}
             >
-              <Input
-                inputMode="decimal"
-                value={form.distance_meters == null ? "" : (form.distance_meters / 1000).toString()}
-                onChange={(e) => {
-                  const km = parseDecimal(e.target.value);
-                  setNum("distance_meters", km == null ? null : km * 1000);
-                }}
-                placeholder='ק"מ'
+              <DecimalField
+                ariaLabel='מרחק בק"מ'
+                value={form.distance_meters == null ? null : form.distance_meters / 1000}
+                onChange={(km) => setNum("distance_meters", km == null ? null : km * 1000)}
+                placeholder="7.15"
               />
             </Field>
             <Field
               label="משך"
-              hint="mm:ss או hh:mm:ss"
+              hint="דקות:שניות — 42:15 = 42 דקות ו-15 שניות"
               error={errors.duration_seconds}
               outlier={isOutOfRange("duration_seconds", form.duration_seconds)}
             >
-              <Input
-                inputMode="numeric"
-                value={durationText}
-                onChange={(e) => {
-                  const t = e.target.value;
-                  setDurationText(t);
-                  const secs = parseDurationInput(t);
-                  setNum("duration_seconds", secs);
-                }}
-                placeholder="30:00"
+              <DurationTextField
+                ariaLabel="משך האימון"
+                value={form.duration_seconds}
+                onChange={(secs) => setNum("duration_seconds", secs)}
+                placeholder="42:15"
               />
             </Field>
           </Row2>
@@ -273,15 +252,12 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
               error={errors.average_pace_s_per_km}
               outlier={isOutOfRange("average_pace_s_per_km", form.average_pace_s_per_km)}
             >
-              <Input
-                inputMode="numeric"
-                value={paceText}
-                onChange={(e) => {
-                  const t = e.target.value;
-                  setPaceText(t);
-                  setNum("average_pace_s_per_km", parsePaceMSS(t));
-                }}
+              <DurationTextField
+                ariaLabel='קצב ממוצע לק"מ'
+                value={form.average_pace_s_per_km}
+                onChange={(secs) => setNum("average_pace_s_per_km", secs)}
                 placeholder="5:30"
+                showEcho={false}
               />
             </Field>
             <Field
@@ -294,10 +270,9 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
               error={errors.average_speed_kmh}
               outlier={isOutOfRange("average_speed_kmh", form.average_speed_kmh)}
             >
-              <Input
-                inputMode="decimal"
-                value={form.average_speed_kmh ?? ""}
-                onChange={(e) => setNum("average_speed_kmh", parseDecimal(e.target.value))}
+              <DecimalField
+                value={form.average_speed_kmh}
+                onChange={(v) => setNum("average_speed_kmh", v)}
                 placeholder="11.0"
               />
             </Field>
@@ -305,26 +280,23 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
 
           <Row3>
             <Field label="דופק ממוצע" error={errors.average_heart_rate}>
-              <Input
-                inputMode="numeric"
-                value={form.average_heart_rate ?? ""}
-                onChange={(e) => setNum("average_heart_rate", parseDecimal(e.target.value))}
+              <DecimalField
+                value={form.average_heart_rate}
+                onChange={(v) => setNum("average_heart_rate", v)}
                 placeholder="bpm"
               />
             </Field>
             <Field label="דופק מרבי" error={errors.max_heart_rate}>
-              <Input
-                inputMode="numeric"
-                value={form.max_heart_rate ?? ""}
-                onChange={(e) => setNum("max_heart_rate", parseDecimal(e.target.value))}
+              <DecimalField
+                value={form.max_heart_rate}
+                onChange={(v) => setNum("max_heart_rate", v)}
                 placeholder="bpm"
               />
             </Field>
             <Field label="Cadence" error={errors.average_cadence_spm}>
-              <Input
-                inputMode="numeric"
-                value={form.average_cadence_spm ?? ""}
-                onChange={(e) => setNum("average_cadence_spm", parseDecimal(e.target.value))}
+              <DecimalField
+                value={form.average_cadence_spm}
+                onChange={(v) => setNum("average_cadence_spm", v)}
                 placeholder="spm"
               />
             </Field>
@@ -346,49 +318,37 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
             <CollapsibleContent className="mt-3 space-y-3">
               <Row2>
                 <Field label="קלוריות">
-                  <Input
-                    inputMode="numeric"
-                    value={form.calories ?? ""}
-                    onChange={(e) => setNum("calories", parseDecimal(e.target.value))}
-                  />
+                  <DecimalField value={form.calories} onChange={(v) => setNum("calories", v)} />
                 </Field>
                 <Field label="מהירות מרבית" hint='קמ"ש'>
-                  <Input
-                    inputMode="decimal"
-                    value={form.max_speed_kmh ?? ""}
-                    onChange={(e) => setNum("max_speed_kmh", parseDecimal(e.target.value))}
+                  <DecimalField
+                    value={form.max_speed_kmh}
+                    onChange={(v) => setNum("max_speed_kmh", v)}
                   />
                 </Field>
               </Row2>
               <Row2>
                 <Field label="Training Effect" hint="0..5">
-                  <Input
-                    inputMode="decimal"
-                    value={form.training_effect ?? ""}
-                    onChange={(e) => setNum("training_effect", parseDecimal(e.target.value))}
+                  <DecimalField
+                    value={form.training_effect}
+                    onChange={(v) => setNum("training_effect", v)}
                   />
                 </Field>
                 <Field label="Peak TE" hint="0..5">
-                  <Input
-                    inputMode="decimal"
-                    value={form.peak_training_effect ?? ""}
-                    onChange={(e) => setNum("peak_training_effect", parseDecimal(e.target.value))}
+                  <DecimalField
+                    value={form.peak_training_effect}
+                    onChange={(v) => setNum("peak_training_effect", v)}
                   />
                 </Field>
               </Row2>
               <Row2>
                 <Field label="EPOC" hint="ml/kg">
-                  <Input
-                    inputMode="decimal"
-                    value={form.epoc_ml_kg ?? ""}
-                    onChange={(e) => setNum("epoc_ml_kg", parseDecimal(e.target.value))}
-                  />
+                  <DecimalField value={form.epoc_ml_kg} onChange={(v) => setNum("epoc_ml_kg", v)} />
                 </Field>
                 <Field label="זמן התאוששות" hint="שעות">
-                  <Input
-                    inputMode="decimal"
-                    value={form.recovery_time_hours ?? ""}
-                    onChange={(e) => setNum("recovery_time_hours", parseDecimal(e.target.value))}
+                  <DecimalField
+                    value={form.recovery_time_hours}
+                    onChange={(v) => setNum("recovery_time_hours", v)}
                   />
                 </Field>
               </Row2>
@@ -411,18 +371,10 @@ export function SuuntoForm({ runId, open, onOpenChange, existing }: Props) {
             <CollapsibleContent className="mt-3 space-y-3">
               <Row2>
                 <Field label="עלייה" hint="מ'">
-                  <Input
-                    inputMode="numeric"
-                    value={form.ascent_m ?? ""}
-                    onChange={(e) => setNum("ascent_m", parseDecimal(e.target.value))}
-                  />
+                  <DecimalField value={form.ascent_m} onChange={(v) => setNum("ascent_m", v)} />
                 </Field>
                 <Field label="ירידה" hint="מ'">
-                  <Input
-                    inputMode="numeric"
-                    value={form.descent_m ?? ""}
-                    onChange={(e) => setNum("descent_m", parseDecimal(e.target.value))}
-                  />
+                  <DecimalField value={form.descent_m} onChange={(v) => setNum("descent_m", v)} />
                 </Field>
               </Row2>
             </CollapsibleContent>

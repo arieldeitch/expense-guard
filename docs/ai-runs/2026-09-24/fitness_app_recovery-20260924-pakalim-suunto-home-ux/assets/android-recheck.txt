@@ -1,0 +1,3 @@
+[shot] a20-pakal-after-fix
+pakal audit (44px rule): {"path":"/home/pakal/morning","overflowX":false,"rowH":[74,74,74,74],"under44":[]}
+PAGE ERRORS: none

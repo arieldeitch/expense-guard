@@ -4,6 +4,7 @@
  */
 import type { Goal, GoalSnapshot, GoalVersion } from "./types";
 import { reportWrite, safeWriteStorage } from "@/lib/storage/safeStorage";
+import { LOCAL_OWNER_ID } from "@/lib/identity/owner";
 
 /** מפתח ה-localStorage של המודול. נחשף עבור schema/snapshot מקומיים (ADR-0033) — אין לשנות. */
 export const STORAGE_KEY = "fitlog:goals:v1";
@@ -107,4 +108,5 @@ export function _resetGoalsStateForTests(state?: GoalsState): void {
   }
 }
 
-export const GOALS_OWNER_ID = "single-user";
+/** Ownership contract lives in one place (ADR-0047); the value is unchanged for compatibility. */
+export const GOALS_OWNER_ID = LOCAL_OWNER_ID;

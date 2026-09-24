@@ -344,11 +344,13 @@ export function startQuickEntry(input: QuickEntryInput): {
   entry: HomeExerciseEntry;
   set: HomeExerciseSet;
 } {
-  const ex = getExercise(input.exercise_id);
+  // The session name is the WORKOUT's name. It is never derived from the exercise that
+  // happens to be reported first or last (ADR-0045) — that produced sessions called
+  // "שכיבות סמיכה" in the history. The exercise is shown as context instead.
   const session = createHomeSession({
     is_quick_entry: true,
     primary_exercise_id: input.exercise_id,
-    name: input.name ?? ex?.name_he ?? "דיווח מהיר",
+    name: input.name ?? "דיווח מהיר",
   });
   const entry = addEntry(session.id, input.exercise_id);
   const set = addSet(entry.id);
@@ -405,9 +407,7 @@ export function updateHomeTemplate(
 ): void {
   commit((s) => ({
     ...s,
-    templates: s.templates.map((t) =>
-      t.id === id ? { ...t, ...patch, updated_at: nowIso() } : t,
-    ),
+    templates: s.templates.map((t) => (t.id === id ? { ...t, ...patch, updated_at: nowIso() } : t)),
   }));
 }
 
@@ -617,7 +617,5 @@ export function startSessionFromTemplate(templateId: string): HomeSession | null
 // ---------- Bulk cleanup helpers ----------
 
 export function listTrashedHomeSessions(): HomeSession[] {
-  return readHomeState().sessions.filter(
-    (s) => s.status === "trashed" || s.deleted_at != null,
-  );
+  return readHomeState().sessions.filter((s) => s.status === "trashed" || s.deleted_at != null);
 }

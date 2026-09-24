@@ -162,6 +162,36 @@ interface SeedExercise {
  * required_equipment_types מפנה ל־EquipmentType (dumbbells/barbell/bench/pullup_bar/...).
  */
 const EX_SEED: SeedExercise[] = [
+  // ---- Home bank additions (ADR-0045): push-up widths, and dumbbells by muscle group ----
+  {
+    name_he: "שכיבות סמיכה רחבות",
+    name_en: "Wide Push Ups",
+    aliases: ["רחב", "אחיזה רחבה"],
+    primary: "chest",
+    secondary: ["shoulders", "triceps"],
+    category: "bodyweight",
+    movement: "horizontal_push",
+    tracking: "bodyweight_reps",
+    bodyweight_based: true,
+    default_sets: 3,
+    default_reps: 12,
+    default_rest: 60,
+    parent_slug: "push-ups",
+  },
+  {
+    name_he: "לחיצת חזה בשכיבה על הרצפה",
+    name_en: "Dumbbell Floor Press",
+    aliases: ["לחיצת חזה", "פלור פרס"],
+    primary: "chest",
+    secondary: ["triceps", "shoulders"],
+    category: "compound",
+    movement: "horizontal_push",
+    tracking: "weight_reps",
+    required_equipment_types: ["dumbbells"],
+    default_sets: 3,
+    default_reps: 10,
+    default_rest: 75,
+  },
   {
     name_he: "שכיבות סמיכה יהלום",
     name_en: "Diamond Push Ups",
