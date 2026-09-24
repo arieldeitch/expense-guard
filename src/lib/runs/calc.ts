@@ -101,39 +101,78 @@ export function formatDistanceKm(meters: number | null | undefined, digits = 2):
   return (meters / 1000).toFixed(digits);
 }
 
-/** Parses "5", "5.5", "5,5", "5:30" (m:ss for pace) → number or null. */
+/**
+ * Parses a decimal the user typed: "5", "5.5", "5,5" (comma → point) → number, else null.
+ * Intentionally strict about what a number is; callers keep the raw text while typing
+ * (see `useNumericText`) so an intermediate "7." is never coerced to 7 mid-keystroke.
+ */
 export function parseDecimal(raw: string): number | null {
   const t = raw.trim().replace(",", ".");
   if (!t) return null;
+  if (!/^-?\d*\.?\d+$/.test(t)) return null;
   const n = Number(t);
   return Number.isFinite(n) ? n : null;
 }
 
-/** "m:ss" → seconds. */
-export function parsePaceMSS(raw: string): number | null {
-  const t = raw.trim();
-  if (!t) return null;
-  if (!t.includes(":")) {
-    const n = parseDecimal(t);
-    return n == null ? null : n * 60;
-  }
-  const [mm, ss] = t.split(":");
-  const m = Number(mm);
-  const s = Number(ss);
-  if (!Number.isFinite(m) || !Number.isFinite(s)) return null;
-  return m * 60 + s;
-}
-
-/** "h:mm:ss" | "mm:ss" | "mm" → seconds. */
+/**
+ * THE duration contract for the whole app (ADR-0044). One parser, one meaning:
+ *
+ *   "40"       → 40 seconds        (a bare number is SECONDS, never minutes)
+ *   "0:40"     → 40 seconds
+ *   "1:20"     → 80 seconds
+ *   "42:15"    → 2535 seconds      (42 minutes and 15 seconds — ":15" is never a decimal)
+ *   "1:02:03"  → 3723 seconds      (h:mm:ss)
+ *
+ * Invalid input returns null so the caller can show an error instead of saving a wrong
+ * number silently: seconds/minutes fields above 59, negative or non-numeric parts, more
+ * than three parts, or a decimal point (time is not decimal — "1.5" is rejected on purpose).
+ */
 export function parseDurationInput(raw: string): number | null {
   const t = raw.trim();
   if (!t) return null;
+  if (!/^\d+(:\d{1,2}){0,2}$/.test(t)) return null;
   const parts = t.split(":").map((p) => Number(p));
   if (parts.some((p) => !Number.isFinite(p) || p < 0)) return null;
-  if (parts.length === 1) return parts[0] * 60; // minutes
+  if (parts.length === 1) return parts[0];
+  // Every part after the first is a 0..59 sub-unit.
+  if (parts.slice(1).some((p) => p > 59)) return null;
   if (parts.length === 2) return parts[0] * 60 + parts[1];
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-  return null;
+  return parts[0] * 3600 + parts[1] * 60 + parts[2];
+}
+
+/** Pace uses the same contract; "5:30" → 330 s/km, "45" → 45 s/km. */
+export function parsePaceMSS(raw: string): number | null {
+  return parseDurationInput(raw);
+}
+
+/**
+ * Canonical text for a duration input — always "m:ss" (or "h:mm:ss"), so
+ * display → parse → display is stable and a bare "40" round-trips as "0:40".
+ */
+export function formatDurationInput(seconds: number | null | undefined): string {
+  if (seconds == null || !isFinite(seconds) || seconds < 0) return "";
+  const s = Math.round(seconds);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const mm = h > 0 ? m.toString().padStart(2, "0") : m.toString();
+  return h > 0
+    ? `${h}:${mm}:${sec.toString().padStart(2, "0")}`
+    : `${mm}:${sec.toString().padStart(2, "0")}`;
+}
+
+/** Human echo under an input, so a typo is visible before saving: "42 דקות ו-15 שניות". */
+export function describeDuration(seconds: number | null | undefined): string {
+  if (seconds == null || !isFinite(seconds) || seconds < 0) return "";
+  const s = Math.round(seconds);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const parts: string[] = [];
+  if (h > 0) parts.push(h === 1 ? "שעה" : `${h} שעות`);
+  if (m > 0) parts.push(m === 1 ? "דקה" : `${m} דקות`);
+  if (sec > 0 || parts.length === 0) parts.push(sec === 1 ? "שנייה" : `${sec} שניות`);
+  return parts.join(" ו-");
 }
 
 /** מחשב data_completeness (0..1) על סמך מספר שדות מספריים מלאים. */
