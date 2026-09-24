@@ -42,7 +42,7 @@ branch: `feat/fitlog-pakalim-suunto-home-ux` (+ `docs/fitlog-run3-closeout` לס
 commits: `5c2c89e` קלט · `c13695d` פק״לים · `e4b669b` בנק תרגילים ואיורים · `55c95ee` בעלות · `87aa7e1` רישום בדיקות · `d6403e9` גרסה 1.2.0 · `ae74039` מטרות מגע בשורת פק״ל · `b851b55` מטרות מגע ב-breadcrumb · `be94766` ADRs וקפסולה · `f5a5ad0` דוח סיום ו-handoff · `0e37fd8` סגירה
 PR: #3 (המימוש) · #4 (סגירה)
 merge commit: `75533f4631eeaa5bf77387027513d4002ae33973` (PR #3) · `9d31ca5` (PR #4)
-main HEAD: `9d31ca5`
+main HEAD: `9d31ca5` בזמן כתיבת הדוח; לאחר מיזוג הדוח עצמו (PR #5) — `e8c47ae`
 
 LIVE:
 **חסום — פרסום לא בוצע.** `mcp Lovable get_project 2b79da21-331d-4a52-bd0f-e49f64b4e79d` מחזיר `404 project_not_found` לחשבון המחובר — שלישית ברציפות (כמו בריצות 1 ו-2). הוכחה שהאתר החי עדיין על ה-build הקודם: `https://fitlog-workout.lovable.app/` מחזיר 200 אבל `https://fitlog-workout.lovable.app/home/pakal/morning` מחזיר **404**. אין טענה לפרסום.
